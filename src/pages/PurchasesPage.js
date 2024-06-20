@@ -95,7 +95,7 @@ const PurchasesPage = () => {
               <p className="purchase-step">
                 Текущий шаг: {purchase.step}{" "}
                 {purchase.isComplete && (
-                  <span style={{ marginLeft: '2px' }}>
+                  <span style={{ marginLeft: '4px' }}>
                     <svg
                       width="8"
                       height="8"
