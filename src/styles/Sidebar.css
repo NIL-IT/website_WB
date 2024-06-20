@@ -1,0 +1,40 @@
+.sidebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-around; 
+    border-radius: 8px 8px 0px 0px;
+    background: rgba(0, 0, 0, 1);
+    padding: 10px;
+    width: 320px;
+    height: 50px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    margin: 0; 
+  }
+  
+  .sidebar a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    height: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar svg {
+    width: 20px;
+    height: auto;
+  }
+
+  .sidebar .active svg path:not([stroke]) {
+    fill: rgba(146, 35, 214, 1);
+  }
+  
+  .sidebar .active svg path[stroke] {
+    stroke: rgba(146, 35, 214, 1);
+  }

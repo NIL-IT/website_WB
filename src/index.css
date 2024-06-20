@@ -1,5 +1,7 @@
 body {
+  overflow-x: hidden;
   margin: 0;
+  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +12,56 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.title-class {
+  font-family: 'Helvetica Neue Cyr';
+  font-size: 16px;
+  font-weight: 500;
+  text-align: left;
+  color: rgba(0, 0, 0, 1);
+  margin-bottom: 10px;
+}
+
+@font-face {
+  font-family: "Helvetica Neue Cyr";
+  src: local("helveticaneuecyr_medium"),
+    url("./fonts/helveticaneuecyr_medium.ttf") format("truetype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: local("inter_regular"),
+    url("./fonts/Inter-Regular.otf") format("opentype");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: local("inter_semibold"),
+    url("./fonts/Inter-SemiBold.otf") format("opentype");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: local("inter_bold"),
+    url("./fonts/Inter-Bold.otf") format("opentype");
+  font-weight: 700;
+}
+
+html::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+body::-webkit-scrollbar {
+  width: 0px;
+  height: 0px; 
+}
+
+html, body {
+  scrollbar-width: none; 
+  -ms-overflow-style: none;  
 }

@@ -1,13 +1,35 @@
-import React from 'react';
-// import './ProductCard.css';
+import React, { useState } from 'react';
+import '../styles/ProductCard.css';
 
 const ProductCard = ({ product }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
+  const handleImageError = (event) => {
+    event.target.style.display = 'none';
+  };
+
   return (
     <div className="product-card">
-      <img src={product.image} alt={product.name} className="product-image" />
-      <h2 className="product-name">{product.name}</h2>
-      <p className="product-price">{product.price} ₽</p>
-      <button className="order-button">Order</button>
+      {!isLoaded && <div className="skeleton"></div>}
+      <img
+        src={product.image}
+        alt={product.name}
+        className="product-image"
+        style={{ display: isLoaded ? 'block' : 'none' }}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+      />
+      <div className="product-info">
+        <div className="product-price">
+        <p className="product-new-price">{product.price} ₽</p>
+        <p className="product-old-price">{product.oldPrice} ₽</p>
+        </div>
+        <p className="product-description">{product.description}</p>
+      </div>
     </div>
   );
 };
