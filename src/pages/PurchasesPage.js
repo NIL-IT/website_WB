@@ -5,7 +5,7 @@ const PurchasesPage = () => {
   const purchases = [
     {
       id: 1,
-      name: "Часы наручные Casio",
+      name: "Часы наручные Casio + Часы наручные Casio + Часы наручные Casio + Часы наручные Casio + Часы наручные Casio",
       price: "0",
       step: "2",
       image: "/images/casio.png",
@@ -32,6 +32,35 @@ const PurchasesPage = () => {
       step: "3",
       image: "/images/casio.png",
     },
+    {
+      id: 5,
+      name: "Часы наручные Casio",
+      price: "0",
+      step: "3",
+      image: "/images/casio.png",
+    },
+    {
+      id: 6,
+      name: "Часы наручные Casio",
+      price: "0",
+      step: "3",
+      image: "/images/casio.png",
+    },
+    {
+      id: 7,
+      name: "Часы наручные Casio",
+      price: "0",
+      step: "3",
+      image: "/images/casio.png",
+    },
+    {
+      id: 8,
+      name: "Часы наручные Casio",
+      price: "0",
+      step: "3",
+      image: "/images/casio.png",
+    },
+
     // ...other purchases
   ];
 
