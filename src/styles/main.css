@@ -47,27 +47,6 @@
   cursor: pointer;
 }
 
-/* Purchases Page */
-.purchases-page {
-  padding: 20px;
-  width: 100%;
-}
-
-.purchases-page ul {
-  list-style: none;
-  padding: 0;
-}
-
-.purchases-page ul li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: white;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
 /* Profile Page */
 .profile-page {
   padding: 20px;

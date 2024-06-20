@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="product-card">
-      {!isLoaded && <div className="skeleton"></div>}
+      {!isLoaded && <div className="catalog-skeleton"></div>}
       <img
         src={product.image}
         alt={product.name}
