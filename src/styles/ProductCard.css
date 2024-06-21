@@ -73,6 +73,10 @@ p {
   color: rgba(113, 113, 113, 1);
   text-decoration: line-through;
   margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
 }
 
 .product-new-price {
@@ -81,4 +85,8 @@ p {
   font-weight: 700;
   line-height: 14px;
   color: rgba(196, 46, 181, 1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
 }

@@ -31,7 +31,7 @@ const ProductDetail = ({ products }) => {
         onLoad={handleImageLoad}
         onError={handleImageError}
       />
-      <p className="product-name">{product.description}</p>
+      <p className="product-name">{product.name}</p>
       <div>
       <div>
         <p className="product-terms">Условия сделки:</p>

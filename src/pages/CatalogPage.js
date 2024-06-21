@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import '../styles/CatalogPage.css';
 
-const CatalogPage = () => {
-  const products = [
-    { id: 1, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 2, name: 'Product 2', price: '2000', image: '/images/product1.png', oldPrice: '3000', description: 'Часы наручные кварцевые с серебрянным ремешком + Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 3, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 4, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 5, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 6, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    { id: 7, name: 'Product 1', price: '1000', image: '/images/product1.png', oldPrice: '2000', description: 'Часы наручные кварцевые с серебрянным ремешком' },
-    // ...other products
-  ];
-
+const CatalogPage = ({ products }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredProducts = products.filter((product) =>

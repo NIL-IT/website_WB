@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
           <p className="product-new-price">{product.price} ₽</p>
           <p className="product-old-price">{product.oldPrice} ₽</p>
         </div>
-        <p className="product-description">{product.description}</p>
+        <p className="product-description">{product.name}</p>
       </div>
     </div>
   );

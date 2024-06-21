@@ -1,69 +1,7 @@
 import React, { useState } from "react";
 import "../styles/PurchasesPage.css";
 
-const PurchasesPage = () => {
-  const purchases = [
-    {
-      id: 1,
-      name: "Часы наручные Casio + Часы наручные Casio + Часы наручные Casio + Часы наручные Casio + Часы наручные Casio",
-      price: "0",
-      step: "2",
-      image: "/images/casio.png",
-    },
-    {
-      id: 2,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "Завершено",
-      image: "/images/casio.png",
-      isComplete: true,
-    },
-    {
-      id: 3,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "6",
-      image: "/images/casio.png",
-    },
-    {
-      id: 4,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "3",
-      image: "/images/casio.png",
-    },
-    {
-      id: 5,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "3",
-      image: "/images/casio.png",
-    },
-    {
-      id: 6,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "3",
-      image: "/images/casio.png",
-    },
-    {
-      id: 7,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "3",
-      image: "/images/casio.png",
-    },
-    {
-      id: 8,
-      name: "Часы наручные Casio",
-      price: "0",
-      step: "3",
-      image: "/images/casio.png",
-    },
-
-    // ...other purchases
-  ];
-
+const PurchasesPage = ({ products }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleImageLoad = () => {
@@ -78,23 +16,23 @@ const PurchasesPage = () => {
     <div className="purchases-page">
       <div className="title-class">Мои покупки</div>
       <ul>
-        {purchases.map((purchase) => (
-          <li key={purchase.id} className="purchase-item">
+        {products.map((product) => (
+          <li key={product.id} className="purchase-item">
             {!isLoaded && <div className="purchase-skeleton"></div>}
             <img
-              src={purchase.image}
-              alt={purchase.name}
+              src={product.image}
+              alt={product.name}
               className="purchase-image"
               style={{ display: isLoaded ? "block" : "none" }}
               onLoad={handleImageLoad}
               onError={handleImageError}
             />
             <div className="purchase-details">
-              <h2 className="purchase-title">{purchase.name}</h2>
-              <p className="purchase-price">Цена для вас: {purchase.price} ₽</p>
+              <h2 className="purchase-title">{product.name}</h2>
+              <p className="purchase-price">Цена для вас: {product.yourPrice} ₽</p>
               <p className="purchase-step">
-                Текущий шаг: {purchase.step}{" "}
-                {purchase.isComplete && (
+                Шаги: {product.step}
+                {product.isComplete && (
                   <span style={{ marginLeft: '4px' }}>
                     <svg
                       width="8"
