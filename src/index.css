@@ -39,6 +39,13 @@ code {
 
 @font-face {
   font-family: "Inter";
+  src: local("inter_medium"),
+    url("./fonts/Inter-Medium.otf") format("opentype");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Inter";
   src: local("inter_semibold"),
     url("./fonts/Inter-SemiBold.otf") format("opentype");
   font-weight: 600;

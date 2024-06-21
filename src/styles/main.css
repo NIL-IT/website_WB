@@ -46,27 +46,3 @@
   border-radius: 5px;
   cursor: pointer;
 }
-
-/* Profile Page */
-.profile-page {
-  padding: 20px;
-  width: 100%;
-}
-
-.profile-page ul {
-  list-style: none;
-  padding: 0;
-}
-
-.profile-page ul li {
-  margin: 10px 0;
-}
-
-.profile-page ul li a {
-  color: #2196f3;
-  text-decoration: none;
-}
-
-.profile-page ul li a:hover {
-  text-decoration: underline;
-}
