@@ -26,7 +26,7 @@ const ProductDetail = ({ products }) => {
       <img
         src={product.image}
         alt={product.name}
-        className="product-image"
+        className="product-image-detail"
         style={{ display: isLoaded ? 'block' : 'none' }}
         onLoad={handleImageLoad}
         onError={handleImageError}

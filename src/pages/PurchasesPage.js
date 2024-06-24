@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import "../styles/PurchasesPage.css";
 
 const PurchasesPage = ({ products }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [loadedImages, setLoadedImages] = useState({});
 
-  const handleImageLoad = () => {
-    setIsLoaded(true);
+  const handleImageLoad = (productId) => {
+    setLoadedImages((prevState) => ({
+      ...prevState,
+      [productId]: true,
+    }));
   };
 
-  const handleImageError = (event) => {
-    event.target.style.display = "none";
+  const handleImageError = (event, productId) => {
+    event.target.style.display = "none"; // Скрыть изображение при ошибке
+    setLoadedImages((prevState) => ({
+      ...prevState,
+      [productId]: false, // Пометить, что изображение не загружено
+    }));
   };
 
   return (
@@ -18,14 +25,14 @@ const PurchasesPage = ({ products }) => {
       <ul>
         {products.map((product) => (
           <li key={product.id} className="purchase-item">
-            {!isLoaded && <div className="purchase-skeleton"></div>}
+            <div className="purchase-skeleton" style={{ display: loadedImages[product.id] ? "none" : "block" }}></div>
             <img
               src={product.image}
               alt={product.name}
               className="purchase-image"
-              style={{ display: isLoaded ? "block" : "none" }}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
+              style={{ display: loadedImages[product.id] ? "block" : "none" }}
+              onLoad={() => handleImageLoad(product.id)}
+              onError={(event) => handleImageError(event, product.id)}
             />
             <div className="purchase-details">
               <h2 className="purchase-title">{product.name}</h2>
@@ -42,14 +49,14 @@ const PurchasesPage = ({ products }) => {
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M0 4C0 1.79086 1.79086 0 4 0C6.20915 0 8 1.79086 8 4C8 6.20915 6.20915 8 4 8C1.79086 8 0 6.20915 0 4Z"
                         fill="#04B800"
                       />
                       <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
+                        fillRule="evenodd"
+                        clipRule="evenodd"
                         d="M5.6858 2.87243C5.79479 2.98141 5.79479 3.15811 5.6858 3.26708L3.96442 4.9885C3.71014 5.24279 3.29782 5.24279 3.04354 4.9885L2.3144 4.25935C2.20542 4.15036 2.20542 3.97365 2.3144 3.86467C2.42339 3.75568 2.60008 3.75568 2.70907 3.86467L3.43821 4.59382C3.47453 4.63014 3.53343 4.63014 3.56974 4.59382L5.29116 2.87243C5.40014 2.76345 5.57681 2.76345 5.6858 2.87243Z"
                         fill="black"
                       />
