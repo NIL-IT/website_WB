@@ -7,8 +7,22 @@
 }
 
 .content {
-  overflow: auto;
-  padding-bottom: 50px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-bottom: 50px; 
+}
+
+.content::-webkit-scrollbar {
+  width: 0px; 
+  height: 0px;
+}
+
+.content {
+  scrollbar-width: none;
+}
+
+.content {
+  -ms-overflow-style: none; 
 }
 
 
@@ -21,29 +35,3 @@
 
 
 
-/* Add Product Page */
-.add-product-page {
-  padding: 20px;
-  width: 100%;
-}
-
-.add-product-page form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.add-product-page form input,
-.add-product-page form select,
-.add-product-page form button {
-  padding: 10px;
-  font-size: 16px;
-}
-
-.add-product-page form button {
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}

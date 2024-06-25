@@ -24,15 +24,15 @@ const ProductCard = ({ product }) => {
       <img
         src={product.image}
         alt={product.name}
-        className="product-image"
+        className="product-image-category"
         style={{ display: isLoaded ? 'block' : 'none' }}
         onLoad={handleImageLoad}
         onError={handleImageError}
       />
       <div className="product-info">
         <div className="product-price">
-          <p className="product-new-price">{product.price} ₽</p>
-          <p className="product-old-price">{product.oldPrice} ₽</p>
+          <p className="product-new-price">{product.yourPrice} ₽</p>
+          <p className="product-old-price">{product.marketPrice} ₽</p>
         </div>
         <p className="product-description">{product.name}</p>
       </div>
