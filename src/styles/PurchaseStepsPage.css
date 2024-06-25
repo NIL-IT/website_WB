@@ -242,6 +242,21 @@
   color: red;
 }
 
+.red-error {
+  position: absolute;
+  top: -10px; /* Adjust as necessary */
+  left: 0;
+  color: red;
+  font-family: "Inter";
+  font-size: 10px;
+  font-weight: 400;
+}
+
+.article-input {
+  position: relative;
+  margin-top: 20px;
+}
+
 .purchase-step-page input {
   width: 280px;
   border: none;
