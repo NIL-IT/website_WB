@@ -1,21 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products, setProducts }) => {
+const ProductDetail = ({ products }) => {
   const { id } = useParams();
-  const productIndex = products.findIndex((product) => product.id.toString() === id);
-  const product = productIndex !== -1 ? products[productIndex] : null;
+  const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (product && !product.hasOwnProperty('step')) {
-      const updatedProducts = [...products];
-      updatedProducts[productIndex] = { ...product, step: 0 };
-      setProducts(updatedProducts);
-    }
-  }, [product, productIndex, products, setProducts]);
 
   const handleImageLoad = () => {
     setIsLoaded(true);

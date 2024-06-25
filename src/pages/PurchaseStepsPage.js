@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../styles/PurchaseStepsPage.css';
 
-const PurchaseStepsPage = ({ products, onStepComplete }) => {
+const PurchaseStepsPage = ({ products }) => {
   const { id } = useParams();
   const product = products.find((product) => product.id.toString() === id);
-  const [step, setStep] = useState(product ? parseInt(product.step) : 0);
   const [formData, setFormData] = useState({
     image1: '',
     image2: '',
@@ -18,31 +17,41 @@ const PurchaseStepsPage = ({ products, onStepComplete }) => {
   });
   const [uploaded, setUploaded] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+  };
+
+  const handleImageError = (event) => {
+    event.target.style.display = 'none';
+  };
+
+  const step = product ? parseInt(product.step) : 0;
 
   useEffect(() => {
     if (product) {
-      const savedStep = localStorage.getItem(`step_${product.id}`);
       const savedFormData = localStorage.getItem(`formData_${product.id}`);
-      if (savedStep) setStep(parseInt(savedStep));
       if (savedFormData) setFormData(JSON.parse(savedFormData));
     }
   }, [product]);
 
   useEffect(() => {
     if (product) {
-      localStorage.setItem(`step_${product.id}`, step);
       localStorage.setItem(`formData_${product.id}`, JSON.stringify(formData));
     }
-  }, [step, formData, product]);
+  }, [formData, product]);
 
-  const handleFileUpload = (event) => {
-    if (event.target.files.length > 0) {
-      setUploaded(true);
+  const handleFileUpload = (event, imageField) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData({ ...formData, [imageField]: reader.result });
+        setUploaded(true);
+      };
+      reader.readAsDataURL(file);
     }
-  };
-
-  const handleNextStep = () => {
-    if (step < 7) setStep(step + 1);
   };
 
   const handleInputChange = (e) => {
@@ -50,30 +59,14 @@ const PurchaseStepsPage = ({ products, onStepComplete }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleImageUpload = (e, imageField) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, [imageField]: reader.result });
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleStepComplete = () => {
-    onStepComplete(step, formData);
-    handleNextStep();
-  };
-
-  const keywords = product.keywords.split(", ").map((keyword, index) => (
+  const keywords = product && product.keywords ? product.keywords.split(", ").map((keyword, index) => (
     <div key={index} className="keyword">
-      {keyword}
       <svg width="18" height="17" viewBox="0 0 18 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11.6254 11.0158L17 16.1863M13.4444 6.79193C13.4444 10.0936 10.6587 12.7701 7.22222 12.7701C3.78579 12.7701 1 10.0936 1 6.79193C1 3.49026 3.78579 0.813721 7.22222 0.813721C10.6587 0.813721 13.4444 3.49026 13.4444 6.79193Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11.6254 11.0158L17 16.1863M13.4444 6.79193C13.4444 10.0936 10.6587 12.7701 7.22222 12.7701C3.78579 12.7701 1 10.0936 1 6.79193C1 3.49026 3.78579 0.813721 7.22222 0.813721C10.6587 0.813721 13.4444 3.49026 13.4444 6.79193Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
+      {keyword}
     </div>
-  ));
+  )) : [];
 
   const renderStepContent = () => {
     switch (step) {
@@ -99,7 +92,7 @@ const PurchaseStepsPage = ({ products, onStepComplete }) => {
                 Цена в магазине: {product.marketPrice} ₽<br />
                 Цена для вас: {product.yourPrice} ₽
               </p>
-              <button className="purchase-step-button" onClick={handleStepComplete}>Я соглашаюсь с условиями</button>
+              <button className="purchase-step-button">Я соглашаюсь с условиями</button>
             </div>
           </div>
         );
@@ -123,6 +116,7 @@ const PurchaseStepsPage = ({ products, onStepComplete }) => {
                 <li>Сделайте скрин корзины и загрузите отчет</li>
               </ul>
               <div className="upload-section">
+                <p className="upload-title">Загрузите скрин корзины</p>
                 <label className="upload-label" htmlFor="file-upload">
                   {uploaded ? 'Изображение загружено' : 'Выберите изображение'}
                 </label>
@@ -130,51 +124,88 @@ const PurchaseStepsPage = ({ products, onStepComplete }) => {
                   id="file-upload"
                   type="file"
                   className="upload-input"
-                  onChange={handleFileUpload}
+                  onChange={(e) => handleFileUpload(e, 'image1')}
                 />
               </div>
-              <div className="upload-feedback" onClick={() => setChecked(!checked)}>
-                <div className="upload-checkbox">
-                  {checked && (
-                    <svg viewBox="0 0 13 13">
-                      <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                    </svg>
-                  )}
+              <div className="purchase-step-footer">
+                <div className="upload-feedback" onClick={() => setChecked(!checked)}>
+                  <div className={`upload-checkbox ${checked ? 'checked' : ''}`}>
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">Добавил(а) в корзину 2-3 товара</div>
                 </div>
-                <div className="upload-feedback-text">Добавил(а) в корзину 2-3 товара</div>
+                <button
+                  className="purchase-step-button"
+                  disabled={!uploaded || !checked}
+                >
+                  Продолжить
+                </button>
               </div>
-              <button
-                className="purchase-step-button"
-                onClick={handleStepComplete}
-                disabled={!uploaded || !checked}
-              >
-                Продолжить
-              </button>
             </div>
           </div>
         );
       case 2:
         return (
-          <div>
-            <input type="file" onChange={(e) => handleImageUpload(e, 'image2')} required />
-            <input type="text" name="article" value={formData.article} onChange={handleInputChange} placeholder="Артикул товара" required />
-            <button onClick={handleStepComplete}>Далее</button>
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <h1 className="purchase-step-title">Шаг 2: Найти товар продавца</h1>
+            </div>
+            <div className="purchase-step-content">
+              <p className="purchase-step-warning"><span className="important">Важно! Соблюдайте инструкцию</span></p>
+              <p className="purchase-step-text">
+                Найдите наш товар (фото карточки товара ниже).
+                <ul className="purchase-step-text text-ul">
+                  <li>Используйте ключевое слово;</li>
+                  <li>Найдите товар в поисковой выдаче, используйте фильтр;</li>
+                  <li>Сделайте скрин нашего товара в конкурентной выдаче;</li>
+                  <li>Вставьте артикул товара для проверки.</li>
+                </ul>
+              </p>
+              <div className="purchase-step-image">
+              {!isLoaded && <div className="purchase-step-skeleton"></div>}
+      <img
+        src={product.image}
+        alt={product.name}
+        className="product-image-detail"
+        style={{ display: isLoaded ? 'block' : 'none' }}
+        onLoad={handleImageLoad}
+        onError={handleImageError}
+      />
+              </div>
+              <p className="purchase-step-text">Если артикул правильный, вы перейдете на следующий шаг.</p>
+              <p className="purchase-step-text" style={{ marginBottom: 0 }}>Загрузите скрин нашего товара в конкурентной выдаче</p>
+                <label className="upload-label" htmlFor="file-upload-competitor">
+                  {uploaded ? 'Изображение загружено' : 'Выберите изображение'}
+                </label>
+                <input
+                  id="file-upload-competitor"
+                  type="file"
+                  className="upload-input"
+                  onChange={(e) => handleFileUpload(e, 'image2')}
+                />
+              <p className="purchase-step-text" style={{ marginBottom: 0 }}>Артикул товара (Введите артикул товара)</p>
+              <p className="purchase-step-subtitle-12px-400">Найдите артикул товара и вставьте его для проверки</p>
+              <input
+                type="text"
+                name="article"
+                value={formData.article}
+                onChange={handleInputChange}
+                placeholder="Введите артикул"
+              />
+              <button className="purchase-step-button" disabled={!uploaded}>Продолжить</button>
+            </div>
           </div>
         );
       default:
-        return <div>Процесс завершен</div>;
+        return <p>Unknown step</p>;
     }
   };
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
-
-  return (
-    <div className="purchase-steps-page">
-      {renderStepContent()}
-    </div>
-  );
+  return <div className="purchase-step-page-container">{renderStepContent()}</div>;
 };
 
 export default PurchaseStepsPage;

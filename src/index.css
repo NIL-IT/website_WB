@@ -56,3 +56,24 @@ code {
     url("./fonts/Inter-Bold.otf") format("opentype");
   font-weight: 700;
 }
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Apply to specific elements, for example .purchase-step-keywords */
+.purchase-step-keywords {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.purchase-step-keywords::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
