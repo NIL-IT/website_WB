@@ -132,6 +132,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
 
+.delete-button {
+  width: 280px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background-color: red;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
 
+.delete-button:hover {
+  background-color: darkred;
 }

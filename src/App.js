@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CatalogPage from './pages/CatalogPage';
+import CatalogPageModerate from './pages/CatalogPageModerate';
 import AddProductPage from './pages/AddProductPage';
 import PurchasesPage from './pages/PurchasesPage';
 import ProfilePage from './pages/ProfilePage';
@@ -24,6 +25,7 @@ const App = () => {
       step: "7",
       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
       article: "123456",
+      category: "Женщинам"
     },
     {
       id: 2,
@@ -39,6 +41,7 @@ const App = () => {
       isComplete: true,
       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
       article: "123456",
+      category: "Мужчинам"
     },
     {
       id: 3,
@@ -53,6 +56,7 @@ const App = () => {
       discount: 1225,
       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
       article: "123456",
+      category: "Мужчинам"
     },
     {
       id: 4,
@@ -85,7 +89,7 @@ const App = () => {
   ]);
 
   
-    const categories = ['Категория 1', 'Категория 2', 'Категория 3'];
+    const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год'];
 
     const [userInfo, setUserInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -123,7 +127,7 @@ const App = () => {
       },
     };
   
-    useEffect(() => {
+  /*  useEffect(() => {
       window.Telegram.WebApp.expand();
     
       const fetchData = async () => {
@@ -158,7 +162,7 @@ const App = () => {
   if (isLoading) {
       console.log("этап0");
       return <div>Загрузка...</div>;
-  } 
+  } */
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
@@ -172,6 +176,7 @@ const App = () => {
           <Routes>
             <Route exact path="/" element={<CatalogPage products={products} />} />
             <Route path="/catalog" element={<CatalogPage products={products} />} />
+            <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} />} />
             <Route path="/add-product" element={<AddProductPage products={products} setProducts={setProducts} categories={categories} />} />
             <Route path="/purchases" element={<PurchasesPage products={products} />} />
             <Route path="/profile" element={<ProfilePage />} />

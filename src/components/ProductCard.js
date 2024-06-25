@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ProductCard.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isModerate }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
 
@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
   };
 
   const handleClick = () => {
-    navigate(`/product/${product.id}`);
+    navigate(`/product/${product.id}`, { state: { fromModeratePage: isModerate } });
   };
 
   return (

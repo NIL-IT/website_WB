@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
 const ProductDetail = ({ products }) => {
@@ -7,6 +7,7 @@ const ProductDetail = ({ products }) => {
   const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleImageLoad = () => {
     setIsLoaded(true);
@@ -20,9 +21,16 @@ const ProductDetail = ({ products }) => {
     navigate(`/purchase-steps/${id}`);
   };
 
+  const handleDeleteClick = () => {
+    // Логика удаления товара
+    console.log(`Товар с id ${id} удален`);
+  };
+
   if (!product) {
     return <div>Product not found</div>;
   }
+
+  const fromModeratePage = location.state?.fromModeratePage;
 
   return (
     <div className="product-detail">
@@ -61,6 +69,9 @@ const ProductDetail = ({ products }) => {
         </div>
       </div>
       <button className="buy-button" onClick={handleBuyClick}>Купить товар</button>
+      {fromModeratePage && (
+        <button className="delete-button" onClick={handleDeleteClick}>Удалить товар</button>
+      )}
     </div>
   );
 };
