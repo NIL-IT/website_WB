@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CatalogPage from './pages/CatalogPage';
 import AddProductPage from './pages/AddProductPage';
@@ -76,7 +76,81 @@ const App = () => {
     },
   ]);
 
-  const categories = ['Категория 1', 'Категория 2', 'Категория 3'];
+  
+    const categories = ['Категория 1', 'Категория 2', 'Категория 3'];
+
+    const [userInfo, setUserInfo] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    
+    const baseURL = 'https://nilurl.ru:8000/'
+    const API = {
+      async getUser(id) {
+        try {
+          const option = {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          };
+          const res = await fetch(`${baseURL}getUser.php?id=${id}`, option).then(res => res.json());
+          return res;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      async createUser(id, username) {
+        try {
+          const option = {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: id, username: username }),
+          };
+          const res = await fetch(`${baseURL}createUser.php`, option).then(res => res.json());
+          return res;
+        } catch (err) {
+          console.log(err);
+        }
+      },
+    };
+  
+    useEffect(() => {
+      window.Telegram.WebApp.expand();
+    
+      const fetchData = async () => {
+        try {
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+          const username = window.Telegram.WebApp.initDataUnsafe.user.username;
+          const response = await API.getUser(userId);
+          console.log("этап1");
+          if (!response.success) {
+            const createResponse = await API.createUser(userId, username);
+            if (createResponse.success === true) {
+              const newUserResponse = await API.getUser(userId);
+              setUserInfo(newUserResponse.data);
+              setIsLoading(false);
+              console.log("этап2");
+              console.log(isLoading);
+              console.log(newUserResponse.data);
+            }
+          } else {
+            console.log("этап3");
+            setUserInfo(response.data);
+            setIsLoading(false);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      };
+    
+      fetchData();
+    }, []);
+  
+  /*  if (isLoading) {
+      console.log("этап0");
+      return <div>Загрузка...</div>;
+  } */
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
