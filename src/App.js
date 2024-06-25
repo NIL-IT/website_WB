@@ -127,7 +127,7 @@ const App = () => {
       },
     };
   
-  /*  useEffect(() => {
+    useEffect(() => {
       window.Telegram.WebApp.expand();
     
       const fetchData = async () => {
@@ -162,7 +162,7 @@ const App = () => {
   if (isLoading) {
       console.log("этап0");
       return <div>Загрузка...</div>;
-  } */
+  } 
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
@@ -175,8 +175,8 @@ const App = () => {
         <div className="content">
           <Routes>
             <Route exact path="/" element={<CatalogPage products={products} />} />
-            <Route path="/catalog" element={<CatalogPage products={products} />} />
-            <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} />} />
+            <Route path="/catalog" element={<CatalogPage products={products} categories={categories} />} />
+            <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories} />} />
             <Route path="/add-product" element={<AddProductPage products={products} setProducts={setProducts} categories={categories} />} />
             <Route path="/purchases" element={<PurchasesPage products={products} />} />
             <Route path="/profile" element={<ProfilePage />} />
