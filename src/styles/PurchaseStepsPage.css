@@ -12,8 +12,7 @@
   flex-direction: column;
   justify-content: center;
   width: 320px;
-  height: 109px;
-  padding: 20px 20px 10px 20px;
+  padding: 20px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 0px 0px 8px 8px;
   box-sizing: border-box;
@@ -53,6 +52,12 @@
   font-weight: 500;
 }
 
+.purchase-step-subtitle-12px-400 {
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 400;
+}
+
 .purchase-step-warning {
   font-family: "Inter";
   font-size: 14px;
@@ -79,11 +84,18 @@
   margin-bottom: 0;
 }
 
-.purchase-step-button {
+.purchase-step-footer {
   position: absolute;
   bottom: 70px;
   width: calc(100% - 40px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.purchase-step-button {
   height: 30px;
+  width: 100%;
   border: none;
   border-radius: 8px;
   background-color: rgba(105, 13, 201, 1);
@@ -94,13 +106,10 @@
   text-align: center;
 }
 
-.important {
-  color: red;
-}
-
 .purchase-step-keywords {
   display: flex;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .keyword {
@@ -117,26 +126,19 @@
   padding: 0 10px;
   margin-right: 10px;
   white-space: nowrap;
-}
-
-.keyword svg {
-  margin-left: 10px;
+  gap: 10px;
 }
 
 .text-ul {
   padding-left: 20px;
-}
-
-.upload-section {
-  margin-top: 20px;
+  margin: 0;
 }
 
 .upload-label {
   font-family: "Helvetica Neue Cyr";
-  font-size: 14px;
-  font-weight: 550;
+  font-size: 8px;
+  font-weight: 400;
   width: 280px;
-  border: 0.5px solid rgba(0, 0, 0, 1);
   border-radius: 8px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
@@ -145,7 +147,7 @@
   cursor: pointer;
   box-sizing: border-box;
   display: inline-block;
-  text-align: center;
+  border: none;
 }
 
 .upload-input {
@@ -166,17 +168,22 @@
 .upload-checkbox {
   width: 13px;
   height: 13px;
-  background-color: rgba(4, 184, 0, 1);
+  background-color: grey;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 8px;
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.upload-checkbox.checked {
+  background-color: rgba(4, 184, 0, 1); /* Green when checked */
 }
 
 .upload-checkbox svg {
   width: 10px;
   height: 10px;
-  fill: white;
+  fill: black;
 }
 
 .upload-feedback-text {
@@ -194,5 +201,62 @@
   margin-top: 10px;
   font-family: "Helvetica Neue Cyr";
   font-size: 14px;
-  color: green;
+}
+
+.upload-title {
+  font-family: "Helvetica Neue Cyr";
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.purchase-step-skeleton {
+  background-color: #e0e0e0;
+  width: 100%;
+  height: 363px;
+  border-radius: 8px;
+  animation: skeleton-loading 1.5s infinite;
+  margin: 0 auto;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #f0f0f0;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+}
+
+.purchase-step-detail {
+  width: 100%;
+  height: 363px;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
+}
+
+.important {
+  color: red;
+}
+
+.purchase-step-page input {
+  width: 280px;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(188, 122, 255, 1);
+  color: white;
+  font-family: "Inter";
+  font-size: 8px;
+  font-weight: 400;
+  padding: 10px;
+  margin-top: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.purchase-step-page input::placeholder {
+  color: white;
 }
