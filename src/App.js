@@ -5,6 +5,7 @@ import AddProductPage from './pages/AddProductPage';
 import PurchasesPage from './pages/PurchasesPage';
 import ProfilePage from './pages/ProfilePage';
 import ProductDetail from './components/ProductDetail';
+import PurchaseStepsPage from './pages/PurchaseStepsPage';
 import Sidebar from './components/Sidebar';
 import './index.css';
 
@@ -47,9 +48,39 @@ const App = () => {
       step: "6",
       discount: 1225,
     },
+    {
+      id: 4,
+      image: 'Без шага',
+      name: 'Без шага',
+      description: 'Без шага',
+      terms: 'Payment323232 details',
+      availableDay: 'To3232323day',
+      marketPrice: 2500,
+      yourPrice: 1500,
+      step: "0",
+      discount: 250,
+      keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного"
+    },
+    {
+      id: 5,
+      image: 'Без шага',
+      name: 'Без шага',
+      description: 'Без шага',
+      terms: 'Payment323232 details',
+      availableDay: 'To3232323day',
+      marketPrice: 2500,
+      yourPrice: 1500,
+      step: "0",
+      discount: 250,
+      keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного"
+    },
   ]);
 
   const categories = ['Категория 1', 'Категория 2', 'Категория 3'];
+
+  const handleStepComplete = (step, formData) => {
+    // Логика для обработки завершения шага
+  };
 
   return (
     <Router>
@@ -63,6 +94,7 @@ const App = () => {
             <Route path="/purchases" element={<PurchasesPage products={products} />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/product/:id" element={<ProductDetail products={products} />} />
+            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage products={products} onStepComplete={handleStepComplete} />} />
           </Routes>
         </div>
       </div>

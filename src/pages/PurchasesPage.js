@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../styles/PurchasesPage.css";
 
 const PurchasesPage = ({ products }) => {
@@ -19,12 +20,19 @@ const PurchasesPage = ({ products }) => {
     }));
   };
 
+  const navigate = useNavigate();
+  const handleProductClick = (productId) => {
+    navigate(`/purchase-steps/${productId}`);
+  };
+
   return (
     <div className="purchases-page">
       <div className="title-class">Мои покупки</div>
       <ul>
-        {products.map((product) => (
-          <li key={product.id} className="purchase-item">
+      {products
+          .filter(product => product.step > 0 || product.isComplete)
+          .map((product) => (
+          <li key={product.id} className="purchase-item" onClick={() => handleProductClick(product.id)}>
             <div className="purchase-skeleton" style={{ display: loadedImages[product.id] ? "none" : "block" }}></div>
             <img
               src={product.image}

@@ -1,12 +1,21 @@
-import React , { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products }) => {
+const ProductDetail = ({ products, setProducts }) => {
   const { id } = useParams();
-  const product = products.find((product) => product.id.toString() === id);
-
+  const productIndex = products.findIndex((product) => product.id.toString() === id);
+  const product = productIndex !== -1 ? products[productIndex] : null;
   const [isLoaded, setIsLoaded] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (product && !product.hasOwnProperty('step')) {
+      const updatedProducts = [...products];
+      updatedProducts[productIndex] = { ...product, step: 0 };
+      setProducts(updatedProducts);
+    }
+  }, [product, productIndex, products, setProducts]);
 
   const handleImageLoad = () => {
     setIsLoaded(true);
@@ -14,6 +23,10 @@ const ProductDetail = ({ products }) => {
 
   const handleImageError = (event) => {
     event.target.style.display = 'none';
+  };
+
+  const handleBuyClick = () => {
+    navigate(`/purchase-steps/${id}`);
   };
 
   if (!product) {
@@ -33,10 +46,10 @@ const ProductDetail = ({ products }) => {
       />
       <p className="product-name">{product.name}</p>
       <div>
-      <div>
-        <p className="product-terms">Условия сделки:</p>
-        <p className="product-payment">{product.terms}</p>
-      </div>
+        <div>
+          <p className="product-terms">Условия сделки:</p>
+          <p className="product-payment">{product.terms}</p>
+        </div>
       </div>
       <div className="product-details">
         <div className="product-item">
@@ -56,7 +69,7 @@ const ProductDetail = ({ products }) => {
           <p>{product.discount}%</p>
         </div>
       </div>
-      <button className="buy-button">Купить товар</button>
+      <button className="buy-button" onClick={handleBuyClick}>Купить товар</button>
     </div>
   );
 };
