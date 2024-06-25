@@ -115,42 +115,42 @@ const App = () => {
       },
     };
   
-    // useEffect(() => {
-    //   window.Telegram.WebApp.expand();
+    useEffect(() => {
+      window.Telegram.WebApp.expand();
     
-    //   const fetchData = async () => {
-    //     try {
-    //       const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
-    //       const username = window.Telegram.WebApp.initDataUnsafe.user.username;
-    //       const response = await API.getUser(userId);
-    //       console.log("этап1");
-    //       if (!response.success) {
-    //         const createResponse = await API.createUser(userId, username);
-    //         if (createResponse.success === true) {
-    //           const newUserResponse = await API.getUser(userId);
-    //           setUserInfo(newUserResponse.data);
-    //           setIsLoading(false);
-    //           console.log("этап2");
-    //           console.log(isLoading);
-    //           console.log(newUserResponse.data);
-    //         }
-    //       } else {
-    //         console.log("этап3");
-    //         setUserInfo(response.data);
-    //         setIsLoading(false);
-    //       }
-    //     } catch (e) {
-    //       console.log(e);
-    //     }
-    //   };
+      const fetchData = async () => {
+        try {
+          const userId = window.Telegram.WebApp.initDataUnsafe.user.id;
+          const username = window.Telegram.WebApp.initDataUnsafe.user.username;
+          const response = await API.getUser(userId);
+          console.log("этап1");
+          if (!response.success) {
+            const createResponse = await API.createUser(userId, username);
+            if (createResponse.success === true) {
+              const newUserResponse = await API.getUser(userId);
+              setUserInfo(newUserResponse.data);
+              setIsLoading(false);
+              console.log("этап2");
+              console.log(isLoading);
+              console.log(newUserResponse.data);
+            }
+          } else {
+            console.log("этап3");
+            setUserInfo(response.data);
+            setIsLoading(false);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      };
     
-    //   fetchData();
-    // }, []);
+      fetchData();
+    }, []);
   
-  /*  if (isLoading) {
+  if (isLoading) {
       console.log("этап0");
       return <div>Загрузка...</div>;
-  } */
+  }
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
