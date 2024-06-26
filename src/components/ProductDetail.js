@@ -53,15 +53,15 @@ const ProductDetail = ({ products }) => {
       <div className="product-details">
         <div className="product-item">
           <p>Доступно в день:</p>
-          <p>{product.availableDay}</p>
+          <p>{product.availableday}</p>
         </div>
         <div className="product-item">
           <p>Цена на маркетплейсе:</p>
-          <p>{product.marketPrice} ₽</p>
+          <p>{product.marketprice} ₽</p>
         </div>
         <div className="product-item">
           <p>Цена для вас:</p>
-          <p>{product.yourPrice} ₽</p>
+          <p>{product.yourprice} ₽</p>
         </div>
         <div className="product-item">
           <p>Скидка:</p>

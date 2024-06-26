@@ -1,26 +1,20 @@
 import React, { useState } from "react";
 import "../styles/AddProductPage.css";
 
-const AddProductPage = ({ products, setProducts, categories }) => {
+const AddProductPage = ({ products, setProducts, categories, fetchProducts }) => {
   const [formData, setFormData] = useState({
     brand: "",
     name: "",
     category: "",
-    price: "",
-    clientPrice: "",
     image: "",
-    discountCode: "",
-    discountCodeDay: "",
-    keywords: "",
-    bonusLink: "",
-    description: "",
-    terms: "",
     availableDay: "",
+    keywords: "",
+    article: "",
+    tg_nick: "",
+    terms: "",
     marketPrice: "",
     yourPrice: "",
-    discount: "",
-    step: "",
-    isComplete: false,
+    amountMax: "",
   });
 
   const handleChange = (e) => {
@@ -41,27 +35,40 @@ const AddProductPage = ({ products, setProducts, categories }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newProduct = { ...formData, id: products.length + 1 };
-    setProducts([...products, newProduct]);
+
+    fetch('https://nilurl.ru:8000/addProduct.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        fetchProducts(); 
+        setProducts([...products, data.newProduct]);
+      } else {
+        console.error('Error:', data.message);
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
     setFormData({
       brand: "",
       name: "",
       category: "",
-      price: "",
-      clientPrice: "",
       image: "",
-      discountCode: "",
-      discountCodeDay: "",
-      keywords: "",
-      bonusLink: "",
-      description: "",
-      terms: "",
       availableDay: "",
+      keywords: "",
+      article: "",
+      tg_nick: "",
+      terms: "",
       marketPrice: "",
       yourPrice: "",
-      discount: "",
-      step: "",
-      isComplete: false,
+      amountMax: "",
     });
   };
 
@@ -147,8 +154,8 @@ const AddProductPage = ({ products, setProducts, categories }) => {
         Кол-во сделок со скидкой<span style={{ color: "red" }}> *</span>
           <input
             type="text"
-            name="discount"
-            value={formData.discount}
+            name="amountMax"
+            value={formData.amountMax}
             onChange={handleChange}
             placeholder="Максимальное количество сделок"
             required
@@ -159,8 +166,8 @@ const AddProductPage = ({ products, setProducts, categories }) => {
           <span style={{ color: "red" }}> *</span>
           <input
             type="number"
-            name="discountCodeDay"
-            value={formData.discountCodeDay}
+            name="availableDay"
+            value={formData.availableDay}
             onChange={handleChange}
             placeholder="Сделок в день"
             required
@@ -182,8 +189,8 @@ const AddProductPage = ({ products, setProducts, categories }) => {
           Артикул<span style={{ color: "red" }}> *</span>
           <input
             type="text"
-            name="description"
-            value={formData.description}
+            name="article"
+            value={formData.article}
             onChange={handleChange}
             placeholder="Введите артикул"
             required
@@ -193,8 +200,8 @@ const AddProductPage = ({ products, setProducts, categories }) => {
         Ваш ник в телеграм<span style={{ color: "red" }}> *</span>
           <input
             type="text"
-            name="terms"
-            value={formData.terms}
+            name="tg_nick"
+            value={formData.tg_nick}
             onChange={handleChange}
             placeholder="Например: Alexon"
             required
@@ -205,8 +212,8 @@ const AddProductPage = ({ products, setProducts, categories }) => {
           Условия для отзыва<span style={{ color: "red" }}> *</span>
           <input
             type="text"
-            name="availableDay"
-            value={formData.availableDay}
+            name="terms"
+            value={formData.terms}
             onChange={handleChange}
             placeholder="Например: отзыв с фото, количество звезд 5 "
             required

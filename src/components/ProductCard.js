@@ -31,8 +31,8 @@ const ProductCard = ({ product, isModerate }) => {
       />
       <div className="product-info">
         <div className="product-price">
-          <p className="product-new-price">{product.yourPrice} ₽</p>
-          <p className="product-old-price">{product.marketPrice} ₽</p>
+          <p className="product-new-price">{product.yourprice} ₽</p>
+          <p className="product-old-price">{product.marketprice} ₽</p>
         </div>
         <p className="product-description">{product.name}</p>
       </div>
