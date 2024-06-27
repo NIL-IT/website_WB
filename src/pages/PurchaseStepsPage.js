@@ -562,7 +562,7 @@ const PurchaseStepsPage = ({ products }) => {
                         <p className="purchase-step-text">
                           <span className="important">Важно! Соблюдайте инструкцию</span>
                         </p>
-                        <ul className="purchase-step-text text-ul">
+                        <ul className="purchase-step-text text-ul" style={{ marginBottom: "20px" }}>
                           <li>Оставьте положительный текстовый отзыв, прикрепите фото и поставьте 5 звёзд;</li>
                           <li>Запишите видео с разрезанным штрих-кодом на фоне товара;</li>
                           <li>Прикрепите скриншот, где видно, что отзыв уже опубликован;</li>

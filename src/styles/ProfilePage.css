@@ -47,8 +47,8 @@
 
 .profile-buttons {
   display: flex;
-  justify-content: space-evenly; 
-  padding: 0; 
+  justify-content: space-evenly;
+  padding: 0;
 }
 
 .profile-buttons button {
@@ -132,5 +132,4 @@
   .profile-page {
     height: 92vh;
   }
-
 }

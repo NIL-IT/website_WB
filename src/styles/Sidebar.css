@@ -6,7 +6,7 @@
   background: rgba(0, 0, 0, 1);
   padding: 1vh;
   width: 100%;
-  height: 7vh; /* Adjusted to be responsive */
+  height: 7vh; 
   flex-shrink: 0;
   box-sizing: border-box;
   position: fixed; 
@@ -28,7 +28,7 @@
 }
 
 .sidebar svg {
-  width: 5vw; /* Adjusted to be responsive */
+  width: 5vw; 
   height: auto;
 }
 
@@ -40,34 +40,32 @@
   stroke: rgba(146, 35, 214, 1);
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 600px) {
   .sidebar {
-    height: 8vh; /* Adjust for larger screens */
+    height: 8vh; 
   }
   
   .sidebar svg {
-    width: 4vw; /* Adjust for larger screens */
+    width: 4vw; 
   }
 }
 
 @media (min-width: 768px) {
   .sidebar {
-    height: 6vh; /* Adjust for even larger screens */
+    height: 6vh;
   }
   
   .sidebar svg {
-    width: 3vw; /* Adjust for even larger screens */
+    width: 3vw; 
   }
 }
 
-/* Media Queries for Smaller Screens */
 @media (max-width: 320px) {
   .sidebar {
-    height: 9vh; /* Adjust for smaller screens */
+    height: 9vh; 
   }
   
   .sidebar svg {
-    width: 6vw; /* Adjust for smaller screens */
+    width: 6vw; 
   }
 }

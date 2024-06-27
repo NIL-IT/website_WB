@@ -1,8 +1,8 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 100vw; /* Full width of the viewport */
-  height: 100vh; /* Full height of the viewport */
+  width: 100vw;
+  height: 100vh;
   position: relative;
   background-color: #fff;
 }
@@ -10,11 +10,11 @@
 .content {
   overflow-x: hidden;
   overflow-y: auto;
-  padding-bottom: 6vh; /* Proportional padding */
+  padding-bottom: 6vh;
 }
 
 .content::-webkit-scrollbar {
-  width: 0; 
+  width: 0;
   height: 0;
 }
 
@@ -23,29 +23,27 @@
 }
 
 .content {
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 }
 
-/* Media Queries for Larger Screens */
 @media (min-width: 600px) {
   .app-container {
-    width: 100vw; /* Slightly reduce width on larger screens for better spacing */
-    height: 100vh; /* Slightly reduce height on larger screens for better spacing */
+    width: 100vw;
+    height: 100vh;
   }
 
   .content {
-    padding-bottom: 7vh; /* Adjust padding for larger screens */
+    padding-bottom: 7vh;
   }
 }
 
-/* Media Queries for Even Larger Screens */
 @media (min-width: 768px) {
   .app-container {
-    width: 100vw; /* Reduce width further on even larger screens */
-    height: 100vh; /* Reduce height further on even larger screens */
+    width: 100vw;
+    height: 100vh;
   }
 
   .content {
-    padding-bottom: 8vh; /* Adjust padding for even larger screens */
+    padding-bottom: 8vh;
   }
 }

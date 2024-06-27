@@ -1,107 +1,107 @@
 .add-product-page {
-    padding: 2vh; /* Use viewport units for padding */
+  padding: 2vh;
 }
 
 .add-product-form {
-    display: flex;  /* Устанавливает flex-контейнер */
-    flex-direction: column;  /* Направление flex-элементов по вертикали */
-    gap: 15px;  /* Задает расстояние между элементами */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .add-product-page label {
-    display: block;
-    margin-bottom: 1vh;
-    font-family: "Helvetica Neue Cyr"; /* Обновлено на Helvetica Neue Cyr */
-    font-size: 12px; /* Устанавливает размер шрифта для заголовка */
-    font-weight: 400;
+  display: block;
+  margin-bottom: 1vh;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 12px;
+  font-weight: 400;
 }
 
 .add-product-page input,
 .add-product-page select {
-    width: 100%; /* Relative to the container */
-    border: 0.05vh solid rgba(0, 0, 0, 1);
-    border-radius: 0.8vh;
-    background-color: rgba(188, 122, 255, 1);
-    color: white;
-    font-family: "Helvetica Neue Cyr"; /* Обновлено на Helvetica Neue Cyr */
-    font-size: 10px; /* Устанавливает размер шрифта для полей ввода */
-    font-weight: 400;
-    padding: 1vh;
-    margin-top: 0.5vh;
-    box-sizing: border-box;
-    cursor: pointer;
+  width: 100%;
+  border: 0.05vh solid rgba(0, 0, 0, 1);
+  border-radius: 0.8vh;
+  background-color: rgba(188, 122, 255, 1);
+  color: white;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 10px;
+  font-weight: 400;
+  padding: 1vh;
+  margin-top: 0.5vh;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
 .add-product-page input[type="file"] {
-    display: none;
+  display: none;
 }
 
 .add-product-page input::placeholder {
-    color: white;
-    font-size: 10px; /* Устанавливает размер шрифта для плейсхолдера */
+  color: white;
+  font-size: 10px;
 }
 
-.add-product-page .file-label { /* Используем более специфичный селектор */
-    width: 100%; /* Relative to the container */
-    border: 0.05vh solid rgba(0, 0, 0, 1);
-    border-radius: 0.8vh;
-    background-color: rgba(188, 122, 255, 1);
-    color: white;
-    font-family: "Helvetica Neue Cyr"; /* Обновлено на Helvetica Neue Cyr */
-    font-size: 10px; /* Устанавливает размер шрифта для file label */
-    font-weight: 400;
-    padding: 1vh;
-    margin-top: 0.5vh;
-    cursor: pointer;
-    box-sizing: border-box;
+.add-product-page .file-label {
+  width: 100%;
+  border: 0.05vh solid rgba(0, 0, 0, 1);
+  border-radius: 0.8vh;
+  background-color: rgba(188, 122, 255, 1);
+  color: white;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 10px;
+  font-weight: 400;
+  padding: 1vh;
+  margin-top: 0.5vh;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
 .add-product-page input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
 
 .add-product-page input[type="number"]::-webkit-outer-spin-button,
 .add-product-page input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .add-product-page select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEyIDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xLjIxNDU4IDAuNzQ2MDQ5QzAuODg5MTYgMS4wNzIyMyAwLjg4OTE2IDEuNjAxMTMgMS4yMTQ1OCAxLjkyNzMxTDUuMjkxNDkgNi4wMDk2NUM1Ljk0MjQxIDYuNjYxNSA2Ljk5NzI0IDYuNjYxMjUgNy42NDc5MSA2LjAwOTE1TDExLjcyMzIgMS45MjQzQzEyLjA0ODYgMS41OTgxMyAxMi4wNDg2IDEuMDY5MjMgMTEuNzIzMiAwLjczNDM0QzExLjM5NzggMC40MTY4MzIgMTAuODcwMSAwLjQxNjgzMiAxMC41NDQ3IDAuNzQzMDM0TDcuMDU2NjYgNC4yMzkxOUM2LjczMTI0IDQuNTY1NDUgNi4yMDM1OCA0LjU2NTQ1IDUuODc4MTYgNC4yMzkxOUwyLjM5MzA4IDAuNzQ2MDQ5QzIuMDY3NjYgMC40MTk4NDcgMS41NDAwOCAwLjQxOTg0NyAxLjIxNDU4IDAuNzQ2MDQ5WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==");
-    background-repeat: no-repeat;
-    background-position: right 1vh center;
-    padding-right: 2vh;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEyIDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xLjIxNDU4IDAuNzQ2MDQ5QzAuODg5MTYgMS4wNzIyMyAwLjg4OTE2IDEuNjAxMTMgMS4yMTQ1OCAxLjkyNzMxTDUuMjkxNDkgNi4wMDk2NUM1Ljk0MjQxIDYuNjYxNSA2Ljk5NzI0IDYuNjYxMjUgNy42NDc5MSA2LjAwOTE1TDExLjcyMzIgMS45MjQzQzEyLjA0ODYgMS41OTgxMyAxMi4wNDg2IDEuMDY5MjMgMTEuNzIzMiAwLjczNDM0QzExLjM5NzggMC40MTY4MzIgMTAuODcwMSAwLjQxNjgzMiAxMC41NDQ3IDAuNzQzMDM0TDcuMDU2NjYgNC4yMzkxOUM2LjczMTI0IDQuNTY1NDUgNi4yMDM1OCA0LjU2NTQ1IDUuODc4MTYgNC4yMzkxOUwyLjM5MzA4IDAuNzQ2MDQ5QzIuMDY3NjYgMC40MTk4NDcgMS41NDAwOCAwLjQxOTg0NyAxLjIxNDU4IDAuNzQ2MDQ5WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==");
+  background-repeat: no-repeat;
+  background-position: right 1vh center;
+  padding-right: 2vh;
 }
 
 .continue-button {
-    width: 100%; /* Relative to the container */
-    height: 4vh; /* Relative to viewport height */
-    border: 0.1vh solid rgba(0, 0, 0, 1);
-    border-radius: 0.8vh;
-    background-color: rgba(105, 13, 201, 1);
-    color: rgba(255, 255, 255, 1);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    text-align: center;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 1);
+  padding: 0.8vh;
+  border-radius: 8px;
+  background-color: rgba(105, 13, 201, 1);
+  color: rgba(255, 255, 255, 1);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
 }
 
 .required-label {
-    font-family: "Helvetica Neue Cyr"; /* Обновлено на Helvetica Neue Cyr */
-    font-size: 10px;
-    font-weight: 400;
-    color: black;
-    margin-bottom: 0.5vh;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 10px;
+  font-weight: 400;
+  color: black;
+  margin-bottom: 0.5vh;
 }
 
 .warning-message {
-    color: red;
-    margin-top: 0.5vh;
-    font-family: "Helvetica Neue Cyr"; /* Обновлено на Helvetica Neue Cyr */
-    font-size: 8px;
-    font-weight: 400;
-    text-decoration: underline;
+  color: red;
+  margin-top: 0.5vh;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 8px;
+  font-weight: 400;
+  text-decoration: underline;
 }
