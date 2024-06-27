@@ -1,19 +1,30 @@
 p {
-    margin: 0;
-  }
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1vw; /* Gap between product cards */
+  justify-content: space-between;
+}
 
 .product-card {
-  width: 135px;
-  height: 220px;
+  aspect-ratio: 135 / 220; /* Maintain aspect ratio of the card */
   border-radius: 10px;
   text-align: left;
-  box-sizing: border-box;
   cursor: pointer;
+
+
+  width: calc(50% - 0.5vh); /* 50% ширины с учетом промежутков между элементами */
+  margin-bottom: 0.5vh; /* Промежуток между карточками */
+  box-sizing: border-box;
 }
 
 .product-image {
   width: 100%;
-  height: 175px;
+  height: 80%;
+  flex-grow: 1;
   object-fit: cover;
   border-radius: 8px;
   display: block;
@@ -22,7 +33,8 @@ p {
 .catalog-skeleton {
   background-color: #e0e0e0;
   width: 100%;
-  height: 175px;
+  height: 80%;
+  flex-grow: 1;
   border-radius: 8px;
   animation: skeleton-loading 1.5s infinite;
 }
@@ -40,39 +52,39 @@ p {
 }
 
 .product-info {
-    padding: 5px;
-    padding-top: 8px;
-    display: flex;
-    gap: 2px;
-    flex-direction: column;
-  }
+  padding: 5px;
+  padding-top: 8px;
+  display: flex;
+  gap: 2px;
+  height: 20%;
+  flex-direction: column;
+}
 
-  .product-description {
-    font-family: "Inter";
-    font-size: 6px;
-    font-weight: 600;
-    color: rgba(0, 0, 0, 1);
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical;
-  }
+.product-description {
+  font-family: "Helvetica Neue Cyr";
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+  line-height: 1.4; 
+}
 
 .product-price {
-    display: flex;
-    gap: 5px;
-    height: 14px;
-    align-items: end;
-  }
+  display: flex;
+  gap: 5px;
+  align-items: end;
+}
 
 .product-old-price {
-  font-family: "Inter";
-  font-size: 6px;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 10px;
   font-weight: 700;
   color: rgba(113, 113, 113, 1);
   text-decoration: line-through;
-  margin-bottom: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -80,7 +92,7 @@ p {
 }
 
 .product-new-price {
-  font-family: "Inter";
+  font-family: "Helvetica Neue Cyr";
   font-size: 14px;
   font-weight: 700;
   line-height: 14px;
@@ -93,7 +105,47 @@ p {
 
 .product-image-category {
   width: 100%;
-  height: 175px;
+  height: auto;
+  flex-grow: 1;
   border-radius: 8px;
   display: block;
+}
+
+/* Media Queries for Larger Screens */
+@media (min-width: 600px) {
+  .product-card {
+    width: calc(50% - 1vh);
+  }
+
+  .product-description {
+    font-size: 12px;
+  }
+  
+  .product-old-price {
+    font-size: 12px;
+  }
+  
+  .product-new-price {
+    font-size: 16px;
+  }
+
+}
+
+/* Media Queries for Even Larger Screens */
+@media (min-width: 768px) {
+  .product-card {
+    width: calc(50% - 1.5vh);
+  }
+
+  .product-description {
+    font-size: 13px;
+  }
+  
+  .product-old-price {
+    font-size: 13px;
+  }
+  
+  .product-new-price {
+    font-size: 17px;
+  }
 }

@@ -75,7 +75,7 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
   return (
     <div className="add-product-page">
       <div className="title-class">Размещение товара</div>
-      <form onSubmit={handleSubmit}>
+      <form className="add-product-form" onSubmit={handleSubmit}>
         <label>
           Бренд товара<span style={{ color: "red" }}> *</span>
           <input
@@ -219,12 +219,14 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
             required
           />
         </label>
+        <div>
         <div className="required-label">
           <span style={{ color: "red" }}>* </span>Обязательное поле для заполнения
         </div>
         <button type="submit" className="continue-button">
           Продолжить
         </button>
+        </div>
       </form>
     </div>
   );

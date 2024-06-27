@@ -65,7 +65,7 @@ const ProductDetail = ({ products }) => {
         </div>
         <div className="product-item">
           <p>Скидка:</p>
-          <p>{product.discount}%</p>
+          <p>{product.discount} %</p>
         </div>
       </div>
       <button className="buy-button" onClick={handleBuyClick}>Купить товар</button>

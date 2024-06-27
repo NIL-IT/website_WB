@@ -15,11 +15,11 @@ code {
 
 .title-class {
   font-family: 'Helvetica Neue Cyr';
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   text-align: left;
   color: rgba(0, 0, 0, 1);
-  margin-bottom: 10px;
+  margin-bottom: 2vh;
 }
 
 @font-face {

@@ -1,21 +1,22 @@
 .product-detail {
   display: flex;
   flex-direction: column;
-  width: 320px;
-  padding: 20px;
-  gap: 10px;
+  width: 100vw; /* Responsive width */
+  padding: 5vw; /* Responsive padding */
+  gap: 2vw; /* Responsive gap */
   box-sizing: border-box;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 2vw; /* Responsive border-radius */
 }
 
 .product-skeleton {
   background-color: #e0e0e0;
   width: 100%;
-  height: 363px;
-  border-radius: 8px;
+  height: calc(100vw * 363 / 320); /* Maintain aspect ratio */
+  border-radius: 2vw; /* Responsive border-radius */
   animation: skeleton-loading 1.5s infinite;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 @keyframes skeleton-loading {
@@ -31,9 +32,9 @@
 }
 
 .product-image-detail {
-  width: 100%;
-  height: 363px;
-  border-radius: 8px;
+  width: 100vw; /* Responsive width */
+  height: calc(100vw * 363 / 320); /* Maintain aspect ratio */
+  border-radius: 2vw; /* Responsive border-radius */
   display: block;
   margin: 0 auto;
 }
@@ -43,34 +44,34 @@
 }
 
 .product-title {
-  font-size: 16px;
-  font-weight: 550;
-  margin-bottom: 20px;
+  font-size: 16px; /* Responsive font size */
+  font-weight: 500;
+  margin-bottom: 5vw; /* Responsive margin */
 }
 
 .deal-conditions {
-  font-size: 16px;
-  font-weight: 550;
-  margin-bottom: 10px;
+  font-size: 16px; /* Responsive font size */
+  font-weight: 500;
+  margin-bottom: 2.5vw; /* Responsive margin */
 }
 
 .payment-terms {
-  font-size: 13px;
+  font-size: 13px; /* Responsive font size */
   font-weight: 400;
-  margin-bottom: 20px;
+  margin-bottom: 5vw; /* Responsive margin */
 }
 
 .price-info {
-  margin-bottom: 20px;
+  margin-bottom: 5vw; /* Responsive margin */
 }
 
 .price-item {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 12px; /* Responsive font size */
   font-weight: 400;
-  padding: 8px 0;
-  border-bottom: 1px solid #000;
+  padding: 2vw 0; /* Responsive padding */
+  border-bottom: 0.3vw solid #000; /* Responsive border */
 }
 
 .price-item:first-child {
@@ -78,17 +79,17 @@
 }
 
 .buy-button {
-  width: 280px;
-  height: 30px;
+  width: 100%;
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; /* Responsive border-radius */
   background-color: rgba(105, 13, 201, 1);
   color: rgba(255, 255, 255, 1);
-  font-size: 14px;
+  font-size: 14px; /* Responsive font size */
   font-weight: 500;
   cursor: pointer;
   text-align: center;
-  margin-top: 30px;
+  padding: 8px;
+  margin-top: 7.5vw; /* Responsive margin */
 }
 
 .buy-button:focus {
@@ -97,52 +98,53 @@
 
 .product-name {
   font-family: "Helvetica Neue Cyr";
-  font-size: 16px;
+  font-size: 16px; /* Responsive font size */
   font-weight: 500;
-  margin: 20px 0;
+  margin: 5vw 0; /* Responsive margin */
   color: rgba(0, 0, 0, 1);
 }
 
 .product-terms {
   font-family: "Helvetica Neue Cyr";
-  font-size: 16px;
+  font-size: 16px; /* Responsive font size */
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
   text-decoration: underline;
+  margin-bottom: 5px;
 }
 
 .product-payment {
   font-family: "Helvetica Neue Cyr";
-  font-size: 13px;
+  font-size: 13px; /* Responsive font size */
   font-weight: 400;
 }
 
 .product-details {
-    font-family: "Helvetica Neue Cyr";
-    font-size: 12px;
-    font-weight: 400;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 12px; /* Responsive font size */
+  font-weight: 400;
 }
 
 .product-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid black;
+  padding: 2vw 0; /* Responsive padding */
+  border-bottom: 0.3vw solid black; /* Responsive border */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .delete-button {
-  width: 280px;
-  height: 30px;
+  width: 100%; /* Responsive width */
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; /* Responsive border-radius */
   background-color: red;
   color: white;
-  font-size: 14px;
+  font-size: 14px; /* Responsive font size */
   font-weight: 500;
+  padding: 8px;
   cursor: pointer;
   text-align: center;
 }

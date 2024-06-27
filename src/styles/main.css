@@ -1,20 +1,21 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 320px;
-  height: 568px;
+  width: 100vw; /* Full width of the viewport */
+  height: 100vh; /* Full height of the viewport */
   position: relative;
+  background-color: #fff;
 }
 
 .content {
   overflow-x: hidden;
   overflow-y: auto;
-  padding-bottom: 50px; 
+  padding-bottom: 6vh; /* Proportional padding */
 }
 
 .content::-webkit-scrollbar {
-  width: 0px; 
-  height: 0px;
+  width: 0; 
+  height: 0;
 }
 
 .content {
@@ -25,13 +26,26 @@
   -ms-overflow-style: none; 
 }
 
+/* Media Queries for Larger Screens */
+@media (min-width: 600px) {
+  .app-container {
+    width: 100vw; /* Slightly reduce width on larger screens for better spacing */
+    height: 100vh; /* Slightly reduce height on larger screens for better spacing */
+  }
 
-
-/* Home Page */
-.home-page {
-  padding: 20px;
-  width: 100%;
+  .content {
+    padding-bottom: 7vh; /* Adjust padding for larger screens */
+  }
 }
 
+/* Media Queries for Even Larger Screens */
+@media (min-width: 768px) {
+  .app-container {
+    width: 100vw; /* Reduce width further on even larger screens */
+    height: 100vh; /* Reduce height further on even larger screens */
+  }
 
-
+  .content {
+    padding-bottom: 8vh; /* Adjust padding for even larger screens */
+  }
+}

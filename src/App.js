@@ -13,83 +13,202 @@ import './index.css';
 
   const App = () => {
     const [products, setProducts] = useState([]);
-    // const [products, setProducts] = useState([
-  //   {
-  //     id: 1,
-  //     image: 'Часы н33аручные 33ару33ару33ару',
-  //     name: 'Часы н1231аручные и Гелик 33ару33ару33ару33ару',
-  //     description: 'Часы наручные 33ару33ару33ару33ару33ару33ару',
-  //     terms: 'Оплата в течение 3-5 дней после публикации отзыва 33ару33ару33арувавававававававава33ару',
-  //     availableDay: 'Today 33ару33ару33ару33ару33ару33ару33ару33ару33ару',
-  //     marketPrice: 1500000000000,
-  //     yourPrice: 130000000,
-  //     discount: 1500000000000,
-  //     step: "7",
-  //     keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-  //     article: "123456",
-  //     category: "Женщинам"
-  //   },
-  //   {
-  //     id: 2,
-  //     image: 'path_t211232o_image',
-  //     name: 'Часы наручны2222е',
-  //     description: 'Часы наручные',
-  //     terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-  //     availableDay: 'Today',
-  //     marketPrice: 1500,
-  //     yourPrice: 1300,
-  //     discount: 15,
-  //     step: "Завершено",
-  //     isComplete: true,
-  //     keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-  //     article: "123456",
-  //     category: "Мужчинам"
-  //   },
-  //   {
-  //     id: 3,
-  //     image: 'path_t343434o_image',
-  //     name: 'Часы наручные111111',
-  //     description: 'Часы наручные',
-  //     terms: 'Payment323232 details',
-  //     availableDay: 'To3232323day',
-  //     marketPrice: 152232300,
-  //     yourPrice: 1311100,
-  //     step: "6",
-  //     discount: 1225,
-  //     keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-  //     article: "123456",
-  //     category: "Мужчинам"
-  //   },
-  //   {
-  //     id: 4,
-  //     image: 'Без шага',
-  //     name: 'Без шага',
-  //     terms: 'Payment323232 details',
-  //     availableDay: 'To3232323day',
-  //     marketPrice: 2500,
-  //     yourPrice: 1500,
-  //     step: "0",
-  //     discount: 250,
-  //     keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-  //     article: "123456",
-  //     category: "Мужчинам"
-  //   },
-  //   {
-  //     id: 5,
-  //     image: 'Без шага',
-  //     name: 'Без шага',
-  //     description: 'Без шага',
-  //     terms: 'Payment323232 details',
-  //     availableDay: 'To3232323day',
-  //     marketPrice: 2500,
-  //     yourPrice: 1500,
-  //     step: "0",
-  //     discount: 250,
-  //     keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-  //     article: "123456",
-  //     category: "Мужчинам"
-  //   },
-  // ]);
+
+   /*  const [products, setProducts] = useState([
+     {
+       id: 1,
+       image: 'Часы н33аручные 33ару33ару33ару',
+       name: 'Часы н1231аручные и Гелик 33ару33ару33ару33ару',
+       description: 'Часы наручные 33ару33ару33ару33ару33ару33ару',
+       terms: 'Оплата в течение 3-5 дней после публикации отзыва 33ару33ару33арувавававава   вававава   33ару',
+       availableday: '15',
+       marketprice: 1500000000000,
+       yourprice: 130000000,
+       discount: 1500000000000,
+       step: "7",
+       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+       article: "123456",
+     category: "Женщинам"
+     },
+     {
+     id: 2,
+       image: 'path_t211232o_image',
+       name: 'Часы наручны2222е',
+       description: 'Часы наручные',
+       terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+       availableDay: 'Today',
+       marketPrice: 1500,
+       yourPrice: 1300,
+       discount: 15,
+     step: "Завершено",
+       isComplete: true,
+       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+       article: "123456",
+       category: "Мужчинам"
+     },
+     {
+      id: 2,
+        image: 'path_t211232o_image',
+        name: 'Часы наручны2222е',
+        description: 'Часы наручные',
+        terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+        availableDay: 'Today',
+        marketPrice: 1500,
+        yourPrice: 1300,
+        discount: 15,
+      step: "Завершено",
+        isComplete: true,
+        keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+        article: "123456",
+        category: "Мужчинам"
+      },
+      {
+        id: 2,
+          image: 'path_t211232o_image',
+          name: 'Часы наручны2222е',
+          description: 'Часы наручные',
+          terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+          availableDay: 'Today',
+          marketPrice: 1500,
+          yourPrice: 1300,
+          discount: 15,
+        step: "Завершено",
+          isComplete: true,
+          keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+          article: "123456",
+          category: "Мужчинам"
+        },
+        {
+          id: 2,
+            image: 'path_t211232o_image',
+            name: 'Часы наручны2222е',
+            description: 'Часы наручные',
+            terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+            availableDay: 'Today',
+            marketPrice: 1500,
+            yourPrice: 1300,
+            discount: 15,
+          step: "Завершено",
+            isComplete: true,
+            keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+            article: "123456",
+            category: "Мужчинам"
+          },
+          {
+            id: 2,
+              image: 'path_t211232o_image',
+              name: 'Часы наручны2222е',
+              description: 'Часы наручные',
+              terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+              availableDay: 'Today',
+              marketPrice: 1500,
+              yourPrice: 1300,
+              discount: 15,
+            step: "Завершено",
+              isComplete: true,
+              keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+              article: "123456",
+              category: "Мужчинам"
+            },
+            {
+              id: 2,
+                image: 'path_t211232o_image',
+                name: 'Часы наручны2222е',
+                description: 'Часы наручные',
+                terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                availableDay: 'Today',
+                marketPrice: 1500,
+                yourPrice: 1300,
+                discount: 15,
+              step: "Завершено",
+                isComplete: true,
+                keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                article: "123456",
+                category: "Мужчинам"
+              },
+              {
+                id: 2,
+                  image: 'path_t211232o_image',
+                  name: 'Часы наручны2222е',
+                  description: 'Часы наручные',
+                  terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                  availableDay: 'Today',
+                  marketPrice: 1500,
+                  yourPrice: 1300,
+                  discount: 15,
+                step: "Завершено",
+                  isComplete: true,
+                  keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                  article: "123456",
+                  category: "Мужчинам"
+                },
+                {
+                  id: 2,
+                    image: 'path_t211232o_image',
+                    name: 'Часы наручны2222е',
+                    description: 'Часы наручные',
+                    terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                    availableDay: 'Today',
+                    marketPrice: 1500,
+                    yourPrice: 1300,
+                    discount: 15,
+                  step: "Завершено",
+                    isComplete: true,
+                    keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                    article: "123456",
+                    category: "Мужчинам"
+                  },
+                  {
+                    id: 2,
+                      image: 'path_t211232o_image',
+                      name: 'Часы наручны2222е',
+                      description: 'Часы наручные',
+                      terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                      availableDay: 'Today',
+                      marketPrice: 1500,
+                      yourPrice: 1300,
+                      discount: 15,
+                    step: "Завершено",
+                      isComplete: true,
+                      keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                      article: "123456",
+                      category: "Мужчинам"
+                    },
+                    {
+                      id: 2,
+                        image: 'path_t211232o_image',
+                        name: 'Часы наручны2222е',
+                        description: 'Часы наручные',
+                        terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                        availableDay: 'Today',
+                        marketPrice: 1500,
+                        yourPrice: 1300,
+                        discount: 15,
+                      step: "Завершено",
+                        isComplete: true,
+                        keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                        article: "123456",
+                        category: "Мужчинам"
+                      },
+                      {
+                        id: 2,
+                          image: 'path_t211232o_image',
+                          name: 'Часы наручны2222е',
+                          description: 'Часы наручные',
+                          terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
+                          availableDay: 'Today',
+                          marketPrice: 1500,
+                          yourPrice: 1300,
+                          discount: 15,
+                        step: "Завершено",
+                          isComplete: true,
+                          keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
+                          article: "123456",
+                          category: "Мужчинам"
+                        },
+                        
+
+   ]); */
     const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год'];
     const [userInfo, setUserInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -186,7 +305,7 @@ import './index.css';
   
     if (isLoading) {
       return <div>Загрузка...</div>;
-    }
+    } 
   
     const handleStepComplete = (step, formData) => {
       // Логика для обработки завершения шага
