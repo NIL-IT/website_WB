@@ -5,6 +5,14 @@ import "../styles/ProfilePage.css";
 const ProfilePage = () => {
   const navigate = useNavigate();
 
+  const handleInstructionClick = () => {
+    window.open("https://telegra.ph/Instrukciya-razmeshcheniya-06-21", "_blank", "noopener,noreferrer");
+  };
+
+  const handleServiceClick = () => {
+    window.open("https://telegra.ph/O-servise-06-21", "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="profile-page">
       <div className="profile-header">
@@ -43,7 +51,7 @@ const ProfilePage = () => {
           <div className="profile-name">Александр</div>
         </div>
         <div className="profile-buttons">
-          <button className="instruction-button" onClick={() => navigate('/instructions')}>
+          <button className="instruction-button" onClick={handleInstructionClick}>
             <svg
               width="23"
               height="21"
@@ -61,7 +69,7 @@ const ProfilePage = () => {
             </svg>
             Инструкция
           </button>
-          <button className="service-button" onClick={() => navigate('/instructions')}>
+          <button className="service-button" onClick={handleServiceClick}>
             <svg
               width="21"
               height="21"
