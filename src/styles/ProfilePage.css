@@ -122,11 +122,15 @@
   .profile-buttons button {
     max-width: 160px;
   }
+
+  .profile-page {
+    height: 93vh;
+  }
 }
 
 @media (min-width: 768px) {
   .profile-page {
-    flex-direction: row;
+    height: 92vh;
   }
 
   .profile-header {
@@ -141,4 +145,13 @@
     margin-top: 0;
     border-radius: 8px;
   }
+}
+
+@media (min-width: 600px) {
+
+}
+
+/* Media Queries for Even Larger Screens */
+@media (min-width: 768px) {
+
 }
