@@ -47,8 +47,8 @@
 
 .profile-buttons {
   display: flex;
-  justify-content: center;
-  gap: 8px;
+  justify-content: space-evenly; 
+  padding: 0; 
 }
 
 .profile-buttons button {
@@ -132,26 +132,5 @@
   .profile-page {
     height: 92vh;
   }
-
-  .profile-header {
-    width: 30%;
-    height: auto;
-    padding: 20px;
-  }
-
-  .profile-content {
-    width: 70%;
-    max-width: none;
-    margin-top: 0;
-    border-radius: 8px;
-  }
-}
-
-@media (min-width: 600px) {
-
-}
-
-/* Media Queries for Even Larger Screens */
-@media (min-width: 768px) {
 
 }

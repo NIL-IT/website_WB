@@ -117,40 +117,40 @@ const PurchaseStepsPage = ({ products }) => {
         return (
           <div className="purchase-step-page">
             <div className="purchase-step-header">
-              <h1 className="purchase-step-title">Условия сделки</h1>
+              <p className="title-class-step">Условия сделки</p>
               <p className="purchase-step-subtitle">
                 Выплата кэшбэка после получения товара в течение 3-х дней
               </p>
             </div>
             <div className="purchase-step-content">
-              <p className="purchase-step-warning">
+              <p className="purchase-step-text">
                 <span className="important">Важно!</span> Товар нельзя сдавать
                 обратно
               </p>
               <p className="purchase-step-text">
                 На каждом шаге оформления выкупа вам будут даваться задания,
                 такие как:
+                <br /> 1. Найдите товар по инструкции;
+                <br /> 2. Добавьте товар и бренд в избранное;
                 <br />
-                1. Найдите товар по инструкции;
+                 3. Купите товар - 1 шт;
                 <br />
-                2. Добавьте товар и бренд в избранное;
+                 4. Предоставьте видео разрезания штрих-кода;
                 <br />
-                3. Купите товар - 1 шт;
-                <br />
-                4. Предоставьте видео разрезания штрих-кода;
-                <br />
-                5. Оставьте отзыв по ТЗ.
+                 5. Оставьте отзыв по ТЗ.
                 <br />
                 Необходимо четко следовать инструкции и прикреплять
                 соответствующие скриншоты, где это требуется.
               </p>
-              <p className="purchase-step-prices">
+              <p className="purchase-step-text">
                 Цена в магазине: {product.marketPrice} ₽<br />
                 Цена для вас: {product.yourPrice} ₽
               </p>
+              <div className="step-footer-container">
               <button className="purchase-step-button">
                 Я соглашаюсь с условиями
               </button>
+              </div>
             </div>
           </div>
         );
@@ -158,13 +158,13 @@ const PurchaseStepsPage = ({ products }) => {
         return (
           <div className="purchase-step-page">
             <div className="purchase-step-header">
-              <h1 className="purchase-step-title">
+              <p className="title-class-step">
                 Шаг 1: Поиск по ключевому слову
-              </h1>
+              </p>
               <div className="purchase-step-keywords">{keywords}</div>
             </div>
             <div className="purchase-step-content">
-              <p className="purchase-step-warning">
+              <p className="purchase-step-text">
                 <span className="important">Важно! Соблюдайте инструкцию</span>
               </p>
               <ul className="purchase-step-text text-ul">
@@ -188,9 +188,9 @@ const PurchaseStepsPage = ({ products }) => {
                 />
                 {imageError.image1 && <p className="error-text">Пожалуйста, загрузите изображение корзины.</p>}
               </div>
-              <div className="purchase-step-footer">
+              <div className="step-footer-container">
                 <div
-                  className="upload-feedback"
+                  className="upload-feedback-step4"
                   onClick={() => setChecked(!checked)}
                 >
                   <div
@@ -212,20 +212,20 @@ const PurchaseStepsPage = ({ products }) => {
                 >
                   Продолжить
                 </button>
-              </div>
+                </div>
             </div>
           </div>
         );
       case 2:
         return (
-          <div className="purchase-step-page">
+          <div className="purchase-step-page-long">
             <div className="purchase-step-header">
-              <h1 className="purchase-step-title">
+              <p className="title-class-step">
                 Шаг 2: Найти товар продавца
-              </h1>
+              </p>
             </div>
             <div className="purchase-step-content">
-              <p className="purchase-step-warning">
+              <p className="purchase-step-text">
                 <span className="important">Важно! Соблюдайте инструкцию</span>
               </p>
               <p className="purchase-step-text">
@@ -272,7 +272,7 @@ const PurchaseStepsPage = ({ products }) => {
               <p className="purchase-step-subtitle-12px-400">
                 Найдите артикул товара и вставьте его для проверки
               </p>
-              <div className="article-input">
+              <div className="article-input-step2">
                 {articleError && <p className="red-error">Введен неверный артикул</p>}
                 <input
                   type="text"
@@ -282,34 +282,36 @@ const PurchaseStepsPage = ({ products }) => {
                   placeholder="Введите артикул"
                 />
               </div>
+              <div className="step-footer-container">
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
               >
                 Продолжить
               </button>
-            </div>
+              </div>
+              </div>
           </div>
         );
         case 3:
           return (
             <div className="purchase-step-page">
               <div className="purchase-step-header">
-                <h1 className="purchase-step-title">
+                <p className="title-class-step">
                 Шаг 3: Добавить товар и бренд в избранное
-                </h1>
+                </p>
               </div>
               <div className="purchase-step-content">
-                <p className="purchase-step-warning">
+                <p className="purchase-step-text">
                   <span className="important">Важно! Соблюдайте инструкцию</span>
                 </p>
                 <ul className="purchase-step-text text-ul">
                   <li>Добавить товар в избранное;</li>
                   <li>Добавить бренд в избранное.</li>
                 </ul>
-                <div className="purchase-step-footer">
+                <div className="step-footer-container">
                   <div
-                    className="upload-feedback"
+                    className="upload-feedback-step4"
                     onClick={() => setChecked(!checked)}
                   >
                     <div
@@ -339,12 +341,12 @@ const PurchaseStepsPage = ({ products }) => {
             return (
                   <div className="purchase-step-page">
                     <div className="purchase-step-header">
-                      <h1 className="purchase-step-title">
+                      <p className="title-class-step">
                         Шаг 4: Реквизиты для перевода кешбэка
-                      </h1>
+                      </p>
                     </div>
                     <div className="purchase-step-content">
-                      <p className="purchase-step-warning">
+                      <p className="purchase-step-text">
                         <span className="important">Важно! Соблюдайте инструкцию</span>
                       </p>
                       <p className="purchase-step-text">
@@ -392,7 +394,7 @@ const PurchaseStepsPage = ({ products }) => {
                           placeholder="Введите ФИО владельца карты"
                         />
                       </div>
-                      <div className="article-input">
+                      <div className="article-input" style={{ marginBottom: "25vh" }}>
                         <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                           Телефон или СБП для перевода
                         </p>
@@ -404,8 +406,8 @@ const PurchaseStepsPage = ({ products }) => {
                           placeholder="Введите номер телефона или СБП"
                         />
                       </div>
-                      <div className="upload-section" style={{ marginTop: '20px' }}>
-                        <div className="upload-feedback" onClick={() => setChecked(!checked)}>
+                      <div className="step-footer-container">
+                        <div className="upload-feedback-step4" onClick={() => setChecked(!checked)}>
                           <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
                             {checked && (
                               <svg viewBox="0 0 13 13">
@@ -420,7 +422,7 @@ const PurchaseStepsPage = ({ products }) => {
                         <button className="purchase-step-button" onClick={handleStepSubmit}>
                           Продолжить
                         </button>
-                      </div>
+                        </div>
                     </div>
                   </div>
                 );
@@ -428,19 +430,19 @@ const PurchaseStepsPage = ({ products }) => {
               return (
                 <div className="purchase-step-page">
                   <div className="purchase-step-header">
-                    <h1 className="purchase-step-title">
+                    <p className="title-class-step">
                     Шаг 5: Оформление заказа
-                    </h1>
+                    </p>
                   </div>
                   <div className="purchase-step-content">
-                    <p className="purchase-step-warning">
+                    <p className="purchase-step-text">
                       <span className="important">Важно! Соблюдайте инструкцию</span>
                     </p>
                     <ul className="purchase-step-text text-ul">
                       <li>Оформите заказ;</li>
                       <li>Сделайте скрин из раздела "Доставки" в личном кабинете.</li>
                     </ul>
-                    <p className="purchase-step-warning" style={{ marginTop: '20px' }}>
+                    <p className="purchase-step-text" style={{ marginTop: '20px' }}>
                     <span className="important">Важно!</span> На скрине обязательно должны быть видны цена и адрес ПВЗ!
               </p>
               <div className="article-input">
@@ -458,9 +460,9 @@ const PurchaseStepsPage = ({ products }) => {
               />
               {imageError.image3 && <p className="red-error">Загрузите изображение</p>}
               </div>
-                    <div className="purchase-step-footer">
+              <div className="step-footer-container">
                       <div
-                        className="upload-feedback"
+                        className="upload-feedback-step4"
                         onClick={() => setChecked(!checked)}
                       >
                         <div
@@ -490,19 +492,19 @@ const PurchaseStepsPage = ({ products }) => {
                 return (
                   <div className="purchase-step-page">
                     <div className="purchase-step-header">
-                      <h1 className="purchase-step-title">
+                      <p className="title-class-step">
                       Шаг 6: Получение товара
-                      </h1>
+                      </p>
                     </div>
                     <div className="purchase-step-content">
-                      <p className="purchase-step-warning">
+                      <p className="purchase-step-text">
                         <span className="important">Важно! Соблюдайте инструкцию</span>
                       </p>
                       <ul className="purchase-step-text text-ul">
                         <li>Заберите товар через 1-3 дня;</li>
                         <li>Сделайте скриншот из личного кабинета, где указана дата получения и статус “Доставлено”.</li>
                       </ul>
-                      <p className="purchase-step-warning" style={{ marginTop: '20px' }}>
+                      <p className="purchase-step-text" style={{ marginTop: '20px' }}>
                       <span className="important">Важно!</span> Напоминаем, что вы согласились с условием сделки и товар не может быть сдан обратно.
                 </p>
                 <div className="article-input">
@@ -520,9 +522,9 @@ const PurchaseStepsPage = ({ products }) => {
                 />
                 {imageError.image4 && <p className="red-error">Загрузите изображение</p>}
                 </div>
-                      <div className="purchase-step-footer">
+                <div className="step-footer-container">
                         <div
-                          className="upload-feedback"
+                          className="upload-feedback-step4"
                           onClick={() => setChecked(!checked)}
                         >
                           <div
@@ -552,12 +554,12 @@ const PurchaseStepsPage = ({ products }) => {
                   return (
                     <div className="purchase-step-page">
                       <div className="purchase-step-header">
-                        <h1 className="purchase-step-title">
+                        <p className="title-class-step">
                         Шаг 7: Отчет об отзыве
-                        </h1>
+                        </p>
                       </div>
                       <div className="purchase-step-content">
-                        <p className="purchase-step-warning">
+                        <p className="purchase-step-text">
                           <span className="important">Важно! Соблюдайте инструкцию</span>
                         </p>
                         <ul className="purchase-step-text text-ul">
@@ -596,9 +598,9 @@ const PurchaseStepsPage = ({ products }) => {
                 />
                 {imageError.image6 && <p className="red-error">Загрузите изображение</p>}
                 </div>
-                        <div className="purchase-step-footer">
+                <div className="step-footer-container">
                           <div
-                            className="upload-feedback"
+                            className="upload-feedback-step4"
                             onClick={() => setChecked(!checked)}
                           >
                             <div
@@ -630,7 +632,7 @@ const PurchaseStepsPage = ({ products }) => {
   };
 
   return (
-    <div className="purchase-step-page-container">{renderStepContent()}</div>
+    renderStepContent()
   );
 };
 

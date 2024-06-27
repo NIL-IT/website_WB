@@ -2,8 +2,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 320px;
-  height: 100%;
+  width: 100vw; /* Use viewport width */
+  height: 94vh; /* Use viewport height */
+  background-color: #000000;
+  font-family: "Helvetica Neue Cyr", sans-serif;
+  box-sizing: border-box;
+}
+
+.title-class-step {
+  font-family: 'Helvetica Neue Cyr';
+  font-size: 18px;
+  font-weight: 500;
+  text-align: left;
+  color: rgba(0, 0, 0, 1);
+}
+
+.purchase-step-page-long {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw; /* Use viewport width */
+  height: auto; /* Use viewport height */
   background-color: #000000;
   font-family: "Helvetica Neue Cyr", sans-serif;
   box-sizing: border-box;
@@ -13,18 +32,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 320px;
-  padding: 20px;
+  width: 100vw; /* Scale proportionally */
+  padding: 20px; /* Proportional padding */
   background-color: rgba(255, 255, 255, 1);
   border-radius: 0px 0px 8px 8px;
   box-sizing: border-box;
-  gap: 20px;
+  gap: 3vh; /* Proportional gap */
 }
 
 .purchase-step-content {
-  width: 100%;
-  padding: 20px;
-  margin-top: 5px;
+  width: 100vw; /* Scale proportionally */
+  padding: 20px; /* Proportional padding */
+  margin-top: 1vh; /* Proportional margin */
   background-color: white;
   border-radius: 8px 8px 0 0;
   box-sizing: border-box;
@@ -32,74 +51,78 @@
 }
 
 .purchase-step-content > * {
-  margin-bottom: 20px;
+  margin-bottom: 3vh; /* Proportional margin */
 }
 
 .purchase-step-content > *:last-child {
   margin-bottom: 0;
 }
 
-.purchase-step-title {
-  font-size: 16px;
-  font-weight: 500;
-  text-align: left;
-  color: rgba(0, 0, 0, 1);
-  margin: 0;
-}
-
 .purchase-step-subtitle {
-  font-size: 12px;
-  font-weight: 500;
-}
-
-.purchase-step-subtitle-12px-400 {
-  font-size: 12px;
-  font-weight: 400;
-}
-
-.purchase-step-warning {
-  font-size: 14px;
-  font-weight: 400;
+font-size: 12px;
+font-weight: 500;
 }
 
 .purchase-step-text {
   font-size: 14px;
-  font-weight: 400;
+font-weight: 400;
 }
 
-.purchase-step-prices {
-  font-size: 14px;
+
+.purchase-step-subtitle-12px-400 {
+  font-size: 12px;
   font-weight: 400;
+  margin-bottom: 0;
+}
+
+
+.purchase-step-warning,
+.purchase-step-prices {
+  /* Font sizes remain unchanged */
 }
 
 .purchase-step-prices > * {
-  margin-bottom: 10px;
+  margin-bottom: 1vh; /* Proportional margin */
 }
 
 .purchase-step-prices > *:last-child {
   margin-bottom: 0;
 }
 
+.step-footer-container {
+  position: fixed;
+  bottom: 8vh;
+  left: 0;
+  width: 100%; /* Исправленный синтаксис */
+  display: flex;
+  flex-direction: column; /* Расположение элементов в столбик */
+  align-items: center; /* Центрирование элементов по горизонтали */
+  padding: 0 20px; /* Внутренний отступ слева и справа */
+  box-sizing: border-box; /* Учет внутренних отступов в общей ширине */
+  gap: 10px;
+}
+
 .purchase-step-footer {
-  width: 100%;
+  width: 100%; /* Scale proportionally */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1vh; /* Proportional gap */
   box-sizing: border-box;
   margin-top: auto;
 }
 
 .purchase-step-button {
-  height: 30px;
   width: 100%;
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; /* Снова добавляем радиус для кнопки */
+  padding: 8px; /* Увеличиваем padding для удобства */
   background-color: rgba(105, 13, 201, 1);
   color: rgba(255, 255, 255, 1);
-  font-size: 14px;
+  font-size: 14px; /* Font sizes remain unchanged */
   font-weight: 500;
   cursor: pointer;
   text-align: center;
+  z-index: 1000; /* Обеспечиваем, что кнопка всегда будет на переднем плане */
 }
 
 .purchase-step-keywords {
@@ -112,32 +135,31 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 34px;
   border-radius: 8px;
   background: rgba(105, 13, 201, 1);
-  font-size: 16px;
+  font-size: 16px; /* Font sizes remain unchanged */
   font-weight: 500;
   color: rgba(255, 255, 255, 1);
-  padding: 0 10px;
-  margin-right: 10px;
+  padding: 8px 15px; /* Proportional padding */
+  margin-right: 2vw; /* Proportional margin */
   white-space: nowrap;
-  gap: 10px;
+  gap: 15px; /* Proportional gap */
 }
 
 .text-ul {
-  padding-left: 20px;
+  padding-left: 20px; /* Proportional padding */
   margin: 0;
 }
 
 .upload-label {
-  font-size: 8px;
+  font-size: 10px; /* Font sizes remain unchanged */
   font-weight: 400;
-  width: 280px;
-  border-radius: 8px;
+  width: 100%; /* Scale proportionally */
+  border-radius: 10px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
-  padding: 10px;
-  margin-top: 5px;
+  padding: 8px; /* Proportional padding */
+  margin-top: 1vh; /* Proportional margin */
   cursor: pointer;
   box-sizing: border-box;
   display: inline-block;
@@ -146,7 +168,7 @@
 
 .upload-input {
   display: none;
-  font-size: 8px;
+  font-size: 8px; /* Font sizes remain unchanged */
   font-weight: 400;
   text-align: left;
 }
@@ -154,19 +176,27 @@
 .upload-feedback {
   display: flex;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 1vh; /* Proportional margin */
   cursor: pointer;
 }
 
+.upload-feedback-step4 {
+  width: 100%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
 .upload-checkbox {
-  width: 13px;
-  height: 13px;
+  width: 15px; /* Proportional width */
+  height: 15px; /* Proportional height */
   background-color: grey;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 8px;
+  margin-right: 10px; /* Proportional margin */
   border: 1px solid rgba(0, 0, 0, 1);
+  box-sizing: border-box;
 }
 
 .upload-checkbox.checked {
@@ -174,13 +204,13 @@
 }
 
 .upload-checkbox svg {
-  width: 10px;
-  height: 10px;
+  width: 15px; /* Proportional width */
+  height: 15px; /* Proportional height */
   fill: black;
 }
 
 .upload-feedback-text {
-  font-size: 12px;
+  font-size: 14px; /* Font sizes remain unchanged */
   font-weight: 700;
 }
 
@@ -190,19 +220,19 @@
 }
 
 .image-uploaded-message {
-  margin-top: 10px;
-  font-size: 14px;
+  margin-top: 1vh; /* Proportional margin */
+  font-size: 14px; /* Font sizes remain unchanged */
 }
 
 .upload-title {
-  font-size: 14px;
+  font-size: 14px; /* Font sizes remain unchanged */
   font-weight: 500;
 }
 
 .purchase-step-skeleton {
   background-color: #e0e0e0;
-  width: 100%;
-  height: 363px;
+  width: 100vw; /* Scale proportionally */
+  height: 45vh; /* Proportional height */
   border-radius: 8px;
   animation: skeleton-loading 1.5s infinite;
   margin: 0 auto;
@@ -221,8 +251,8 @@
 }
 
 .purchase-step-detail {
-  width: 100%;
-  height: 363px;
+  width: 90vw; /* Scale proportionally */
+  height: 45vh; /* Proportional height */
   border-radius: 8px;
   display: block;
   margin: 0 auto;
@@ -234,32 +264,62 @@
 
 .red-error {
   position: absolute;
-  top: -10px; /* Adjust as necessary */
+  top: -1vh; /* Proportional positioning */
   left: 0;
   color: red;
-  font-size: 10px;
+  font-size: 10px; /* Font sizes remain unchanged */
   font-weight: 400;
 }
 
 .article-input {
   position: relative;
-  margin-top: 20px;
+  margin-top: 2vh; /* Proportional margin */
 }
 
-.purchase-step-page input {
+.article-input-step2 {
+  position: relative;
+  margin-top: 2vh; 
+  margin-bottom: 10vh;
+}
+
+.purchase-step-page input,
+.purchase-step-page-long input {
   width: 100%;
   border: none;
   border-radius: 8px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
-  font-size: 8px;
+  font-size: 10px; /* Font sizes remain unchanged */
   font-weight: 400;
-  padding: 10px;
-  margin-top: 5px;
+  padding: 8px; /* Proportional padding */
+  margin-top: 1vh; /* Proportional margin */
   box-sizing: border-box;
   cursor: pointer;
 }
 
-.purchase-step-page input::placeholder {
+.purchase-step-page input::placeholder,
+.purchase-step-page-long input::placeholder {
   color: white;
+}
+
+@media (min-width: 600px) {
+  .purchase-step-page {
+    height: 93vh;
+  }
+
+  .step-footer-container {
+    bottom: 9vh;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .purchase-step-page {
+    height: 92vh;
+  }
+
+  .step-footer-container {
+    bottom: 10vh;
+  }
+
 }
