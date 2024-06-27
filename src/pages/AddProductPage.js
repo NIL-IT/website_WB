@@ -109,9 +109,9 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
             <option value="" disabled>
               Выберите категорию
             </option>
-            {categories.map((category, index) => (
-              <option key={index} value={category}>
-                {category}
+            {categories.map((category_base, index) => (
+              <option key={index} value={category_base}>
+                {category_base}
               </option>
             ))}
           </select>
