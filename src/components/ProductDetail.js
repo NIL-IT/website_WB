@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products }) => {
+const ProductDetail = ({ products, userInfo}) => {
   const { id } = useParams();
   const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -21,9 +21,33 @@ const ProductDetail = ({ products }) => {
     navigate(`/purchase-steps/${id}`);
   };
 
-  const handleDeleteClick = () => {
-    // Логика удаления товара
-    console.log(`Товар с id ${id} удален`);
+  const handleDeleteClick = async () => {
+    if (userInfo?.status !== 'admin') {
+      alert('У вас нет прав для удаления этого товара');
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://nilurl.ru:8000/deleteProduct.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: id, userId: userInfo.id }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Товар успешно удален');
+        navigate('/catalog');
+      } else {
+        alert('Ошибка при удалении товара: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Ошибка при удалении товара:', error);
+      alert('Произошла ошибка при удалении товара');
+    }
   };
 
   if (!product) {

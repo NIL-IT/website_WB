@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../styles/AddProductPage.css";
 
+
 const AddProductPage = ({ products, setProducts, categories, fetchProducts }) => {
   const [formData, setFormData] = useState({
     brand: "",
@@ -71,7 +72,7 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
       amountMax: "",
     });
   };
-
+  
   return (
     <div className="add-product-page">
       <div className="title-class">Размещение товара</div>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import '../styles/CatalogPage.css';
+import BackButton from '../components/BackButton';
+
 
 const CatalogPageModerate = ({ products, categories }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +37,7 @@ const CatalogPageModerate = ({ products, categories }) => {
 
   return (
     <div className="catalog-page">
+      <BackButton />
       <div className={`catalog-content ${showPopup ? 'blur-background' : ''}`}>
         <div className="title-class">Модерация товаров</div>
         <div className="search-container">
