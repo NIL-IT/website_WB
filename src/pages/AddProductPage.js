@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import "../styles/AddProductPage.css";
 
-const AddProductPage = ({ products, setProducts, categories, fetchProducts }) => {
+const AddProductPage = ({
+  products,
+  setProducts,
+  categories,
+  fetchProducts,
+}) => {
+  const [showPopup, setShowPopup] = useState(false);
   const [formData, setFormData] = useState({
     brand: "",
     name: "",
@@ -36,25 +42,29 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch('https://nilurl.ru:8000/addProduct.php', {
-      method: 'POST',
+    fetch("https://nilurl.ru:8000/addProduct.php", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(formData),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        fetchProducts(); 
-        setProducts([...products, data.newProduct]);
-      } else {
-        console.error('Error:', data.message);
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          fetchProducts();
+          setProducts([...products, data.newProduct]);
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+          }, 2000);
+        } else {
+          console.error("Error:", data.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
 
     setFormData({
       brand: "",
@@ -151,7 +161,7 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
           </label>
         </label>
         <label>
-        Кол-во сделок со скидкой<span style={{ color: "red" }}> *</span>
+          Кол-во сделок со скидкой<span style={{ color: "red" }}> *</span>
           <input
             type="text"
             name="amountMax"
@@ -183,7 +193,9 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
             placeholder="Например: красная рубашка, рубашка мужская "
             required
           />
-          <span className="warning-message">Вводите обязательно через , (запятую), как показано в примере</span>
+          <span className="warning-message">
+            Вводите обязательно через , (запятую), как показано в примере
+          </span>
         </label>
         <label>
           Артикул<span style={{ color: "red" }}> *</span>
@@ -197,7 +209,7 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
           />
         </label>
         <label>
-        Ваш ник в телеграм<span style={{ color: "red" }}> *</span>
+          Ваш ник в телеграм<span style={{ color: "red" }}> *</span>
           <input
             type="text"
             name="tg_nick"
@@ -206,7 +218,9 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
             placeholder="Например: Alexon"
             required
           />
-          <span className="warning-message">Ваш ник не должен содержать @, https://t.me/</span>
+          <span className="warning-message">
+            Ваш ник не должен содержать @, https://t.me/
+          </span>
         </label>
         <label>
           Условия для отзыва<span style={{ color: "red" }}> *</span>
@@ -220,14 +234,59 @@ const AddProductPage = ({ products, setProducts, categories, fetchProducts }) =>
           />
         </label>
         <div>
-        <div className="required-label">
-          <span style={{ color: "red" }}>* </span>Обязательное поле для заполнения
-        </div>
-        <button type="submit" className="continue-button">
-          Продолжить
-        </button>
+          <div className="required-label">
+            <span style={{ color: "red" }}>* </span>Обязательное поле для
+            заполнения
+          </div>
+          <button
+            type="submit"
+            className="continue-button"
+          >
+            Продолжить
+          </button>
         </div>
       </form>
+      {showPopup && (
+        <div className="catalog-popup-overlay">
+          <div className="catalog-popup">
+            <svg
+              width="42"
+              height="42"
+              viewBox="0 0 42 42"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M21 42C32.598 42 42 32.598 42 21C42 9.40202 32.598 0 21 0C9.40202 0 0 9.40202 0 21C0 32.598 9.40202 42 21 42Z"
+                fill="#4CAF50"
+              />
+              <path
+                d="M31.6001 11.6L18.0001 25.2L12.4001 19.6L9.6001 22.4L18.0001 30.8L34.4001 14.4L31.6001 11.6Z"
+                fill="#CCFF90"
+              />
+            </svg>
+
+            <p
+              style={{
+                fontFamily: "Helvetica Neue Cyr",
+                fontSize: "20px",
+                fontWeight: 500,
+              }}
+            >
+              Все готово!
+            </p>
+            <p
+              style={{
+                fontFamily: "Helvetica Neue Cyr",
+                fontSize: "16px",
+                fontWeight: 400,
+              }}
+            >
+              Скоро ваш товар появится в каталоге товаров
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

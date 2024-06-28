@@ -105,3 +105,58 @@
   font-weight: 400;
   text-decoration: underline;
 }
+
+.catalog-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(10px); /* Применить размытие к фону */
+}
+
+.catalog-popup {
+  width: 200px;
+  height: 300px;
+  background: #fff;
+  padding: 57px 17px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.catalog-popup svg {
+  flex-shrink: 0; /* предотвращает изменение размера svg */
+}
+
+.catalog-popup p {
+  margin: 0;
+}
+
+.catalog-popup p:first-of-type {
+  flex-grow: 1; /* заполняет свободное пространство */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.catalog-popup p:last-of-type {
+  flex-shrink: 0; /* предотвращает изменение размера второго p */
+}
+
+.close-catalog-popup-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: rgba(188, 122, 255, 1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
