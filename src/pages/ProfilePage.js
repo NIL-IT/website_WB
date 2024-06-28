@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from 'react-router-dom';
 import "../styles/ProfilePage.css";
 
-const ProfilePage = () => {
+const ProfilePage = ({userInfo}) => {
   const navigate = useNavigate();
 
   const handleInstructionClick = () => {
@@ -48,7 +48,7 @@ const ProfilePage = () => {
               />
             </svg>
           </div>
-          <div className="profile-name">Александр</div>
+          <div className="profile-name">{userInfo.username}</div>
         </div>
         <div className="profile-buttons">
           <button className="instruction-button" onClick={handleInstructionClick}>
@@ -177,6 +177,7 @@ const ProfilePage = () => {
             />
           </svg>
         </div>
+        {userInfo && userInfo.status === 'admin' && (
         <div className="profile-item" onClick={() => navigate('/catalog-moderate')}>
           <div className="item-text">
             <span className="item-title">
@@ -202,7 +203,7 @@ const ProfilePage = () => {
               fill="black"
             />
           </svg>
-        </div>
+        </div>)}
       </div>
     </div>
   );

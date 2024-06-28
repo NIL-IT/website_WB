@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products, userInfo}) => {
+const ProductDetail = ({ products, userInfo, fetchProducts}) => {
   const { id } = useParams();
   const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,9 +17,29 @@ const ProductDetail = ({ products, userInfo}) => {
     event.target.style.display = 'none';
   };
 
-  const handleBuyClick = () => {
-    navigate(`/purchase-steps/${id}`);
-  };
+  const handleBuyClick = async () => {
+    try {
+      const response = await fetch(`https://nilurl.ru:8000/createStep.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id_usertg: userInfo.id_usertg, id_product: id }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Шаг успешно создан');
+        navigate(`/purchase-steps/${result.stepsId}`);
+      } else {
+        alert('Ошибка при создании шага: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Ошибка при создании шага:', error);
+      alert('Произошла ошибка при создании шага');
+    }
+  };  
 
   const handleDeleteClick = async () => {
     if (userInfo?.status !== 'admin') {
@@ -33,13 +53,14 @@ const ProductDetail = ({ products, userInfo}) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ productId: id, userId: userInfo.id }),
+        body: JSON.stringify({ productId: id, userId: userInfo.id_usertg }),
       });
 
       const result = await response.json();
 
       if (result.success) {
         alert('Товар успешно удален');
+        fetchProducts();
         navigate('/catalog');
       } else {
         alert('Ошибка при удалении товара: ' + result.error);

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useNavigate } from "react-router-dom";
 import "../styles/AddProductPage.css";
 
 const AddProductPage = ({
@@ -8,6 +9,7 @@ const AddProductPage = ({
   fetchProducts,
 }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     brand: "",
     name: "",
@@ -40,6 +42,11 @@ const AddProductPage = ({
   };
 
   const handleSubmit = (e) => {
+    setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+            
+          }, 2000);
     e.preventDefault();
 
     fetch("https://nilurl.ru:8000/addProduct.php", {
@@ -54,10 +61,7 @@ const AddProductPage = ({
         if (data.success) {
           fetchProducts();
           setProducts([...products, data.newProduct]);
-          setShowPopup(true);
-          setTimeout(() => {
-            setShowPopup(false);
-          }, 2000);
+          navigate('/catalog');
         } else {
           console.error("Error:", data.message);
         }

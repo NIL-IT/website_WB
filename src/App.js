@@ -167,7 +167,7 @@ const App = () => {
     try {
       const response = await API.getProducts();
       if (response.success) {
-        setProducts(response.data); // Устанавливаем продукты в состояние компонента
+        setProducts(response.data); 
       } else {
         console.error('Failed to fetch products:', response.error);
       }
@@ -182,10 +182,9 @@ const App = () => {
 
     const fetchData = async () => {
       try {
-        // const userId = tg.initDataUnsafe.user.id;
-        // const username = tg.initDataUnsafe.user.username;
-        const userId = 
-        const username = 
+        const userId = tg.initDataUnsafe.user.id;
+        const username = tg.initDataUnsafe.user.username;
+        
         console.log('User ID:', userId);
         console.log('Username:', username);
 
@@ -231,8 +230,8 @@ const App = () => {
             <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories}/>} />
             <Route path="/add-product" element={<AddProductPage fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
             <Route path="/purchases" element={<PurchasesPage products={products} userInfo={userInfo} />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/product/:id" element={<ProductDetail products={products} userInfo={userInfo} />} />
+            <Route path="/profile" element={<ProfilePage userInfo={userInfo}/>} />
+            <Route path="/product/:id" element={<ProductDetail products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchase-steps/:id" element={<PurchaseStepsPage products={products} onStepComplete={handleStepComplete} />} />
           </Routes>
         </div>
