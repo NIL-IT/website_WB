@@ -30,7 +30,8 @@
 
 .search-bar {
   width: 100%;
-  padding: 5px 5px 5px 30px;
+  height: 4vh;
+  padding: 0px 5px 0px 30px;
   font-family: "Helvetica Neue Cyr";
   font-size: 12px;
   font-weight: 400;
@@ -38,10 +39,11 @@
   color: rgba(255, 255, 255, 1);
   border: 0.05vh solid rgba(0, 0, 0, 1);
   border-radius: 8px;
-  box-sizing: border-box;
   opacity: 1;
   background-color: rgba(188, 122, 255, 1);
   outline: none;
+  display: flex;
+  line-height: 4vh;
 }
 
 .search-bar::placeholder {
@@ -56,7 +58,6 @@
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  width: 10px;
   height: auto;
   pointer-events: none;
 }
@@ -79,7 +80,7 @@
   position: fixed;
   bottom: 0;
   left: 50%;
-  max-height: 70%;
+  height: 70%;
   transform: translateX(-50%);
   width: 100%;
   border-radius: 0.8vh 0.8vh 0 0;
@@ -104,7 +105,7 @@
 
 .popup-title {
   font-family: "Helvetica Neue Cyr";
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   text-align: center;
   width: 100%;
@@ -122,16 +123,17 @@
 
 .popup-category-title {
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .popup-categories {
   display: flex;
   flex-direction: column;
+  height: 42vh;
   overflow-y: auto;
-  gap: 5px;
+  gap: 15px;
 }
 
 .popup-category {
@@ -139,7 +141,7 @@
   justify-content: space-between;
   align-items: center;
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .popup-category input[type="checkbox"] {
@@ -166,7 +168,7 @@
   border-radius: 8px;
   background-color: rgba(103, 103, 103, 0.38);
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
   outline: none;
@@ -186,10 +188,6 @@
   .search-container {
     margin-bottom: 3vh;
     gap: 3vh;
-  }
-
-  .search-bar {
-    font-size: 14px;
   }
 
   .filter-icon {

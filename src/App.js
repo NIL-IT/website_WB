@@ -14,7 +14,7 @@ import './index.css';
   const App = () => {
     const [products, setProducts] = useState([]);
 
-   /*   const [products, setProducts] = useState([
+    /*  const [products, setProducts] = useState([
      {
        id: 1,
        image: "/Canada.jpg" ,
@@ -25,10 +25,11 @@ import './index.css';
        marketprice: 1500000000000,
        yourprice: 130000000,
        discount: 1500000000000,
-       step: "6",
+       step: "Завершено",
        keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
        article: "123456",
-     category: "Женщинам"
+     category: "Женщинам",
+     isComplete: true,
      },
      {
      id: 2,
@@ -113,7 +114,7 @@ import './index.css';
                         
 
    ]);  */
-    const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год'];
+   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
     const [userInfo, setUserInfo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const baseURL = 'https://nilurl.ru:8000/';
@@ -223,7 +224,7 @@ import './index.css';
             <Routes>
               <Route exact path="/" element={<CatalogPage products={products} categories={categories} />} />
               <Route path="/catalog" element={<CatalogPage products={products} categories={categories}/>} />
-              <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} />} />
+              <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories}/>} />
               <Route path="/add-product" element={<AddProductPage fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
               <Route path="/purchases" element={<PurchasesPage products={products} userInfo={userInfo} />} />
               <Route path="/profile" element={<ProfilePage />} />

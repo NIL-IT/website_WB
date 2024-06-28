@@ -21,7 +21,10 @@ const PurchaseStepsPage = ({ products }) => {
   const [uploaded, setUploaded] = useState({ image1: false, image2: false });
   const [isLoaded, setIsLoaded] = useState(false);
   const [articleError, setArticleError] = useState(false);
-  const [imageError, setImageError] = useState({ image1: false, image2: false });
+  const [imageError, setImageError] = useState({
+    image1: false,
+    image2: false,
+  });
   const [checked, setChecked] = useState(false);
 
   const handleImageLoad = () => {
@@ -133,11 +136,11 @@ const PurchaseStepsPage = ({ products }) => {
                 <br /> 1. Найдите товар по инструкции;
                 <br /> 2. Добавьте товар и бренд в избранное;
                 <br />
-                 3. Купите товар - 1 шт;
+                3. Купите товар - 1 шт;
                 <br />
-                 4. Предоставьте видео разрезания штрих-кода;
+                4. Предоставьте видео разрезания штрих-кода;
                 <br />
-                 5. Оставьте отзыв по ТЗ.
+                5. Оставьте отзыв по ТЗ.
                 <br />
                 Необходимо четко следовать инструкции и прикреплять
                 соответствующие скриншоты, где это требуется.
@@ -147,9 +150,9 @@ const PurchaseStepsPage = ({ products }) => {
                 Цена для вас: {product.yourPrice} ₽
               </p>
               <div className="step-footer-container">
-              <button className="purchase-step-button">
-                Я соглашаюсь с условиями
-              </button>
+                <button className="purchase-step-button">
+                  Я соглашаюсь с условиями
+                </button>
               </div>
             </div>
           </div>
@@ -175,10 +178,12 @@ const PurchaseStepsPage = ({ products }) => {
                 <li>Добавьте несколько товаров в корзину</li>
                 <li>Сделайте скрин корзины и загрузите отчет</li>
               </ul>
-              <div className="upload-section" style={{ marginTop: '20px' }}>
+              <div className="upload-section" style={{ marginTop: "20px" }}>
                 <p className="upload-title">Загрузите скрин корзины</p>
                 <label className="upload-label" htmlFor="file-upload">
-                  {uploaded.image1 ? "Изображение загружено" : "Выберите изображение"}
+                  {uploaded.image1
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
                 </label>
                 <input
                   id="file-upload"
@@ -186,7 +191,11 @@ const PurchaseStepsPage = ({ products }) => {
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image1")}
                 />
-                {imageError.image1 && <p className="error-text">Пожалуйста, загрузите изображение корзины.</p>}
+                {imageError.image1 && (
+                  <p className="error-text">
+                    Пожалуйста, загрузите изображение корзины.
+                  </p>
+                )}
               </div>
               <div className="step-footer-container">
                 <div
@@ -212,7 +221,7 @@ const PurchaseStepsPage = ({ products }) => {
                 >
                   Продолжить
                 </button>
-                </div>
+              </div>
             </div>
           </div>
         );
@@ -220,9 +229,7 @@ const PurchaseStepsPage = ({ products }) => {
         return (
           <div className="purchase-step-page-long">
             <div className="purchase-step-header">
-              <p className="title-class-step">
-                Шаг 2: Найти товар продавца
-              </p>
+              <p className="title-class-step">Шаг 2: Найти товар продавца</p>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
@@ -255,16 +262,23 @@ const PurchaseStepsPage = ({ products }) => {
                 Загрузите скрин нашего товара в конкурентной выдаче
               </p>
               <div className="article-input">
-              <label className="upload-label" htmlFor="file-upload-competitor">
-                {uploaded.image2 ? "Изображение загружено" : "Выберите изображение"}
-              </label>
-              <input
-                id="file-upload-competitor"
-                type="file"
-                className="upload-input"
-                onChange={(e) => handleFileUpload(e, "image2")}
-              />
-              {imageError.image2 && <p className="red-error">Загрузите изображение</p>}
+                <label
+                  className="upload-label"
+                  htmlFor="file-upload-competitor"
+                >
+                  {uploaded.image2
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
+                </label>
+                <input
+                  id="file-upload-competitor"
+                  type="file"
+                  className="upload-input"
+                  onChange={(e) => handleFileUpload(e, "image2")}
+                />
+                {imageError.image2 && (
+                  <p className="red-error">Загрузите изображение</p>
+                )}
               </div>
               <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                 Артикул товара (Введите артикул товара)
@@ -273,7 +287,9 @@ const PurchaseStepsPage = ({ products }) => {
                 Найдите артикул товара и вставьте его для проверки
               </p>
               <div className="article-input-step2">
-                {articleError && <p className="red-error">Введен неверный артикул</p>}
+                {articleError && (
+                  <p className="red-error">Введен неверный артикул</p>
+                )}
                 <input
                   type="text"
                   name="article"
@@ -283,236 +299,256 @@ const PurchaseStepsPage = ({ products }) => {
                 />
               </div>
               <div className="step-footer-container">
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                >
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">
+                Шаг 3: Добавить товар и бренд в избранное
+              </p>
+            </div>
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <ul
+                className="purchase-step-text text-ul"
+                style={{ marginBottom: "20px" }}
+              >
+                <li>Добавить товар в избранное;</li>
+                <li>Добавить бренд в избранное.</li>
+              </ul>
+              <div
+                className="upload-feedback-step4"
+                onClick={() => setChecked(!checked)}
+              >
+                <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
+                  {checked && (
+                    <svg viewBox="0 0 13 13">
+                      <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                    </svg>
+                  )}
+                </div>
+                <div className="upload-feedback-text">
+                  Добавил(а) товар и бренд в избранное
+                </div>
+              </div>
+              <div className="step-footer-container"></div>
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
               >
                 Продолжить
               </button>
-              </div>
-              </div>
+            </div>
           </div>
         );
-        case 3:
-          return (
-            <div className="purchase-step-page">
-              <div className="purchase-step-header">
-                <p className="title-class-step">
-                Шаг 3: Добавить товар и бренд в избранное
-                </p>
-              </div>
-              <div className="purchase-step-content">
-                <p className="purchase-step-text">
-                  <span className="important">Важно! Соблюдайте инструкцию</span>
-                </p>
-                <ul className="purchase-step-text text-ul">
-                  <li>Добавить товар в избранное;</li>
-                  <li>Добавить бренд в избранное.</li>
-                </ul>
-                <div className="step-footer-container">
-                  <div
-                    className="upload-feedback-step4"
-                    onClick={() => setChecked(!checked)}
-                  >
-                    <div
-                      className={`upload-checkbox ${checked ? "checked" : ""}`}
-                    >
-                      {checked && (
-                        <svg viewBox="0 0 13 13">
-                          <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                        </svg>
-                      )}
-                    </div>
-                    <div className="upload-feedback-text">
-                    Добавил(а) товар и бренд в избранное
-                    </div>
-                  </div>
-                  <button
-                    className="purchase-step-button"
-                    onClick={handleStepSubmit}
-                  >
-                    Продолжить
-                  </button>
-                </div>
-              </div>
+      case 4:
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">
+                Шаг 4: Реквизиты для перевода кешбэка
+              </p>
             </div>
-          );
-          case 4:
-            return (
-                  <div className="purchase-step-page">
-                    <div className="purchase-step-header">
-                      <p className="title-class-step">
-                        Шаг 4: Реквизиты для перевода кешбэка
-                      </p>
-                    </div>
-                    <div className="purchase-step-content">
-                      <p className="purchase-step-text">
-                        <span className="important">Важно! Соблюдайте инструкцию</span>
-                      </p>
-                      <p className="purchase-step-text">
-                        Напишите свои реквизиты:
-                        <ul className="purchase-step-text text-ul">
-                          <li>Номер карты;</li>
-                          <li>Название банка;</li>
-                          <li>ФИО владельца карты;</li>
-                          <li>Телефон СБП для перевода.</li>
-                        </ul>
-                      </p>
-                      <div className="article-input">
-                        <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                          Номер карты
-                        </p>
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          value={formData.cardNumber}
-                          onChange={handleInputChange}
-                          placeholder="Введите номер карты"
-                        />
-                      </div>
-                      <div className="article-input">
-                        <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                          Название банка
-                        </p>
-                        <input
-                          type="text"
-                          name="bankName"
-                          value={formData.bankName}
-                          onChange={handleInputChange}
-                          placeholder="Введите название банка"
-                        />
-                      </div>
-                      <div className="article-input">
-                        <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                          ФИО владельца карты
-                        </p>
-                        <input
-                          type="text"
-                          name="cardHolder"
-                          value={formData.cardHolder}
-                          onChange={handleInputChange}
-                          placeholder="Введите ФИО владельца карты"
-                        />
-                      </div>
-                      <div className="article-input" style={{ marginBottom: "25vh" }}>
-                        <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                          Телефон или СБП для перевода
-                        </p>
-                        <input
-                          type="text"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          placeholder="Введите номер телефона или СБП"
-                        />
-                      </div>
-                      <div className="step-footer-container">
-                        <div className="upload-feedback-step4" onClick={() => setChecked(!checked)}>
-                          <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
-                            {checked && (
-                              <svg viewBox="0 0 13 13">
-                                <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="upload-feedback-text">
-                            Подтверждаю правильность реквизитов
-                          </div>
-                        </div>
-                        <button className="purchase-step-button" onClick={handleStepSubmit}>
-                          Продолжить
-                        </button>
-                        </div>
-                    </div>
-                  </div>
-                );
-            case 5:
-              return (
-                <div className="purchase-step-page">
-                  <div className="purchase-step-header">
-                    <p className="title-class-step">
-                    Шаг 5: Оформление заказа
-                    </p>
-                  </div>
-                  <div className="purchase-step-content">
-                    <p className="purchase-step-text">
-                      <span className="important">Важно! Соблюдайте инструкцию</span>
-                    </p>
-                    <ul className="purchase-step-text text-ul">
-                      <li>Оформите заказ;</li>
-                      <li>Сделайте скрин из раздела "Доставки" в личном кабинете.</li>
-                    </ul>
-                    <p className="purchase-step-text" style={{ marginTop: '20px' }}>
-                    <span className="important">Важно!</span> На скрине обязательно должны быть видны цена и адрес ПВЗ!
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <p className="purchase-step-text">
+                Напишите свои реквизиты:
+                <ul className="purchase-step-text text-ul">
+                  <li>Номер карты;</li>
+                  <li>Название банка;</li>
+                  <li>ФИО владельца карты;</li>
+                  <li>Телефон СБП для перевода.</li>
+                </ul>
               </p>
               <div className="article-input">
-              <p className="upload-title" style={{ marginBottom: 0 }}>
-              Загрузите скрин заказа в отчет
-              </p>
-              <label className="upload-label" htmlFor="file-upload-competitor">
-                {uploaded.image3 ? "Изображение загружено" : "Выберите изображение"}
-              </label>
-              <input
-                id="file-upload-competitor"
-                type="file"
-                className="upload-input"
-                onChange={(e) => handleFileUpload(e, "image3")}
-              />
-              {imageError.image3 && <p className="red-error">Загрузите изображение</p>}
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Номер карты
+                </p>
+                <input
+                  type="text"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  onChange={handleInputChange}
+                  placeholder="Введите номер карты"
+                />
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Название банка
+                </p>
+                <input
+                  type="text"
+                  name="bankName"
+                  value={formData.bankName}
+                  onChange={handleInputChange}
+                  placeholder="Введите название банка"
+                />
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  ФИО владельца карты
+                </p>
+                <input
+                  type="text"
+                  name="cardHolder"
+                  value={formData.cardHolder}
+                  onChange={handleInputChange}
+                  placeholder="Введите ФИО владельца карты"
+                />
+              </div>
+              <div className="article-input" style={{ marginBottom: "25vh" }}>
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Телефон или СБП для перевода
+                </p>
+                <input
+                  type="text"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Введите номер телефона или СБП"
+                />
               </div>
               <div className="step-footer-container">
-                      <div
-                        className="upload-feedback-step4"
-                        onClick={() => setChecked(!checked)}
-                      >
-                        <div
-                          className={`upload-checkbox ${checked ? "checked" : ""}`}
-                        >
-                          {checked && (
-                            <svg viewBox="0 0 13 13">
-                              <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                            </svg>
-                          )}
-                        </div>
-                        <div className="upload-feedback-text">
-                        Оформил(а) заказ
-                        </div>
-                      </div>
-                      <button
-                        className="purchase-step-button"
-                        onClick={handleStepSubmit}
-                      >
-                        Продолжить
-                      </button>
-                    </div>
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">
+                    Подтверждаю правильность реквизитов
                   </div>
                 </div>
-              );
-              case 6:
-                return (
-                  <div className="purchase-step-page">
-                    <div className="purchase-step-header">
-                      <p className="title-class-step">
-                      Шаг 6: Получение товара
-                      </p>
-                    </div>
-                    <div className="purchase-step-content">
-                      <p className="purchase-step-text">
-                        <span className="important">Важно! Соблюдайте инструкцию</span>
-                      </p>
-                      <ul className="purchase-step-text text-ul">
-                        <li>Заберите товар через 1-3 дня;</li>
-                        <li>Сделайте скриншот из личного кабинета, где указана дата получения и статус “Доставлено”.</li>
-                      </ul>
-                      <p className="purchase-step-text" style={{ marginTop: '20px' }}>
-                      <span className="important">Важно!</span> Напоминаем, что вы согласились с условием сделки и товар не может быть сдан обратно.
-                </p>
-                <div className="article-input">
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                >
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      case 5:
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">Шаг 5: Оформление заказа</p>
+            </div>
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <ul className="purchase-step-text text-ul">
+                <li>Оформите заказ;</li>
+                <li>Сделайте скрин из раздела "Доставки" в личном кабинете.</li>
+              </ul>
+              <p className="purchase-step-text" style={{ marginTop: "20px" }}>
+                <span className="important">Важно!</span> На скрине обязательно
+                должны быть видны цена и адрес ПВЗ!
+              </p>
+              <div className="article-input">
                 <p className="upload-title" style={{ marginBottom: 0 }}>
-                Загрузите скриншот, подтверждающий, что заказ доставлен
+                  Загрузите скрин заказа в отчет
                 </p>
-                <label className="upload-label" htmlFor="file-upload-competitor">
-                  {uploaded.image4 ? "Изображение загружено" : "Выберите изображение"}
+                <label
+                  className="upload-label"
+                  htmlFor="file-upload-competitor"
+                >
+                  {uploaded.image3
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
+                </label>
+                <input
+                  id="file-upload-competitor"
+                  type="file"
+                  className="upload-input"
+                  onChange={(e) => handleFileUpload(e, "image3")}
+                />
+                {imageError.image3 && (
+                  <p className="red-error">Загрузите изображение</p>
+                )}
+              </div>
+              <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">Оформил(а) заказ</div>
+                </div>
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                >
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      case 6:
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">Шаг 6: Получение товара</p>
+            </div>
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <ul className="purchase-step-text text-ul">
+                <li>Заберите товар через 1-3 дня;</li>
+                <li>
+                  Сделайте скриншот из личного кабинета, где указана дата
+                  получения и статус “Доставлено”.
+                </li>
+              </ul>
+              <p className="purchase-step-text" style={{ marginTop: "20px" }}>
+                <span className="important">Важно!</span> Напоминаем, что вы
+                согласились с условием сделки и товар не может быть сдан
+                обратно.
+              </p>
+              <div className="article-input">
+                <p className="upload-title" style={{ marginBottom: 0 }}>
+                  Загрузите скриншот, подтверждающий, что заказ доставлен
+                </p>
+                <label
+                  className="upload-label"
+                  htmlFor="file-upload-competitor"
+                >
+                  {uploaded.image4
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
                 </label>
                 <input
                   id="file-upload-competitor"
@@ -520,75 +556,95 @@ const PurchaseStepsPage = ({ products }) => {
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image4")}
                 />
-                {imageError.image4 && <p className="red-error">Загрузите изображение</p>}
+                {imageError.image4 && (
+                  <p className="red-error">Загрузите изображение</p>
+                )}
+              </div>
+              <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">Забрал(а) товар</div>
                 </div>
-                <div className="step-footer-container">
-                        <div
-                          className="upload-feedback-step4"
-                          onClick={() => setChecked(!checked)}
-                        >
-                          <div
-                            className={`upload-checkbox ${checked ? "checked" : ""}`}
-                          >
-                            {checked && (
-                              <svg viewBox="0 0 13 13">
-                                <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="upload-feedback-text">
-                          Забрал(а) товар
-                          </div>
-                        </div>
-                        <button
-                          className="purchase-step-button"
-                          onClick={handleStepSubmit}
-                        >
-                          Продолжить
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                );
-                case 7:
-                  return (
-                    <div className="purchase-step-page">
-                      <div className="purchase-step-header">
-                        <p className="title-class-step">
-                        Шаг 7: Отчет об отзыве
-                        </p>
-                      </div>
-                      <div className="purchase-step-content">
-                        <p className="purchase-step-text">
-                          <span className="important">Важно! Соблюдайте инструкцию</span>
-                        </p>
-                        <ul className="purchase-step-text text-ul" style={{ marginBottom: "20px" }}>
-                          <li>Оставьте положительный текстовый отзыв, прикрепите фото и поставьте 5 звёзд;</li>
-                          <li>Запишите видео с разрезанным штрих-кодом на фоне товара;</li>
-                          <li>Прикрепите скриншот, где видно, что отзыв уже опубликован;</li>
-                          <li>Прикрепите видео с разрезанным штрих-кодом.</li>
-                        </ul>
-                  <div className="article-input">
-                  <p className="upload-title" style={{ marginBottom: 0 }}>
-                  Загрузите скриншот опубликованного отзыва
-                  </p>
-                  <label className="upload-label" htmlFor="file-upload-competitor">
-                    {uploaded.image5 ? "Изображение загружено" : "Выберите изображение"}
-                  </label>
-                  <input
-                    id="file-upload-competitor"
-                    type="file"
-                    className="upload-input"
-                    onChange={(e) => handleFileUpload(e, "image5")}
-                  />
-                  {imageError.image5 && <p className="red-error">Загрузите изображение</p>}
-                  </div>
-                  <div className="article-input">
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                >
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      case 7:
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">Шаг 7: Отчет об отзыве</p>
+            </div>
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <ul
+                className="purchase-step-text text-ul"
+                style={{ marginBottom: "20px" }}
+              >
+                <li>
+                  Оставьте положительный текстовый отзыв, прикрепите фото и
+                  поставьте 5 звёзд;
+                </li>
+                <li>
+                  Запишите видео с разрезанным штрих-кодом на фоне товара;
+                </li>
+                <li>
+                  Прикрепите скриншот, где видно, что отзыв уже опубликован;
+                </li>
+                <li>Прикрепите видео с разрезанным штрих-кодом.</li>
+              </ul>
+              <div className="article-input">
                 <p className="upload-title" style={{ marginBottom: 0 }}>
-                Загрузите видео с разрезанным штрих-кодом на фоне товара
+                  Загрузите скриншот опубликованного отзыва
                 </p>
-                <label className="upload-label" htmlFor="file-upload-competitor">
-                  {uploaded.image6 ? "Изображение загружено" : "Выберите изображение"}
+                <label
+                  className="upload-label"
+                  htmlFor="file-upload-competitor"
+                >
+                  {uploaded.image5
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
+                </label>
+                <input
+                  id="file-upload-competitor"
+                  type="file"
+                  className="upload-input"
+                  onChange={(e) => handleFileUpload(e, "image5")}
+                />
+                {imageError.image5 && (
+                  <p className="red-error">Загрузите изображение</p>
+                )}
+              </div>
+              <div className="article-input">
+                <p className="upload-title" style={{ marginBottom: 0 }}>
+                  Загрузите видео с разрезанным штрих-кодом на фоне товара
+                </p>
+                <label
+                  className="upload-label"
+                  htmlFor="file-upload-competitor"
+                >
+                  {uploaded.image6
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
                 </label>
                 <input
                   id="file-upload-competitor"
@@ -596,44 +652,121 @@ const PurchaseStepsPage = ({ products }) => {
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image6")}
                 />
-                {imageError.image6 && <p className="red-error">Загрузите изображение</p>}
+                {imageError.image6 && (
+                  <p className="red-error">Загрузите изображение</p>
+                )}
+              </div>
+              <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">Оставил(а) отзыв</div>
                 </div>
-                <div className="step-footer-container">
-                          <div
-                            className="upload-feedback-step4"
-                            onClick={() => setChecked(!checked)}
-                          >
-                            <div
-                              className={`upload-checkbox ${checked ? "checked" : ""}`}
-                            >
-                              {checked && (
-                                <svg viewBox="0 0 13 13">
-                                  <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                                </svg>
-                              )}
-                            </div>
-                            <div className="upload-feedback-text">
-                            Оставил(а) отзыв
-                            </div>
-                          </div>
-                          <button
-                            className="purchase-step-button"
-                            onClick={handleStepSubmit}
-                          >
-                            Продолжить
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  );
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                >
+                  Продолжить
+                </button>
+              </div>
+            </div>
+          </div>
+        );
       default:
-        return <p>Unknown step</p>;
+        return (
+          <div className="purchase-step-page">
+            <div className="purchase-step-header">
+              <p className="title-class-step">Сделка № 328</p>
+            </div>
+            <div className="purchase-step-content">
+              <div key={product.id} className="purchase-item">
+                <div
+                  className="purchase-skeleton"
+                  style={{ display: isLoaded ? "none" : "block" }}
+                ></div>
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="purchase-image"
+                  style={{ display: isLoaded ? "block" : "none" }}
+                  onLoad={handleImageLoad}
+                  onError={handleImageError}
+                />
+                <div className="purchase-details">
+                  <h2 className="purchase-title">{product.name}</h2>
+                  <p className="purchase-price">
+                    Цена для вас: {product.yourPrice} ₽
+                  </p>
+                  <p className="purchase-step">
+                    Шаги: {product.step}
+                    {product.isComplete && (
+                      <span style={{ marginLeft: "4px" }}>
+                        <svg
+                          width="8"
+                          height="8"
+                          viewBox="0 0 8 8"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M0 4C0 1.79086 1.79086 0 4 0C6.20915 0 8 1.79086 8 4C8 6.20915 6.20915 8 4 8C1.79086 8 0 6.20915 0 4Z"
+                            fill="#04B800"
+                          />
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M5.6858 2.87243C5.79479 2.98141 5.79479 3.15811 5.6858 3.26708L3.96442 4.9885C3.71014 5.24279 3.29782 5.24279 3.04354 4.9885L2.3144 4.25935C2.20542 4.15036 2.20542 3.97365 2.3144 3.86467C2.42339 3.75568 2.60008 3.75568 2.70907 3.86467L3.43821 4.59382C3.47453 4.63014 3.53343 4.63014 3.56974 4.59382L5.29116 2.87243C5.40014 2.76345 5.57681 2.76345 5.6858 2.87243Z"
+                            fill="black"
+                          />
+                        </svg>
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </div>
+              <button className="telegram-button">
+                <svg
+                  width="20"
+                  height="18"
+                  viewBox="0 0 20 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M19.2597 2.74549C19.5246 1.45402 18.2561 0.380775 17.0264 0.855917L1.95202 6.68009C0.578698 7.21069 0.517506 9.13108 1.85425 9.748L5.13702 11.2632L6.69868 16.7289C6.77979 17.0128 7.00508 17.2327 7.29091 17.3068C7.57673 17.3808 7.88042 17.2981 8.0892 17.0893L10.4948 14.6837L13.8645 17.211C14.8427 17.9446 16.2515 17.4102 16.4972 16.2125L19.2597 2.74549ZM2.55268 8.23475L17.627 2.41058L14.8645 15.8777L10.9166 12.9167C10.5849 12.6678 10.1206 12.7008 9.82735 12.9941L8.79702 14.0244L9.1066 12.3218L15.1725 6.25594C15.4678 5.96073 15.4989 5.49263 15.2455 5.16086C14.9921 4.82908 14.5324 4.73602 14.1699 4.94315L5.79263 9.73008L2.55268 8.23475ZM6.81406 11.066L7.31938 12.8347L7.51338 11.7676C7.54371 11.6008 7.62417 11.4472 7.74403 11.3274L9.59393 9.47758L6.81406 11.066Z"
+                    fill="white"
+                  />
+                </svg>
+                Написать продавцу
+              </button>
+              <p className="font-16px-600" style={{ marginTop: "30px", marginBottom: 0 }}>Реквизиты для перевода</p>
+              <p className="font-16px-400" style={{ marginTop: "15px", marginBottom: 0 }}>Василий Сергеевич</p>
+              <p className="font-16px-400" style={{ marginTop: "6px", marginBottom: 0 }}>Сбер 89843568943</p>
+              <p className="font-16px-600" style={{ marginTop: "15px", marginBottom: 0 }}>Условия сделки</p>
+              <p className="font-16px-400" style={{ marginTop: "10px", marginBottom: 0 }}>Выплата на 24 день</p>
+              <p className="font-16px-600" style={{ marginTop: "25px", marginBottom: 0 }}>Если есть вопросы, напишите нам</p>
+              <button className="button-help" style={{ marginTop: "10px", marginBottom: 0 }}>Поддержка</button>
+            </div>
+          </div>  
+        );
     }
   };
 
-  return (
-    renderStepContent()
-  );
+  return renderStepContent();
 };
 
 export default PurchaseStepsPage;

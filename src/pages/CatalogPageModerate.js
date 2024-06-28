@@ -28,8 +28,7 @@ const CatalogPageModerate = ({ products, categories }) => {
   };
 
   const filteredProducts = products.filter((product) => {
-    const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                              product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearchTerm = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
     return matchesSearchTerm && matchesCategory;
   });
@@ -37,7 +36,7 @@ const CatalogPageModerate = ({ products, categories }) => {
   return (
     <div className="catalog-page">
       <div className={`catalog-content ${showPopup ? 'blur-background' : ''}`}>
-        <div className="title-class">Каталог</div>
+        <div className="title-class">Модерация товаров</div>
         <div className="search-container">
           <div className="search-bar-wrapper">
             <svg className="search-icon" width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
