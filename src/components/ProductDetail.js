@@ -12,7 +12,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts}) => {
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
-
+const skidka = Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100);
   const handleImageError = (event) => {
     event.target.style.display = 'none';
   };
@@ -110,7 +110,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts}) => {
         </div>
         <div className="product-item">
           <p>Скидка:</p>
-          <p>{Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100)} %</p>
+          <p>{skidka} %</p>
         </div>
       </div>
       <button className="buy-button" onClick={handleBuyClick}>Купить товар</button>
