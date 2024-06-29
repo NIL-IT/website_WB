@@ -16,6 +16,7 @@ const App = () => {
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://nilurl.ru:8000/';
   /*  const [products, setProducts] = useState([
      {
@@ -161,6 +162,20 @@ const App = () => {
         console.log(err);
       }
     },
+    async getUserSteps(id_usertg) {
+      try {
+        const option = {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        const res = await fetch(`${baseURL}getSteps.php?id_usertg=${id_usertg}`, option).then(res => res.json());
+        return res;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   };
 
   const fetchProducts = async () => {
@@ -175,7 +190,23 @@ const App = () => {
       console.error('Error fetching products:', error);
     }
   };
-
+  
+  const fetchUserSteps = async (id_usertg) => {
+    try {
+        const response = await API.getUserSteps(id_usertg);
+        console.log('API Response:', response);
+        if (response.success) {
+            setUserSteps(response.data);
+            return response.data;
+        } else {
+            console.error('Failed to fetch user steps:', response.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Error fetching user steps:', error);
+        return null;
+    }
+};
   useEffect(() => {
     const tg = window.Telegram.WebApp;
     tg.expand();
@@ -202,6 +233,13 @@ const App = () => {
           fetchProducts();
           setIsLoading(false);
         }
+        const stepsResponse = await API.getUserSteps(userId);
+      if (stepsResponse.success) {
+        console.log('User Steps:', stepsResponse.data);
+        setUserSteps(stepsResponse.data);
+      } else {
+        console.error('Failed to fetch user steps:', stepsResponse.error);
+      }
       } catch (e) {
         console.log(e);
       }
@@ -229,10 +267,10 @@ const App = () => {
             <Route path="/catalog" element={<CatalogPage products={products} categories={categories}/>} />
             <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories}/>} />
             <Route path="/add-product" element={<AddProductPage fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
-            <Route path="/purchases" element={<PurchasesPage products={products} userInfo={userInfo} />} />
+            <Route path="/purchases" element={<PurchasesPage  userSteps={userSteps} userInfo={userInfo} />} />
             <Route path="/profile" element={<ProfilePage userInfo={userInfo}/>} />
-            <Route path="/product/:id" element={<ProductDetail products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
-            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage products={products} onStepComplete={handleStepComplete} />} />
+            <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
+            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete} />} />
           </Routes>
         </div>
       </div>

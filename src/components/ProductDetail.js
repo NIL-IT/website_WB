@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products, userInfo, fetchProducts}) => {
+const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps}) => {
   const { id } = useParams();
   const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,7 +17,7 @@ const skidka = Math.round(((product.marketprice - product.yourprice) / product.m
     event.target.style.display = 'none';
   };
 
-  const handleBuyClick = async () => {
+   const handleBuyClick = async () => {
     try {
       const response = await fetch(`https://nilurl.ru:8000/createStep.php`, {
         method: 'POST',
@@ -31,7 +31,14 @@ const skidka = Math.round(((product.marketprice - product.yourprice) / product.m
 
       if (result.success) {
         alert('Шаг успешно создан');
-        navigate(`/purchase-steps/${result.stepsId}`);
+        const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+        const newStep = updatedUserSteps.find(step => step.id_product === Number(id));
+
+        if (newStep) {
+          navigate(`/purchase-steps/${result.stepsId}`); 
+        } else {
+          console.error('Не удалось найти созданный шаг в данных пользователя');
+        }
       } else {
         alert('Ошибка при создании шага: ' + result.error);
       }

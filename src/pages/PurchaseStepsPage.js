@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/PurchaseStepsPage.css";
 
-const PurchaseStepsPage = ({ products }) => {
+const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
   const { id } = useParams();
-  const product = products.find((product) => product.id.toString() === id);
+  const baseURL = "https://nilurl.ru:8000/";
+  const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
   const [formData, setFormData] = useState({
     image1: "",
     image2: "",
@@ -18,12 +19,17 @@ const PurchaseStepsPage = ({ products }) => {
     cardHolder: "",
     phone: "",
   });
-  const [uploaded, setUploaded] = useState({ image1: false, image2: false });
+  const [uploaded, setUploaded] = useState({ image1: false, image2: false, image3: false, image4: false, image5: false, image6: false });
   const [isLoaded, setIsLoaded] = useState(false);
   const [articleError, setArticleError] = useState(false);
   const [imageError, setImageError] = useState({
     image1: false,
     image2: false,
+    image3: false,
+    image4: false,
+    image5: false,
+    image6: false,
+   
   });
   const [checked, setChecked] = useState(false);
 
@@ -35,20 +41,47 @@ const PurchaseStepsPage = ({ products }) => {
     event.target.style.display = "none";
   };
 
-  const step = product ? parseInt(product.step) : 0;
+  const step = userStep ? parseInt(userStep.step) : 0;
 
   useEffect(() => {
-    if (product) {
-      const savedFormData = localStorage.getItem(`formData_${product.id}`);
+    if (userStep) {
+      const savedFormData = localStorage.getItem(`formData_${userStep.id}`);
       if (savedFormData) setFormData(JSON.parse(savedFormData));
     }
-  }, [product]);
+  }, [userStep]);
 
   useEffect(() => {
-    if (product) {
-      localStorage.setItem(`formData_${product.id}`, JSON.stringify(formData));
+    if (userStep) {
+      localStorage.setItem(
+        `formData_${userStep.id}`,
+        JSON.stringify(formData)
+      );
     }
-  }, [formData, product]);
+  }, [formData, userStep]);
+
+  const handleAcceptTerms = async () => {
+    try {
+      const response = await fetch(`${baseURL}updateStep.php`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: userStep.id,
+        }),
+      });
+      const result = await response.json();
+      if (result.success) {
+        alert("Шаг обновлен");
+        const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+        console.log(updatedUserSteps);
+      } else {
+        console.error("Ошибка обновления шага:", result.message);
+      }
+    } catch (error) {
+      console.error("Ошибка запроса:", error);
+    }
+  };
 
   const handleFileUpload = (event, imageField) => {
     const file = event.target.files[0];
@@ -73,26 +106,206 @@ const PurchaseStepsPage = ({ products }) => {
     setFormData({ ...formData, article: value });
   };
 
-  const handleStepSubmit = () => {
-    if (step === 2) {
-      if (formData.article !== product.article) {
+  const handleStepSubmit = async () => {
+    if (step === 1) {
+      if (!uploaded.image1) {
+        setImageError({ ...imageError, image1: true });
+        return;
+      }
+  
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("id", userStep.id);
+        formDataToSend.append("image1", formData.image1);
+  
+        const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert("Изображение успешно загружено и обновлен шаг");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+        } else {
+          console.error("Ошибка загрузки изображения:", result.error);
+        }
+      } catch (error) {
+        console.error("Ошибка запроса:", error);
+      }
+    } else if (step === 2) {
+      if (!uploaded.image2) {
+        setImageError({ ...imageError, image2: true });
+        return;
+      }
+      if (!formData.article.trim()) {
         setArticleError(true);
+        return;
+      }
+  
+      // Validate article
+      if (formData.article !== userStep.article) {
+        setArticleError(true);
+        return;
       } else {
         setArticleError(false);
       }
+  
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("id", userStep.id);
+        formDataToSend.append("image2", formData.image2);
+  
+        const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert("Изображение  успешно загружено и обновлены шаг 2");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+        } else {
+          console.error("Ошибка загрузки изображения:", result.error);
+        }
+      } catch (error) {
+        console.error("Ошибка запроса:", error);
+      } 
+    } else if (step === 3) {
+      
+      try {
+          const formDataToSend = new FormData();
+          formDataToSend.append("id", userStep.id);
 
-      if (!uploaded.image2) {
-        setImageError({ ...imageError, image2: true });
-      } else {
-        setImageError({ ...imageError, image2: false });
+          const response = await fetch(`${baseURL}updateStep.php`, {
+              method: "POST",
+              body: formDataToSend,
+          });
+          const result = await response.json();
+          if (result.success) {
+              alert("Обновлен шаг 3");
+              const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+              console.log(updatedUserSteps);
+          } else {
+              console.error("Ошибка загрузки :", result.error);
+          }
+      } catch (error) {
+          console.error("Ошибка запроса:", error);
       }
+  } else if (step === 4) {
+
+    try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("id", userStep.id);
+        formDataToSend.append("cardNumber", formData.cardNumber);
+        formDataToSend.append("bankName", formData.bankName);
+        formDataToSend.append("cardHolder", formData.cardHolder);
+        formDataToSend.append("phone", formData.phone);
+
+        const response = await fetch(`${baseURL}updateStep.php`, {
+            method: "POST",
+            body: formDataToSend,
+        });
+        const result = await response.json();
+        if (result.success) {
+            alert("Данные успешно загружены и обновлен шаг 4");
+            const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+            console.log(updatedUserSteps);
+        } else {
+            console.error("Ошибка загрузки данных:", result.error);
+        }
+    } catch (error) {
+        console.error("Ошибка запроса:", error);
     }
-    // Add logic for proceeding to the next step if no errors
+} else if (step === 5) {
+  if (!uploaded.image3) {
+    setImageError({ ...imageError, image3: true });
+    return;
+  }
+  try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("id", userStep.id);
+      formDataToSend.append("image3", formData.image3);
+
+
+      const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+      });
+      const result = await response.json();
+      if (result.success) {
+          alert("Изображение загружено и обновлен шаг 5");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+      } else {
+          console.error("Ошибка загрузки данных:", result.error);
+      }
+  } catch (error) {
+      console.error("Ошибка запроса:", error);
+  }
+} else if (step === 6) {
+  if (!uploaded.image4) {
+    setImageError({ ...imageError, image4: true });
+    return;
+  }
+  try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("id", userStep.id);
+      formDataToSend.append("image4", formData.image4);
+
+
+      const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+      });
+      const result = await response.json();
+      if (result.success) {
+          alert("Изображение загружено и обновлен шаг 6");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+      } else {
+          console.error("Ошибка загрузки данных:", result.error);
+      }
+  } catch (error) {
+      console.error("Ошибка запроса:", error);
+  }
+} else if (step === 7) {
+  if (!uploaded.image5) {
+    setImageError({ ...imageError, image5: true });
+    return;
+  }
+  if (!uploaded.image6) {
+    setImageError({ ...imageError, image6: true });
+    return;
+  }
+  try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("id", userStep.id);
+      formDataToSend.append("image5", formData.image5);
+      formDataToSend.append("image6", formData.image6);
+
+
+      const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+      });
+      const result = await response.json();
+      if (result.success) {
+          alert("Изображение загружено и обновлен шаг 7");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+      } else {
+          console.error("Ошибка загрузки данных:", result.error);
+      }
+  } catch (error) {
+      console.error("Ошибка запроса:", error);
+  }
+}
   };
 
   const keywords =
-    product && product.keywords
-      ? product.keywords.split(", ").map((keyword, index) => (
+    userStep && userStep.keywords
+      ? userStep.keywords.split(", ").map((keyword, index) => (
           <div key={index} className="keyword">
             <svg
               width="18"
@@ -146,11 +359,11 @@ const PurchaseStepsPage = ({ products }) => {
                 соответствующие скриншоты, где это требуется.
               </p>
               <p className="purchase-step-text">
-                Цена в магазине: {product.marketPrice} ₽<br />
-                Цена для вас: {product.yourPrice} ₽
+                Цена в магазине: {userStep.marketprice} ₽<br />
+                Цена для вас: {userStep.yourprice} ₽
               </p>
               <div className="step-footer-container">
-                <button className="purchase-step-button">
+                <button className="purchase-step-button" onClick={handleAcceptTerms}>
                   Я соглашаюсь с условиями
                 </button>
               </div>
@@ -158,78 +371,79 @@ const PurchaseStepsPage = ({ products }) => {
           </div>
         );
       case 1:
-        return (
-          <div className="purchase-step-page">
-            <div className="purchase-step-header">
-              <p className="title-class-step">
-                Шаг 1: Поиск по ключевому слову
-              </p>
-              <div className="purchase-step-keywords">{keywords}</div>
-            </div>
-            <div className="purchase-step-content">
-              <p className="purchase-step-text">
-                <span className="important">Важно! Соблюдайте инструкцию</span>
-              </p>
-              <ul className="purchase-step-text text-ul">
-                <li>Оформление заказа на 50-ом шаге</li>
-                <li>Пока не ищите наш товар</li>
-                <li>Напишите ключевое поле в поисковик сайта</li>
-                <li>Смотрите товары других продавцов</li>
-                <li>Добавьте несколько товаров в корзину</li>
-                <li>Сделайте скрин корзины и загрузите отчет</li>
-              </ul>
-              <div className="upload-section" style={{ marginTop: "20px" }}>
-                <p className="upload-title">Загрузите скрин корзины</p>
-                <label className="upload-label" htmlFor="file-upload">
-                  {uploaded.image1
-                    ? "Изображение загружено"
-                    : "Выберите изображение"}
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image1")}
-                />
-                {imageError.image1 && (
-                  <p className="error-text">
-                    Пожалуйста, загрузите изображение корзины.
-                  </p>
-                )}
+          return (
+            <div className="purchase-step-page">
+              <div className="purchase-step-header">
+                <p className="title-class-step">
+                  Шаг 1: Поиск по ключевому слову
+                </p>
+                <div className="purchase-step-keywords">{keywords}</div>
               </div>
-              <div className="step-footer-container">
-                <div
-                  className="upload-feedback-step4"
-                  onClick={() => setChecked(!checked)}
-                >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
-                    {checked && (
-                      <svg viewBox="0 0 13 13">
-                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                      </svg>
-                    )}
-                  </div>
-                  <div className="upload-feedback-text">
-                    Добавил(а) в корзину 2-3 товара
-                  </div>
+              <div className="purchase-step-content">
+                <p className="purchase-step-text">
+                  <span className="important">Важно! Соблюдайте инструкцию</span>
+                </p>
+                <ul className="purchase-step-text text-ul">
+                  <li>Оформление заказа на 5-ом шаге</li>
+                  <li>Пока не ищите наш товар</li>
+                  <li>Напишите ключевое поле в поисковик сайта</li>
+                  <li>Смотрите товары других продавцов</li>
+                  <li>Добавьте несколько товаров в корзину</li>
+                  <li>Сделайте скрин корзины и загрузите отчет</li>
+                </ul>
+                <div className="upload-section" style={{ marginTop: "20px" }}>
+                  <p className="upload-title">Загрузите скрин корзины</p>
+                  <label className="upload-label" htmlFor="file-upload">
+                    {uploaded.image1
+                      ? "Изображение загружено"
+                      : "Выберите изображение"}
+                  </label>
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="upload-input"
+                    onChange={(e) => handleFileUpload(e, "image1")}
+                  />
+                  {imageError.image1 && (
+                    <p className="error-text">
+                      Пожалуйста, загрузите изображение корзины.
+                    </p>
+                  )}
                 </div>
-                <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
-                >
-                  Продолжить
-                </button>
+                <div className="step-footer-container">
+                  <div
+                    className="upload-feedback-step4"
+                    onClick={() => setChecked(!checked)}
+                  >
+                    <div
+                      className={`upload-checkbox ${checked ? "checked" : ""}`}
+                    >
+                      {checked && (
+                        <svg viewBox="0 0 13 13">
+                          <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                        </svg>
+                      )}
+                    </div>
+                    <div className="upload-feedback-text">
+                      Добавил(а) в корзину 2-3 товара
+                    </div>
+                  </div>
+                  <button
+                    className="purchase-step-button"
+                    onClick={handleStepSubmit}
+                  >
+                    Продолжить
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        );
+          );
       case 2:
         return (
           <div className="purchase-step-page-long">
             <div className="purchase-step-header">
               <p className="title-class-step">Шаг 2: Найти товар продавца</p>
+              <div className="purchase-step-keywords">{keywords}</div>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
@@ -247,8 +461,8 @@ const PurchaseStepsPage = ({ products }) => {
               <div className="purchase-step-image">
                 {!isLoaded && <div className="purchase-step-skeleton"></div>}
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={userStep.image}
+                  alt={userStep.name}
                   className="product-image-detail"
                   style={{ display: isLoaded ? "block" : "none" }}
                   onLoad={handleImageLoad}
@@ -589,127 +803,100 @@ const PurchaseStepsPage = ({ products }) => {
       case 7:
         return (
           <div className="purchase-step-page">
-            <div className="purchase-step-header">
-              <p className="title-class-step">Шаг 7: Отчет об отзыве</p>
+      <div className="purchase-step-header">
+        <p className="title-class-step">Шаг 7: Отчет об отзыве</p>
+      </div>
+      <div className="purchase-step-content">
+        <p className="purchase-step-text">
+          <span className="important">Важно! Соблюдайте инструкцию</span>
+        </p>
+        <ul className="purchase-step-text text-ul" style={{ marginBottom: "20px" }}>
+          <li>Оставьте положительный текстовый отзыв, прикрепите фото и поставьте 5 звёзд;</li>
+          <li>Запишите видео с разрезанным штрих-кодом на фоне товара;</li>
+          <li>Прикрепите скриншот, где видно, что отзыв уже опубликован;</li>
+          <li>Прикрепите видео с разрезанным штрих-кодом.</li>
+        </ul>
+        <div className="article-input">
+          <p className="upload-title" style={{ marginBottom: 0 }}>
+            Загрузите скриншот опубликованного отзыва
+          </p>
+          <label className="upload-label" htmlFor="file-upload-competitor1">
+            {uploaded.image5 ? "Изображение загружено" : "Выберите изображение"}
+          </label>
+          <input
+            id="file-upload-competitor1"
+            type="file"
+            className="upload-input"
+            onChange={(e) => handleFileUpload(e, "image5")}
+          />
+          {imageError.image5 && (
+            <p className="red-error">Загрузите изображение</p>
+          )}
+        </div>
+        <div className="article-input">
+          <p className="upload-title" style={{ marginBottom: 0 }}>
+            Загрузите видео с разрезанным штрих-кодом на фоне товара
+          </p>
+          <label className="upload-label" htmlFor="file-upload-competitor2">
+            {uploaded.image6 ? "Изображение загружено" : "Выберите изображение"}
+          </label>
+          <input
+            id="file-upload-competitor2"
+            type="file"
+            className="upload-input"
+            onChange={(e) => handleFileUpload(e, "image6")}
+          />
+          {imageError.image6 && (
+            <p className="red-error">Загрузите изображение</p>
+          )}
+        </div>
+        <div className="step-footer-container">
+          <div className="upload-feedback-step4" onClick={() => setChecked(!checked)}>
+            <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
+              {checked && (
+                <svg viewBox="0 0 13 13">
+                  <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                </svg>
+              )}
             </div>
-            <div className="purchase-step-content">
-              <p className="purchase-step-text">
-                <span className="important">Важно! Соблюдайте инструкцию</span>
-              </p>
-              <ul
-                className="purchase-step-text text-ul"
-                style={{ marginBottom: "20px" }}
-              >
-                <li>
-                  Оставьте положительный текстовый отзыв, прикрепите фото и
-                  поставьте 5 звёзд;
-                </li>
-                <li>
-                  Запишите видео с разрезанным штрих-кодом на фоне товара;
-                </li>
-                <li>
-                  Прикрепите скриншот, где видно, что отзыв уже опубликован;
-                </li>
-                <li>Прикрепите видео с разрезанным штрих-кодом.</li>
-              </ul>
-              <div className="article-input">
-                <p className="upload-title" style={{ marginBottom: 0 }}>
-                  Загрузите скриншот опубликованного отзыва
-                </p>
-                <label
-                  className="upload-label"
-                  htmlFor="file-upload-competitor"
-                >
-                  {uploaded.image5
-                    ? "Изображение загружено"
-                    : "Выберите изображение"}
-                </label>
-                <input
-                  id="file-upload-competitor"
-                  type="file"
-                  className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image5")}
-                />
-                {imageError.image5 && (
-                  <p className="red-error">Загрузите изображение</p>
-                )}
-              </div>
-              <div className="article-input">
-                <p className="upload-title" style={{ marginBottom: 0 }}>
-                  Загрузите видео с разрезанным штрих-кодом на фоне товара
-                </p>
-                <label
-                  className="upload-label"
-                  htmlFor="file-upload-competitor"
-                >
-                  {uploaded.image6
-                    ? "Изображение загружено"
-                    : "Выберите изображение"}
-                </label>
-                <input
-                  id="file-upload-competitor"
-                  type="file"
-                  className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image6")}
-                />
-                {imageError.image6 && (
-                  <p className="red-error">Загрузите изображение</p>
-                )}
-              </div>
-              <div className="step-footer-container">
-                <div
-                  className="upload-feedback-step4"
-                  onClick={() => setChecked(!checked)}
-                >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
-                    {checked && (
-                      <svg viewBox="0 0 13 13">
-                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                      </svg>
-                    )}
-                  </div>
-                  <div className="upload-feedback-text">Оставил(а) отзыв</div>
-                </div>
-                <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
-                >
-                  Продолжить
-                </button>
-              </div>
-            </div>
+            <div className="upload-feedback-text">Оставил(а) отзыв</div>
           </div>
-        );
+          <button className="purchase-step-button" onClick={handleStepSubmit}>
+            Продолжить
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
       default:
         return (
           <div className="purchase-step-page">
             <div className="purchase-step-header">
-              <p className="title-class-step">Сделка № 328</p>
+              <p className="title-class-step">Сделка № {userStep.id}</p>
             </div>
             <div className="purchase-step-content">
-              <div key={product.id} className="purchase-item">
+              <div key={userStep.id} className="purchase-item">
                 <div
                   className="purchase-skeleton"
                   style={{ display: isLoaded ? "none" : "block" }}
                 ></div>
                 <img
-                  src={product.image}
-                  alt={product.name}
+                  src={userStep.image}
+                  alt={userStep.name}
                   className="purchase-image"
                   style={{ display: isLoaded ? "block" : "none" }}
                   onLoad={handleImageLoad}
                   onError={handleImageError}
                 />
                 <div className="purchase-details">
-                  <h2 className="purchase-title">{product.name}</h2>
+                  <h2 className="purchase-title">{userStep.name}</h2>
                   <p className="purchase-price">
-                    Цена для вас: {product.yourPrice} ₽
+                    Цена для вас: {userStep.yourprice} ₽
                   </p>
                   <p className="purchase-step">
-                    Шаги: {product.step}
-                    {product.isComplete && (
+                    Шаги: {userStep.step}
+                    {userStep.isComplete && (
                       <span style={{ marginLeft: "4px" }}>
                         <svg
                           width="8"
@@ -754,10 +941,10 @@ const PurchaseStepsPage = ({ products }) => {
                 Написать продавцу
               </button>
               <p className="font-16px-600" style={{ marginTop: "30px", marginBottom: 0 }}>Реквизиты для перевода</p>
-              <p className="font-16px-400" style={{ marginTop: "15px", marginBottom: 0 }}>Василий Сергеевич</p>
-              <p className="font-16px-400" style={{ marginTop: "6px", marginBottom: 0 }}>Сбер 89843568943</p>
+              <p className="font-16px-400" style={{ marginTop: "15px", marginBottom: 0 }}>{userStep.cardholder}</p>
+              <p className="font-16px-400" style={{ marginTop: "6px", marginBottom: 0 }}>{userStep.bankname} {userStep.phone}</p>
               <p className="font-16px-600" style={{ marginTop: "15px", marginBottom: 0 }}>Условия сделки</p>
-              <p className="font-16px-400" style={{ marginTop: "10px", marginBottom: 0 }}>Выплата на 24 день</p>
+              <p className="font-16px-400" style={{ marginTop: "10px", marginBottom: 0 }}>{userStep.terms}</p>
               <p className="font-16px-600" style={{ marginTop: "25px", marginBottom: 0 }}>Если есть вопросы, напишите нам</p>
               <button className="button-help" style={{ marginTop: "10px", marginBottom: 0 }}>Поддержка</button>
             </div>

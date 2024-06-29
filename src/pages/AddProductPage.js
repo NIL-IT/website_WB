@@ -59,8 +59,7 @@ const AddProductPage = ({
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          fetchProducts();
-          setProducts([...products, data.newProduct]);
+          
           navigate('/catalog');
         } else {
           console.error("Error:", data.message);

@@ -2,52 +2,54 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/PurchasesPage.css";
 
-const PurchasesPage = ({ products }) => {
+const PurchasesPage = ({ userSteps }) => {
   const [loadedImages, setLoadedImages] = useState({});
 
-  const handleImageLoad = (productId) => {
+  const handleImageLoad = (userStepId) => {
     setLoadedImages((prevState) => ({
       ...prevState,
-      [productId]: true,
+      [userStepId]: true,
     }));
   };
 
-  const handleImageError = (event, productId) => {
+  const handleImageError = (event, userStepId) => {
     event.target.style.display = "none"; // Скрыть изображение при ошибке
     setLoadedImages((prevState) => ({
       ...prevState,
-      [productId]: false, // Пометить, что изображение не загружено
+      [userStepId]: false, // Пометить, что изображение не загружено
     }));
   };
 
   const navigate = useNavigate();
-  const handleProductClick = (productId) => {
-    navigate(`/purchase-steps/${productId}`);
+
+  const handleProductClick = (userStepId) => {
+    console.log(userStepId);
+    navigate(`/purchase-steps/${userStepId}`);
   };
 
   return (
     <div className="purchases-page">
       <div className="title-class">Мои покупки</div>
       <ul>
-      {products
-          .filter(product => product.step > 0 || product.isComplete)
-          .map((product) => (
-          <li key={product.id} className="purchase-item" onClick={() => handleProductClick(product.id)}>
-            <div className="purchase-skeleton" style={{ display: loadedImages[product.id] ? "none" : "block" }}></div>
+      {userSteps
+          .filter(userStep => userStep.step > 0 || userStep.step === "Завершено")
+          .map((userStep) => (
+          <li key={userStep.id} className="purchase-item" onClick={() => handleProductClick(userStep.id)}>
+            <div className="purchase-skeleton" style={{ display: loadedImages[userStep.id] ? "none" : "block" }}></div>
             <img
-              src={product.image}
-              alt={product.name}
+              src={userStep.image}
+              alt={userStep.name}
               className="purchase-image"
-              style={{ display: loadedImages[product.id] ? "block" : "none" }}
-              onLoad={() => handleImageLoad(product.id)}
-              onError={(event) => handleImageError(event, product.id)}
+              style={{ display: loadedImages[userStep.id] ? "block" : "none" }}
+              onLoad={() => handleImageLoad(userStep.id)}
+              onError={(event) => handleImageError(event, userStep.id)}
             />
             <div className="purchase-details">
-              <h2 className="purchase-title">{product.name}</h2>
-              <p className="purchase-price">Цена для вас: {product.yourPrice} ₽</p>
+              <h2 className="purchase-title">{userStep.name}</h2>
+              <p className="purchase-price">Цена для вас: {userStep.yourprice} ₽</p>
               <p className="purchase-step">
-                Шаги: {product.step}
-                {product.isComplete && (
+                Текущий шаг: {userStep.step}
+                {userStep.step === "Завершено" && (
                   <span style={{ marginLeft: '4px' }}>
                     <svg
                       width="8"
