@@ -119,7 +119,25 @@ const App = () => {
                         
 
    ]);  */
-  const API = {
+   const [initialWindowHeight, setInitialWindowHeight] = useState(window.innerHeight);
+
+   useEffect(() => {
+     const handleResize = () => {
+       if (window.innerHeight < initialWindowHeight) {
+         document.body.style.height = `${initialWindowHeight}px`;
+       } else {
+         document.body.style.height = '100vh';
+       }
+     };
+ 
+     window.addEventListener('resize', handleResize);
+ 
+     return () => {
+       window.removeEventListener('resize', handleResize);
+     };
+   }, [initialWindowHeight]);
+  
+   const API = {
     async getUser(id) {
       try {
         const option = {
