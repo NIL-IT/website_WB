@@ -880,7 +880,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
               </div>
               <div className="article-input">
                 <p className="upload-title" style={{ marginBottom: 0 }}>
-                  Загрузите видео с разрезанным штрих-кодом на фоне товара
+                  Загрузите фотографию с разрезанным штрих-кодом на фоне товара
                 </p>
                 <label
                   className="upload-label"
