@@ -13,13 +13,13 @@ import BackButton from './components/BackButton';
 import './index.css';
 
 const App = () => {
-  const [products, setProducts] = useState([]);
+ const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://nilurl.ru:8000/';
-  /*  const [products, setProducts] = useState([
+    /*  const [products, setProducts] = useState([
      {
        id: 1,
        image: "/Canada.jpg" ,
@@ -119,23 +119,6 @@ const App = () => {
                         
 
    ]);  */
-   const [initialWindowHeight, setInitialWindowHeight] = useState(window.innerHeight);
-
-   useEffect(() => {
-     const handleResize = () => {
-       if (window.innerHeight < initialWindowHeight) {
-         document.body.style.height = `${initialWindowHeight}px`;
-       } else {
-         document.body.style.height = '100vh';
-       }
-     };
- 
-     window.addEventListener('resize', handleResize);
- 
-     return () => {
-       window.removeEventListener('resize', handleResize);
-     };
-   }, [initialWindowHeight]);
   
    const API = {
     async getUser(id) {
@@ -226,7 +209,7 @@ const App = () => {
         return null;
     }
 };
-  useEffect(() => {
+useEffect(() => {
     const tg = window.Telegram.WebApp;
     tg.expand();
 

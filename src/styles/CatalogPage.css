@@ -1,6 +1,6 @@
 .catalog-page {
   position: relative;
-  padding: 2vh;
+  padding: 20px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -14,10 +14,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2vh;
+  margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
-  gap: 2vh;
+  gap: 10px;
 }
 
 .search-bar-wrapper {
@@ -30,20 +30,20 @@
 
 .search-bar {
   width: 100%;
-  height: 4vh;
+  height: 25px;
   padding: 0px 5px 0px 30px;
   font-family: "Helvetica Neue Cyr";
   font-size: 12px;
   font-weight: 400;
   text-align: left;
   color: rgba(255, 255, 255, 1);
-  border: 0.05vh solid rgba(0, 0, 0, 1);
+  border: 0.5px solid rgba(0, 0, 0, 1);
   border-radius: 8px;
   opacity: 1;
   background-color: rgba(188, 122, 255, 1);
   outline: none;
   display: flex;
-  line-height: 4vh;
+  line-height: 25px;
 }
 
 .search-bar::placeholder {
@@ -64,14 +64,14 @@
 
 .filter-icon {
   cursor: pointer;
-  width: 3vh;
+  width: 17px;
   height: auto;
 }
 
 .products-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5vh;
+  gap: 3px;
   justify-content: space-between;
   box-sizing: border-box;
 }
@@ -80,14 +80,13 @@
   position: fixed;
   bottom: 0;
   left: 50%;
-  height: 70%;
   transform: translateX(-50%);
   width: 100%;
-  border-radius: 0.8vh 0.8vh 0 0;
-  border: 0.1vh solid rgba(0, 0, 0, 1);
+  border-radius: 0.8px 0.8px 0 0;
+  border: 1px solid rgba(0, 0, 0, 1);
   background: rgba(255, 255, 255, 1);
   z-index: 10001;
-  box-shadow: 0px 4px 1.5vh rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 }
 
@@ -117,10 +116,6 @@
   cursor: pointer;
 }
 
-.popup-body {
-  margin-bottom: 2vh;
-}
-
 .popup-category-title {
   font-family: "Helvetica Neue Cyr";
   font-size: 14px;
@@ -131,7 +126,7 @@
 .popup-categories {
   display: flex;
   flex-direction: column;
-  height: 42vh;
+  height: 280px;
   overflow-y: auto;
   gap: 15px;
 }
@@ -147,12 +142,12 @@
 .popup-category input[type="checkbox"] {
   width: 15px;
   height: 15px;
-  border-radius: 0.4vh;
-  border: 0.1vh solid rgba(0, 0, 0, 1);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 1);
 }
 
 .popup-footer {
-  border-top: 0.1vh solid rgba(0, 0, 0, 1);
+  border-top: 1px solid rgba(0, 0, 0, 1);
   display: flex;
   justify-content: space-evenly;
   padding: 0;
@@ -182,26 +177,4 @@
 
 .blur-background {
   filter: blur(0.5vh);
-}
-
-@media (min-width: 600px) {
-  .search-container {
-    margin-bottom: 3vh;
-    gap: 3vh;
-  }
-
-  .filter-icon {
-    width: 3.5vh;
-  }
-}
-
-@media (min-width: 768px) {
-  .search-container {
-    margin-bottom: 4vh;
-    gap: 4vh;
-  }
-
-  .filter-icon {
-    width: 4vh;
-  }
 }

@@ -14,8 +14,8 @@ p {
   border-radius: 10px;
   text-align: left;
   cursor: pointer;
-  width: calc(50% - 0.5vh);
-  margin-bottom: 0.5vh;
+  width: calc(50% - 3px);
+  margin-bottom: 3px;
   box-sizing: border-box;
 }
 
@@ -110,9 +110,6 @@ p {
 }
 
 @media (min-width: 600px) {
-  .product-card {
-    width: calc(50% - 1vh);
-  }
 
   .product-description {
     font-size: 12px;
@@ -128,9 +125,6 @@ p {
 }
 
 @media (min-width: 768px) {
-  .product-card {
-    width: calc(50% - 1.5vh);
-  }
 
   .product-description {
     font-size: 13px;

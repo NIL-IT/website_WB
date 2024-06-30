@@ -1,5 +1,5 @@
 .add-product-page {
-  padding: 2vh;
+  padding: 20px;
 }
 
 .add-product-form {
@@ -10,7 +10,7 @@
 
 .add-product-page label {
   display: block;
-  margin-bottom: 1vh;
+  margin-bottom: 10px;
   font-family: "Helvetica Neue Cyr";
   font-size: 12px;
   font-weight: 400;
@@ -19,15 +19,15 @@
 .add-product-page input,
 .add-product-page select {
   width: 100%;
-  border: 0.05vh solid rgba(0, 0, 0, 1);
-  border-radius: 0.8vh;
+  border: 0.5px solid rgba(0, 0, 0, 1);
+  border-radius: 8px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
   font-family: "Helvetica Neue Cyr";
   font-size: 10px;
   font-weight: 400;
-  padding: 1vh;
-  margin-top: 0.5vh;
+  padding: 10px;
+  margin-top: 5px;
   box-sizing: border-box;
   cursor: pointer;
 }
@@ -43,15 +43,15 @@
 
 .add-product-page .file-label {
   width: 100%;
-  border: 0.05vh solid rgba(0, 0, 0, 1);
-  border-radius: 0.8vh;
+  border: 0.5px solid rgba(0, 0, 0, 1);
+  border-radius: 8px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
   font-family: "Helvetica Neue Cyr";
   font-size: 10px;
   font-weight: 400;
-  padding: 1vh;
-  margin-top: 0.5vh;
+  padding: 10px;
+  margin-top: 5px;
   cursor: pointer;
   box-sizing: border-box;
 }
@@ -72,14 +72,14 @@
   -moz-appearance: none;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iNyIgdmlld0JveD0iMCAwIDEyIDciIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xLjIxNDU4IDAuNzQ2MDQ5QzAuODg5MTYgMS4wNzIyMyAwLjg4OTE2IDEuNjAxMTMgMS4yMTQ1OCAxLjkyNzMxTDUuMjkxNDkgNi4wMDk2NUM1Ljk0MjQxIDYuNjYxNSA2Ljk5NzI0IDYuNjYxMjUgNy42NDc5MSA2LjAwOTE1TDExLjcyMzIgMS45MjQzQzEyLjA0ODYgMS41OTgxMyAxMi4wNDg2IDEuMDY5MjMgMTEuNzIzMiAwLjczNDM0QzExLjM5NzggMC40MTY4MzIgMTAuODcwMSAwLjQxNjgzMiAxMC41NDQ3IDAuNzQzMDM0TDcuMDU2NjYgNC4yMzkxOUM2LjczMTI0IDQuNTY1NDUgNi4yMDM1OCA0LjU2NTQ1IDUuODc4MTYgNC4yMzkxOUwyLjM5MzA4IDAuNzQ2MDQ5QzIuMDY3NjYgMC40MTk4NDcgMS41NDAwOCAwLjQxOTg0NyAxLjIxNDU4IDAuNzQ2MDQ5WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+Cg==");
   background-repeat: no-repeat;
-  background-position: right 1vh center;
-  padding-right: 2vh;
+  background-position: right 10px center;
+  padding-right: 20px;
 }
 
 .continue-button {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 1);
-  padding: 0.8vh;
+  padding: 8px;
   border-radius: 8px;
   background-color: rgba(105, 13, 201, 1);
   color: rgba(255, 255, 255, 1);
@@ -94,12 +94,12 @@
   font-size: 10px;
   font-weight: 400;
   color: black;
-  margin-bottom: 0.5vh;
+  margin-bottom: 5px;
 }
 
 .warning-message {
   color: red;
-  margin-top: 0.5vh;
+  margin-top: 5px;
   font-family: "Helvetica Neue Cyr";
   font-size: 8px;
   font-weight: 400;
