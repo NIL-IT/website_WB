@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "../styles/ProductDetail.css";
 
-const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps}) => {
+const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) => {
   const { id } = useParams();
   const product = products.find((product) => product.id.toString() === id);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -12,12 +12,18 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps}) => 
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
-const skidka = Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100);
+
+  const skidka = Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100);
+
   const handleImageError = (event) => {
     event.target.style.display = 'none';
   };
 
-   const handleBuyClick = async () => {
+  const handleBuyClick = async () => {
+    if (product.availableday === 0) {
+      return;
+    }
+
     try {
       const response = await fetch(`https://nilurl.ru:8000/createStep.php`, {
         method: 'POST',
@@ -35,7 +41,7 @@ const skidka = Math.round(((product.marketprice - product.yourprice) / product.m
         const newStep = updatedUserSteps.find(step => step.id_product === Number(id));
 
         if (newStep) {
-          navigate(`/purchase-steps/${result.stepsId}`); 
+          navigate(`/purchase-steps/${result.stepsId}`);
         } else {
           console.error('Не удалось найти созданный шаг в данных пользователя');
         }
@@ -46,7 +52,7 @@ const skidka = Math.round(((product.marketprice - product.yourprice) / product.m
       console.error('Ошибка при создании шага:', error);
       alert('Произошла ошибка при создании шага');
     }
-  };  
+  };
 
   const handleDeleteClick = async () => {
     if (userInfo?.status !== 'admin') {
@@ -120,7 +126,13 @@ const skidka = Math.round(((product.marketprice - product.yourprice) / product.m
           <p>{skidka} %</p>
         </div>
       </div>
-      <button className="buy-button" onClick={handleBuyClick}>Купить товар</button>
+      <button
+        className={`buy-button ${product.availableday === 0 ? 'disabled' : ''}`}
+        onClick={handleBuyClick}
+        disabled={product.availableday === 0}
+      >
+        {product.availableday === 0 ? 'Лимит на сегодня исчерпан' : 'Купить товар'}
+      </button>
       {fromModeratePage && (
         <button className="delete-button" onClick={handleDeleteClick}>Удалить товар</button>
       )}

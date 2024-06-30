@@ -38,7 +38,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
     image6: false,
   });
   const [checked, setChecked] = useState(false);
-
+  const [errors, setErrors] = useState({
+    cardNumber: false,
+    bankName: false,
+    cardHolder: false,
+    phone: false
+  });
+  
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
@@ -204,10 +210,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
         console.error("Ошибка запроса:", error);
       }
     } else if (step === 4) {
-      if (!checked) {
-        alert("Пожалуйста, подтвердите выполнение задачи на шаге 4.");
-        return;
-      }
 
       try {
         const formDataToSend = new FormData();
@@ -435,7 +437,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                   onChange={(e) => handleFileUpload(e, "image1")}
                 />
                 {imageError.image1 && (
-                  <p className="error-text">
+                  <p className="red-error">
                     Пожалуйста, загрузите изображение корзины.
                   </p>
                 )}
@@ -600,99 +602,101 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
       case 4:
         return (
           <div className="purchase-step-page">
-            <div className="purchase-step-header">
-              <p className="title-class-step">
-                Шаг 4: Реквизиты для перевода кешбэка
-              </p>
+      <div className="purchase-step-header">
+        <p className="title-class-step">
+          Шаг 4: Реквизиты для перевода кешбэка
+        </p>
+      </div>
+      <div className="purchase-step-content">
+        <p className="purchase-step-text">
+          <span className="important">Важно! Соблюдайте инструкцию</span>
+        </p>
+        <p className="purchase-step-text">
+          Напишите свои реквизиты:
+          <ul className="purchase-step-text text-ul">
+            <li>Номер карты;</li>
+            <li>Название банка;</li>
+            <li>ФИО владельца карты;</li>
+            <li>Телефон СБП для перевода.</li>
+          </ul>
+        </p>
+        <div className="article-input">
+          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+            Номер карты
+          </p>
+          <input
+            type="text"
+            name="cardNumber"
+            value={formData.cardNumber}
+            onChange={handleInputChange}
+            placeholder="Введите номер карты"
+          />
+          {errors.cardNumber && <p className="red-error">Заполните поле</p>}
+        </div>
+        <div className="article-input">
+          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+            Название банка
+          </p>
+          <input
+            type="text"
+            name="bankName"
+            value={formData.bankName}
+            onChange={handleInputChange}
+            placeholder="Введите название банка"
+          />
+          {errors.bankName && <p className="red-error">Заполните поле</p>}
+        </div>
+        <div className="article-input">
+          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+            ФИО владельца карты
+          </p>
+          <input
+            type="text"
+            name="cardHolder"
+            value={formData.cardHolder}
+            onChange={handleInputChange}
+            placeholder="Введите ФИО владельца карты"
+          />
+          {errors.cardHolder && <p className="red-error">Заполните поле</p>}
+        </div>
+        <div className="article-input" style={{ marginBottom: "25vh" }}>
+          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+            Телефон или СБП для перевода
+          </p>
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            placeholder="Введите номер телефона или СБП"
+          />
+          {errors.phone && <p className="red-error">Заполните поле</p>}
+        </div>
+        <div className="step-footer-container">
+          <div
+            className="upload-feedback-step4"
+            onClick={() => setChecked(!checked)}
+          >
+            <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
+              {checked && (
+                <svg viewBox="0 0 13 13">
+                  <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                </svg>
+              )}
             </div>
-            <div className="purchase-step-content">
-              <p className="purchase-step-text">
-                <span className="important">Важно! Соблюдайте инструкцию</span>
-              </p>
-              <p className="purchase-step-text">
-                Напишите свои реквизиты:
-                <ul className="purchase-step-text text-ul">
-                  <li>Номер карты;</li>
-                  <li>Название банка;</li>
-                  <li>ФИО владельца карты;</li>
-                  <li>Телефон СБП для перевода.</li>
-                </ul>
-              </p>
-              <div className="article-input">
-                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                  Номер карты
-                </p>
-                <input
-                  type="text"
-                  name="cardNumber"
-                  value={formData.cardNumber}
-                  onChange={handleInputChange}
-                  placeholder="Введите номер карты"
-                />
-              </div>
-              <div className="article-input">
-                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                  Название банка
-                </p>
-                <input
-                  type="text"
-                  name="bankName"
-                  value={formData.bankName}
-                  onChange={handleInputChange}
-                  placeholder="Введите название банка"
-                />
-              </div>
-              <div className="article-input">
-                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                  ФИО владельца карты
-                </p>
-                <input
-                  type="text"
-                  name="cardHolder"
-                  value={formData.cardHolder}
-                  onChange={handleInputChange}
-                  placeholder="Введите ФИО владельца карты"
-                />
-              </div>
-              <div className="article-input" style={{ marginBottom: "25vh" }}>
-                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                  Телефон или СБП для перевода
-                </p>
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="Введите номер телефона или СБП"
-                />
-              </div>
-              <div className="step-footer-container">
-                <div
-                  className="upload-feedback-step4"
-                  onClick={() => setChecked(!checked)}
-                >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
-                    {checked && (
-                      <svg viewBox="0 0 13 13">
-                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                      </svg>
-                    )}
-                  </div>
-                  <div className="upload-feedback-text">
-                    Подтверждаю правильность реквизитов
-                  </div>
-                </div>
-                <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
-                >
-                  Продолжить
-                </button>
-              </div>
+            <div className="upload-feedback-text">
+              Подтверждаю правильность реквизитов
             </div>
           </div>
+          <button
+            className="purchase-step-button"
+            onClick={handleStepSubmit}
+          >
+            Продолжить
+          </button>
+        </div>
+      </div>
+    </div>
         );
       case 5:
         return (
