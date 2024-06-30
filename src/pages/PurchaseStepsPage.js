@@ -59,29 +59,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
     }
   }, [formData, userStep]);
 
-  const handleAcceptTerms = async () => {
-    try {
-      const response = await fetch(`${baseURL}updateStep.php`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          id: userStep.id,
-        }),
-      });
-      const result = await response.json();
-      if (result.success) {
-        alert("Шаг обновлен");
-        const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
-        console.log(updatedUserSteps);
-      } else {
-        console.error("Ошибка обновления шага:", result.message);
-      }
-    } catch (error) {
-      console.error("Ошибка запроса:", error);
-    }
-  };
+  
 
   const handleFileUpload = (event, imageField) => {
     const file = event.target.files[0];
@@ -107,7 +85,30 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
   };
 
   const handleStepSubmit = async () => {
-    if (step === 1) {
+    if (step === 0) {
+      
+  
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("id", userStep.id);
+        
+  
+        const response = await fetch(`${baseURL}updateStep.php`, {
+          method: "POST",
+          body: formDataToSend,
+        });
+        const result = await response.json();
+        if (result.success) {
+          alert("Изображение успешно загружено и обновлен шаг 0");
+          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+          console.log(updatedUserSteps);
+        } else {
+          console.error("Ошибка загрузки изображения:", result.error);
+        }
+      } catch (error) {
+        console.error("Ошибка запроса:", error);
+      }
+    } else if (step === 1) {
       if (!uploaded.image1) {
         setImageError({ ...imageError, image1: true });
         return;
@@ -124,7 +125,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение успешно загружено и обновлен шаг");
+          alert("Изображение успешно загружено и обновлен шаг 1");
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -363,7 +364,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                 Цена для вас: {userStep.yourprice} ₽
               </p>
               <div className="step-footer-container">
-                <button className="purchase-step-button" onClick={handleAcceptTerms}>
+                <button className="purchase-step-button" onClick={handleStepSubmit}>
                   Я соглашаюсь с условиями
                 </button>
               </div>
