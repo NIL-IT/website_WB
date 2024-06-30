@@ -42,9 +42,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
     cardNumber: false,
     bankName: false,
     cardHolder: false,
-    phone: false
+    phone: false,
   });
-  
+
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
@@ -87,6 +87,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: false });
   };
 
   const handleArticleChange = (e) => {
@@ -210,6 +211,19 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
         console.error("Ошибка запроса:", error);
       }
     } else if (step === 4) {
+      // Check for empty fields
+      const newErrors = {
+        cardNumber: !formData.cardNumber,
+        bankName: !formData.bankName,
+        cardHolder: !formData.cardHolder,
+        phone: !formData.phone,
+      };
+
+      setErrors(newErrors);
+
+      if (Object.values(newErrors).some((error) => error)) {
+        return;
+      }
 
       try {
         const formDataToSend = new FormData();
