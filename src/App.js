@@ -5,6 +5,7 @@ import CatalogPageModerate from './pages/CatalogPageModerate';
 import AddProductPage from './pages/AddProductPage';
 import PurchasesPage from './pages/PurchasesPage';
 import ProfilePage from './pages/ProfilePage';
+import ReportPage from './pages/ReportPage';
 import ProductDetail from './components/ProductDetail';
 import PurchaseStepsPage from './pages/PurchaseStepsPage';
 import Sidebar from './components/Sidebar';
@@ -266,11 +267,12 @@ const App = () => {
             <Route exact path="/" element={<CatalogPage products={products} categories={categories} />} />
             <Route path="/catalog" element={<CatalogPage products={products} categories={categories}/>} />
             <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories}/>} />
-            <Route path="/add-product" element={<AddProductPage fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
+            <Route path="/add-product" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
             <Route path="/purchases" element={<PurchasesPage  userSteps={userSteps} userInfo={userInfo} />} />
             <Route path="/profile" element={<ProfilePage userInfo={userInfo}/>} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchase-steps/:id" element={<PurchaseStepsPage userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete} />} />
+            <Route path="/report/:id" element={<ReportPage userInfo={userInfo}/> } />
           </Routes>
         </div>
       </div>

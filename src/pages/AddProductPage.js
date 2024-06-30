@@ -3,6 +3,7 @@ import {useNavigate } from "react-router-dom";
 import "../styles/AddProductPage.css";
 
 const AddProductPage = ({
+  userInfo,
   products,
   setProducts,
   categories,
@@ -18,7 +19,7 @@ const AddProductPage = ({
     availableDay: "",
     keywords: "",
     article: "",
-    tg_nick: "",
+    tg_nick: userInfo.username,
     terms: "",
     marketPrice: "",
     yourPrice: "",
