@@ -6,6 +6,14 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
   const { id } = useParams();
   const baseURL = "https://nilurl.ru:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
+
+  const handleSellerClick = () => {
+  if (userStep && userStep.tg_nick) {
+    window.open(`https://t.me/${userStep.tg_nick}`, "_blank", "noopener,noreferrer");
+  } else {
+    console.error("Telegram nickname not found or userStep is undefined");
+  }
+};
   const [formData, setFormData] = useState({
     image1: "",
     image2: "",
@@ -1005,7 +1013,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                   </p>
                 </div>
               </div>
-              <button className="telegram-button">
+              <button className="telegram-button" onClick={handleSellerClick}>
                 <svg
                   width="20"
                   height="18"
