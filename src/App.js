@@ -120,6 +120,12 @@ const App = () => {
 
    ]);  */
   
+   document.addEventListener('touchstart', function(event) {
+    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+      event.preventDefault();
+    }
+  }, false);
+
    const API = {
     async getUser(id) {
       try {
