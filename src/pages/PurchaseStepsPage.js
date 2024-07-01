@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "../styles/PurchaseStepsPage.css";
 
-const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
+const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts }) => {
   const { id } = useParams();
   const baseURL = "https://nilurl.ru:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
@@ -307,6 +307,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
         const result = await response.json();
         if (result.success) {
           alert("Изображение загружено и обновлен шаг 5");
+          fetchProducts();
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -448,12 +449,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                 Цена для вас: {userStep.yourprice} ₽
               </p>
               <div className="step-footer-container">
-                <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
+              <button
+                className="purchase-step-button"
+                onClick={handleStepSubmit}
+                disabled={userStep.availableday === 0} 
                 >
-                  Я соглашаюсь с условиями
-                </button>
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Я соглашаюсь с условиями'}
+              </button>
               </div>
             </div>
           </div>
@@ -517,11 +519,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                   </div>
                 </div>
                 <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
+                className="purchase-step-button"
+                onClick={handleStepSubmit}
+                disabled={userStep.availableday === 0} 
                 >
-                  Продолжить
-                </button>
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
+              </button>
               </div>
             </div>
           </div>
@@ -601,12 +604,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                 )}
               </div>
               <div className="step-footer-container">
-                <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
+              <button
+                className="purchase-step-button"
+                onClick={handleStepSubmit}
+                disabled={userStep.availableday === 0} 
                 >
-                  Продолжить
-                </button>
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
+              </button>
               </div>
             </div>
           </div>
@@ -649,8 +653,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
-              >
-                Продолжить
+                disabled={userStep.availableday === 0} 
+                >
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
               </button>
             </div>
           </div>
@@ -745,11 +750,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
             </div>
           </div>
           <button
-            className="purchase-step-button"
-            onClick={handleStepSubmit}
-          >
-            Продолжить
-          </button>
+                className="purchase-step-button"
+                onClick={handleStepSubmit}
+                disabled={userStep.availableday === 0} 
+                >
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
+              </button>
         </div>
       </div>
     </div>
@@ -811,11 +817,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                   <div className="upload-feedback-text">Оформил(а) заказ</div>
                 </div>
                 <button
-                  className="purchase-step-button"
-                  onClick={handleStepSubmit}
+                className="purchase-step-button"
+                onClick={handleStepSubmit}
+                disabled={userStep.availableday === 0} 
                 >
-                  Продолжить
-                </button>
+                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
+              </button>
               </div>
             </div>
           </div>

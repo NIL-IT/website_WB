@@ -272,7 +272,7 @@ useEffect(() => {
             <Route path="/purchases" element={<PurchasesPage  userSteps={userSteps} userInfo={userInfo} />} />
             <Route path="/profile" element={<ProfilePage userInfo={userInfo}/>} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
-            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete} />} />
+            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete} />} />
             <Route path="/report/:id" element={<ReportPage userInfo={userInfo}/> } />
           </Routes>
         </div>
