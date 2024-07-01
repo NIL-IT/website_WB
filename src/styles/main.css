@@ -11,7 +11,6 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 6vh;
-  background-color: #fdf;
 }
 
 .content::-webkit-scrollbar {

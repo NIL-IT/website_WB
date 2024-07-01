@@ -30,18 +30,15 @@
   margin-top: 5px;
   box-sizing: border-box;
   cursor: pointer;
-  touch-action: manipulation;
 }
 
 .add-product-page input[type="file"] {
   display: none;
-  touch-action: manipulation;
 }
 
 .add-product-page input::placeholder {
   color: white;
   font-size: 10px;
-  touch-action: manipulation;
 }
 
 .add-product-page .file-label {
@@ -61,13 +58,11 @@
 
 .add-product-page input[type="number"] {
   -moz-appearance: textfield;
-  touch-action: manipulation;
 }
 
 .add-product-page input[type="number"]::-webkit-outer-spin-button,
 .add-product-page input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
-  touch-action: manipulation;
   margin: 0;
 }
 
@@ -79,7 +74,6 @@
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 20px;
-  touch-action: manipulation;
 }
 
 .continue-button {
