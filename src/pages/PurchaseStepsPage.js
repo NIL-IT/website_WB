@@ -110,6 +110,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
   };
 
   const handleStepSubmit = async () => {
+
     if (step === 0) {
       try {
         const formDataToSend = new FormData();
@@ -125,12 +126,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки изображения:", result.error);
+          alert("Ошибка загрузки изображения:"+ result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:", error);
       }
-    } else if (step === 1) {
+    } 
+    
+    
+    
+    else if (step === 1) {
       if (!uploaded.image1) {
         setImageError({ ...imageError, image1: true });
         return;
@@ -156,12 +161,17 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки изображения:", result.error);
+          alert("Ошибка загрузки данных: "+ result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
-    } else if (step === 2) {
+    } 
+    
+    
+    
+    
+    else if (step === 2) {
       if (!uploaded.image2) {
         setImageError({ ...imageError, image2: true });
         return;
@@ -194,12 +204,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки изображения:", result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        console.error("Ошибка запроса:" + error);
       }
-    } else if (step === 3) {
+    }
+    
+    
+    
+    else if (step === 3) {
       if (!checked) {
         alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
         return;
@@ -219,12 +233,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки:", result.error);
+          alert("Ошибка загрузки данных: "+ result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
-    } else if (step === 4) {
+    } 
+    
+    
+    
+    else if (step === 4) {
       // Check for empty fields
       const newErrors = {
         cardNumber: !formData.cardNumber,
@@ -257,12 +275,17 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки данных:", result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
-    } else if (step === 5) {
+    } 
+    
+    
+    
+    
+    else if (step === 5) {
       if (!uploaded.image3) {
         setImageError({ ...imageError, image3: true });
         return;
@@ -287,12 +310,17 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки данных:", result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
-    } else if (step === 6) {
+    } 
+    
+    
+    
+    
+    else if (step === 6) {
       if (!uploaded.image4) {
         setImageError({ ...imageError, image4: true });
         return;
@@ -317,10 +345,10 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки данных:", result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
     } else if (step === 7) {
       if (!uploaded.image5) {
@@ -352,10 +380,10 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          console.error("Ошибка загрузки данных:", result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
-        console.error("Ошибка запроса:", error);
+        console.error("Ошибка запроса:" + error);
       }
     }
   };

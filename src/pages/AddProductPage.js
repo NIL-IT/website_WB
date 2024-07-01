@@ -155,6 +155,7 @@ const AddProductPage = ({
         <label>
           Фото товара<span style={{ color: "red" }}> *</span>
           <input
+            name="image"
             type="file"
             id="file-upload"
             onChange={handleImageUpload}
