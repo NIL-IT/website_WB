@@ -120,6 +120,26 @@ const App = () => {
 
    ]);  */
   
+   const [initialHeight, setInitialHeight] = useState(window.innerHeight);
+  const [contentHeight, setContentHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newHeight = window.innerHeight;
+
+      if (newHeight < initialHeight) {
+        setContentHeight(initialHeight - (initialHeight - newHeight));  // Клавиатура открыта
+      } else {
+        setContentHeight(initialHeight);  // Клавиатура закрыта
+        setInitialHeight(newHeight);  // Обновляем initialHeight на случай если окно было изменено
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [initialHeight]);
+
+   
    document.addEventListener('touchstart', function(event) {
     if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
       event.preventDefault();
@@ -269,7 +289,7 @@ useEffect(() => {
       <div className="app-container">
         <BackButton /> 
         <Sidebar />
-        <div className="content">
+        <div className="content " style={{ height: contentHeight }}>
           <Routes>
             <Route exact path="/" element={<CatalogPage products={products} categories={categories} />} />
             <Route path="/catalog" element={<CatalogPage products={products} categories={categories}/>} />
