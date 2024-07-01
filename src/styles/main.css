@@ -3,7 +3,6 @@
   flex-direction: column;
   width: 100vw;
   position: fixed;
-  bottom: 0;
   background-color: #fff;
   height: var(--tg-viewport-stable-height);
 }
@@ -12,7 +11,6 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 6vh;
-  scroll-padding-bottom: 50px;
 }
 
 .content::-webkit-scrollbar {
