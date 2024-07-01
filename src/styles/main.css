@@ -1,7 +1,6 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  flex: 1;
   width: 100vw;
   position: relative;
   background-color: #fff;
@@ -12,9 +11,6 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 6vh;
-  flex: 1; /* Это свойство позволит блоку занять доступное пространство по высоте */
-  display: flex;
-  flex-direction: column; /* Убедитесь, что ваш родительский контейнер настроен для Flexbox */
 }
 
 .content::-webkit-scrollbar {
