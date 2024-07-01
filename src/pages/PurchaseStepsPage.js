@@ -547,9 +547,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                 Найдите артикул товара и вставьте его для проверки
               </p>
               <div className="article-input-step2">
-                {articleError && (
-                  <p className="red-error">Введен неверный артикул</p>
-                )}
                 <input
                   type="text"
                   name="article"
@@ -557,6 +554,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo }) => {
                   onChange={handleArticleChange}
                   placeholder="Введите артикул"
                 />
+                 {articleError && (
+                  <p className="red-error">Введен неверный артикул</p>
+                )}
               </div>
               <div className="step-footer-container">
                 <button
