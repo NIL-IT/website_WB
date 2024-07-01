@@ -11,7 +11,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 6vh;
-  background-color: firebrick;
+  background-color: #fdf;
 }
 
 .content::-webkit-scrollbar {
