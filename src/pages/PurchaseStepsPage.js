@@ -136,6 +136,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Изображение успешно загружено и обновлен шаг 0");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -144,7 +147,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 1) {
+    } 
+    
+    
+    
+    
+    
+    else if (step === 1) {
       if (!uploaded.image1) {
         setImageError({ ...imageError, image1: true });
         return;
@@ -167,6 +176,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Изображение успешно загружено и обновлен шаг 1");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -175,7 +187,15 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 2) {
+    } 
+    
+    
+    
+    
+    
+    
+    
+    else if (step === 2) {
       if (!uploaded.image2) {
         setImageError({ ...imageError, image2: true });
         return;
@@ -204,6 +224,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Изображение успешно загружено и обновлен шаг 2");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -212,7 +235,15 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         console.error("Ошибка запроса:" + error);
       }
-    } else if (step === 3) {
+    } 
+    
+    
+    
+    
+    
+    
+    
+    else if (step === 3) {
       if (!checked) {
         alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
         return;
@@ -229,6 +260,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Обновлен шаг 3");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -237,7 +271,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 4) {
+    } 
+    
+    
+    
+    
+    
+    else if (step === 4) {
       if (!checked) {
         alert("Пожалуйста, подтвердите правильность ввода данных. ");
         return;
@@ -263,6 +303,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         formDataToSend.append("bankName", formData.bankName);
         formDataToSend.append("cardHolder", formData.cardHolder);
         formDataToSend.append("phone", formData.phone);
+        formDataToSend.append("id_usertg", userInfo.id_usertg);
 
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
@@ -271,6 +312,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Данные успешно загружены и обновлен шаг 4");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -279,7 +323,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 5) {
+    } 
+    
+    
+    
+    
+    
+    else if (step === 5) {
       if (!uploaded.image3) {
         setImageError({ ...imageError, image3: true });
         return;
@@ -302,6 +352,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         if (result.success) {
           alert("Изображение загружено и обновлен шаг 5");
           fetchProducts();
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -310,7 +363,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 6) {
+    } 
+    
+    
+    
+    
+    
+    else if (step === 6) {
       if (!uploaded.image4) {
         setImageError({ ...imageError, image4: true });
         return;
@@ -332,6 +391,8 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Изображение загружено и обновлен шаг 6");
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -340,7 +401,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } else if (step === 7) {
+    } 
+    
+    
+    
+    
+    
+    else if (step === 7) {
       if (!uploaded.image5) {
         setImageError({ ...imageError, image5: true });
         return;
@@ -367,6 +434,9 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const result = await response.json();
         if (result.success) {
           alert("Изображение загружено и обновлен шаг 7");
+          setChecked(false);
+          localStorage.removeItem(`formData_${userStep.id}`);
+          localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
