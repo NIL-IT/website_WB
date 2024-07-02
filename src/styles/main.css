@@ -4,13 +4,14 @@
   width: 100vw;
   position: relative;
   background-color: #fff;
-  height: var(--tg-viewport-stable-height);
+  height: 100vh; /* Используем относительные единицы измерения для высоты */
 }
 
 .content {
   overflow-x: hidden;
   overflow-y: auto;
   padding-bottom: 6vh;
+  flex: 1; /* Занимает оставшееся пространство внутри .app-container */
 }
 
 .content::-webkit-scrollbar {
