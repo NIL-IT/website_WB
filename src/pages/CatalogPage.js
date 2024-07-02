@@ -40,20 +40,7 @@ const CatalogPage = ({ products, categories }) => {
     return matchesSearchTerm && matchesCategory;
   });
 
-  const telegram = new TelegramWebAppContainer();
-
-  telegram.WebApp.ready(() => {
-    const handleBackButtonClick = () => {
-      console.log("Back button clicked");
-      window.history.back();
-    };
-
-    if (telegram.WebApp.backButton) {
-      telegram.WebApp.backButton.isVisible(true).onClick(handleBackButtonClick); // Set the click event handler
-    } else {
-      console.error("Back button not available.");
-    }
-  });
+  
 
   return (
     <div className="catalog-page">
