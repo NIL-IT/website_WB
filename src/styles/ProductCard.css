@@ -54,7 +54,7 @@ p {
   padding-top: 8px;
   display: flex;
   gap: 5px;
-  height: 30%;
+  height: 70px;
   flex-direction: column;
 }
 
@@ -93,7 +93,7 @@ p {
   font-family: "Helvetica Neue Cyr";
   font-size: 21px;
   font-weight: 700;
-  line-height: 14px;
+  line-height: 21px;
   color: rgba(196, 46, 181, 1);
   white-space: nowrap;
   overflow: hidden;

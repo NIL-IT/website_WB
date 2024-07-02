@@ -58,18 +58,19 @@
   justify-content: center;
   width: 100%;
   height: 39px;
-  padding: 10px 20px;
+  padding: 10px 0px; /* Убраны боковые паддинги */
   border: none;
   border-radius: 8px;
   background-color: rgba(103, 103, 103, 0.38);
-  gap: 10px;
+  gap: 20px; /* Гэп увеличен до 20 пикселей */
   color: #000000;
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 18px; /* Увеличено с 12px */
   font-weight: 500;
   cursor: pointer;
   outline: none;
 }
+
 
 .profile-buttons button:focus {
   outline: none;

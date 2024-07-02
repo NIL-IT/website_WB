@@ -14,6 +14,7 @@
   font-family: "Helvetica Neue Cyr";
   font-size: 18px; /* Увеличено с 12px */
   font-weight: 400;
+  margin-bottom: 10px;
 }
 
 .add-product-page input,
@@ -48,7 +49,7 @@
   background-color: rgba(188, 122, 255, 1);
   color: white;
   font-family: "Helvetica Neue Cyr";
-  font-size: 15px; /* Увеличено с 10px */
+  font-size: 13px; /* Увеличено с 10px */
   font-weight: 400;
   padding: 10px;
   margin-top: 5px;
@@ -78,7 +79,7 @@
 
 .error-message {
   color: red;
-  font-size: 24px; /* Увеличено с 16px */
+  font-size: 15px; /* Увеличено с 16px */
 }
 
 .continue-button {
