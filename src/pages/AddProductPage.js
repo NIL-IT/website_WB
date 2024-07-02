@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/AddProductPage.css";
 
-const AddProductPage = ({
-  userInfo,
-  products,
-  setProducts,
-  categories,
-  fetchProducts,
-}) => {
+const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -43,11 +37,6 @@ const AddProductPage = ({
   };
 
   const handleSubmit = (e) => {
-    setShowPopup(true);
-          setTimeout(() => {
-            setShowPopup(false);
-            
-          }, 2000);
     e.preventDefault();
 
     fetch("https://nilurl.ru:8000/addProduct.php", {
@@ -57,17 +46,29 @@ const AddProductPage = ({
       },
       body: JSON.stringify(formData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
-          
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+            fetchProducts();
           navigate('/catalog');
+          }, 2000);
+          
+          
         } else {
-          console.error("Error:", data.message);
+          alert("Error: " + data.message);
+          navigate('/catalog');
         }
       })
       .catch((error) => {
-        console.error("Error:", error);
+        alert("Error: " + error);
       });
 
     setFormData({

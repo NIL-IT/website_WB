@@ -181,7 +181,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         return;
       }
 
-      // Validate article
+     
       if (formData.article !== userStep.article) {
         setArticleError(true);
         return;
@@ -1102,9 +1102,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                 Если есть вопросы, напишите нам
               </p>
               <button
-                className="button-help"
-                style={{ marginTop: "10px", marginBottom: 0 }}
-              >
+                  className="button-help"
+                  style={{ marginTop: "10px", marginBottom: 0 }}
+                  onClick={() => {
+                    window.open("https://t.me/lAlexonl", "_blank", "noopener,noreferrer");
+                  }}
+                >
                 Поддержка
               </button>
             </div>
