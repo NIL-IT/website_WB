@@ -62,7 +62,7 @@
   border: none;
   border-radius: 8px;
   background-color: rgba(103, 103, 103, 0.38);
-  gap: 20px;
+  gap: 10px;
   color: #000000;
   font-family: "Helvetica Neue Cyr";
   font-size: 12px;
@@ -114,7 +114,7 @@
 
 .item-subtitle {
   font-family: "Helvetica Neue Cyr";
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 400;
 }
 
