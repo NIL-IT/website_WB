@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
@@ -154,7 +154,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение успешно загружено и обновлен шаг 0");
+          // alert("Изображение успешно загружено и обновлен шаг 0");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
@@ -188,7 +188,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение успешно загружено и обновлен шаг 1");
+          // alert("Изображение успешно загружено и обновлен шаг 1");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
@@ -228,7 +228,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение успешно загружено и обновлен шаг 2");
+          // alert("Изображение успешно загружено и обновлен шаг 2");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
@@ -256,7 +256,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Обновлен шаг 3");
+          // alert("Обновлен шаг 3");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
@@ -301,7 +301,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Данные успешно загружены и обновлен шаг 4");
+          // alert("Данные успешно загружены и обновлен шаг 4");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
@@ -335,7 +335,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение загружено и обновлен шаг 5");
+          // alert("Изображение загружено и обновлен шаг 5");
           fetchProducts();
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
@@ -369,7 +369,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение загружено и обновлен шаг 6");
+          // alert("Изображение загружено и обновлен шаг 6");
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
@@ -407,7 +407,7 @@ const PurchaseStepsPage = ({
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение загружено и обновлен шаг 7");
+          // alert("Изображение загружено и обновлен шаг 7");
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);

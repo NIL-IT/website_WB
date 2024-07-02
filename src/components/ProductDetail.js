@@ -36,7 +36,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
       const result = await response.json();
 
       if (result.success) {
-        alert('Шаг успешно создан');
+        // alert('Шаг успешно создан');
         const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
         const newStep = updatedUserSteps.find(step => step.id_product === Number(id));
 
@@ -72,7 +72,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
       const result = await response.json();
 
       if (result.success) {
-        alert('Товар успешно удален');
+        // alert('Товар успешно удален');
         fetchProducts();
         navigate('/catalog');
       } else {
