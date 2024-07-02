@@ -307,7 +307,7 @@
   color: #fff;
   border-radius: 8px;
   font-family: "Helvetica Neue Cyr";
-font-size: 24px;
+font-size: 18px;
 font-weight: 600;
 }
 
@@ -315,13 +315,12 @@ font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50%;
   padding: 12px;
   background-color: rgba(70, 144, 255, 1);
   color: #fff;
   border-radius: 8px;
   font-family: "Helvetica Neue Cyr";
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 500;
 }
 
