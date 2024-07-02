@@ -71,6 +71,10 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
   const step = userStep ? parseInt(userStep.step) : 0;
 
   useEffect(() => {
+    setChecked(false);
+}, [step]);
+
+  useEffect(() => {
     if (userStep) {
       const savedFormData = localStorage.getItem(`formData_${userStep.id}`);
       const savedChecked = localStorage.getItem(`checked_${userStep.id}`);
