@@ -33,7 +33,7 @@
 
 .profile-name {
   font-family: "Helvetica Neue Cyr";
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 600;
   color: rgba(146, 35, 214, 1);
 }
@@ -65,7 +65,7 @@
   gap: 20px;
   color: #000000;
   font-family: "Helvetica Neue Cyr";
-  font-size: 8px;
+  font-size: 12px;
   font-weight: 500;
   cursor: pointer;
   outline: none;
@@ -107,14 +107,14 @@
   display: flex;
   align-items: center;
   font-family: "Helvetica Neue Cyr";
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 600;
   gap: 5px;
 }
 
 .item-subtitle {
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 21px;
   font-weight: 400;
 }
 
