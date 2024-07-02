@@ -528,7 +528,11 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
               <p className="title-class-step">
                 Шаг 1: Поиск по ключевому слову
               </p>
-              <div className="purchase-step-keywords">{keywords}</div>
+              <div className="purchase-keywords-container">
+  <div className="arrow left">&lt;</div>
+  <div className="purchase-step-keywords">{keywords}</div>
+  <div className="arrow right">&gt;</div>
+</div>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
@@ -595,7 +599,11 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
           <div className="purchase-step-page-long">
             <div className="purchase-step-header">
               <p className="title-class-step">Шаг 2: Найти товар продавца</p>
-              <div className="purchase-step-keywords">{keywords}</div>
+              <div className="purchase-keywords-container">
+  <div className="arrow left">&lt;</div>
+  <div className="purchase-step-keywords">{keywords}</div>
+  <div className="arrow right">&gt;</div>
+</div>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
