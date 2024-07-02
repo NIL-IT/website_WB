@@ -303,7 +303,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         formDataToSend.append("bankName", formData.bankName);
         formDataToSend.append("cardHolder", formData.cardHolder);
         formDataToSend.append("phone", formData.phone);
-        formDataToSend.append("id_usertg", userInfo.id_usertg);
 
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
@@ -343,6 +342,8 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         const formDataToSend = new FormData();
         formDataToSend.append("id", userStep.id);
         formDataToSend.append("image3", formData.image3);
+        formDataToSend.append("id_usertg", userInfo.id_usertg);
+
 
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
