@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import imageCompression from 'browser-image-compression';
+import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
 
-const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts }) => {
+const PurchaseStepsPage = ({
+  userSteps,
+  fetchUserSteps,
+  userInfo,
+  fetchProducts,
+}) => {
   const { id } = useParams();
   const baseURL = "https://nilurl.ru:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
 
   const handleSellerClick = () => {
     if (userStep && userStep.tg_nick) {
-      window.open(`https://t.me/${userStep.tg_nick}`, "_blank", "noopener,noreferrer");
+      window.open(
+        `https://t.me/${userStep.tg_nick}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
     } else {
       console.error("Telegram nickname not found or userStep is undefined");
     }
@@ -62,11 +71,18 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     setIsLoaded(true);
   };
 
-  document.addEventListener('touchstart', function(event) {
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-      event.preventDefault();
-    }
-  }, false);
+  document.addEventListener(
+    "touchstart",
+    function (event) {
+      if (
+        event.target.tagName === "INPUT" ||
+        event.target.tagName === "TEXTAREA"
+      ) {
+        event.preventDefault();
+      }
+    },
+    false
+  );
 
   const handleImageError = (event) => {
     event.target.style.display = "none";
@@ -98,7 +114,10 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     const file = event.target.files[0];
     if (file) {
       try {
-        const compressedFile = await imageCompression(file, { maxSizeMB: 0.7, maxWidthOrHeight: 1920 });
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 0.7,
+          maxWidthOrHeight: 1920,
+        });
         const reader = new FileReader();
         reader.onloadend = () => {
           setFormData({ ...formData, [imageField]: reader.result });
@@ -147,13 +166,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    else if (step === 1) {
+    } else if (step === 1) {
       if (!uploaded.image1) {
         setImageError({ ...imageError, image1: true });
         return;
@@ -187,15 +200,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    
-    
-    else if (step === 2) {
+    } else if (step === 2) {
       if (!uploaded.image2) {
         setImageError({ ...imageError, image2: true });
         return;
@@ -235,15 +240,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         console.error("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    
-    
-    else if (step === 3) {
+    } else if (step === 3) {
       if (!checked) {
         alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
         return;
@@ -271,13 +268,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    else if (step === 4) {
+    } else if (step === 4) {
       if (!checked) {
         alert("Пожалуйста, подтвердите правильность ввода данных. ");
         return;
@@ -322,13 +313,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    else if (step === 5) {
+    } else if (step === 5) {
       if (!uploaded.image3) {
         setImageError({ ...imageError, image3: true });
         return;
@@ -343,7 +328,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         formDataToSend.append("id", userStep.id);
         formDataToSend.append("image3", formData.image3);
         formDataToSend.append("id_usertg", userInfo.id_usertg);
-
 
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
@@ -364,13 +348,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    else if (step === 6) {
+    } else if (step === 6) {
       if (!uploaded.image4) {
         setImageError({ ...imageError, image4: true });
         return;
@@ -402,13 +380,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    
-    else if (step === 7) {
+    } else if (step === 7) {
       if (!uploaded.image5) {
         setImageError({ ...imageError, image5: true });
         return;
@@ -474,6 +446,20 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         ))
       : [];
 
+      const keywordsRef = useRef(null);
+
+      const scrollLeft = () => {
+        if (keywordsRef.current) {
+          keywordsRef.current.scrollBy({ left: -100, behavior: 'smooth' });
+        }
+      };
+    
+      const scrollRight = () => {
+        if (keywordsRef.current) {
+          keywordsRef.current.scrollBy({ left: 100, behavior: 'smooth' });
+        }
+      };
+
   const renderStepContent = () => {
     switch (step) {
       case 0:
@@ -510,13 +496,15 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                 Цена для вас: {userStep.yourprice} ₽
               </p>
               <div className="step-footer-container">
-              <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
                 >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Я соглашаюсь с условиями'}
-              </button>
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Я соглашаюсь с условиями"}
+                </button>
               </div>
             </div>
           </div>
@@ -529,10 +517,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                 Шаг 1: Поиск по ключевому слову
               </p>
               <div className="purchase-keywords-container">
-  <div className="arrow left">&lt;</div>
-  <div className="purchase-step-keywords">{keywords}</div>
-  <div className="arrow right">&gt;</div>
-</div>
+                <div className="arrow left" onClick={scrollLeft}>
+                  &lt;
+                </div>
+                <div className="purchase-step-keywords" ref={keywordsRef}>
+                  {keywords}
+                </div>
+                <div className="arrow right" onClick={scrollRight}>
+                  &gt;
+                </div>
+              </div>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
@@ -584,12 +578,14 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                   </div>
                 </div>
                 <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
                 >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
-              </button>
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Продолжить"}
+                </button>
               </div>
             </div>
           </div>
@@ -600,10 +596,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
             <div className="purchase-step-header">
               <p className="title-class-step">Шаг 2: Найти товар продавца</p>
               <div className="purchase-keywords-container">
-  <div className="arrow left">&lt;</div>
-  <div className="purchase-step-keywords">{keywords}</div>
-  <div className="arrow right">&gt;</div>
-</div>
+                <div className="arrow left" onClick={scrollLeft}>
+                  &lt;
+                </div>
+                <div className="purchase-step-keywords" ref={keywordsRef}>
+                  {keywords}
+                </div>
+                <div className="arrow right" onClick={scrollRight}>
+                  &gt;
+                </div>
+              </div>
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
@@ -668,18 +670,20 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                   onChange={handleArticleChange}
                   placeholder="Введите артикул"
                 />
-                 {articleError && (
+                {articleError && (
                   <p className="red-error">Введен неверный артикул</p>
                 )}
               </div>
               <div className="step-footer-container">
-              <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
                 >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
-              </button>
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Продолжить"}
+                </button>
               </div>
             </div>
           </div>
@@ -722,9 +726,11 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
-                >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
+                disabled={userStep.availableday === 0}
+              >
+                {userStep.availableday === 0
+                  ? "Товар сегодня недоступен"
+                  : "Продолжить"}
               </button>
             </div>
           </div>
@@ -732,102 +738,110 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       case 4:
         return (
           <div className="purchase-step-page">
-      <div className="purchase-step-header">
-        <p className="title-class-step">
-          Шаг 4: Реквизиты для перевода кешбэка
-        </p>
-      </div>
-      <div className="purchase-step-content">
-        <p className="purchase-step-text">
-          <span className="important">Важно! Соблюдайте инструкцию</span>
-        </p>
-        <p className="purchase-step-text">
-          Напишите свои реквизиты:
-          <ul className="purchase-step-text text-ul">
-            <li>Номер карты;</li>
-            <li>Название банка;</li>
-            <li>ФИО владельца карты;</li>
-            <li>Телефон СБП для перевода.</li>
-          </ul>
-        </p>
-        <div className="article-input">
-          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-            Номер карты
-          </p>
-          <input
-            type="number"
-            name="cardNumber"
-            value={formData.cardNumber}
-            onChange={handleInputChange}
-            placeholder="Введите номер карты"
-          />
-          {errors.cardNumber && <p className="red-error">Заполните поле</p>}
-        </div>
-        <div className="article-input">
-          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-            Название банка
-          </p>
-          <input
-            type="text"
-            name="bankName"
-            value={formData.bankName}
-            onChange={handleInputChange}
-            placeholder="Введите название банка"
-          />
-          {errors.bankName && <p className="red-error">Заполните поле</p>}
-        </div>
-        <div className="article-input">
-          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-            ФИО владельца карты
-          </p>
-          <input
-            type="text"
-            name="cardHolder"
-            value={formData.cardHolder}
-            onChange={handleInputChange}
-            placeholder="Введите ФИО владельца карты"
-          />
-          {errors.cardHolder && <p className="red-error">Заполните поле</p>}
-        </div>
-        <div className="article-input" style={{ marginBottom: "25vh" }}>
-          <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-            Телефон для перевода
-          </p>
-          <input
-            type="number"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            placeholder="Введите номер телефона или СБП"
-          />
-          {errors.phone && <p className="red-error">Заполните поле</p>}
-        </div>
-        <div className="step-footer-container">
-          <div
-            className="upload-feedback-step4"
-            onClick={() => setChecked(!checked)}
-          >
-            <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
-              {checked && (
-                <svg viewBox="0 0 13 13">
-                  <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                </svg>
-              )}
+            <div className="purchase-step-header">
+              <p className="title-class-step">
+                Шаг 4: Реквизиты для перевода кешбэка
+              </p>
             </div>
-            <div className="upload-feedback-text">
-              Подтверждаю правильность реквизитов
+            <div className="purchase-step-content">
+              <p className="purchase-step-text">
+                <span className="important">Важно! Соблюдайте инструкцию</span>
+              </p>
+              <p className="purchase-step-text">
+                Напишите свои реквизиты:
+                <ul className="purchase-step-text text-ul">
+                  <li>Номер карты;</li>
+                  <li>Название банка;</li>
+                  <li>ФИО владельца карты;</li>
+                  <li>Телефон СБП для перевода.</li>
+                </ul>
+              </p>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Номер карты
+                </p>
+                <input
+                  type="number"
+                  name="cardNumber"
+                  value={formData.cardNumber}
+                  onChange={handleInputChange}
+                  placeholder="Введите номер карты"
+                />
+                {errors.cardNumber && (
+                  <p className="red-error">Заполните поле</p>
+                )}
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Название банка
+                </p>
+                <input
+                  type="text"
+                  name="bankName"
+                  value={formData.bankName}
+                  onChange={handleInputChange}
+                  placeholder="Введите название банка"
+                />
+                {errors.bankName && <p className="red-error">Заполните поле</p>}
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  ФИО владельца карты
+                </p>
+                <input
+                  type="text"
+                  name="cardHolder"
+                  value={formData.cardHolder}
+                  onChange={handleInputChange}
+                  placeholder="Введите ФИО владельца карты"
+                />
+                {errors.cardHolder && (
+                  <p className="red-error">Заполните поле</p>
+                )}
+              </div>
+              <div className="article-input" style={{ marginBottom: "25vh" }}>
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Телефон для перевода
+                </p>
+                <input
+                  type="number"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Введите номер телефона или СБП"
+                />
+                {errors.phone && <p className="red-error">Заполните поле</p>}
+              </div>
+              <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">
+                    Подтверждаю правильность реквизитов
+                  </div>
+                </div>
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
+                >
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Продолжить"}
+                </button>
+              </div>
             </div>
           </div>
-          <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
-                >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
-              </button>
-        </div>
-      </div>
-    </div>
         );
       case 5:
         return (
@@ -886,12 +900,14 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                   <div className="upload-feedback-text">Оформил(а) заказ</div>
                 </div>
                 <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0} 
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
                 >
-                {userStep.availableday === 0 ? 'Товар сегодня недоступен' : 'Продолжить'}
-              </button>
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Продолжить"}
+                </button>
               </div>
             </div>
           </div>
@@ -1171,12 +1187,16 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
                 Если есть вопросы, напишите нам
               </p>
               <button
-                  className="button-help"
-                  style={{ marginTop: "10px", marginBottom: 0 }}
-                  onClick={() => {
-                    window.open("https://t.me/lAlexonl", "_blank", "noopener,noreferrer");
-                  }}
-                >
+                className="button-help"
+                style={{ marginTop: "10px", marginBottom: 0 }}
+                onClick={() => {
+                  window.open(
+                    "https://t.me/lAlexonl",
+                    "_blank",
+                    "noopener,noreferrer"
+                  );
+                }}
+              >
                 Поддержка
               </button>
             </div>
