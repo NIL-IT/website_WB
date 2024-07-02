@@ -53,8 +53,8 @@ p {
   padding: 5px;
   padding-top: 8px;
   display: flex;
-  gap: 2px;
-  height: 20%;
+  gap: 5px;
+  height: 30%;
   flex-direction: column;
 }
 
@@ -68,7 +68,7 @@ p {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-height: 1.4;
+  line-height: 1;
 }
 
 .product-price {

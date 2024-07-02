@@ -11,7 +11,6 @@
 
 .add-product-page label {
   display: block;
-  margin-bottom: 10px;
   font-family: "Helvetica Neue Cyr";
   font-size: 18px; /* Увеличено с 12px */
   font-weight: 400;
@@ -39,7 +38,7 @@
 
 .add-product-page input::placeholder {
   color: white;
-  font-size: 15px; /* Увеличено с 10px */
+  font-size: 13px; /* Увеличено с 10px */
 }
 
 .add-product-page .file-label {
