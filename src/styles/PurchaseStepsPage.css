@@ -172,8 +172,8 @@
   border-radius: 10px;
   background-color: rgba(188, 122, 255, 1);
   color: white;
-  padding: 8px;
-  margin-top: 1vh;
+  padding: 12px;
+  margin-top: 1.5vh;
   cursor: pointer;
   box-sizing: border-box;
   display: inline-block;
@@ -303,8 +303,8 @@
   color: white;
   font-size: 15px;
   font-weight: 400;
-  padding: 8px;
-  margin-top: 1vh;
+  padding: 12px;
+  margin-top: 1.5vh;
   box-sizing: border-box;
   cursor: pointer;
 }

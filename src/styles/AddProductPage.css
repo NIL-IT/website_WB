@@ -27,7 +27,7 @@
   font-family: "Helvetica Neue Cyr";
   font-size: 15px; /* Увеличено с 10px */
   font-weight: 400;
-  padding: 10px;
+  padding: 12px;
   margin-top: 5px;
   box-sizing: border-box;
   cursor: pointer;
@@ -53,7 +53,7 @@
   font-family: "Helvetica Neue Cyr";
   font-size: 13px; /* Увеличено с 10px */
   font-weight: 400;
-  padding: 10px;
+  padding: 12px;
   margin-top: 5px;
   cursor: pointer;
   box-sizing: border-box;
