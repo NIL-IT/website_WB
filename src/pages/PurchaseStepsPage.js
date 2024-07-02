@@ -9,12 +9,13 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
 
   const handleSellerClick = () => {
-  if (userStep && userStep.tg_nick) {
-    window.open(`https://t.me/${userStep.tg_nick}`, "_blank", "noopener,noreferrer");
-  } else {
-    console.error("Telegram nickname not found or userStep is undefined");
-  }
-};
+    if (userStep && userStep.tg_nick) {
+      window.open(`https://t.me/${userStep.tg_nick}`, "_blank", "noopener,noreferrer");
+    } else {
+      console.error("Telegram nickname not found or userStep is undefined");
+    }
+  };
+
   const [formData, setFormData] = useState({
     image1: "",
     image2: "",
@@ -28,6 +29,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     cardHolder: "",
     phone: "",
   });
+
   const [uploaded, setUploaded] = useState({
     image1: false,
     image2: false,
@@ -36,6 +38,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     image5: false,
     image6: false,
   });
+
   const [isLoaded, setIsLoaded] = useState(false);
   const [articleError, setArticleError] = useState(false);
   const [imageError, setImageError] = useState({
@@ -46,6 +49,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     image5: false,
     image6: false,
   });
+
   const [checked, setChecked] = useState(false);
   const [errors, setErrors] = useState({
     cardNumber: false,
@@ -72,7 +76,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
 
   useEffect(() => {
     setChecked(false);
-}, [step]);
+  }, [step, userStep]);
 
   useEffect(() => {
     if (userStep) {
@@ -120,7 +124,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
   };
 
   const handleStepSubmit = async () => {
-
     if (step === 0) {
       try {
         const formDataToSend = new FormData();
@@ -136,16 +139,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          alert("Ошибка загрузки изображения:"+ result.error);
+          alert("Ошибка загрузки изображения:" + result.error);
         }
       } catch (error) {
-        alert("Ошибка запроса:", error);
+        alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    else if (step === 1) {
+    } else if (step === 1) {
       if (!uploaded.image1) {
         setImageError({ ...imageError, image1: true });
         return;
@@ -171,17 +170,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          alert("Ошибка загрузки данных: "+ result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    else if (step === 2) {
+    } else if (step === 2) {
       if (!uploaded.image2) {
         setImageError({ ...imageError, image2: true });
         return;
@@ -191,7 +185,6 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         return;
       }
 
-     
       if (formData.article !== userStep.article) {
         setArticleError(true);
         return;
@@ -210,7 +203,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         });
         const result = await response.json();
         if (result.success) {
-          alert("Изображение  успешно загружено и обновлены шаг 2");
+          alert("Изображение успешно загружено и обновлен шаг 2");
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -219,11 +212,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         console.error("Ошибка запроса:" + error);
       }
-    }
-    
-    
-    
-    else if (step === 3) {
+    } else if (step === 3) {
       if (!checked) {
         alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
         return;
@@ -243,17 +232,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
-          alert("Ошибка загрузки данных: "+ result.error);
+          alert("Ошибка загрузки данных: " + result.error);
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    else if (step === 4) {
-      
+    } else if (step === 4) {
       if (!checked) {
         alert("Пожалуйста, подтвердите правильность ввода данных. ");
         return;
@@ -295,12 +279,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    else if (step === 5) {
+    } else if (step === 5) {
       if (!uploaded.image3) {
         setImageError({ ...imageError, image3: true });
         return;
@@ -331,12 +310,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
       } catch (error) {
         alert("Ошибка запроса:" + error);
       }
-    } 
-    
-    
-    
-    
-    else if (step === 6) {
+    } else if (step === 6) {
       if (!uploaded.image4) {
         setImageError({ ...imageError, image4: true });
         return;
