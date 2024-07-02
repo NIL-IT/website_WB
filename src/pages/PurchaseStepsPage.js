@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import imageCompression from 'browser-image-compression';
 import "../styles/PurchaseStepsPage.css";
 
 const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts }) => {
@@ -72,29 +73,34 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
   useEffect(() => {
     if (userStep) {
       const savedFormData = localStorage.getItem(`formData_${userStep.id}`);
+      const savedChecked = localStorage.getItem(`checked_${userStep.id}`);
       if (savedFormData) setFormData(JSON.parse(savedFormData));
+      if (savedChecked) setChecked(JSON.parse(savedChecked));
     }
   }, [userStep]);
 
   useEffect(() => {
     if (userStep) {
-      localStorage.setItem(
-        `formData_${userStep.id}`,
-        JSON.stringify(formData)
-      );
+      localStorage.setItem(`formData_${userStep.id}`, JSON.stringify(formData));
+      localStorage.setItem(`checked_${userStep.id}`, JSON.stringify(checked));
     }
-  }, [formData, userStep]);
+  }, [formData, checked, userStep]);
 
-  const handleFileUpload = (event, imageField) => {
+  const handleFileUpload = async (event, imageField) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, [imageField]: reader.result });
-        setUploaded({ ...uploaded, [imageField]: true });
-        setImageError({ ...imageError, [imageField]: false });
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressedFile = await imageCompression(file, { maxSizeMB: 0.7, maxWidthOrHeight: 1920 });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData({ ...formData, [imageField]: reader.result });
+          setUploaded({ ...uploaded, [imageField]: true });
+          setImageError({ ...imageError, [imageField]: false });
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error("Ошибка сжатия изображения:", error);
+      }
     }
   };
 
@@ -243,7 +249,12 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
     
     
     else if (step === 4) {
-      // Check for empty fields
+      
+      if (!checked) {
+        alert("Пожалуйста, подтвердите правильность ввода данных. ");
+        return;
+      }
+
       const newErrors = {
         cardNumber: !formData.cardNumber,
         bankName: !formData.bankName,
