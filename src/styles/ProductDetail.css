@@ -44,19 +44,19 @@
 }
 
 .product-title {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 500;
   margin-bottom: 5vw;
 }
 
 .deal-conditions {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 500;
   margin-bottom: 2.5vw;
 }
 
 .payment-terms {
-  font-size: 13px;
+  font-size: 19px;
   font-weight: 400;
   margin-bottom: 5vw;
 }
@@ -68,7 +68,7 @@
 .price-item {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 400;
   padding: 2vw 0;
   border-bottom: 0.3vw solid #000;
@@ -84,7 +84,7 @@
   border-radius: 8px;
   background-color: rgba(105, 13, 201, 1);
   color: rgba(255, 255, 255, 1);
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 500;
   cursor: pointer;
   text-align: center;
@@ -103,7 +103,7 @@
 
 .product-name {
   font-family: "Helvetica Neue Cyr";
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 500;
   margin: 5vw 0;
   color: rgba(0, 0, 0, 1);
@@ -111,7 +111,7 @@
 
 .product-terms {
   font-family: "Helvetica Neue Cyr";
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 500;
   color: rgba(0, 0, 0, 1);
   text-decoration: underline;
@@ -120,13 +120,13 @@
 
 .product-payment {
   font-family: "Helvetica Neue Cyr";
-  font-size: 13px;
+  font-size: 19px;
   font-weight: 400;
 }
 
 .product-details {
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 18px;
   font-weight: 400;
 }
 
@@ -147,7 +147,7 @@
   border-radius: 8px;
   background-color: red;
   color: white;
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 500;
   padding: 8px;
   cursor: pointer;

@@ -60,7 +60,7 @@ p {
 
 .product-description {
   font-family: "Helvetica Neue Cyr";
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 600;
   color: rgba(0, 0, 0, 1);
   overflow: hidden;
@@ -79,7 +79,7 @@ p {
 
 .product-old-price {
   font-family: "Helvetica Neue Cyr";
-  font-size: 10px;
+  font-size: 15px;
   font-weight: 700;
   color: rgba(113, 113, 113, 1);
   text-decoration: line-through;
@@ -91,7 +91,7 @@ p {
 
 .product-new-price {
   font-family: "Helvetica Neue Cyr";
-  font-size: 14px;
+  font-size: 21px;
   font-weight: 700;
   line-height: 14px;
   color: rgba(196, 46, 181, 1);
@@ -109,32 +109,3 @@ p {
   display: block;
 }
 
-@media (min-width: 600px) {
-
-  .product-description {
-    font-size: 12px;
-  }
-
-  .product-old-price {
-    font-size: 12px;
-  }
-
-  .product-new-price {
-    font-size: 16px;
-  }
-}
-
-@media (min-width: 768px) {
-
-  .product-description {
-    font-size: 13px;
-  }
-
-  .product-old-price {
-    font-size: 13px;
-  }
-
-  .product-new-price {
-    font-size: 17px;
-  }
-}
