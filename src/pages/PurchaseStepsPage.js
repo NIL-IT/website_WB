@@ -654,7 +654,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
               </p>
               <div className="article-input-step2">
                 <input
-                  type="text"
+                  type="number"
                   name="article"
                   value={formData.article}
                   onChange={handleArticleChange}
@@ -747,7 +747,7 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
             Номер карты
           </p>
           <input
-            type="text"
+            type="number"
             name="cardNumber"
             value={formData.cardNumber}
             onChange={handleInputChange}
@@ -783,10 +783,10 @@ const PurchaseStepsPage = ({ userSteps, fetchUserSteps, userInfo, fetchProducts 
         </div>
         <div className="article-input" style={{ marginBottom: "25vh" }}>
           <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-            Телефон или СБП для перевода
+            Телефон для перевода
           </p>
           <input
-            type="text"
+            type="number"
             name="phone"
             value={formData.phone}
             onChange={handleInputChange}

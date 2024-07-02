@@ -37,7 +37,9 @@
   display: none;
 }
 
-.add-product-page input::placeholder {
+.add-product-page input::placeholder,
+.add-product-page select::placeholder,
+.add-product-page textarea::placeholder {
   color: white;
   font-size: 13px; /* Увеличено с 10px */
 }

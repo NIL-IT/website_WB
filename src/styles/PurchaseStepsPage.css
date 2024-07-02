@@ -292,6 +292,7 @@
 }
 
 .purchase-step-page input::placeholder,
+.purchase-step-page select::placeholder,
 .purchase-step-page-long input::placeholder {
   color: white;
 }
