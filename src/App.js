@@ -217,8 +217,10 @@ const App = () => {
     }
 };
 useEffect(() => {
+    localStorage.clear()
     const tg = window.Telegram.WebApp;
     tg.expand();
+    
 
     const fetchData = async () => {
       try {
