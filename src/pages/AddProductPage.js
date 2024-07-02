@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import imageCompression from "browser-image-compression";
 import "../styles/AddProductPage.css";
 
 const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
@@ -20,24 +21,68 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     amountMax: "",
   });
 
+  const [errors, setErrors] = useState({
+    marketPrice: false,
+    yourPrice: false,
+    amountMax: false,
+    availableDay: false,
+    article: false,
+    validationMessage: "",
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // Validation for numeric fields
+    if (
+      ["marketPrice", "yourPrice", "amountMax", "availableDay", "article"].includes(name) &&
+      isNaN(value)
+    ) {
+      setErrors({ ...errors, [name]: true });
+    } else {
+      setErrors({ ...errors, [name]: false });
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, image: reader.result });
-      };
-      reader.readAsDataURL(file);
+      try {
+        const options = {
+          maxSizeMB: 0.7, // (700KB)
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFormData({ ...formData, image: reader.result });
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error) {
+        console.error("Error compressing the image:", error);
+      }
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (parseFloat(formData.yourPrice) >= parseFloat(formData.marketPrice)) {
+      setErrors({
+        ...errors,
+        validationMessage: "Цена клиента должна быть меньше, чем цена на сайте.",
+      });
+      return;
+    }
+
+    if (parseInt(formData.amountMax) < parseInt(formData.availableDay) || parseInt(formData.amountMax) <= 0 || parseInt(formData.amountMax) > 10000) {
+      setErrors({
+        ...errors,
+        validationMessage: "Недопустимое значение количества сделок.",
+      });
+      return;
+    }
 
     fetch("https://nilurl.ru:8000/addProduct.php", {
       method: "POST",
@@ -48,7 +93,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     })
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         return response.json();
       })
@@ -58,13 +103,11 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           setTimeout(() => {
             setShowPopup(false);
             fetchProducts();
-          navigate('/catalog');
+            navigate("/catalog");
           }, 2000);
-          
-          
         } else {
           alert("Error: " + data.message);
-          navigate('/catalog');
+          navigate("/catalog");
         }
       })
       .catch((error) => {
@@ -79,14 +122,14 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       availableDay: "",
       keywords: "",
       article: "",
-      tg_nick: "",
+      tg_nick: userInfo.username,
       terms: "",
       marketPrice: "",
       yourPrice: "",
       amountMax: "",
     });
   };
-  
+
   return (
     <div className="add-product-page">
       <div className="title-class">Размещение товара</div>
@@ -140,6 +183,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             onChange={handleChange}
             placeholder="Укажите цену на маркетплейсе"
             required
+            className={errors.marketPrice ? "error" : ""}
           />
         </label>
         <label>
@@ -151,6 +195,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             onChange={handleChange}
             placeholder="Введите цену клиента"
             required
+            className={errors.yourPrice ? "error" : ""}
           />
         </label>
         <label>
@@ -169,17 +214,17 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
         <label>
           Кол-во сделок со скидкой<span style={{ color: "red" }}> *</span>
           <input
-            type="text"
+            type="number"
             name="amountMax"
             value={formData.amountMax}
             onChange={handleChange}
             placeholder="Максимальное количество сделок"
             required
+            className={errors.amountMax ? "error" : ""}
           />
         </label>
         <label>
-          Кол-во сделок со скидкой в день
-          <span style={{ color: "red" }}> *</span>
+          Кол-во сделок со скидкой в день<span style={{ color: "red" }}> *</span>
           <input
             type="number"
             name="availableDay"
@@ -187,6 +232,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             onChange={handleChange}
             placeholder="Сделок в день"
             required
+            className={errors.availableDay ? "error" : ""}
           />
         </label>
         <label>
@@ -206,12 +252,13 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
         <label>
           Артикул<span style={{ color: "red" }}> *</span>
           <input
-            type="text"
+            type="number"
             name="article"
             value={formData.article}
             onChange={handleChange}
             placeholder="Введите артикул"
             required
+            className={errors.article ? "error" : ""}
           />
         </label>
         <label>
@@ -239,15 +286,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             required
           />
         </label>
+        {errors.validationMessage && (
+          <div className="error-message">{errors.validationMessage}</div>
+        )}
         <div>
           <div className="required-label">
             <span style={{ color: "red" }}>* </span>Обязательное поле для
             заполнения
           </div>
-          <button
-            type="submit"
-            className="continue-button"
-          >
+          <button type="submit" className="continue-button">
             Продолжить
           </button>
         </div>
