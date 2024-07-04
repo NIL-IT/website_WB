@@ -1,7 +1,7 @@
 .profile-page {
   display: flex;
   flex-direction: column;
-  height: 94vh;
+  height: 92vh;
   width: 100%;
   min-height: 94vh;
   background-color: #000000;
@@ -126,12 +126,12 @@
   }
 
   .profile-page {
-    height: 93vh;
+    height: 91vh;
   }
 }
 
 @media (min-width: 768px) {
   .profile-page {
-    height: 92vh;
+    height: 90vh;
   }
 }

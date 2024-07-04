@@ -446,19 +446,19 @@ const PurchaseStepsPage = ({
         ))
       : [];
 
-      const keywordsRef = useRef(null);
+  const keywordsRef = useRef(null);
 
-      const scrollLeft = () => {
-        if (keywordsRef.current) {
-          keywordsRef.current.scrollBy({ left: -100, behavior: 'smooth' });
-        }
-      };
-    
-      const scrollRight = () => {
-        if (keywordsRef.current) {
-          keywordsRef.current.scrollBy({ left: 100, behavior: 'smooth' });
-        }
-      };
+  const scrollLeft = () => {
+    if (keywordsRef.current) {
+      keywordsRef.current.scrollBy({ left: -100, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (keywordsRef.current) {
+      keywordsRef.current.scrollBy({ left: 100, behavior: "smooth" });
+    }
+  };
 
   const renderStepContent = () => {
     switch (step) {
@@ -535,7 +535,10 @@ const PurchaseStepsPage = ({
               <ul className="purchase-step-text text-ul">
                 <li>Оформление заказа на 5-ом шаге</li>
                 <li>Пока не ищите наш товар</li>
-                <li>Напишите ключевое поле в поисковик сайта</li>
+                <li>
+                  Напишите ключевое слово (указано наверху рядом с лупой) в
+                  поиске маркетплейса
+                </li>
                 <li>Смотрите товары других продавцов</li>
                 <li>Добавьте несколько товаров в корзину</li>
                 <li>Сделайте скрин корзины и загрузите отчет</li>
@@ -660,7 +663,9 @@ const PurchaseStepsPage = ({
                 Артикул товара (Введите артикул товара)
               </p>
               <p className="purchase-step-subtitle-12px-400">
-                Найдите артикул товара и вставьте его для проверки
+                Найдите артикул товара и вставьте его для проверки. Артикул
+                можно узнать в карточке товара в разделе «Характеристики и
+                описание».
               </p>
               <div className="article-input-step2">
                 <input
@@ -927,6 +932,11 @@ const PurchaseStepsPage = ({
                 <li>
                   Сделайте скриншот из личного кабинета, где указана дата
                   получения и статус “Доставлено”.
+                </li>
+                <li>
+                  Зайдите снова в бот и в нижнем меню выберите иконку корзины.
+                  Там вы найдете оформленный заказ и вернетесь на этот шаг для
+                  загрузки скриншота.
                 </li>
               </ul>
               <p className="purchase-step-text" style={{ marginTop: "20px" }}>
