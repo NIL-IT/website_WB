@@ -87,7 +87,7 @@
 
 .step-footer-container {
   position: fixed;
-  bottom: 8vh;
+  bottom: 10vh;
   left: 0;
   width: 100%;
   display: flex;
@@ -348,9 +348,6 @@ font-weight: 600;
     height: 93vh;
   }
 
-  .step-footer-container {
-    bottom: 9vh;
-  }
 }
 
 @media (min-width: 768px) {
@@ -358,7 +355,4 @@ font-weight: 600;
     height: 92vh;
   }
 
-  .step-footer-container {
-    bottom: 10vh;
-  }
 }
