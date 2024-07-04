@@ -10,7 +10,7 @@
 .content {
   overflow-x: hidden;
   overflow-y: auto;
-  padding-bottom: 6vh;
+  padding-bottom: 10vh;
   flex: 1; /* Занимает оставшееся пространство внутри .app-container */
 }
 
