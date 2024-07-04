@@ -18,6 +18,7 @@ const ReportPage = ({userInfo}) => {
           body: JSON.stringify({
             id: id,
             id_usertg: userInfo.id_usertg,
+            status: userInfo.status
           }),
         });
 
