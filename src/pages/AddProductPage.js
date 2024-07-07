@@ -84,7 +84,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       return;
     }
 
-    fetch("https://nilurl.ru:8000/addProduct.php", {
+    fetch("https://testingnil.ru:8000/addProduct.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

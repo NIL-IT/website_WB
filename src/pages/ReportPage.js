@@ -10,7 +10,7 @@ const ReportPage = ({userInfo}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://nilurl.ru:8000/getTrans.php", {
+        const response = await fetch("https://testingnil.ru:8000/getTrans.php", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

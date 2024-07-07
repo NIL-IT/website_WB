@@ -25,7 +25,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://nilurl.ru:8000/createStep.php`, {
+      const response = await fetch(`https://testingnil.ru:8000/createStep.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://nilurl.ru:8000/deleteProduct.php`, {
+      const response = await fetch(`https://testingnil.ru:8000/deleteProduct.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

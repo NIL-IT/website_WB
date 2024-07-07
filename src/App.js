@@ -18,7 +18,7 @@ const App = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userSteps, setUserSteps] = useState([]);
-  const baseURL = 'https://nilurl.ru:8000/';
+  const baseURL = 'https://testingnil.ru:8000/';
   // const [userInfo, setUserInfo] = useState([
   //   {
   //     id_usertg: 934574143,

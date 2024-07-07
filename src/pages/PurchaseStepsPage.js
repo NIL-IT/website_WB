@@ -10,7 +10,7 @@ const PurchaseStepsPage = ({
   fetchProducts,
 }) => {
   const { id } = useParams();
-  const baseURL = "https://nilurl.ru:8000/";
+  const baseURL = "https://testingnil.ru:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
 
   const handleSellerClick = () => {
