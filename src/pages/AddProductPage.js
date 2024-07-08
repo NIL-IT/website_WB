@@ -5,27 +5,25 @@ import "../styles/AddProductPage.css";
 
 const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showInputPopup, setShowInputPopup] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     brand: "",
     name: "",
     category: "",
     image: "",
-    availableDay: "",
     keywords: "",
     article: "",
     tg_nick: userInfo.username,
     terms: "",
     marketPrice: "",
     yourPrice: "",
-    amountMax: "",
+    availableDay: {},
   });
 
   const [errors, setErrors] = useState({
     marketPrice: false,
     yourPrice: false,
-    amountMax: false,
-    availableDay: false,
     article: false,
     validationMessage: "",
   });
@@ -35,7 +33,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
 
     // Validation for numeric fields
     if (
-      ["marketPrice", "yourPrice", "amountMax", "availableDay", "article"].includes(name) &&
+      ["marketPrice", "yourPrice", "article"].includes(name) &&
       isNaN(value)
     ) {
       setErrors({ ...errors, [name]: true });
@@ -65,6 +63,17 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     }
   };
 
+  const handleAvailableDayChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      availableDay: {
+        ...formData.availableDay,
+        [name]: value,
+      },
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -76,7 +85,9 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       return;
     }
 
-    if (parseInt(formData.amountMax) < parseInt(formData.availableDay) || parseInt(formData.amountMax) <= 0 || parseInt(formData.amountMax) > 10000) {
+    if (
+      Object.values(formData.availableDay).some(day => parseInt(day) > 1000 || parseInt(day) < 0)
+    ) {
       setErrors({
         ...errors,
         validationMessage: "Недопустимое значение количества сделок.",
@@ -119,14 +130,13 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       name: "",
       category: "",
       image: "",
-      availableDay: "",
       keywords: "",
       article: "",
       tg_nick: userInfo.username,
       terms: "",
       marketPrice: "",
       yourPrice: "",
-      amountMax: "",
+      availableDay: {},
     });
   };
 
@@ -212,30 +222,6 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           </label>
         </label>
         <label>
-          Кол-во сделок со скидкой<span style={{ color: "red" }}> *</span>
-          <input
-            type="number"
-            name="amountMax"
-            value={formData.amountMax}
-            onChange={handleChange}
-            placeholder="Максимальное количество сделок"
-            required
-            className={errors.amountMax ? "error" : ""}
-          />
-        </label>
-        <label>
-          Кол-во сделок со скидкой в день<span style={{ color: "red" }}> *</span>
-          <input
-            type="number"
-            name="availableDay"
-            value={formData.availableDay}
-            onChange={handleChange}
-            placeholder="Сделок в день"
-            required
-            className={errors.availableDay ? "error" : ""}
-          />
-        </label>
-        <label>
           Ключевые слова для поиска<span style={{ color: "red" }}> *</span>
           <input
             type="text"
@@ -286,6 +272,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             required
           />
         </label>
+        <label>
+          <button
+            type="button"
+            onClick={() => setShowInputPopup(true)}
+            className="input-popup-button"
+          >
+            Кол-во сделок со скидкой в день
+          </button>
+          </label>
         {errors.validationMessage && (
           <div className="error-message">{errors.validationMessage}</div>
         )}
@@ -337,6 +332,30 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             >
               Скоро ваш товар появится в каталоге товаров
             </p>
+          </div>
+        </div>
+      )}
+      {showInputPopup && (
+        <div className="input-popup-overlay">
+          <div className="input-popup">
+            <h3>Установить количество сделок со скидкой в день</h3>
+            {[...Array(14)].map((_, index) => {
+              const date = new Date();
+              date.setDate(date.getDate() + index);
+              const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+              return (
+                <label key={index}>
+                  {dateString}
+                  <input
+                    type="number"
+                    name={dateString}
+                    value={formData.availableDay[dateString] || ""}
+                    onChange={handleAvailableDayChange}
+                  />
+                </label>
+              );
+            })}
+            <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
           </div>
         </div>
       )}

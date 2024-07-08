@@ -12,12 +12,13 @@
 .add-product-page label {
   display: block;
   font-family: "Helvetica Neue Cyr";
-  font-size: 18px; /* Увеличено с 12px */
+  font-size: 18px;
   font-weight: 400;
   margin-bottom: 10px;
 }
 
 .add-product-page input,
+.input-popup-button,
 .add-product-page select {
   width: 100%;
   border: 0.5px solid rgba(0, 0, 0, 1);
@@ -25,12 +26,17 @@
   background-color: rgba(188, 122, 255, 1);
   color: white;
   font-family: "Helvetica Neue Cyr";
-  font-size: 15px; /* Увеличено с 10px */
+  font-size: 15px; 
   font-weight: 400;
   padding: 12px;
   margin-top: 5px;
   box-sizing: border-box;
   cursor: pointer;
+}
+
+.input-popup-button {
+  font-size: 13px;
+  text-align: left;
 }
 
 .add-product-page input[type="file"] {
@@ -41,7 +47,7 @@
 .add-product-page select::placeholder,
 .add-product-page textarea::placeholder {
   color: white;
-  font-size: 13px; /* Увеличено с 10px */
+  font-size: 13px; 
 }
 
 .add-product-page .file-label {
@@ -51,7 +57,7 @@
   background-color: rgba(188, 122, 255, 1);
   color: white;
   font-family: "Helvetica Neue Cyr";
-  font-size: 13px; /* Увеличено с 10px */
+  font-size: 13px; 
   font-weight: 400;
   padding: 12px;
   margin-top: 5px;
@@ -81,17 +87,18 @@
 
 .error-message {
   color: red;
-  font-size: 15px; /* Увеличено с 16px */
+  font-size: 15px;
 }
 
-.continue-button {
+.continue-button,
+.input-popup button {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 1);
   padding: 8px;
   border-radius: 8px;
   background-color: rgba(105, 13, 201, 1);
   color: rgba(255, 255, 255, 1);
-  font-size: 21px; /* Увеличено с 14px */
+  font-size: 21px;
   font-weight: 500;
   cursor: pointer;
   text-align: center;
@@ -99,7 +106,7 @@
 
 .required-label {
   font-family: "Helvetica Neue Cyr";
-  font-size: 15px; /* Увеличено с 10px */
+  font-size: 15px; 
   font-weight: 400;
   color: black;
   margin-bottom: 5px;
@@ -109,7 +116,7 @@
   color: red;
   margin-top: 5px;
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px; /* Увеличено с 8px */
+  font-size: 12px; 
   font-weight: 400;
   text-decoration: underline;
 }
@@ -124,7 +131,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  backdrop-filter: blur(10px); /* Применить размытие к фону */
+  backdrop-filter: blur(10px); 
 }
 
 .catalog-popup {
@@ -141,7 +148,7 @@
 }
 
 .catalog-popup svg {
-  flex-shrink: 0; /* предотвращает изменение размера svg */
+  flex-shrink: 0;
 }
 
 .catalog-popup p {
@@ -149,14 +156,14 @@
 }
 
 .catalog-popup p:first-of-type {
-  flex-grow: 1; /* заполняет свободное пространство */
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .catalog-popup p:last-of-type {
-  flex-shrink: 0; /* предотвращает изменение размера второго p */
+  flex-shrink: 0; 
 }
 
 .close-catalog-popup-button {
@@ -167,4 +174,58 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
+}
+
+
+.input-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.input-popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 500px; 
+  width: 70%; 
+  height: 50%; 
+  box-sizing: border-box;
+  font-family: "Helvetica Neue Cyr", sans-serif; 
+  overflow-y: auto; 
+}
+
+.input-popup h3 {
+  margin-top: 0; 
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 500; 
+}
+
+
+.input-popup label {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  margin-bottom: 10px; 
+  font-size: 16px; 
+  font-family: "Helvetica Neue Cyr", sans-serif;
+}
+
+
+.input-popup input {
+  width: 60px; 
+  padding: 5px; 
+  font-size: 14px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  box-sizing: border-box; 
 }
