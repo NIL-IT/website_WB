@@ -335,30 +335,30 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           </div>
         </div>
       )}
-      {showInputPopup && (
-        <div className="input-popup-overlay">
-          <div className="input-popup">
-            <h3>Установить количество сделок со скидкой в день</h3>
-            {[...Array(14)].map((_, index) => {
-              const date = new Date();
-              date.setDate(date.getDate() + index);
-              const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-              return (
-                <label key={index}>
-                  {dateString}
-                  <input
-                    type="number"
-                    name={dateString}
-                    value={formData.availableDay[dateString] || ""}
-                    onChange={handleAvailableDayChange}
-                  />
-                </label>
-              );
-            })}
-            <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
-          </div>
-        </div>
-      )}
+{showInputPopup && (
+  <div className="input-popup-overlay" onClick={() => setShowInputPopup(false)}>
+    <div className="input-popup" onClick={(e) => e.stopPropagation()}>
+      <h3>Установить количество сделок со скидкой в день</h3>
+      {[...Array(14)].map((_, index) => {
+        const date = new Date();
+        date.setDate(date.getDate() + index);
+        const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        return (
+          <label key={index}>
+            {dateString}
+            <input
+              type="number"
+              name={dateString}
+              value={formData.availableDay[dateString] || ""}
+              onChange={handleAvailableDayChange}
+            />
+          </label>
+        );
+      })}
+      <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
