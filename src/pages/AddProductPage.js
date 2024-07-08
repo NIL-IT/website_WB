@@ -65,11 +65,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
 
   const handleAvailableDayChange = (e) => {
     const { name, value } = e.target;
+  
+    // Convert empty string to 0 if value is empty
+    const numericValue = value === "" ? 0 : parseInt(value);
+  
     setFormData({
       ...formData,
       availableDay: {
         ...formData.availableDay,
-        [name]: value,
+        [name]: numericValue,
       },
     });
   };
