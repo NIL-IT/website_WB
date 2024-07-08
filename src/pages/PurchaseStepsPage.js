@@ -1201,7 +1201,7 @@ const PurchaseStepsPage = ({
                 style={{ marginTop: "10px", marginBottom: 0 }}
                 onClick={() => {
                   window.open(
-                    "https://t.me/lAlexonl",
+                    "https://t.me/ARTEMYAG",
                     "_blank",
                     "noopener,noreferrer"
                   );

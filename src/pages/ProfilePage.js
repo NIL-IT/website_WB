@@ -141,7 +141,7 @@ const ProfilePage = ({userInfo}) => {
             />
           </svg>
         </div>
-        <div className="profile-item" onClick={() => {window.open(`https://t.me/lAlexonl`, "_blank", "noopener,noreferrer");} }>
+        <div className="profile-item" onClick={() => {window.open(`https://t.me/ARTEMYAG`, "_blank", "noopener,noreferrer");} }>
           <div className="item-text">
             <span className="item-title">
               <svg
