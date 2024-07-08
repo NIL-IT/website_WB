@@ -48,7 +48,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     if (file) {
       try {
         const options = {
-          maxSizeMB: 0.7, // (700KB)
+          maxSizeMB: 0.7,
           useWebWorker: true,
         };
         const compressedFile = await imageCompression(file, options);
@@ -69,13 +69,13 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     // Convert empty string to 0 if value is empty
     const numericValue = value === "" ? 0 : parseInt(value);
   
-    setFormData({
-      ...formData,
+    setFormData(prevFormData => ({
+      ...prevFormData,
       availableDay: {
-        ...formData.availableDay,
+        ...prevFormData.availableDay,
         [name]: numericValue,
       },
-    });
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -346,7 +346,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       {[...Array(14)].map((_, index) => {
         const date = new Date();
         date.setDate(date.getDate() + index);
-        const dateString = date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        const dateString = date.toISOString().split('T')[0];
         return (
           <label key={index}>
             {dateString}
