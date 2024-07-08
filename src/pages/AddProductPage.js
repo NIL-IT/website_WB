@@ -66,8 +66,8 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const handleAvailableDayChange = (e) => {
     const { name, value } = e.target;
   
-    // Convert empty string to 0 if value is empty
-    const numericValue = value === "" ? 0 : parseInt(value);
+    // Convert empty string to 0 if value is empty or not a valid number
+    const numericValue = value === "" || isNaN(parseInt(value)) ? 0 : parseInt(value);
   
     setFormData(prevFormData => ({
       ...prevFormData,
