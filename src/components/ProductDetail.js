@@ -151,11 +151,11 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         <button className="delete-button" onClick={handleDeleteClick}>Удалить товар</button>
       )}
       {showPopup && (
-        <div className="popup-overlay" onClick={() => setShowPopup(false)}>
-          <div className="popup" onClick={(e) => e.stopPropagation()}>
+        <div className="detail-popup-overlay" onClick={() => setShowPopup(false)}>
+          <div className="detail-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Доступные дни</h3>
             {Object.keys(product.availabledays).map((day) => (
-              <div key={day} className="popup-item">
+              <div key={day} className="detail-popup-item">
                 <span>{day}:</span>
                 <span>{product.availabledays[day]}</span>
               </div>

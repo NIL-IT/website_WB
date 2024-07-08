@@ -160,7 +160,7 @@
   vertical-align:text-bottom
 }
 
-.popup-overlay {
+.detail-popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -173,29 +173,30 @@
   z-index: 1000;
 }
 
-.popup {
+.detail-popup {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 300px;
-  width: 100%;
+  width: 50%;
+  height: 70%;
   box-sizing: border-box;
   font-family: "Helvetica Neue Cyr", sans-serif;
 }
 
-.popup h3 {
+.detail-popup h3 {
   margin-top: 0;
   font-size: 18px;
   font-weight: 500;
 }
 
-.popup-item {
+.detail-popup-item {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
 }
 
-.popup-item:last-child {
+.detail-popup-item:last-child {
   margin-bottom: 0;
 }
