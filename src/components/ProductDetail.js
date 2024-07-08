@@ -154,10 +154,10 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="popup" onClick={(e) => e.stopPropagation()}>
             <h3>Доступные дни</h3>
-            {Object.keys(product.availableDays).map((day) => (
+            {Object.keys(product.availabledays).map((day) => (
               <div key={day} className="popup-item">
                 <span>{day}:</span>
-                <span>{product.availableDays[day]}</span>
+                <span>{product.availabledays[day]}</span>
               </div>
             ))}
           </div>
