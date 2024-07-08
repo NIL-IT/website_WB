@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/AddProductPage.css";
@@ -7,6 +7,18 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showInputPopup, setShowInputPopup] = useState(false);
   const navigate = useNavigate();
+
+  const initializeAvailableDay = () => {
+    const availableDay = {};
+    for (let i = 0; i < 14; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() + i);
+      const dateString = date.toISOString().split('T')[0];
+      availableDay[dateString] = 0;
+    }
+    return availableDay;
+  };
+
   const [formData, setFormData] = useState({
     brand: "",
     name: "",
@@ -18,7 +30,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     terms: "",
     marketPrice: "",
     yourPrice: "",
-    availableDay: {},
+    availableDay: initializeAvailableDay(),
   });
 
   const [errors, setErrors] = useState({
@@ -32,10 +44,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     const { name, value } = e.target;
 
     // Validation for numeric fields
-    if (
-      ["marketPrice", "yourPrice", "article"].includes(name) &&
-      isNaN(value)
-    ) {
+    if (["marketPrice", "yourPrice", "article"].includes(name) && isNaN(value)) {
       setErrors({ ...errors, [name]: true });
     } else {
       setErrors({ ...errors, [name]: false });
@@ -140,7 +149,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
       terms: "",
       marketPrice: "",
       yourPrice: "",
-      availableDay: {},
+      availableDay: initializeAvailableDay(),
     });
   };
 
@@ -339,30 +348,30 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           </div>
         </div>
       )}
-{showInputPopup && (
-  <div className="input-popup-overlay" onClick={() => setShowInputPopup(false)}>
-    <div className="input-popup" onClick={(e) => e.stopPropagation()}>
-      <h3>Установить количество сделок со скидкой в день</h3>
-      {[...Array(14)].map((_, index) => {
-        const date = new Date();
-        date.setDate(date.getDate() + index);
-        const dateString = date.toISOString().split('T')[0];
-        return (
-          <label key={index}>
-            {dateString}
-            <input
-              type="number"
-              name={dateString}
-              value={formData.availableDay[dateString] || ""}
-              onChange={handleAvailableDayChange}
-            />
-          </label>
-        );
-      })}
-      <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
-    </div>
-  </div>
-)}
+ {showInputPopup && (
+          <div className="input-popup-overlay" onClick={() => setShowInputPopup(false)}>
+            <div className="input-popup" onClick={(e) => e.stopPropagation()}>
+              <h3>Установить количество сделок со скидкой в день</h3>
+              {[...Array(14)].map((_, index) => {
+                const date = new Date();
+                date.setDate(date.getDate() + index);
+                const dateString = date.toISOString().split('T')[0];
+                return (
+                  <label key={index}>
+                    {dateString}
+                    <input
+                      type="number"
+                      name={dateString}
+                      value={formData.availableDay[dateString]}
+                      onChange={handleAvailableDayChange}
+                    />
+                  </label>
+                );
+              })}
+              <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
+            </div>
+          </div>
+        )}
     </div>
   );
 };
