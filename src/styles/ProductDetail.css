@@ -176,17 +176,19 @@
 .detail-popup {
   background-color: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 10px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  width: 50%;
-  height: 70%;
+  max-width: 500px; 
+  width: 70%; 
+  height: 50%; 
   box-sizing: border-box;
-  font-family: "Helvetica Neue Cyr", sans-serif;
+  font-family: "Helvetica Neue Cyr", sans-serif; 
+  overflow-y: auto; 
 }
 
 .detail-popup h3 {
   margin-top: 0;
+  margin-bottom: 20px;
   font-size: 18px;
   font-weight: 500;
 }
