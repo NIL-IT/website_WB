@@ -37,10 +37,9 @@ const CatalogPage = ({ products, categories }) => {
     const matchesCategory =
       selectedCategories.length === 0 ||
       selectedCategories.includes(product.category);
-    return matchesSearchTerm && matchesCategory;
+    const isConfirmed = product.is_confirmed;
+    return matchesSearchTerm && matchesCategory && isConfirmed;
   });
-
-  
 
   return (
     <div className="catalog-page">

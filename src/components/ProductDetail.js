@@ -73,13 +73,38 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
 
       if (result.success) {
         fetchProducts();
-        navigate('/catalog');
+        navigate('/catalog-moderate');
       } else {
         alert('Ошибка при удалении товара: ' + result.error);
       }
     } catch (error) {
       console.error('Ошибка при удалении товара:', error);
       alert('Произошла ошибка при удалении товара');
+    }
+  };
+
+  const handleConfirmClick = async () => {
+    try {
+      const response = await fetch(`https://testingnil.ru:8000/confirmProduct.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId: id, userId: userInfo.id_usertg }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        fetchProducts();
+        alert('Товар успешно подтвержден');
+        navigate('/catalog-moderate');
+      } else {
+        alert('Ошибка при подтверждении товара: ' + result.error);
+      }
+    } catch (error) {
+      console.error('Ошибка при подтверждении товара:', error);
+      alert('Произошла ошибка при подтверждении товара');
     }
   };
 
@@ -149,6 +174,12 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
       </button>
       {fromModeratePage && (
         <button className="delete-button" onClick={handleDeleteClick}>Удалить товар</button>
+      )}
+      {fromModeratePage && !product.is_confirmed && (
+        <button className="confirm-button" onClick={handleConfirmClick}>Подтвердить товар</button>
+      )}
+      {fromModeratePage && product.is_confirmed && (
+        <button className="confirm-button disabled" disabled>Товар уже подтвержден</button>
       )}
       {showPopup && (
         <div className="detail-popup-overlay" onClick={() => setShowPopup(false)}>

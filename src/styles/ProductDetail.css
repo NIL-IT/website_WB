@@ -154,6 +154,23 @@
   text-align: center;
 }
 
+.confirm-button {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background-color: rgb(255, 255, 0); 
+  color: white;
+  font-size: 21px;
+  font-weight: 500;
+  padding: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.confirm-button.disabled {
+  background-color: rgb(82, 82, 82); 
+}
+
 .info-icon {
   margin-left: 10px;
   cursor: pointer;

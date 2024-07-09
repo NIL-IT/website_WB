@@ -128,7 +128,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             setShowPopup(false);
             fetchProducts();
             navigate("/catalog");
-          }, 2000);
+          }, 5000);
         } else {
           alert("Error: " + data.message);
           navigate("/catalog");
@@ -343,7 +343,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                 fontWeight: 400,
               }}
             >
-              Скоро ваш товар появится в каталоге товаров
+              Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку
             </p>
           </div>
         </div>
