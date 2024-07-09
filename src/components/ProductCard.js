@@ -20,7 +20,15 @@ const ProductCard = ({ product, isModerate }) => {
 
   return (
     <div className="product-card" onClick={handleClick}>
-      {!isLoaded && <div className="catalog-skeleton"></div>}
+      {!isLoaded && (
+        <div className="catalog-skeleton">
+          {!product.is_confirmed && (
+            <div className="exclamation-mark">
+              !
+            </div>
+          )}
+        </div>
+      )}
       <img
         src={product.image}
         alt={product.name}
@@ -29,6 +37,11 @@ const ProductCard = ({ product, isModerate }) => {
         onLoad={handleImageLoad}
         onError={handleImageError}
       />
+      {!product.is_confirmed && (
+        <div className="exclamation-mark">
+          !
+        </div>
+      )}
       <div className="product-info">
         <div className="product-price">
           <p className="product-new-price">{product.yourprice} ₽</p>
