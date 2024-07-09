@@ -1176,7 +1176,8 @@ const PurchaseStepsPage = ({
                 className="font-16px-400"
                 style={{ marginTop: "6px", marginBottom: 0 }}
               >
-                {userStep.bankname} {userStep.phone}
+                {userStep.bankname} {userStep.phone}<br/>
+                Номер карты: {userStep.cardnumber}
               </p>
               <p
                 className="font-16px-600"
@@ -1201,7 +1202,7 @@ const PurchaseStepsPage = ({
                 style={{ marginTop: "10px", marginBottom: 0 }}
                 onClick={() => {
                   window.open(
-                    "https://t.me/lAlexonl",
+                    "https://t.me/ARTEMYAG",
                     "_blank",
                     "noopener,noreferrer"
                   );
