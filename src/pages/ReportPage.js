@@ -63,6 +63,7 @@ const ReportPage = ({userInfo}) => {
           <p className="purchase-step-text">ФИО держателя карты: {stepData.cardholder}</p>
           <p className="purchase-step-text">Банк: {stepData.bankname}</p>
           <p className="purchase-step-text">Номер: {stepData.phone}</p>
+          <p className="purchase-step-text">Номер карты: {stepData.cardnumber}</p>
         </div>
         <div>
           {screenshots.map((screenshot, index) => (
