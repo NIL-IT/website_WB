@@ -26,6 +26,7 @@ p {
   object-fit: cover;
   border-radius: 8px;
   display: block;
+  position: relative;
 }
 
 .catalog-skeleton {
@@ -35,6 +36,17 @@ p {
   flex-grow: 1;
   border-radius: 8px;
   animation: skeleton-loading 1.5s infinite;
+  position: relative;
+}
+
+.exclamation-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
+  font-size: 30px; /* Размер восклицательного знака */
+  color: red; /* Цвет восклицательного знака */
+  z-index: 1; /*  Устанавливаем z-index для того, чтобы восклицательный знак был поверх */
 }
 
 @keyframes skeleton-loading {
