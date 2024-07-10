@@ -9,6 +9,22 @@
   border-radius: 2vw;
 }
 
+.telegram-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  background-color: rgba(188, 122, 255, 1);
+  color: #fff;
+  border-radius: 8px;
+  font-family: "Helvetica Neue Cyr";
+font-size: 18px;
+font-weight: 600;
+cursor: pointer;
+}
+
 .product-skeleton {
   background-color: #e0e0e0;
   width: 100%;
@@ -158,7 +174,7 @@
   width: 100%;
   border: none;
   border-radius: 8px;
-  background-color: rgb(255, 255, 0); 
+  background-color: rgb(28, 59, 25); 
   color: white;
   font-size: 21px;
   font-weight: 500;
@@ -168,7 +184,8 @@
 }
 
 .confirm-button.disabled {
-  background-color: gray 
+  background-color: gray;
+  cursor: not-allowed;
 }
 
 .info-icon {

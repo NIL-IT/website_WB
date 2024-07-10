@@ -14,6 +14,18 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     setIsLoaded(true);
   };
 
+  const handleSellerClick = () => {
+    if (product.tg_nick) {
+      window.open(
+        `https://t.me/${product.tg_nick}`,
+        "_blank",
+        "noopener,noreferrer"
+      );
+    } else {
+      console.error("Telegram nickname not found or userStep is undefined");
+    }
+  };
+
   const skidka = Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100);
 
   const handleImageError = (event) => {
@@ -122,6 +134,24 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         onError={handleImageError}
       />
       <p className="product-name">{product.name}</p>
+      {fromModeratePage && (
+      <button className="telegram-button" onClick={handleSellerClick}>
+                <svg
+                  width="20"
+                  height="18"
+                  viewBox="0 0 20 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M19.2597 2.74549C19.5246 1.45402 18.2561 0.380775 17.0264 0.855917L1.95202 6.68009C0.578698 7.21069 0.517506 9.13108 1.85425 9.748L5.13702 11.2632L6.69868 16.7289C6.77979 17.0128 7.00508 17.2327 7.29091 17.3068C7.57673 17.3808 7.88042 17.2981 8.0892 17.0893L10.4948 14.6837L13.8645 17.211C14.8427 17.9446 16.2515 17.4102 16.4972 16.2125L19.2597 2.74549ZM2.55268 8.23475L17.627 2.41058L14.8645 15.8777L10.9166 12.9167C10.5849 12.6678 10.1206 12.7008 9.82735 12.9941L8.79702 14.0244L9.1066 12.3218L15.1725 6.25594C15.4678 5.96073 15.4989 5.49263 15.2455 5.16086C14.9921 4.82908 14.5324 4.73602 14.1699 4.94315L5.79263 9.73008L2.55268 8.23475ZM6.81406 11.066L7.31938 12.8347L7.51338 11.7676C7.54371 11.6008 7.62417 11.4472 7.74403 11.3274L9.59393 9.47758L6.81406 11.066Z"
+                    fill="white"
+                  />
+                </svg>
+                Написать продавцу
+              </button>)}
       <div>
         <div>
           <p className="product-terms">Условия сделки:</p>
