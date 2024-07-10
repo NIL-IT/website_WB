@@ -133,7 +133,12 @@ const PurchaseStepsPage = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === "phone") {
+      const phoneValue = value.replace(/\D/g, "").slice(0, 10);
+      setFormData({ ...formData, [name]: "+7" + phoneValue });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
     setErrors({ ...errors, [name]: false });
   };
 
