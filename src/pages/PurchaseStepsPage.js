@@ -12,6 +12,7 @@ const PurchaseStepsPage = ({
   const { id } = useParams();
   const baseURL = "https://testingnil.ru:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleSellerClick = () => {
     if (userStep && userStep.tg_nick) {
@@ -24,6 +25,15 @@ const PurchaseStepsPage = ({
       console.error("Telegram nickname not found or userStep is undefined");
     }
   };
+
+  const Popup = ({ message, onClose }) => (
+    <div className="popup">
+      <div className="popup-content">
+        <p>{message}</p>
+        <button onClick={onClose}>Закрыть</button>
+      </div>
+    </div>
+  );
 
   const [formData, setFormData] = useState({
     image1: "",
@@ -406,6 +416,12 @@ const PurchaseStepsPage = ({
         formDataToSend.append("image6", formData.image6);
         formDataToSend.append("id_usertg", userInfo.id_usertg);
 
+        // Отображаем попап перед отправкой запроса
+        setShowPopup(true);
+
+        // Задержка перед отправкой запроса, чтобы пользователь увидел попап
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
           body: formDataToSend,
@@ -425,6 +441,10 @@ const PurchaseStepsPage = ({
         console.error("Ошибка запроса:" + error);
       }
     }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
   const keywords =
@@ -1000,6 +1020,12 @@ const PurchaseStepsPage = ({
       case 7:
         return (
           <div className="purchase-step-page">
+            {showPopup && (
+              <Popup
+                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3 рабочих дней"
+                onClose={closePopup}
+              />
+            )}
             <div className="purchase-step-header">
               <p className="title-class-step">Шаг 7: Отчет об отзыве</p>
             </div>
@@ -1181,7 +1207,8 @@ const PurchaseStepsPage = ({
                 className="font-16px-400"
                 style={{ marginTop: "6px", marginBottom: 0 }}
               >
-                {userStep.bankname} {userStep.phone}<br/>
+                {userStep.bankname} {userStep.phone}
+                <br />
                 Номер карты: {userStep.cardnumber}
               </p>
               <p
