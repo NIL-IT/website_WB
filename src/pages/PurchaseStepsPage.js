@@ -144,8 +144,11 @@ const PurchaseStepsPage = ({
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      const phoneValue = value.replace(/\D/g, "").slice(0, 10);
-      setFormData({ ...formData, [name]: "+7" + phoneValue });
+      let phoneValue = value.replace(/\D/g, ""); // Удаление всех символов, кроме цифр
+      if (phoneValue.startsWith("7")) {
+        phoneValue = phoneValue.slice(1);
+      }
+      setFormData({ ...formData, [name]: "+7" + phoneValue.slice(0, 10) });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -416,11 +419,8 @@ const PurchaseStepsPage = ({
         formDataToSend.append("image6", formData.image6);
         formDataToSend.append("id_usertg", userInfo.id_usertg);
 
-        // Отображаем попап перед отправкой запроса
-        setShowPopup(true);
-
-        // Задержка перед отправкой запроса, чтобы пользователь увидел попап
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        
+        
 
         const response = await fetch(`${baseURL}updateStep.php`, {
           method: "POST",
@@ -432,6 +432,8 @@ const PurchaseStepsPage = ({
           setChecked(false);
           localStorage.removeItem(`formData_${userStep.id}`);
           localStorage.removeItem(`checked_${userStep.id}`);
+          setShowPopup(true);
+        await new Promise((resolve) => setTimeout(resolve, 3000));
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
         } else {
@@ -834,7 +836,7 @@ const PurchaseStepsPage = ({
                   Телефон для перевода
                 </p>
                 <input
-                  type="number"
+                  type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
