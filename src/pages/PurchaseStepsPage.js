@@ -27,10 +27,9 @@ const PurchaseStepsPage = ({
   };
 
   const Popup = ({ message, onClose }) => (
-    <div className="popup">
-      <div className="popup-content">
-        <p>{message}</p>
-        <button onClick={onClose}>Закрыть</button>
+    <div className="input-popup-overlay">
+      <div className="input-popup">
+        <h3>{message}</h3>
       </div>
     </div>
   );
