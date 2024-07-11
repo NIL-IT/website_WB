@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "../styles/ProfilePage.css";
 
 const ProfilePage = ({userInfo}) => {
+  const [username, setUsername] = useState(userInfo.username);
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleInstructionClick = () => {
     window.open("https://telegra.ph/Instrukciya-razmeshcheniya-06-21", "_blank", "noopener,noreferrer");
@@ -11,6 +13,36 @@ const ProfilePage = ({userInfo}) => {
 
   const handleServiceClick = () => {
     window.open("https://telegra.ph/O-servise-06-21", "_blank", "noopener,noreferrer");
+  };
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handleSaveClick = () => {
+    // Отправка данных на сервер
+    fetch('https://testingnil.ru:8000/update-username.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username,id_usertg: userInfo.id_usertg}),
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        setIsEditing(false);
+        window.location.reload()
+        
+      } else {
+        alert('Ошибка при обновлении имени пользователя');
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
   };
 
   return (
@@ -48,7 +80,25 @@ const ProfilePage = ({userInfo}) => {
               />
             </svg>
           </div>
-          <div className="profile-name">{userInfo.username}</div>
+          <div className="profile-name">
+            {userInfo.username === '' || userInfo.username === null ? (
+              isEditing ? (
+                <>
+                  <input
+                    className="profile-name-input"
+                    type="text"
+                    value={username}
+                    onChange={handleUsernameChange}
+                  />
+                  <button onClick={handleSaveClick}>Сохранить</button>
+                </>
+              ) : (
+                <button onClick={handleEditClick}>Изменить</button>
+              )
+            ) : (
+              <span>{userInfo.username}</span>
+            )}
+          </div>
         </div>
         <div className="profile-buttons">
           <button className="instruction-button" onClick={handleInstructionClick}>

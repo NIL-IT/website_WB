@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import CatalogPage from './pages/CatalogPage';
 import CatalogPageModerate from './pages/CatalogPageModerate';
 import AddProductPage from './pages/AddProductPage';
@@ -13,6 +13,7 @@ import BackButton from './components/BackButton';
 import './index.css';
 
 const App = () => {
+  
  const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
@@ -128,7 +129,7 @@ const App = () => {
    ]);  */
 
    const API = {
-    async getUser(id) {
+    async getUser(id, username) {
       try {
         const option = {
           method: 'GET',
@@ -136,7 +137,7 @@ const App = () => {
             'Content-Type': 'application/json',
           },
         };
-        const res = await fetch(`${baseURL}getUser.php?id=${id}`, option).then(res => res.json());
+        const res = await fetch(`${baseURL}getUser.php?id=${id}&username=${username}`, option).then(res => res.json());
         return res;
       } catch (err) {
         console.log(err);
@@ -220,44 +221,60 @@ useEffect(() => {
     localStorage.clear()
     const tg = window.Telegram.WebApp;
     tg.expand();
-    
+
 
     const fetchData = async () => {
       try {
         const userId = tg.initDataUnsafe.user.id;
-        const username = tg.initDataUnsafe.user.username;
-        
+       const username = tg.initDataUnsafe.user.username;
+       // const username = '';
+
         console.log('User ID:', userId);
         console.log('Username:', username);
 
-        const response = await API.getUser(userId);
+        let valid = true; // Объявляем переменную valid здесь
+
+        const response = await API.getUser(userId, username);
         if (!response.success) {
           const createResponse = await API.createUser(userId, username);
           if (createResponse.success === true) {
-            const newUserResponse = await API.getUser(userId);
+            const newUserResponse = await API.getUser(userId, username);
+            if (!newUserResponse.validUsername) {
+              alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
+              valid = false; // Обновляем значение valid
+            }
             setUserInfo(newUserResponse.data);
             fetchProducts();
             setIsLoading(false);
           }
         } else {
+          if (!response.validUsername) {
+            alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
+            valid = false; // Обновляем значение valid
+          }
           setUserInfo(response.data);
           fetchProducts();
           setIsLoading(false);
         }
+
         const stepsResponse = await API.getUserSteps(userId);
-      if (stepsResponse.success) {
-        console.log('User Steps:', stepsResponse.data);
-        setUserSteps(stepsResponse.data);
-      } else {
-        console.error('Failed to fetch user steps:', stepsResponse.error);
-      }
+        if (stepsResponse.success) {
+          console.log('User Steps:', stepsResponse.data);
+          setUserSteps(stepsResponse.data);
+          
+          if (!valid) {
+            // return <Navigate to="/profile" />;
+          }
+        } else {
+          console.error('Failed to fetch user steps:', stepsResponse.error);
+        }
       } catch (e) {
         console.log(e);
       }
     };
 
-    fetchData();
-  }, []);
+  fetchData();
+}, []);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
