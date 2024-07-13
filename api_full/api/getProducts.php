@@ -10,26 +10,42 @@ function getAllProducts($conn) {
                 name,
                 terms,
                 available_day_current AS availableDay,
+                available_day AS availabledays,
                 market_price AS marketPrice,
                 your_price AS yourPrice,
                 keywords,
                 article,
-                category
+                tg_nick,
+                category,
+                expire,
+                is_confirmed
             FROM products";
     $stmt = $conn->prepare($query);
     
     if ($stmt->execute()) {
         $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        foreach ($products as &$product) {
-            $imagePath = $product['image'];
-            if (file_exists($imagePath)) {
-                $product['image'] = 'https://nilurl.ru:8000/' . $imagePath;
-            } else {
-                $product['image'] = null;
+        $filteredProducts = [];
+
+        foreach ($products as $product) {
+            // Check if the product should be excluded based on 'expire'
+            if ($product['expire'] !== true) {
+                $imagePath = $product['image'];
+                if (file_exists($imagePath)) {
+                    $product['image'] = 'https://testingnil.ru:8000/' . $imagePath;
+                } else {
+                    $product['image'] = null;
+                }
+
+                // Decode the available_day field from JSON string to an array
+                $product['availabledays'] = json_decode($product['availabledays'], true);
+
+                // Add product to filtered list
+                $filteredProducts[] = $product;
             }
         }
-        return $products;
+
+        return $filteredProducts;
     } else {
         return false;
     }

@@ -1,18 +1,17 @@
 <?php
-// Получить значение заголовка Origin
-$origin = $_SERVER['HTTP_ORIGIN'];
+if (isset($_SERVER['HTTP_ORIGIN'])) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+} else {
+    $origin = '';
+}
 
-// Установить разрешенный домен в зависимости от значения заголовка Origin
+$allowed_origin = "https://testingnil.ru";
 
-    $allowed_origin = "https://nilurl.ru";
+header("Access-Control-Allow-Origin: $allowed_origin");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Access-Control-Allow-Credentials: true');
 
-
-header("Access-Control-Allow-Origin: $allowed_origin"); // Разрешить запросы с фронтенд сервера
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS"); // Разрешить методы запроса
-header("Access-Control-Allow-Headers: Content-Type, Authorization"); // Разрешить заголовки
-header('Access-Control-Allow-Credentials: true'); // Разрешить куки
-
-// Если это preflight запрос, вернуть 200 OK и завершить выполнение скрипта
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
     header("Content-Length: 0");

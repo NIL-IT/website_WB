@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, NavLink} from 'react-router-dom';
 import CatalogPage from './pages/CatalogPage';
 import CatalogPageModerate from './pages/CatalogPageModerate';
 import AddProductPage from './pages/AddProductPage';
@@ -263,7 +263,7 @@ useEffect(() => {
           setUserSteps(stepsResponse.data);
           
           if (!valid) {
-            // return <Navigate to="/profile" />;
+            
           }
         } else {
           console.error('Failed to fetch user steps:', stepsResponse.error);

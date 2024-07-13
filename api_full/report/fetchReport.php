@@ -11,14 +11,12 @@ try {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Проверка наличия необходимых данных
-    if (!isset($data['id'], $data['id_usertg'], $data['status'])) {
+    if (!isset($data['id'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input']);
         exit;
     }
 
     $id = $data['id'];
-    $id_usertg = $data['id_usertg'];
-    $user_status = $data['status'];
 
     // Запрос к таблице steps
     $stmt = $pdo->prepare('SELECT * FROM steps WHERE id = :id');
@@ -45,18 +43,14 @@ try {
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($user_status === 'admin' || ($user && $user['id_usertg'] == $id_usertg)) {
-                // Добавление префикса к URL изображениям
-                for ($i = 1; $i <= 6; $i++) {
-                    if (!empty($step["image$i"])) {
-                        $step["image$i"] = 'https://testingnil.ru:8000/' . $step["image$i"];
-                    }
+            // Добавление префикса к URL изображениям
+            for ($i = 1; $i <= 6; $i++) {
+                if (!empty($step["image$i"])) {
+                    $step["image$i"] = 'https://testingnil.ru:8000/' . $step["image$i"];
                 }
-
-                echo json_encode(['success' => true, 'data' => $step]);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'User not found or mismatch']);
             }
+
+            echo json_encode(['success' => true, 'data' => $step]);
         } else {
             echo json_encode(['success' => false, 'error' => 'Product not found']);
         }

@@ -1,17 +1,20 @@
 <?php
 
 include 'db.php';
-include 'cors.php'; 
+include 'cors.php';
 
 function getUserSteps($id_usertg) {
     $pdo = getDbConnection();
     
     try {
-
         $stmt = $pdo->prepare("
             SELECT 
                 s.id,
                 s.step,
+                s.cardholder,
+                s.bankname,
+                s.phone,
+                s.cardnumber,
                 s.id_product,
                 p.name, 
                 p.image_path AS image, 
@@ -21,7 +24,8 @@ function getUserSteps($id_usertg) {
                 p.tg_nick,
                 p.keywords,
                 p.market_price AS marketPrice, 
-                p.your_price AS yourPrice
+                p.your_price AS yourPrice,
+                p.expire
             FROM 
                 steps s
             JOIN 
@@ -34,13 +38,20 @@ function getUserSteps($id_usertg) {
         
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        $filteredResults = [];
 
-        foreach ($results as &$row) {
+        foreach ($results as $row) {
+            // Проверяем, если expire = true и step < 5, то пропускаем элемент
+            if ($row['expire'] === true && $row['step'] <= 5 && $row['step'] !== 'Завершено') {
+                continue;
+            }
+
             $imagePath = $row['image'];
-            $row['image'] = 'https://nilurl.ru:8000/' . $imagePath;
+            $row['image'] = 'https://testingnil.ru:8000/' . $imagePath;
+            $filteredResults[] = $row;
         }
 
-        echo json_encode(['success' => true, 'data' => $results]);
+        echo json_encode(['success' => true, 'data' => $filteredResults]);
     } catch (PDOException $e) {
         echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }

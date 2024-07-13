@@ -1,0 +1,5 @@
+{
+    "require": {
+        "digitalstars/google-sheets": "^1.0"
+    }
+}

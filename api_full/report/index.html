@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Страница отчёта</title>
+  <style>
+    .purchase-step-page {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .purchase-step-header {
+      margin-bottom: 20px;
+    }
+    .title-class-step {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .purchase-step-text {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .product-image-detail {
+      max-width: 100%;
+      height: auto;
+    }
+    .error {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="purchase-step-page">
+    <div class="purchase-step-header">
+      <p id="report-title" class="title-class-step"></p>
+    </div>
+    <div class="purchase-step-content" style="padding-bottom: 8vh;">
+      <div id="user-info"></div>
+      <div id="screenshots"></div>
+    </div>
+  </div>
+  <script src="report.js"></script>
+</body>
+</html>

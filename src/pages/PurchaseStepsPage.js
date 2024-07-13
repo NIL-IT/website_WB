@@ -1269,7 +1269,7 @@ const PurchaseStepsPage = ({
                 style={{ marginTop: "10px", marginBottom: 0 }}
                 onClick={() => {
                   window.open(
-                    "https://t.me/ARTEMYAG",
+                    "https://t.me/razdadim5",
                     "_blank",
                     "noopener,noreferrer"
                   );
