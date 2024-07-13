@@ -4,8 +4,8 @@ function getDbConnection() {
     $host = "localhost"; 
     $port = "5432"; 
     $dbname = "wbbot"; 
-    $user = "dins"; 
-    $password = "kvd19b17"; 
+    $user = ""; 
+    $password = ""; 
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
     
     try {
