@@ -53,16 +53,19 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         const newStep = updatedUserSteps.find(step => step.id_product === Number(id));
 
         if (newStep) {
+          localStorage.clear()
           navigate(`/purchase-steps/${result.stepsId}`);
         } else {
           console.error('Не удалось найти созданный шаг в данных пользователя');
         }
       } else {
         alert('Ошибка при создании шага: ' + result.error);
+        localStorage.clear()
       }
     } catch (error) {
       console.error('Ошибка при создании шага:', error);
       alert('Произошла ошибка при создании шага');
+      localStorage.clear()
     }
   };
 

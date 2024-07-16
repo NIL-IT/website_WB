@@ -213,9 +213,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки изображения:" + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 1) {
       if (!uploaded.image1) {
@@ -247,9 +249,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 2) {
       if (!uploaded.image2) {
@@ -287,9 +291,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         console.error("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 3) {
       if (!checked) {
@@ -315,9 +321,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 4) {
       if (!checked) {
@@ -360,9 +368,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 5) {
       if (!uploaded.image3) {
@@ -395,9 +405,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 6) {
       if (!uploaded.image4) {
@@ -427,9 +439,11 @@ const PurchaseStepsPage = ({
           console.log(updatedUserSteps);
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         alert("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     } else if (step === 7) {
       if (!uploaded.image5) {
@@ -444,7 +458,7 @@ const PurchaseStepsPage = ({
         alert("Пожалуйста, подтвердите выполнение задачи на шаге 7.");
         return;
       }
-
+      
       try {
         const formDataToSend = new FormData();
         formDataToSend.append("id", userStep.id);
@@ -469,11 +483,14 @@ const PurchaseStepsPage = ({
         await new Promise((resolve) => setTimeout(resolve, 3000));
           const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
           console.log(updatedUserSteps);
+          localStorage.clear()
         } else {
           alert("Ошибка загрузки данных: " + result.error);
+          localStorage.clear()
         }
       } catch (error) {
         console.error("Ошибка запроса:" + error);
+        localStorage.clear()
       }
     }
   };

@@ -218,7 +218,7 @@ const App = () => {
     }
 };
 useEffect(() => {
-    localStorage.clear()
+    localStorage.clear();
     const tg = window.Telegram.WebApp;
     tg.expand();
 
