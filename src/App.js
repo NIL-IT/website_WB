@@ -130,18 +130,19 @@ const App = () => {
 
    const API = {
     async getUser(id, username) {
-      try {
-        const option = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const res = await fetch(`${baseURL}getUser.php?id=${id}&username=${username}`, option).then(res => res.json());
-        return res;
-      } catch (err) {
-        console.log(err);
-      }
+        try {
+            const option = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id, username: username })
+            };
+            const res = await fetch(`${baseURL}getUser.php`, option).then(res => res.json());
+            return res;
+        } catch (err) {
+            console.log(err);
+        }
     },
     async createUser(id, username) {
       try {
@@ -174,18 +175,24 @@ const App = () => {
     },
     async getUserSteps(id_usertg) {
       try {
-        const option = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const res = await fetch(`${baseURL}getSteps.php?id_usertg=${id_usertg}`, option).then(res => res.json());
-        return res;
+          const option = {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ id_usertg: id_usertg }),
+          };
+          const res = await fetch(`${baseURL}getSteps.php`, option);
+          if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          const data = await res.json();
+          return data;
       } catch (err) {
-        console.log(err);
+          console.error("Error:", err);
+          return { success: false, message: err.message };
       }
-    },
+  },
   };
 
   const fetchProducts = async () => {
