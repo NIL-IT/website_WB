@@ -263,14 +263,14 @@ const PurchaseStepsPage = ({
       if (!formData.article.trim()) {
         setArticleError(true);
         return;
-      }
-
-      if (formData.article !== userStep.article) {
+    }
+    
+    if (Number(formData.article) !== Number(userStep.article)) {
         setArticleError(true);
         return;
-      } else {
+    } else {
         setArticleError(false);
-      }
+    }
 
       try {
         const formDataToSend = new FormData();
