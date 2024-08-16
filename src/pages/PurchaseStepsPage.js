@@ -572,6 +572,9 @@ const PurchaseStepsPage = ({
                 Цена в магазине: {userStep.marketprice} ₽<br />
                 Цена для вас: {userStep.yourprice} ₽
               </p>
+              <p className="purchase-step-text">
+              Фиксированный процент от цены на ВБ (по центральному региону)
+              </p>
               <div className="step-footer-container">
                 <button
                   className="purchase-step-button"
