@@ -545,7 +545,7 @@ const PurchaseStepsPage = ({
             <div className="purchase-step-header">
               <p className="title-class-step">Условия сделки</p>
               <p className="purchase-step-subtitle">
-                Выплата кэшбэка после получения товара в течение 3-х дней
+                Выплата кэшбэка после получения товара в течение 3-5 дней
               </p>
             </div>
             <div className="purchase-step-content">
@@ -573,7 +573,7 @@ const PurchaseStepsPage = ({
                 Цена для вас: {userStep.yourprice} ₽
               </p>
               <p className="purchase-step-text">
-              Фиксированный процент от цены на ВБ (по центральному региону)
+              Фиксированный процент от цены на ВБ кошельком или ОЗОН картой (по центральному региону)
               </p>
               <div className="step-footer-container">
                 <button
