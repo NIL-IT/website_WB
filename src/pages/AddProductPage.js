@@ -6,6 +6,22 @@ import "../styles/AddProductPage.css";
 const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showInputPopup, setShowInputPopup] = useState(false);
+  const [showPopup2, setShowPopup2] = useState(false);
+  const [inputFields, setInputFields] = useState([{ keyword: "", count: "" }]);
+
+  const handleApply = () => {
+    console.log("Применить кнопку нажали");
+  };
+
+  const handleAddField = () => {
+    setInputFields([...inputFields, { keyword: "", count: "" }]);
+  };
+
+  const handleFieldChange = (index, event) => {
+    const newFields = [...inputFields];
+    newFields[index][event.target.name] = event.target.value;
+    setInputFields(newFields);
+  };
   const navigate = useNavigate();
 
   const initializeAvailableDay = () => {
@@ -13,7 +29,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     for (let i = 0; i < 14; i++) {
       const date = new Date();
       date.setDate(date.getDate() + i);
-      const dateString = date.toISOString().split('T')[0];
+      const dateString = date.toISOString().split("T")[0];
       availableDay[dateString] = 0;
     }
     return availableDay;
@@ -44,7 +60,10 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     const { name, value } = e.target;
 
     // Validation for numeric fields
-    if (["marketPrice", "yourPrice", "article"].includes(name) && isNaN(value)) {
+    if (
+      ["marketPrice", "yourPrice", "article"].includes(name) &&
+      isNaN(value)
+    ) {
       setErrors({ ...errors, [name]: true });
     } else {
       setErrors({ ...errors, [name]: false });
@@ -74,11 +93,12 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
 
   const handleAvailableDayChange = (e) => {
     const { name, value } = e.target;
-  
+
     // Convert empty string to 0 if value is empty or not a valid number
-    const numericValue = value === "" || isNaN(parseInt(value)) ? 0 : parseInt(value);
-  
-    setFormData(prevFormData => ({
+    const numericValue =
+      value === "" || isNaN(parseInt(value)) ? 0 : parseInt(value);
+
+    setFormData((prevFormData) => ({
       ...prevFormData,
       availableDay: {
         ...prevFormData.availableDay,
@@ -93,13 +113,16 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     if (parseFloat(formData.yourPrice) >= parseFloat(formData.marketPrice)) {
       setErrors({
         ...errors,
-        validationMessage: "Цена клиента должна быть меньше, чем цена на сайте.",
+        validationMessage:
+          "Цена клиента должна быть меньше, чем цена на сайте.",
       });
       return;
     }
 
     if (
-      Object.values(formData.availableDay).some(day => parseInt(day) > 1000 || parseInt(day) < 0)
+      Object.values(formData.availableDay).some(
+        (day) => parseInt(day) > 1000 || parseInt(day) < 0
+      )
     ) {
       setErrors({
         ...errors,
@@ -244,9 +267,196 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             placeholder="Например: красная рубашка, рубашка мужская "
             required
           />
-          <span className="warning-message">
-            Вводите обязательно через , (запятую), как показано в примере
-          </span>
+          <div className="add-flex-container">
+            <span className="warning-message flex-text">
+              Вводите обязательно через , (запятую), как показано в примере
+            </span>
+            <button
+              style={{
+                padding: "7px 19px",
+                borderRadius: "8px",
+                border: "0.5px solid #000000",
+                background: "#690DC9",
+                fontFamily: "Inter",
+                fontSize: "12px",
+                fontWeight: 400,
+                color: "#fff",
+                marginLeft: "10px",
+              }}
+              onClick={() => setShowPopup2(true)}
+            >
+              Количество
+            </button>
+          </div>
+          {/* Попап */}
+          {showPopup2 && (
+            <div
+              className="input-popup-overlay"
+              onClick={() => setShowPopup2(false)}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: "8px",
+                  width: "90%",
+                  height: "auto",
+                  boxSizing: "border-box",
+                  fontFamily: '"Helvetica Neue Cyr", sans-serif',
+                  overflowY: "auto",
+                }}
+              >
+                {/* Хэдер */}
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontFamily: "Inter",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    backgroundColor: "#D9D9D9",
+                    padding: "7px",
+                  }}
+                >
+                  Укажите количество показов для ключевых слов
+                </div>
+
+                {/* Мейн часть */}
+                <div
+                  style={{
+                    padding: "10px",
+                    height: "150px",
+                    overflowY: "auto",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                    position: "relative",
+                  }}
+                >
+                  {inputFields.map((field, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "10px",
+                      }}
+                    >
+                      <input
+                        className="add-product-page input"
+                        type="text"
+                        name="keyword"
+                        placeholder="Ключевое слово"
+                        value={field.keyword}
+                        onChange={(e) => handleFieldChange(index, e)}
+                        style={{
+                          width: "75%", // Задаем 90% ширины для ключевого слова
+                          border: "0.5px solid rgba(0, 0, 0, 1)",
+                          borderRadius: "8px",
+                          backgroundColor: "rgba(188, 122, 255, 1)",
+                          color: "white",
+                          fontFamily: '"Helvetica Neue Cyr"',
+                          fontSize: "15px",
+                          fontWeight: 400,
+                          padding: "12px",
+                          marginTop: "5px",
+                        }}
+                      />
+                      <input
+                        className="add-product-page input"
+                        type="number"
+                        name="count"
+                        placeholder="Кол-во"
+                        value={field.count}
+                        onChange={(e) => handleFieldChange(index, e)}
+                        style={{
+                          width: "25%", // Задаем 10% ширины для количества
+                          border: "0.5px solid rgba(0, 0, 0, 1)",
+                          borderRadius: "8px",
+                          backgroundColor: "rgba(188, 122, 255, 1)",
+                          color: "white",
+                          fontFamily: '"Helvetica Neue Cyr"',
+                          fontSize: "15px",
+                          fontWeight: 400,
+                          padding: "12px",
+                          marginTop: "5px",
+                          textAlign: "center",
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+                {/* Кнопка добавления поля */}
+                <div
+  style={{
+    display: "flex",
+    justifyContent: "space-between", // равное расстояние между кнопками и краями контейнера
+    alignItems: "center",
+    padding: "10px",
+    width: "100%", // растягивает контейнер на всю ширину
+    boxSizing: "border-box",
+  }}
+>
+  <button
+    onClick={handleAddField}
+    style={{
+      fontFamily: "Inter",
+      fontSize: "12px",
+      fontWeight: 700,
+      color: "#FFFFFF",
+      backgroundColor: "#47A76A",
+      padding: "7px 26px",
+      borderRadius: "8px",
+      border: "none",
+      cursor: "pointer",
+      flex: 1, // добавляет гибкость кнопке для равного распределения
+      marginRight: "10px", // промежуток между кнопками
+    }}
+  >
+    + Добавить
+  </button>
+  <button
+    onClick={handleApply}
+    style={{
+      fontFamily: "Inter",
+      fontSize: "12px",
+      fontWeight: 700,
+      color: "#FFFFFF",
+      backgroundColor: "rgba(188, 122, 255, 1)",
+      padding: "7px 26px",
+      borderRadius: "8px",
+      border: "none",
+      cursor: "pointer",
+      flex: 1, // добавляет гибкость кнопке для равного распределения
+      marginLeft: "10px", // промежуток между кнопками
+    }}
+  >
+    Применить
+  </button>
+</div>
+                {/* Футер */}
+                <div
+                  style={{
+                    borderTop: "1px solid #000000",
+                    padding: "6px 10px",
+                    fontFamily: "Inter",
+                    fontSize: "10px",
+                    fontWeight: 400,
+                    textAlign: "left",
+                    display: "flex",
+                  }}
+                >
+                  Изначально будет показываться первое ключевое слово, после
+                  исчерпания количества показов этого ключевого слова будет
+                  показано следующее. Важно, чтобы суммарное количество показов
+                  не превышало <div
+                  style={{
+                    fontWeight: 700,
+                  }}
+                > "Количество сделок со скидкой".</div>
+                </div>
+              </div>
+            </div>
+          )}
         </label>
         <label>
           Артикул<span style={{ color: "red" }}> *</span>
@@ -293,7 +503,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           >
             Кол-во сделок со скидкой в день
           </button>
-          </label>
+        </label>
         {errors.validationMessage && (
           <div className="error-message">{errors.validationMessage}</div>
         )}
@@ -343,35 +553,39 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                 fontWeight: 400,
               }}
             >
-              Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку
+              Ваш товар отправлен на модерацию. Если вашего товара долго нет, то
+              напишите в поддержку
             </p>
           </div>
         </div>
       )}
- {showInputPopup && (
-          <div className="input-popup-overlay" onClick={() => setShowInputPopup(false)}>
-            <div className="input-popup" onClick={(e) => e.stopPropagation()}>
-              <h3>Установить количество сделок со скидкой в день</h3>
-              {[...Array(14)].map((_, index) => {
-                const date = new Date();
-                date.setDate(date.getDate() + index);
-                const dateString = date.toISOString().split('T')[0];
-                return (
-                  <label key={index}>
-                    {dateString}
-                    <input
-                      type="number"
-                      name={dateString}
-                      value={formData.availableDay[dateString]}
-                      onChange={handleAvailableDayChange}
-                    />
-                  </label>
-                );
-              })}
-              <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
-            </div>
+      {showInputPopup && (
+        <div
+          className="input-popup-overlay"
+          onClick={() => setShowInputPopup(false)}
+        >
+          <div className="input-popup" onClick={(e) => e.stopPropagation()}>
+            <h3>Установить количество сделок со скидкой в день</h3>
+            {[...Array(14)].map((_, index) => {
+              const date = new Date();
+              date.setDate(date.getDate() + index);
+              const dateString = date.toISOString().split("T")[0];
+              return (
+                <label key={index}>
+                  {dateString}
+                  <input
+                    type="number"
+                    name={dateString}
+                    value={formData.availableDay[dateString]}
+                    onChange={handleAvailableDayChange}
+                  />
+                </label>
+              );
+            })}
+            <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

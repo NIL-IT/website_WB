@@ -48,6 +48,10 @@ const ProductCard = ({ product, isModerate }) => {
           <p className="product-old-price">{product.marketprice} ₽</p>
         </div>
         <p className="product-description">{product.name}</p>
+        <div className="product-price">
+        <p className="product-description">Доступно сегодня:</p>
+        <p className="product-description color-text">{product.availableday}шт</p>
+        </div>
       </div>
     </div>
   );
