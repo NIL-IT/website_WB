@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/AddProductPage.css";
@@ -8,20 +8,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showInputPopup, setShowInputPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
   const [inputFields, setInputFields] = useState([{ keyword: "", count: "" }]);
-
-  const handleApply = () => {
-    console.log("Применить кнопку нажали");
-  };
-
-  const handleAddField = () => {
-    setInputFields([...inputFields, { keyword: "", count: "" }]);
-  };
-
-  const handleFieldChange = (index, event) => {
-    const newFields = [...inputFields];
-    newFields[index][event.target.name] = event.target.value;
-    setInputFields(newFields);
-  };
+  
   const navigate = useNavigate();
 
   const initializeAvailableDay = () => {
@@ -59,11 +46,13 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validation for numeric fields
-    if (
-      ["marketPrice", "yourPrice", "article"].includes(name) &&
-      isNaN(value)
-    ) {
+    // Если изменяется поле keywords, то очищаем поля попапа
+    if (name === "keywords") {
+      setInputFields([{ keyword: "", count: "" }]);
+    }
+
+    // Валидация для числовых полей
+    if (["marketPrice", "yourPrice", "article"].includes(name) && isNaN(value)) {
       setErrors({ ...errors, [name]: true });
     } else {
       setErrors({ ...errors, [name]: false });
@@ -71,14 +60,44 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     }
   };
 
+  // Функция для изменения полей в попапе
+  const handleFieldChange = (index, event) => {
+    const newFields = [...inputFields];
+    newFields[index][event.target.name] = event.target.value;
+    setInputFields(newFields);
+
+    // Если изменяются поля в попапе, то очищаем поле keywords
+    setFormData({ ...formData, keywords: "" });
+  };
+
+  // Добавление нового поля в попапе
+  const handleAddField = () => {
+    setInputFields([...inputFields, { keyword: "", count: "" }]);
+  };
+
+  // Валидация и логика для кнопки "Применить" в попапе
+  const handleApply = () => {
+    const validFields = inputFields.every(
+      (field) => field.keyword.trim() !== "" && field.count.trim() !== ""
+    );
+
+    if (!validFields) {
+      setErrors({
+        ...errors,
+        validationMessage: "Все поля в попапе должны быть заполнены.",
+      });
+      return;
+    }
+
+    setShowPopup2(false); // Закрываем попап при успешной проверке
+  };
+
+  // Обработка загрузки изображений
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
       try {
-        const options = {
-          maxSizeMB: 0.7,
-          useWebWorker: true,
-        };
+        const options = { maxSizeMB: 0.7, useWebWorker: true };
         const compressedFile = await imageCompression(file, options);
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -110,40 +129,35 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (parseFloat(formData.yourPrice) >= parseFloat(formData.marketPrice)) {
+    const hasKeywords = formData.keywords.trim() !== "";
+    const hasInputFields = inputFields.some(
+      (field) => field.keyword.trim() !== "" && field.count.trim() !== ""
+    );
+
+    if (!hasKeywords && !hasInputFields) {
       setErrors({
         ...errors,
         validationMessage:
-          "Цена клиента должна быть меньше, чем цена на сайте.",
+          "Необходимо заполнить либо поле ключевых слов, либо хотя бы одно поле в попапе.",
       });
       return;
     }
 
-    if (
-      Object.values(formData.availableDay).some(
-        (day) => parseInt(day) > 1000 || parseInt(day) < 0
-      )
-    ) {
+    if (parseFloat(formData.yourPrice) >= parseFloat(formData.marketPrice)) {
       setErrors({
         ...errors,
-        validationMessage: "Недопустимое значение количества сделок.",
+        validationMessage: "Цена клиента должна быть меньше, чем цена на сайте.",
       });
       return;
     }
 
+    // Отправка данных на сервер
     fetch("https://testingnil.ru:8000/addProduct.php", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
+      .then((response) => response.json())
       .then((data) => {
         if (data.success) {
           setShowPopup(true);
@@ -157,29 +171,14 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           navigate("/catalog");
         }
       })
-      .catch((error) => {
-        alert("Error: " + error);
-      });
-
-    setFormData({
-      brand: "",
-      name: "",
-      category: "",
-      image: "",
-      keywords: "",
-      article: "",
-      tg_nick: userInfo.username,
-      terms: "",
-      marketPrice: "",
-      yourPrice: "",
-      availableDay: initializeAvailableDay(),
-    });
+      .catch((error) => alert("Error: " + error));
   };
 
   return (
     <div className="add-product-page">
       <div className="title-class">Размещение товара</div>
       <form className="add-product-form" onSubmit={handleSubmit}>
+        {/* Поля формы */}
         <label>
           Бренд товара<span style={{ color: "red" }}> *</span>
           <input
@@ -191,7 +190,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             required
           />
         </label>
-        <label>
+<label>
           Название товара<span style={{ color: "red" }}> *</span>
           <input
             type="text"
@@ -265,13 +264,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             value={formData.keywords}
             onChange={handleChange}
             placeholder="Например: красная рубашка, рубашка мужская "
-            required
+required
           />
           <div className="add-flex-container">
             <span className="warning-message flex-text">
               Вводите обязательно через , (запятую), как показано в примере
             </span>
             <button
+              type="button"
+              onClick={() => setShowPopup2(true)}
               style={{
                 padding: "7px 19px",
                 borderRadius: "8px",
@@ -283,72 +284,68 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                 color: "#fff",
                 marginLeft: "10px",
               }}
-              onClick={() => setShowPopup2(true)}
             >
               Количество
             </button>
           </div>
-          {/* Попап */}
-          {showPopup2 && (
+        </label>
+
+        {/* Попап */}
+        {showPopup2 && (
+          <div className="input-popup-overlay" onClick={() => setShowPopup2(false)}>
             <div
-              className="input-popup-overlay"
-              onClick={() => setShowPopup2(false)}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: "white",
+                borderRadius: "8px",
+                width: "90%",
+                height: "auto",
+                boxSizing: "border-box",
+                fontFamily: '"Helvetica Neue Cyr", sans-serif',
+                overflowY: "auto",
+              }}
             >
               <div
-                onClick={(e) => e.stopPropagation()}
                 style={{
-                  backgroundColor: "white",
-                  borderRadius: "8px",
-                  width: "90%",
-                  height: "auto",
-                  boxSizing: "border-box",
-                  fontFamily: '"Helvetica Neue Cyr", sans-serif',
-                  overflowY: "auto",
+                  textAlign: "center",
+                  fontFamily: "Inter",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  backgroundColor: "#D9D9D9",
+                  padding: "7px",
                 }}
               >
-                {/* Хэдер */}
-                <div
-                  style={{
-                    textAlign: "center",
-                    fontFamily: "Inter",
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    backgroundColor: "#D9D9D9",
-                    padding: "7px",
-                  }}
-                >
-                  Укажите количество показов для ключевых слов
-                </div>
+                Укажите количество показов для ключевых слов
+              </div>
 
-                {/* Мейн часть */}
-                <div
-                  style={{
-                    padding: "10px",
-                    height: "150px",
-                    overflowY: "auto",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px",
-                    position: "relative",
-                  }}
-                >
-                  {inputFields.map((field, index) => (
-                    <div
-                      key={index}
+              <div
+                style={{
+                  padding: "10px",
+                  height: "150px",
+                  overflowY: "auto",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "10px",
+                  position: "relative",
+                }}
+              >
+                {inputFields.map((field, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      gap: "10px",
+                    }}
+                  >
+                    <input
+className="add-product-page input"
+                      type="text"
+                      name="keyword"
+                      placeholder="Ключевое слово"
+                      value={field.keyword}
+                      onChange={(e) => handleFieldChange(index, e)}
                       style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        gap: "10px",
-                      }}
-                    >
-                      <input
-                        className="add-product-page input"
-                        type="text"
-                        name="keyword"
-                        placeholder="Ключевое слово"
-                        value={field.keyword}
-                        onChange={(e) => handleFieldChange(index, e)}
-                        style={{
                           width: "75%", // Задаем 90% ширины для ключевого слова
                           border: "0.5px solid rgba(0, 0, 0, 1)",
                           borderRadius: "8px",
@@ -360,15 +357,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                           padding: "12px",
                           marginTop: "5px",
                         }}
-                      />
-                      <input
-                        className="add-product-page input"
-                        type="number"
-                        name="count"
-                        placeholder="Кол-во"
-                        value={field.count}
-                        onChange={(e) => handleFieldChange(index, e)}
-                        style={{
+                    />
+                    <input
+className="add-product-page input"
+                      type="number"
+                      name="count"
+                      placeholder="Кол-во"
+                      value={field.count}
+                      onChange={(e) => handleFieldChange(index, e)}
+                      style={{
                           width: "25%", // Задаем 10% ширины для количества
                           border: "0.5px solid rgba(0, 0, 0, 1)",
                           borderRadius: "8px",
@@ -381,22 +378,22 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                           marginTop: "5px",
                           textAlign: "center",
                         }}
-                      />
-                    </div>
-                  ))}
-                </div>
-                {/* Кнопка добавления поля */}
-                <div
-  style={{
-    display: "flex",
-    justifyContent: "space-between", // равное расстояние между кнопками и краями контейнера
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between", // равное расстояние между кнопками и краями контейнера
     alignItems: "center",
-    padding: "10px",
-    width: "100%", // растягивает контейнер на всю ширину
+                  padding: "10px",
+                width: "100%", // растягивает контейнер на всю ширину
     boxSizing: "border-box",
   }}
->
-  <button
+              >
+                <button
     onClick={handleAddField}
     style={{
       fontFamily: "Inter",
@@ -414,7 +411,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   >
     + Добавить
   </button>
-  <button
+                <button
     onClick={handleApply}
     style={{
       fontFamily: "Inter",
@@ -432,8 +429,8 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   >
     Применить
   </button>
-</div>
-                {/* Футер */}
+              </div>
+{/* Футер */}
                 <div
                   style={{
                     borderTop: "1px solid #000000",
@@ -454,10 +451,9 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                   }}
                 > "Количество сделок со скидкой".</div>
                 </div>
-              </div>
             </div>
-          )}
-        </label>
+          </div>
+        )}
         <label>
           Артикул<span style={{ color: "red" }}> *</span>
           <input
@@ -502,12 +498,12 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             className="input-popup-button"
           >
             Кол-во сделок со скидкой в день
-          </button>
-        </label>
+        </button>
+</label>
         {errors.validationMessage && (
           <div className="error-message">{errors.validationMessage}</div>
         )}
-        <div>
+<div>
           <div className="required-label">
             <span style={{ color: "red" }}>* </span>Обязательное поле для
             заполнения
@@ -517,7 +513,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
           </button>
         </div>
       </form>
-      {showPopup && (
+{showPopup && (
         <div className="catalog-popup-overlay">
           <div className="catalog-popup">
             <svg
