@@ -72,17 +72,19 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     setFormData({ ...formData, keywords: "" });
   };
 
-  // Добавление нового поля в попапе
-  const handleAddField = () => {
-    setInputFields([...inputFields, { keyword: "", count: "" }]);
-  };
+// Добавление нового поля в попапе
+const handleAddField = (event) => {
+  event.preventDefault(); // Предотвращает выполнение стандартного действия
+  setInputFields([...inputFields, { keyword: "", count: "" }]);
+};
 
-  // Удаление последнего поля в попапе
-  const handleRemoveField = () => {
-    if (inputFields.length > 1) {
-      setInputFields(inputFields.slice(0, -1));
-    }
-  };
+// Удаление последнего поля в попапе
+const handleRemoveField = (event) => {
+  event.preventDefault(); // Предотвращает выполнение стандартного действия
+  if (inputFields.length > 1) {
+    setInputFields(inputFields.slice(0, -1));
+  }
+};
 
   // Валидация и логика для кнопки "Применить" в попапе
   const handleApply = () => {
@@ -418,15 +420,15 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                     fontWeight: 700,
                     color: "#FFFFFF",
                     backgroundColor: "#47A76A",
-                    padding: "7px 26px",
+                    padding: "7px 7px",
+                    width: "29px",
                     borderRadius: "8px",
                     border: "none",
                     cursor: "pointer",
-                    flex: 1,
                     marginRight: "10px",
                   }}
                 >
-                  + Добавить
+                  +
                 </button>
 
                 {/* Кнопка для удаления последнего поля */}
@@ -438,15 +440,16 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
                     fontWeight: 700,
                     color: "#FFFFFF",
                     backgroundColor: "#FF0000",
-                    padding: "7px 26px",
+                    padding: "7px 7px",
+                    width: "29px",
                     borderRadius: "8px",
                     border: "none",
                     cursor: "pointer",
-                    flex: 1,
                     marginLeft: "10px",
+                    marginRight: "10px",
                   }}
                 >
-                  - Удалить
+                  -
                 </button>
 
                 <button
