@@ -309,7 +309,7 @@ const handleRemoveField = (event) => {
           </div>
         </label>
 
-        {/* Попап */}
+       {/* Попап */}
 {showPopup2 && (
   <div className="input-popup-overlay" onClick={() => setShowPopup2(false)}>
     <div
@@ -336,6 +336,11 @@ const handleRemoveField = (event) => {
       >
         Укажите количество показов для ключевых слов
       </div>
+
+      {/* Уведомление о правильном заполнении формы */}
+      <p style={{ color: "blue", textAlign: "center", margin: "10px 0" }}>
+        Пожалуйста, убедитесь, что название категории состоит из одного слова или словосочетания без запятых.
+      </p>
 
       <div
         style={{
@@ -402,10 +407,10 @@ const handleRemoveField = (event) => {
         ))}
       </div>
 
-      {/* Ошибка, если поля пустые */}
-      {inputFields.some(field => !field.keyword || !field.count) && (
+      {/* Ошибка, если поля пустые или неправильно заполнены */}
+      {inputFields.some(field => !field.keyword || !field.count || /[,]/.test(field.keyword)) && (
         <p style={{ color: "red", textAlign: "center" }}>
-          Пожалуйста, заполните все поля.
+          Пожалуйста, заполните все поля и убедитесь, что ключевое слово не содержит запятых.
         </p>
       )}
 
@@ -460,30 +465,30 @@ const handleRemoveField = (event) => {
         </button>
 
         <button
-  onClick={() => {
-    handleApply(); // Вызываем handleApply, если все поля заполнены
-  }}
-  style={{
-    fontFamily: "Inter",
-    fontSize: "12px",
-    fontWeight: 700,
-    color: "#FFFFFF",
-    backgroundColor: inputFields.some(field => !field.keyword || !field.count)
-      ? "rgba(188, 122, 255, 0.5)" // Цвет для неактивной кнопки
-      : "rgba(188, 122, 255, 1)", // Цвет для активной кнопки
-    padding: "7px 26px",
-    borderRadius: "8px",
-    border: "none",
-    cursor: inputFields.some(field => !field.keyword || !field.count) 
-      ? "not-allowed" // Указатель для неактивной кнопки
-      : "pointer", // Указатель для активной кнопки
-    flex: 1,
-    marginLeft: "10px",
-  }}
-  disabled={inputFields.some(field => !field.keyword || !field.count)} // Отключаем кнопку
->
-  Применить
-</button>
+          onClick={() => {
+            handleApply(); // Вызываем handleApply, если все поля заполнены
+          }}
+          style={{
+            fontFamily: "Inter",
+            fontSize: "12px",
+            fontWeight: 700,
+            color: "#FFFFFF",
+            backgroundColor: inputFields.some(field => !field.keyword || !field.count || /[,]/.test(field.keyword))
+              ? "rgba(188, 122, 255, 0.5)" // Цвет для неактивной кнопки
+              : "rgba(188, 122, 255, 1)", // Цвет для активной кнопки
+            padding: "7px 26px",
+            borderRadius: "8px",
+            border: "none",
+            cursor: inputFields.some(field => !field.keyword || !field.count || /[,]/.test(field.keyword))
+              ? "not-allowed" // Указатель для неактивной кнопки
+              : "pointer", // Указатель для активной кнопки
+            flex: 1,
+            marginLeft: "10px",
+          }}
+          disabled={inputFields.some(field => !field.keyword || !field.count || /[,]/.test(field.keyword))} // Отключаем кнопку
+        >
+          Применить
+        </button>
       </div>
 
       {/* Футер */}
@@ -506,6 +511,7 @@ const handleRemoveField = (event) => {
     </div>
   </div>
 )}
+
         <label>
           Артикул<span style={{ color: "red" }}> *</span>
           <input
