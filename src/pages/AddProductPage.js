@@ -287,7 +287,7 @@ const handleRemoveField = (event) => {
           />
           <div className="add-flex-container">
             <span className="warning-message flex-text">
-              Вводите обязательно через , (запятую), как показано в примере
+            Вводите обязательно через , (запятую), как показано в примере. <div>При введении данных в меню "Количество", данное поле оставить пустым.</div>
             </span>
             <button
               type="button"
