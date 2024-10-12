@@ -571,9 +571,13 @@ const PurchaseStepsPage = ({
               <p className="purchase-step-text">
                 Цена в магазине: {userStep.marketprice} ₽<br />
                 Цена для вас: {userStep.yourprice} ₽
+
               </p>
               <p className="purchase-step-text">
-              Фиксированный процент от цены на ВБ кошельком или ОЗОН картой (по центральному региону)
+              С одного аккаунта маркетплэйса можно выкупить только 1 единицу товара.
+              </p>
+              <p className="purchase-step-text">
+              Платим фиксированный процент от цены при оплате ВБ кошельком или ОЗОН картой (по центральному региону).
               </p>
               <div className="step-footer-container">
                 <button
@@ -1179,7 +1183,7 @@ const PurchaseStepsPage = ({
           <div className="purchase-step-page">
             {showPopup && (
               <Popup
-                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3 рабочих дней"
+                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3-5 рабочих дней"
                 onClose={closePopup}
               />
             )}
