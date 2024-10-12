@@ -8,7 +8,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showInputPopup, setShowInputPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
   const [inputFields, setInputFields] = useState([{ keyword: "", count: "" }]);
-  
+
   const navigate = useNavigate();
 
   const initializeAvailableDay = () => {
@@ -52,7 +52,10 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     }
 
     // Валидация для числовых полей
-    if (["marketPrice", "yourPrice", "article"].includes(name) && isNaN(value)) {
+    if (
+      ["marketPrice", "yourPrice", "article"].includes(name) &&
+      isNaN(value)
+    ) {
       setErrors({ ...errors, [name]: true });
     } else {
       setErrors({ ...errors, [name]: false });
@@ -146,7 +149,8 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     if (parseFloat(formData.yourPrice) >= parseFloat(formData.marketPrice)) {
       setErrors({
         ...errors,
-        validationMessage: "Цена клиента должна быть меньше, чем цена на сайте.",
+        validationMessage:
+          "Цена клиента должна быть меньше, чем цена на сайте.",
       });
       return;
     }
@@ -190,7 +194,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             required
           />
         </label>
-<label>
+        <label>
           Название товара<span style={{ color: "red" }}> *</span>
           <input
             type="text"
@@ -264,7 +268,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
             value={formData.keywords}
             onChange={handleChange}
             placeholder="Например: красная рубашка, рубашка мужская "
-required
+            required
           />
           <div className="add-flex-container">
             <span className="warning-message flex-text">
@@ -292,7 +296,10 @@ required
 
         {/* Попап */}
         {showPopup2 && (
-          <div className="input-popup-overlay" onClick={() => setShowPopup2(false)}>
+          <div
+            className="input-popup-overlay"
+            onClick={() => setShowPopup2(false)}
+          >
             <div
               onClick={(e) => e.stopPropagation()}
               style={{
@@ -339,45 +346,45 @@ required
                     }}
                   >
                     <input
-className="add-product-page input"
+                      className="add-product-page input"
                       type="text"
                       name="keyword"
                       placeholder="Ключевое слово"
                       value={field.keyword}
                       onChange={(e) => handleFieldChange(index, e)}
                       style={{
-                          width: "75%", // Задаем 90% ширины для ключевого слова
-                          border: "0.5px solid rgba(0, 0, 0, 1)",
-                          borderRadius: "8px",
-                          backgroundColor: "rgba(188, 122, 255, 1)",
-                          color: "white",
-                          fontFamily: '"Helvetica Neue Cyr"',
-                          fontSize: "15px",
-                          fontWeight: 400,
-                          padding: "12px",
-                          marginTop: "5px",
-                        }}
+                        width: "75%", // Задаем 90% ширины для ключевого слова
+                        border: "0.5px solid rgba(0, 0, 0, 1)",
+                        borderRadius: "8px",
+                        backgroundColor: "rgba(188, 122, 255, 1)",
+                        color: "white",
+                        fontFamily: '"Helvetica Neue Cyr"',
+                        fontSize: "15px",
+                        fontWeight: 400,
+                        padding: "12px",
+                        marginTop: "5px",
+                      }}
                     />
                     <input
-className="add-product-page input"
+                      className="add-product-page input"
                       type="number"
                       name="count"
                       placeholder="Кол-во"
                       value={field.count}
                       onChange={(e) => handleFieldChange(index, e)}
                       style={{
-                          width: "25%", // Задаем 10% ширины для количества
-                          border: "0.5px solid rgba(0, 0, 0, 1)",
-                          borderRadius: "8px",
-                          backgroundColor: "rgba(188, 122, 255, 1)",
-                          color: "white",
-                          fontFamily: '"Helvetica Neue Cyr"',
-                          fontSize: "15px",
-                          fontWeight: 400,
-                          padding: "12px",
-                          marginTop: "5px",
-                          textAlign: "center",
-                        }}
+                        width: "25%", // Задаем 10% ширины для количества
+                        border: "0.5px solid rgba(0, 0, 0, 1)",
+                        borderRadius: "8px",
+                        backgroundColor: "rgba(188, 122, 255, 1)",
+                        color: "white",
+                        fontFamily: '"Helvetica Neue Cyr"',
+                        fontSize: "15px",
+                        fontWeight: 400,
+                        padding: "12px",
+                        marginTop: "5px",
+                        textAlign: "center",
+                      }}
                     />
                   </div>
                 ))}
@@ -387,70 +394,99 @@ className="add-product-page input"
                 style={{
                   display: "flex",
                   justifyContent: "space-between", // равное расстояние между кнопками и краями контейнера
-    alignItems: "center",
+                  alignItems: "center",
                   padding: "10px",
-                width: "100%", // растягивает контейнер на всю ширину
-    boxSizing: "border-box",
-  }}
+                  width: "100%", // растягивает контейнер на всю ширину
+                  boxSizing: "border-box",
+                }}
               >
                 <button
-    onClick={handleAddField}
-    style={{
-      fontFamily: "Inter",
-      fontSize: "12px",
-      fontWeight: 700,
-      color: "#FFFFFF",
-      backgroundColor: "#47A76A",
-      padding: "7px 26px",
-      borderRadius: "8px",
-      border: "none",
-      cursor: "pointer",
-      flex: 1, // добавляет гибкость кнопке для равного распределения
-      marginRight: "10px", // промежуток между кнопками
-    }}
-  >
-    + Добавить
-  </button>
-                <button
-    onClick={handleApply}
-    style={{
-      fontFamily: "Inter",
-      fontSize: "12px",
-      fontWeight: 700,
-      color: "#FFFFFF",
-      backgroundColor: "rgba(188, 122, 255, 1)",
-      padding: "7px 26px",
-      borderRadius: "8px",
-      border: "none",
-      cursor: "pointer",
-      flex: 1, // добавляет гибкость кнопке для равного распределения
-      marginLeft: "10px", // промежуток между кнопками
-    }}
-  >
-    Применить
-  </button>
-              </div>
-{/* Футер */}
-                <div
+                  onClick={handleAddField}
                   style={{
-                    borderTop: "1px solid #000000",
-                    padding: "6px 10px",
                     fontFamily: "Inter",
-                    fontSize: "10px",
-                    fontWeight: 400,
-                    textAlign: "left",
-                    display: "flex",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#47A76A",
+                    width: "29px",
+                    padding: "7px 7px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    marginRight: "10px", // промежуток между кнопками
                   }}
                 >
-                  Изначально будет показываться первое ключевое слово, после
-                  исчерпания количества показов этого ключевого слова будет
-                  показано следующее. Важно, чтобы суммарное количество показов
-                  не превышало <div
+                  +
+                </button>
+
+                {/* Кнопка для удаления последнего поля */}
+                <button
+                  onClick={() => {
+                    if (inputFields.length > 1) {
+                      setInputFields(inputFields.slice(0, -1)); // Удаление последнего элемента
+                    }
+                  }}
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "#FF0000",
+                    padding: "7px 7px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    width: "29px",
+                    marginLeft: "10px",
+                    marginRight: "10px",
+                  }}
+                >
+                  -
+                </button>
+                <button
+                  onClick={handleApply}
+                  style={{
+                    fontFamily: "Inter",
+                    fontSize: "12px",
+                    fontWeight: 700,
+                    color: "#FFFFFF",
+                    backgroundColor: "rgba(188, 122, 255, 1)",
+                    padding: "7px 26px",
+                    borderRadius: "8px",
+                    border: "none",
+                    cursor: "pointer",
+                    flex: 1, // добавляет гибкость кнопке для равного распределения
+                    marginLeft: "10px", // промежуток между кнопками
+                  }}
+                >
+                  Применить
+                </button>
+              </div>
+              {/* Футер */}
+              <div
+                style={{
+                  borderTop: "1px solid #000000",
+                  padding: "6px 10px",
+                  fontFamily: "Inter",
+                  fontSize: "10px",
+                  fontWeight: 400,
+                  textAlign: "left",
+                  display: "flex",
+                }}
+              >
+                Изначально будет показываться первое ключевое слово, после
+                исчерпания количества показов этого ключевого слова будет
+                показано следующее. Важно, чтобы суммарное количество показов не
+                превышало{" "}
+                <div
                   style={{
                     fontWeight: 700,
                   }}
-                > "Количество сделок со скидкой".</div>
+                >
+                  {" "}
+                  "Количество сделок со скидкой".
                 </div>
+              </div>
             </div>
           </div>
         )}
@@ -498,12 +534,12 @@ className="add-product-page input"
             className="input-popup-button"
           >
             Кол-во сделок со скидкой в день
-        </button>
-</label>
+          </button>
+        </label>
         {errors.validationMessage && (
           <div className="error-message">{errors.validationMessage}</div>
         )}
-<div>
+        <div>
           <div className="required-label">
             <span style={{ color: "red" }}>* </span>Обязательное поле для
             заполнения
@@ -513,7 +549,7 @@ className="add-product-page input"
           </button>
         </div>
       </form>
-{showPopup && (
+      {showPopup && (
         <div className="catalog-popup-overlay">
           <div className="catalog-popup">
             <svg
