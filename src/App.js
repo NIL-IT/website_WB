@@ -116,74 +116,77 @@ const fetchUserSteps = async (id_usertg) => {
         return null;
     }
 };
-  useEffect(() => {
-localStorage.clear();
-    const tg = window.Telegram.WebApp;
+useEffect(() => {
+  localStorage.clear();
+
+  const tg = window.Telegram?.WebApp || null;
+
+  if (tg) {
     tg.expand();
 
-    // Disable native scroll behavior
+    // Отключаем скроллинг
     tg.viewport.setScrollable(false);
 
-    // Apply styles to fix scrolling issue
+    // Применяем стили для мобильных устройств
     document.body.style.overflow = 'auto';
     document.body.style.height = '100vh';
+  } else {
+    console.error("Telegram WebApp API недоступен.");
+    setIsLoading(false); // Разблокируем интерфейс, даже если API недоступно
+    return;
+  }
 
-    const fetchData = async () => {
-      try {
-        const userId = tg.initDataUnsafe.user.id;
-        const username = tg.initDataUnsafe.user.username;
-       // const username = '';
+  const fetchData = async () => {
+    try {
+      const userId = tg.initDataUnsafe?.user?.id || null;
+      const username = tg.initDataUnsafe?.user?.username || '';
 
-        console.log('User ID:', userId);
-        console.log('Username:', username);
+      console.log('User ID:', userId);
+      console.log('Username:', username);
 
-        let valid = true; // Объявляем переменную valid здесь
-
-        const response = await API.getUser(userId, username);
-        if (!response.success) {
-          const createResponse = await API.createUser(userId, username);
-          if (createResponse.success === true) {
-            const newUserResponse = await API.getUser(userId, username);
-if (!newUserResponse.validUsername) {
-              alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
-              valid = false; // Обновляем значение valid
-            }
-            setUserInfo(newUserResponse.data);
-fetchProducts();
-            setIsLoading(false);
-          }
-        } else {
-if (!response.validUsername) {
-            alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
-            valid = false; // Обновляем значение valid
-          }
-          setUserInfo(response.data);
-        fetchProducts();
+      if (!userId) {
+        alert('Ошибка: не удалось загрузить данные пользователя.');
         setIsLoading(false);
-}
-
-        const stepsResponse = await API.getUserSteps(userId);
-        if (stepsResponse.success) {
-          console.log('User Steps:', stepsResponse.data);
-          setUserSteps(stepsResponse.data);
-          
-          if (!valid) {
-            
-          }
-        } else {
-          console.error('Failed to fetch user steps:', stepsResponse.error);
-        }
-      } catch (e) {
-        console.log(e);
+        return;
       }
-    };
 
-    fetchData();
+      let response = await API.getUser(userId, username);
 
-    return () => {
-      tg.viewport.setScrollable(true);
-    };
-  }, []);
+      if (!response?.success) {
+        console.log("Создаем нового пользователя...");
+        const createResponse = await API.createUser(userId, username);
+        if (createResponse?.success) {
+          response = await API.getUser(userId, username);
+        } else {
+          console.error("Ошибка создания пользователя:", createResponse?.message);
+        }
+      }
+
+      if (response?.data) {
+        setUserInfo(response.data);
+      }
+
+      const stepsResponse = await API.getUserSteps(userId);
+      if (stepsResponse?.success) {
+        setUserSteps(stepsResponse.data);
+      } else {
+        console.error("Ошибка загрузки шагов:", stepsResponse?.message);
+      }
+
+      await fetchProducts();
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+      setIsLoading(false);
+    }
+  };
+
+  fetchData();
+
+  return () => {
+    tg?.viewport.setScrollable(true);
+  };
+}, []);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
