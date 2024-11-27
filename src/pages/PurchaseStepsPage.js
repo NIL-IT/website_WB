@@ -618,34 +618,13 @@ const PurchaseStepsPage = ({
               </p>
               <ul className="purchase-step-text text-ul">
                 <li>Оформление заказа на 5-ом шаге</li>
-                <li>Пока не ищите наш товар</li>
                 <li>
                   Напишите ключевое слово (указано наверху рядом с лупой) в
                   поиске маркетплейса
                 </li>
                 <li>Смотрите товары других продавцов</li>
-                <li>Добавьте несколько товаров в корзину</li>
-                <li>Сделайте скрин корзины и загрузите отчет</li>
+                <li>Добавьте в корзину 2-3 товара конкурентов</li>
               </ul>
-              <div className="upload-section" style={{ marginTop: "20px" }}>
-                <p className="upload-title">Загрузите скрин корзины</p>
-                <label className="upload-label" htmlFor="file-upload">
-                  {uploaded.image1
-                    ? "Изображение загружено"
-                    : "Выберите изображение"}
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image1")}
-                />
-                {imageError.image1 && (
-                  <p className="red-error">
-                    Пожалуйста, загрузите изображение корзины.
-                  </p>
-                )}
-              </div>
               <button className="telegram-button" onClick={handleSellerClick}>
                 <svg
                   width="20"
@@ -829,7 +808,27 @@ const PurchaseStepsPage = ({
               >
                 <li>Добавить товар в избранное;</li>
                 <li>Добавить бренд в избранное.</li>
+                <li>Загрузите скрин корзины, чтобы было видно наш товар и товары конкурентов.</li>
               </ul>
+              <div className="upload-section" style={{ marginTop: "20px" }}>
+                <p className="upload-title">Загрузите скрин корзины</p>
+                <label className="upload-label" htmlFor="file-upload">
+                  {uploaded.image1
+                    ? "Изображение загружено"
+                    : "Выберите изображение"}
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  className="upload-input"
+                  onChange={(e) => handleFileUpload(e, "image1")}
+                />
+                {imageError.image1 && (
+                  <p className="red-error">
+                    Пожалуйста, загрузите изображение корзины.
+                  </p>
+                )}
+              </div>
               <div
                 className="upload-feedback-step4"
                 onClick={() => setChecked(!checked)}
