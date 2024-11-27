@@ -13,136 +13,28 @@ import BackButton from './components/BackButton';
 import './index.css';
 
 const App = () => {
-  
- const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://testingnil.ru:8000/';
-  // const [userInfo, setUserInfo] = useState([
-  //   {
-  //     id_usertg: 934574143,
-  //     status: "admin",
-  //     username: "The_Ivers",
-  //   }
-  // ]);
-    /*  const [products, setProducts] = useState([
-     {
-       id: 1,
-       image: "/Canada.jpg" ,
-       name: 'Часы н1231аручные и Гелик 33ару33ару33ару33ару',
-       description: 'Часы наручные 33ару33ару33ару33ару33ару33ару',
-       terms: 'Оплата в течение 3-5 дней после публикации отзыва 33ару33ару33арувавававава   вававава   33ару',
-       availableday: '15',
-       marketprice: 1500000000000,
-       yourprice: 130000000,
-       discount: 1500000000000,
-       step: "Завершено",
-       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-       article: "123456",
-     category: "Женщинам",
-     isComplete: true,
-     },
-     {
-     id: 2,
-       image: 'path_t211232o_image',
-       name: 'Часы наручны2222е',
-       description: 'Часы наручные',
-       terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-       availableDay: 'Today',
-       marketPrice: 1500,
-       yourPrice: 1300,
-       discount: 15,
-     step: "Завершено",
-       isComplete: true,
-       keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-       article: "123456",
-       category: "Мужчи1223123нам"
-     },
-     {
-      id: 2,
-        image: 'path_t211232o_image',
-        name: 'Часы наручны2222е',
-        description: 'Часы наручные',
-        terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-        availableDay: 'Today',
-        marketPrice: 1500,
-        yourPrice: 1300,
-        discount: 15,
-      step: "Завершено",
-        isComplete: true,
-        keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-        article: "123456",
-        category: "Мужч123123123инам"
-      },
-      {
-        id: 2,
-          image: 'path_t211232o_image',
-          name: 'Часы наручны2222е',
-          description: 'Часы наручные',
-          terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-          availableDay: 'Today',
-          marketPrice: 1500,
-          yourPrice: 1300,
-          discount: 15,
-        step: "Завершено",
-          isComplete: true,
-          keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-          article: "123456",
-          category: "Мужч12312312инам"
-        },
-        {
-          id: 2,
-            image: 'path_t211232o_image',
-            name: 'Часы наручны2222е',
-            description: 'Часы наручные',
-            terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-            availableDay: 'Today',
-            marketPrice: 1500,
-            yourPrice: 1300,
-            discount: 15,
-          step: "Завершено",
-            isComplete: true,
-            keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-            article: "123456",
-            category: "Мужчинам"
-          },
-          {
-            id: 2,
-              image: 'path_t211232o_image',
-              name: 'Часы наручны2222е',
-              description: 'Часы наручные',
-              terms: 'Оплата в течение 3222-54444 дней после публикации отзыва',
-              availableDay: 'Today',
-              marketPrice: 1500,
-              yourPrice: 1300,
-              discount: 15,
-            step: "Завершено",
-              isComplete: true,
-              keywords: "Диффузор для дома, Диффузоры РФ, Домашний ремонт окон и всего возможного",
-              article: "123456",
-              category: "Мужчинам"
-            },
-                        
 
-   ]);  */
-
-   const API = {
+  const API = {
     async getUser(id, username) {
-        try {
-            const option = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: id, username: username })
-            };
-            const res = await fetch(`${baseURL}getUser.php`, option).then(res => res.json());
-            return res;
-        } catch (err) {
-            console.log(err);
-        }
+      try {
+        const option = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: id, username: username })
+        };
+        const res = await fetch(`${baseURL}getUser.php`, option).then(res => res.json());
+        return res;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async createUser(id, username) {
       try {
@@ -175,31 +67,31 @@ const App = () => {
     },
     async getUserSteps(id_usertg) {
       try {
-          const option = {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ id_usertg: id_usertg }),
-          };
-          const res = await fetch(`${baseURL}getSteps.php`, option);
+        const option = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id_usertg: id_usertg }),
+        };
+        const res = await fetch(`${baseURL}getSteps.php`, option);
           if (!res.ok) {
               throw new Error(`HTTP error! status: ${res.status}`);
           }
           const data = await res.json();
-          return data;
+        return data;
       } catch (err) {
-          console.error("Error:", err);
-          return { success: false, message: err.message };
+        console.error("Error:", err);
+return { success: false, message: err.message };
       }
-  },
+    },
   };
 
   const fetchProducts = async () => {
     try {
       const response = await API.getProducts();
       if (response.success) {
-        setProducts(response.data); 
+        setProducts(response.data);
       } else {
         console.error('Failed to fetch products:', response.error);
       }
@@ -207,8 +99,8 @@ const App = () => {
       console.error('Error fetching products:', error);
     }
   };
-  
-  const fetchUserSteps = async (id_usertg) => {
+
+const fetchUserSteps = async (id_usertg) => {
     try {
         const response = await API.getUserSteps(id_usertg);
         console.log('API Response:', response);
@@ -224,16 +116,22 @@ const App = () => {
         return null;
     }
 };
-useEffect(() => {
-    localStorage.clear();
+  useEffect(() => {
+localStorage.clear();
     const tg = window.Telegram.WebApp;
     tg.expand();
 
+    // Disable native scroll behavior
+    tg.viewport.setScrollable(false);
+
+    // Apply styles to fix scrolling issue
+    document.body.style.overflow = 'auto';
+    document.body.style.height = '100vh';
 
     const fetchData = async () => {
       try {
         const userId = tg.initDataUnsafe.user.id;
-       const username = tg.initDataUnsafe.user.username;
+        const username = tg.initDataUnsafe.user.username;
        // const username = '';
 
         console.log('User ID:', userId);
@@ -246,23 +144,23 @@ useEffect(() => {
           const createResponse = await API.createUser(userId, username);
           if (createResponse.success === true) {
             const newUserResponse = await API.getUser(userId, username);
-            if (!newUserResponse.validUsername) {
+if (!newUserResponse.validUsername) {
               alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
               valid = false; // Обновляем значение valid
             }
             setUserInfo(newUserResponse.data);
-            fetchProducts();
+fetchProducts();
             setIsLoading(false);
           }
         } else {
-          if (!response.validUsername) {
+if (!response.validUsername) {
             alert('Ваше имя пользователя не было распознано. Пожалуйста, введите его сверху на странице профиля. Вводите без @ в начале.');
             valid = false; // Обновляем значение valid
           }
           setUserInfo(response.data);
-          fetchProducts();
-          setIsLoading(false);
-        }
+        fetchProducts();
+        setIsLoading(false);
+}
 
         const stepsResponse = await API.getUserSteps(userId);
         if (stepsResponse.success) {
@@ -280,8 +178,12 @@ useEffect(() => {
       }
     };
 
-  fetchData();
-}, []);
+    fetchData();
+
+    return () => {
+      tg.viewport.setScrollable(true);
+    };
+  }, []);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -294,7 +196,7 @@ useEffect(() => {
   return (
     <Router>
       <div className="app-container">
-        <BackButton /> 
+        <BackButton />
         <Sidebar />
         <div className="content">
           <Routes>
