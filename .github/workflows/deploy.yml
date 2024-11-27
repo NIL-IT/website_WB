@@ -2,9 +2,9 @@ name: Deploy TestBot
 
 on:
   push:
-    branches: [frontend]
+    branches: [main]
   pull_request:
-    branches: [frontend]
+    branches: [main]
 
 jobs:
   build:
