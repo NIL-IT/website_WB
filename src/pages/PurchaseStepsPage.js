@@ -220,112 +220,109 @@ const PurchaseStepsPage = ({
         localStorage.clear()
       }
     } else if (step === 1) {
-      if (!uploaded.image1) {
-        setImageError({ ...imageError, image1: true });
-        return;
-      }
-
       if (!checked) {
-        alert("Пожалуйста, подтвердите, что вы добавили 2-3 товара в корзину.");
-        return;
+          alert("Пожалуйста, подтвердите, что вы добавили 2-3 товара в корзину.");
+          return;
       }
-
+  
       try {
-        const formDataToSend = new FormData();
-        formDataToSend.append("id", userStep.id);
-        formDataToSend.append("image1", formData.image1);
-
-        const response = await fetch(`${baseURL}updateStep.php`, {
-          method: "POST",
-          body: formDataToSend,
-        });
-        const result = await response.json();
-        if (result.success) {
-          // alert("Изображение успешно загружено и обновлен шаг 1");
-          setChecked(false);
-          localStorage.removeItem(`formData_${userStep.id}`);
-          localStorage.removeItem(`checked_${userStep.id}`);
-          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
-          console.log(updatedUserSteps);
-        } else {
-          alert("Ошибка загрузки данных: " + result.error);
-          localStorage.clear()
-        }
+          const formDataToSend = new FormData();
+          formDataToSend.append("id", userStep.id);
+  
+          const response = await fetch(`${baseURL}updateStep.php`, {
+              method: "POST",
+              body: formDataToSend,
+          });
+          const result = await response.json();
+          if (result.success) {
+              setChecked(false);
+              localStorage.removeItem(`formData_${userStep.id}`);
+              localStorage.removeItem(`checked_${userStep.id}`);
+              const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+              console.log(updatedUserSteps);
+          } else {
+              alert("Ошибка загрузки данных: " + result.error);
+              localStorage.clear();
+          }
       } catch (error) {
-        alert("Ошибка запроса:" + error);
-        localStorage.clear()
+          alert("Ошибка запроса:" + error);
+          localStorage.clear();
       }
-    } else if (step === 2) {
+  } else if (step === 2) {
       if (!uploaded.image2) {
-        setImageError({ ...imageError, image2: true });
-        return;
+          setImageError({ ...imageError, image2: true });
+          return;
       }
       if (!formData.article.trim()) {
-        setArticleError(true);
-        return;
-    }
-    
-    if (Number(formData.article) !== Number(userStep.article)) {
-        setArticleError(true);
-        return;
-    } else {
-        setArticleError(false);
-    }
-
-      try {
-        const formDataToSend = new FormData();
-        formDataToSend.append("id", userStep.id);
-        formDataToSend.append("image2", formData.image2);
-
-        const response = await fetch(`${baseURL}updateStep.php`, {
-          method: "POST",
-          body: formDataToSend,
-        });
-        const result = await response.json();
-        if (result.success) {
-          // alert("Изображение успешно загружено и обновлен шаг 2");
-          setChecked(false);
-          localStorage.removeItem(`formData_${userStep.id}`);
-          localStorage.removeItem(`checked_${userStep.id}`);
-          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
-          console.log(updatedUserSteps);
-        } else {
-          alert("Ошибка загрузки данных: " + result.error);
-          localStorage.clear()
-        }
-      } catch (error) {
-        console.error("Ошибка запроса:" + error);
-        localStorage.clear()
+          setArticleError(true);
+          return;
       }
-    } else if (step === 3) {
+  
+      if (Number(formData.article) !== Number(userStep.article)) {
+          setArticleError(true);
+          return;
+      } else {
+          setArticleError(false);
+      }
+  
+      try {
+          const formDataToSend = new FormData();
+          formDataToSend.append("id", userStep.id);
+          formDataToSend.append("image2", formData.image2);
+  
+          const response = await fetch(`${baseURL}updateStep.php`, {
+              method: "POST",
+              body: formDataToSend,
+          });
+          const result = await response.json();
+          if (result.success) {
+              setChecked(false);
+              localStorage.removeItem(`formData_${userStep.id}`);
+              localStorage.removeItem(`checked_${userStep.id}`);
+              const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+              console.log(updatedUserSteps);
+          } else {
+              alert("Ошибка загрузки данных: " + result.error);
+              localStorage.clear();
+          }
+      } catch (error) {
+          console.error("Ошибка запроса:" + error);
+          localStorage.clear();
+      }
+  } else if (step === 3) {
+      if (!uploaded.image1) { // Проверка на наличие image1
+          setImageError({ ...imageError, image1: true });
+          return;
+      }
+  
       if (!checked) {
-        alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
-        return;
+          alert("Пожалуйста, подтвердите выполнение задачи на шаге 3.");
+          return;
       }
-
+  
       try {
-        const formDataToSend = new FormData();
-        formDataToSend.append("id", userStep.id);
-
-        const response = await fetch(`${baseURL}updateStep.php`, {
-          method: "POST",
-          body: formDataToSend,
-        });
-        const result = await response.json();
-        if (result.success) {
-          // alert("Обновлен шаг 3");
-          setChecked(false);
-          localStorage.removeItem(`formData_${userStep.id}`);
-          localStorage.removeItem(`checked_${userStep.id}`);
-          const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
-          console.log(updatedUserSteps);
-        } else {
-          alert("Ошибка загрузки данных: " + result.error);
-          localStorage.clear()
-        }
+          const formDataToSend = new FormData();
+          formDataToSend.append("id", userStep.id);
+          formDataToSend.append("image1", formData.image1); // Добавляем image1
+  
+          const response = await fetch(`${baseURL}updateStep.php`, {
+              method: "POST",
+              body: formDataToSend,
+          });
+          const result = await response.json();
+          if (result.success) {
+              setChecked(false);
+              localStorage.removeItem(`formData_${userStep.id}`);
+              localStorage.removeItem(`checked_${userStep.id}`);
+              const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
+              console.log(updatedUserSteps);
+          } else {
+              alert("Ошибка загрузки данных: " + result.error);
+              localStorage.clear();
+          }
       } catch (error) {
-        alert("Ошибка запроса:" + error);
-        localStorage.clear()
+          alert("Ошибка запроса:" + error);
+          localStorage.clear();
       }
     } else if (step === 4) {
       if (!checked) {
@@ -625,7 +622,7 @@ const PurchaseStepsPage = ({
                 <li>Смотрите товары других продавцов</li>
                 <li>Добавьте в корзину 2-3 товара конкурентов</li>
               </ul>
-              <button className="telegram-button" onClick={handleSellerClick}>
+              <button className="telegram-button" onClick={handleSellerClick} style={{ marginTop: "20px" }}>
                 <svg
                   width="20"
                   height="18"
