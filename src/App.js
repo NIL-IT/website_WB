@@ -227,9 +227,6 @@ useEffect(() => {
     localStorage.clear();
     const tg = window.Telegram.WebApp;
     tg.expand(); // Расширяет приложение на весь экран
-    tg.setScrollableArea(0); // Предотвращает сворачивание WebApp при прокрутке
-    localStorage.clear();
-    
 
 
     const fetchData = async () => {
