@@ -1179,7 +1179,7 @@ const PurchaseStepsPage = ({
           <div className="purchase-step-page">
             {showPopup && (
               <Popup
-                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3-5 рабочих дней"
+                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3-10 рабочих дней"
                 onClose={closePopup}
               />
             )}
