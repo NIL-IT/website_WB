@@ -1,4 +1,4 @@
-name: Deploy TestBot
+name: Deploy website_WB back
 
 on:
   push:
