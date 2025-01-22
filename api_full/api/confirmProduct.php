@@ -7,7 +7,6 @@ $data = json_decode(file_get_contents('php://input'), true);
 $productId = $data['productId'];
 $id_usertg = $data['userId'];
 
-// Получение информации о пользователе
 $pdo = getDbConnection();
 $userQuery = $pdo->prepare("SELECT * FROM users WHERE id_usertg = :id_usertg");
 $userQuery->execute(['id_usertg' => $id_usertg]);
