@@ -52,14 +52,18 @@ try {
     $data = $_POST;
 
     if (!isset($data['id'])) {
-        echo json_encode(['success' => false, 'error' => 'Invalid input: id is missing']);
-        exit;
+        echo json_encode(['success' => false, 'error' => 'Неправильный ввод: id шага не найдено']);
+        exit();
     }
     
-        $id_usertg = $data['id_usertg'];
- 
-
     $id = $data['id'];
+
+    if (isset($data['id_usertg'])) {
+        $id_usertg = $data['id_usertg'];
+    } else {
+        $id_usertg = null;  
+    }
+    
 
 
     $stmt = $pdo->prepare('SELECT step, id_product FROM steps WHERE id = :id');
@@ -144,28 +148,14 @@ try {
 
     
     elseif ($currentStep === '1') {
-        if (!isset($data['image1'])) {
-            echo json_encode(['success' => false, 'error' => 'Image data not provided']);
-            exit;
-        }
-        $imageData = $data['image1'];
-        $imageDirectory = 'uploads/'; 
-        $imageName = uniqid() . '.png'; 
-        $imagePath = $imageDirectory . $imageName;
-        $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-        if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
-            $stmt = $pdo->prepare('UPDATE steps SET image1 = :imagePath, step = 2 WHERE id = :id');
-            $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-            if ($stmt->execute()) {
-                echo json_encode(['success' => true, 'message' => 'Image saved and step updated to 2 successfully']);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Failed to update step to 2']);
-            }
+        $stmt = $pdo->prepare('UPDATE steps SET step = 2 WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Step updated to 2 successfully']);
         } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to save image']);
+            echo json_encode(['success' => false, 'error' => 'Failed to update step to 2']);
         }
-    } 
+    }
     
     
     
@@ -212,14 +202,28 @@ try {
 
     
     elseif ($currentStep === '3') {
-        $stmt = $pdo->prepare('UPDATE steps SET step = 4 WHERE id = :id');
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Step updated to 4 successfully']);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to update step to 4']);
+        if (!isset($data['image1'])) {
+            echo json_encode(['success' => false, 'error' => 'Image data not provided']);
+            exit;
         }
-    } 
+        $imageData = $data['image1'];
+        $imageDirectory = 'uploads/'; 
+        $imageName = uniqid() . '.png'; 
+        $imagePath = $imageDirectory . $imageName;
+        $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
+        if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
+            $stmt = $pdo->prepare('UPDATE steps SET image1 = :imagePath, step = 4 WHERE id = :id');
+            $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            if ($stmt->execute()) {
+                echo json_encode(['success' => true, 'message' => 'Image saved and step updated to 4 successfully']);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to update step to 4']);
+            }
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Failed to save image']);
+        }
+    }
     
     
     
@@ -266,113 +270,149 @@ try {
 
 
 
-    elseif ($currentStep === '5') {
-        if (!isset($data['image3'])) {
-            echo json_encode(['success' => false, 'error' => 'Image data not provided']);
-            exit;
-        }
-        
-        $imageData = $data['image3'];
-        $imageDirectory = 'uploads/'; 
-        $imageName = uniqid() . '.png'; 
-        $imagePath = $imageDirectory . $imageName;
-        $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
-        
-        if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
-            $pdo->beginTransaction();
-            try {
-                // Обновляем таблицу steps: устанавливаем image3 и обновляем шаг до 6
-                $stmt = $pdo->prepare('UPDATE steps SET image3 = :imagePath, step = 6 WHERE id = :id');
-                $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
-                $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+   elseif ($currentStep === '5') {
+    if (!isset($data['image3'])) {
+        echo json_encode(['success' => false, 'error' => 'Image data not provided']);
+        exit;
+    }
+    
+    $imageData = $data['image3'];
+    $imageDirectory = 'uploads/'; 
+    $imageName = uniqid() . '.png'; 
+    $imagePath = $imageDirectory . $imageName;
+    $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
+    
+    if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
+        $pdo->beginTransaction();
+        try {
+            // Обновляем таблицу steps: устанавливаем image3 и обновляем шаг до 6
+            $stmt = $pdo->prepare('UPDATE steps SET image3 = :imagePath, step = 6 WHERE id = :id');
+            $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
+            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            
+            if ($stmt->execute()) {
+                // Получаем текущую дату в формате Y-m-d по Москве
+                $currentDate = new DateTime('now', new DateTimeZone('Europe/Moscow'));
+                $currentDateString = $currentDate->format('Y-m-d');
+
+                // Получаем available_day и keywords_with_count для данного продукта
+                $stmt = $pdo->prepare('SELECT available_day, available_day_current, keywords_with_count FROM products WHERE id = :id_product');
+                $stmt->bindParam(':id_product', $idProduct, PDO::PARAM_INT);
+                $stmt->execute();
+                $result = $stmt->fetch(PDO::FETCH_ASSOC);
                 
-                if ($stmt->execute()) {
-                    // Получаем текущую дату в формате Y-m-d по Москве
-                    $currentDate = new DateTime('now', new DateTimeZone('Europe/Moscow'));
-                    $currentDateString = $currentDate->format('Y-m-d');
-    
-                    // Получаем available_day для данного продукта
-                    $stmt = $pdo->prepare('SELECT available_day, available_day_current FROM products WHERE id = :id_product');
-                    $stmt->bindParam(':id_product', $idProduct, PDO::PARAM_INT);
-                    $stmt->execute();
-                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($result) {
+                    $availableDayJson = $result['available_day'];
+                    $availableDayCurrent = $result['available_day_current'];
+                    $availableDayArray = json_decode($availableDayJson, true);
                     
-                    if ($result) {
-                        $availableDayJson = $result['available_day'];
-                        $availableDayCurrent = $result['available_day_current'];
-                        $availableDayArray = json_decode($availableDayJson, true);
-    
-                        if (json_last_error() !== JSON_ERROR_NONE) {
-                            throw new Exception("Error decoding JSON for product ID $idProduct: " . json_last_error_msg());
-                        }
-    
+
+                    if (json_last_error() !== JSON_ERROR_NONE) {
+                        throw new Exception("Error decoding JSON for product ID $idProduct: " . json_last_error_msg());
+                    }
+                    $keywordsWithCount = json_decode($result['keywords_with_count'], true);
+                    // Проверка, что available_day_current > 0
+                    if ($availableDayCurrent > 0) {
                         // Уменьшаем значение в available_day для текущей даты
                         if (isset($availableDayArray[$currentDateString])) {
                             $availableDayArray[$currentDateString]--;
-    
-                            // Уменьшаем available_day_current
                             $availableDayCurrent--;
-    
-                            // Конвертируем обратно в JSON
                             $updatedAvailableDayJson = json_encode($availableDayArray);
-    
-                            // Обновляем значения в базе данных
+
+                            // Обновляем available_day и available_day_current
                             $updateStmt = $pdo->prepare('
                                 UPDATE products 
                                 SET available_day = :available_day, available_day_current = :available_day_current 
                                 WHERE id = :id_product
                             ');
                             $updateStmt->bindParam(':available_day', $updatedAvailableDayJson, PDO::PARAM_STR);
-                            $updateStmt->bindParam(':available_day_current', $availableDayCurrent, PDO::PARAM_INT);
-                            $updateStmt->bindParam(':id_product', $idProduct, PDO::PARAM_INT);
+                            $updateStmt->bindParam(':available_day_current', $availableDayCurrent);
+                            $updateStmt->bindParam(':id_product', $idProduct);
                             $updateStmt->execute();
                         } else {
                             throw new Exception("No available day found for date $currentDateString");
                         }
-    
-                        // Отправка уведомления в Telegram
-                        $sql = "SELECT id_usertg FROM users WHERE username = :username";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(':username', $tg_nick, PDO::PARAM_STR);
-                        $stmt->execute();
-                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-                        
-                        if ($result) {
-                            $chatId_t = $result['id_usertg'];
-                        } else {
-                            throw new Exception("Введите имя пользователя в профиле для связи продавца с вами. Вводить без @.");
-                        }
-    
-                        $sql = "SELECT username FROM users WHERE id_usertg = :id_usertg";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
-                        $stmt->execute();
-                        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-                        $chatId = $chatId_t;
-                        $dealNumber = $id;
-                        $productName = $Product_name;
-                        $userName = $user["username"];
-                        $userHandle = $user["username"];
-                        $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle);
-    
-                        $pdo->commit();
-                        echo json_encode(['success' => true, 'answer'=> $response, 'message' => 'Image saved, step updated to 6, and product availability updated successfully']);
                     } else {
-                        throw new Exception("Product with ID $idProduct not found");
+                        throw new Exception("No available days left for product ID $idProduct");
                     }
+
+                    // Уменьшаем значение в keywords_with_count, если оно не пустое и не null
+                    if (!empty($keywordsWithCount) && is_array($keywordsWithCount)) {
+                        $updated = false;
+                        $numKeywords = count($keywordsWithCount);
+                        
+                        foreach ($keywordsWithCount as $index => &$keyword) {
+                            $key = key($keyword);
+                            $value = current($keyword);
+
+                            if ($value > 0) {
+                                if ($index === $numKeywords - 1 && $value === 1) {
+                                    break;
+                                }
+                                
+                                $keyword[$key]--;
+                                $updated = true;
+                                break;
+                            }
+                        }
+
+                        if ($updated) {
+                            $updatedKeywordsWithCount = json_encode($keywordsWithCount, JSON_UNESCAPED_UNICODE);
+
+                            $updateStmt = $pdo->prepare("
+                                UPDATE products 
+                                SET keywords_with_count = :keywords_with_count 
+                                WHERE id = :id_product
+                            ");
+                            $updateStmt->bindParam(':keywords_with_count', $updatedKeywordsWithCount);
+                            $updateStmt->bindParam(':id_product', $idProduct);
+                            $updateStmt->execute();
+                        }
+                    }
+
+                    $sql = "SELECT id_usertg FROM users WHERE username = :username";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':username', $tg_nick, PDO::PARAM_STR);
+                    $stmt->execute();
+                    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if ($result) {
+                        $chatId_t = $result['id_usertg'];
+                    } else {
+                        throw new Exception("Введите имя пользователя в профиле для связи продавца с вами. Вводить без @.");
+                    }
+
+                    $sql = "SELECT username FROM users WHERE id_usertg = :id_usertg";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                    $chatId = $chatId_t;
+                    $dealNumber = $id;
+                    $productName = $Product_name;
+                    $userName = $user["username"];
+                    $userHandle = $user["username"];
+                    $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle);
+
+                    $pdo->commit();
+                    echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 6, and product availability and keywords updated successfully']);
                 } else {
-                    $pdo->rollBack();
-                    echo json_encode(['success' => false, 'error' => 'Failed to update step to 6']);
+                    throw new Exception("Product with ID $idProduct not found");
                 }
-            } catch (Exception $e) {
+            } else {
                 $pdo->rollBack();
-                echo json_encode(['success' => false, 'error' => 'Error: ' . $e->getMessage()]);
+                echo json_encode(['success' => false, 'error' => 'Failed to update step to 6']);
             }
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to save image']);
+        } catch (Exception $e) {
+            $pdo->rollBack();
+            echo json_encode(['success' => false, 'error' => 'Error: ' . $e->getMessage()]);
         }
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save image']);
     }
+}
+
     
     
     
@@ -459,7 +499,10 @@ try {
                     echo "User not found.";
                     exit; 
                 }
-                
+                if (!isset($data['id_usertg'])) {
+                    echo json_encode(['success' => false, 'error' => 'Данные тг не найдены, перезайдите на страницу']);
+                    exit();
+                }
                 $sql = "SELECT username FROM users WHERE id_usertg = :id_usertg";
                 $stmtUser = $pdo->prepare($sql);
                 $stmtUser->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);

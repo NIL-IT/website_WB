@@ -10,6 +10,9 @@
       padding: 20px;
     }
     .purchase-step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 20px;
     }
     .title-class-step {
@@ -28,12 +31,29 @@
       color: red;
       font-weight: bold;
     }
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-green {
+      background-color: green;
+      color: white;
+    }
+    .btn-gray {
+      background-color: gray;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <div id="app" class="purchase-step-page">
     <div class="purchase-step-header">
       <p id="report-title" class="title-class-step"></p>
+    </div>
+    <div>
+      <button id="verifyBtn" class="btn"></button><br><br>
+      <button id="payBtn" class="btn"></button>
     </div>
     <div class="purchase-step-content" style="padding-bottom: 8vh;">
       <div id="user-info"></div>

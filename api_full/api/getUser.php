@@ -3,15 +3,23 @@ header('Content-Type: application/json');
 include 'cors.php';
 require 'db.php';
 
-$id = $_GET['id'];
-$username = $_GET['username'];
+// Получение данных из POST запроса
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (!isset($data['id']) || !isset($data['username'])) {
+    echo json_encode(['success' => false, 'message' => 'Invalid input: id or username is missing']);
+    exit;
+}
+
+$id = $data['id'];
+$username = $data['username'];
 
 try {
     $conn = getDbConnection();
 
     // Проверка существования пользователя по id_userTG
     $stmt = $conn->prepare("SELECT * FROM users WHERE id_userTG = :id");
-    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -21,8 +29,8 @@ try {
             if ($user['username'] !== $username) {
                 // Обновление username
                 $updateStmt = $conn->prepare("UPDATE users SET username = :username WHERE id_userTG = :id");
-                $updateStmt->bindParam(':username', $username);
-                $updateStmt->bindParam(':id', $id);
+                $updateStmt->bindParam(':username', $username, PDO::PARAM_STR);
+                $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $updateStmt->execute();
                 $user['username'] = $username;
             }

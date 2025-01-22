@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="purchase-step-text">Банк: ${data.data.bankname}</p>
           <p class="purchase-step-text">Номер: ${data.data.phone}</p>
           <p class="purchase-step-text">Номер карты: ${data.data.cardnumber}</p>
+          <p class="purchase-step-text">Выгода: ${data.benefit} руб.</p>
         `;
         
         const screenshotsDiv = document.getElementById("screenshots");
@@ -42,6 +43,91 @@ document.addEventListener("DOMContentLoaded", function () {
           `;
           screenshotsDiv.appendChild(screenshotDiv);
         });
+
+        // Установка текста и стилей для кнопки verifyBtn
+        const verifyBtn = document.getElementById("verifyBtn");
+        if (data.data.verified) {
+          verifyBtn.textContent = "Отменить верификацию товара";
+          verifyBtn.classList.add("btn-green");
+        } else {
+          verifyBtn.textContent = "Подтвердить верификацию товара";
+          verifyBtn.classList.add("btn-gray");
+        }
+
+        // Установка текста и стилей для кнопки payBtn
+        const payBtn = document.getElementById("payBtn");
+        if (data.data.paid) {
+          payBtn.textContent = "Отменить оплату";
+          payBtn.classList.add("btn-green");
+        } else {
+          payBtn.textContent = "Подтвердить оплату";
+          payBtn.classList.add("btn-gray");
+        }
+
+        // Добавление логики для кнопки verifyBtn
+        verifyBtn.addEventListener("click", function () {
+          fetch("toggleVerify.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                if (data.verified) {
+                  verifyBtn.textContent = "Отменить верификацию товара";
+                  verifyBtn.classList.remove("btn-green");
+                  verifyBtn.classList.add("btn-gray");
+                } else {
+                  verifyBtn.textContent = "Подтвердить верификацию товара";
+                  verifyBtn.classList.remove("btn-gray");
+                  verifyBtn.classList.add("btn-green");
+                }
+              } else {
+                console.error("Ошибка при выполнении запроса для verifyBtn:", data.error);
+              }
+            })
+            .catch((error) => {
+              console.error("Ошибка при выполнении запроса для verifyBtn:", error);
+            });
+        });
+
+        // Добавление логики для кнопки payBtn
+        payBtn.addEventListener("click", function () {
+          fetch("togglePay.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                if (data.paid) {
+                  payBtn.textContent = "Отменить оплату";
+                  payBtn.classList.remove("btn-green");
+                  payBtn.classList.add("btn-gray");
+                } else {
+                  payBtn.textContent = "Подтвердить оплату";
+                  payBtn.classList.remove("btn-gray");
+                  payBtn.classList.add("btn-green");
+                }
+              } else {
+                console.error("Ошибка при выполнении запроса для payBtn:", data.error);
+              }
+            })
+            .catch((error) => {
+              console.error("Ошибка при выполнении запроса для payBtn:", error);
+            });
+        });
+
       } else {
         document.getElementById("app").innerHTML = `<div class="error">${data.error}</div>`;
       }

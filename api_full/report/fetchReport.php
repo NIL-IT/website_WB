@@ -29,13 +29,16 @@ try {
         $id_product = $step['id_product'];
 
         // Запрос к таблице products
-        $stmt = $pdo->prepare('SELECT tg_nick FROM products WHERE id = :id_product');
+        $stmt = $pdo->prepare('SELECT tg_nick, market_price, your_price FROM products WHERE id = :id_product');
         $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
         $stmt->execute();
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($product) {
             $tg_nick = $product['tg_nick'];
+            $market_price = $product['market_price'];
+            $your_price = $product['your_price'];
+            $benefit = $market_price - $your_price;
 
             // Запрос к таблице users
             $stmt = $pdo->prepare('SELECT id_usertg FROM users WHERE username = :tg_nick');
@@ -50,7 +53,14 @@ try {
                 }
             }
 
-            echo json_encode(['success' => true, 'data' => $step]);
+            // Добавление значения выгоды в ответ
+            $response = [
+                'success' => true,
+                'data' => $step,
+                'benefit' => $benefit
+            ];
+
+            echo json_encode($response);
         } else {
             echo json_encode(['success' => false, 'error' => 'Product not found']);
         }

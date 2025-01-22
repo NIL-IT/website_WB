@@ -23,6 +23,7 @@ function getUserSteps($id_usertg) {
                 p.terms,
                 p.tg_nick,
                 p.keywords,
+                p.keywords_with_count,
                 p.market_price AS marketPrice, 
                 p.your_price AS yourPrice,
                 p.expire
@@ -42,12 +43,30 @@ function getUserSteps($id_usertg) {
 
         foreach ($results as $row) {
             // Проверяем, если expire = true и step < 5, то пропускаем элемент
-            if ($row['expire'] === true && $row['step'] <= 5 && $row['step'] !== 'Завершено') {
+            if (filter_var($row['expire'], FILTER_VALIDATE_BOOLEAN) && $row['step'] < 5 && $row['step'] !== 'Завершено') {
                 continue;
             }
-
-            $imagePath = $row['image'];
-            $row['image'] = 'https://testingnil.ru:8000/' . $imagePath;
+        
+            // Если keywords пустой, извлекаем данные из keywords_with_count
+            if (empty($row['keywords'])) {
+                $keywordsWithCount = json_decode($row['keywords_with_count'], true);
+                
+                if (is_array($keywordsWithCount)) {
+                    foreach ($keywordsWithCount as $keyword) {
+                        $key = key($keyword);
+                        $value = current($keyword);
+        
+                        // Найти первый ключ с ненулевым значением
+                        if ($value > 0) {
+                            $row['keywords'] = $key;
+                            break;
+                        }
+                    }
+                }
+            }
+        
+            // Добавляем полный URL для изображения
+            $row['image'] = 'https://testingnil.ru:8000/' . $row['image'];
             $filteredResults[] = $row;
         }
 
@@ -57,8 +76,10 @@ function getUserSteps($id_usertg) {
     }
 }
 
-if (isset($_GET['id_usertg'])) {
-    $id_usertg = $_GET['id_usertg'];
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (isset($data['id_usertg']) && !empty($data['id_usertg'])) {
+    $id_usertg = htmlspecialchars($data['id_usertg']);
     getUserSteps($id_usertg);
 } else {
     echo json_encode(['success' => false, 'message' => 'No id_usertg provided']);
