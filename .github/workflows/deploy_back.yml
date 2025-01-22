@@ -1,0 +1,41 @@
+name: Deploy TestBot
+
+on:
+  push:
+    branches: [backend]
+  pull_request:
+    branches: [backend]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy backend files
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          # Устанавливаем sshpass и rsync
+          sudo apt-get update && sudo apt-get install -y sshpass rsync
+
+          # Создаем временную директорию для SSH known_hosts
+          mkdir -p /tmp/ssh
+          ssh-keyscan -H $HOST >> /tmp/ssh/known_hosts
+
+          # Копируем папку api_full в /var/www/test_bot/git/backend/
+          SSH_CMD="ssh -o UserKnownHostsFile=/tmp/ssh/known_hosts -o StrictHostKeyChecking=yes"
+          sshpass -p "$PASSWORD" rsync -avz --delete -e "$SSH_CMD" ./api_full/ root@$HOST:/var/www/test_bot/git/backend/
+
+          # Копируем файлы из api_full/api в /var/www/test_bot/api/
+          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" root@$HOST:/var/www/test_bot/git/backend/api_full/api/ root@$HOST:/var/www/test_bot/api/
+
+          # Копируем файлы из api_full/report в /var/www/test_bot/report/
+          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" root@$HOST:/var/www/test_bot/git/backend/api_full/report/ root@$HOST:/var/www/test_bot/report/
+
+          # Копируем файлы из api_full/updater в /var/www/test_bot/updater/
+          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" root@$HOST:/var/www/test_bot/git/backend/api_full/updater/ root@$HOST:/var/www/test_bot/updater/
