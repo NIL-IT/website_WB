@@ -542,7 +542,7 @@ const PurchaseStepsPage = ({
             <div className="purchase-step-header">
               <p className="title-class-step">Условия сделки</p>
               <p className="purchase-step-subtitle">
-                Выплата кэшбэка после получения товара в течение 3-5 дней
+                Срок выплаты кэшбэка в течении 3-10 дней после завершения отчета
               </p>
             </div>
             <div className="purchase-step-content">
