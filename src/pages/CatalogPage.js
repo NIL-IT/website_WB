@@ -45,8 +45,6 @@ const CatalogPage = ({ products, categories }) => {
     <div className="catalog-page">
       <div className={`catalog-content ${showPopup ? "blur-background" : ""}`}>
 <div className="title-class">Каталог</div>
-<div className="info-text">Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</div>
-
         <div className="search-container">
           <div className="search-bar-wrapper">
             <svg
@@ -93,6 +91,7 @@ const CatalogPage = ({ products, categories }) => {
         </div>
 
         <div className="products-grid">
+        <div className="info-text">Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</div>
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
