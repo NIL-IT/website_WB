@@ -762,7 +762,7 @@ const PurchaseStepsPage = ({
                   className="upload-label"
                   htmlFor="file-upload-competitor"
                 >
-                  {uploaded.image2
+                  {uploaded.image1
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -770,9 +770,9 @@ const PurchaseStepsPage = ({
                   id="file-upload-competitor"
                   type="file"
                   className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image2")}
+                  onChange={(e) => handleFileUpload(e, "image1")}
                 />
-                {imageError.image2 && (
+                {imageError.image1 && (
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
@@ -853,7 +853,7 @@ const PurchaseStepsPage = ({
               <div className="upload-section" style={{ marginTop: "20px" }}>
                 <p className="upload-title">Загрузите скрин корзины</p>
                 <label className="upload-label" htmlFor="file-upload">
-                  {uploaded.image1
+                  {uploaded.image2
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -861,9 +861,9 @@ const PurchaseStepsPage = ({
                   id="file-upload"
                   type="file"
                   className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image1")}
+                  onChange={(e) => handleFileUpload(e, "image2")}
                 />
-                {imageError.image1 && (
+                {imageError.image2 && (
                   <p className="red-error">
                     Пожалуйста, загрузите изображение корзины.
                   </p>
@@ -950,7 +950,7 @@ const PurchaseStepsPage = ({
                   <div className="upload-section" style={{ marginTop: "20px" }}>
                 <p className="upload-title">Загрузите скрин подписки</p>
                 <label className="upload-label" htmlFor="file-upload">
-                  {uploaded.image1
+                  {uploaded.image3
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -958,9 +958,9 @@ const PurchaseStepsPage = ({
                   id="file-upload"
                   type="file"
                   className="upload-input"
-                  onChange={(e) => handleFileUpload(e, "image1")}
+                  onChange={(e) => handleFileUpload(e, "image3")}
                 />
-                {imageError.image1 && (
+                {imageError.image3 && (
                   <p className="red-error">
                     Пожалуйста, загрузите изображение подтверждения подписки на социальную сеть бренда.
                   </p>
@@ -1162,7 +1162,7 @@ const PurchaseStepsPage = ({
                   className="upload-label"
                   htmlFor="file-upload-competitor"
                 >
-                  {uploaded.image3
+                  {uploaded.image4
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -1172,7 +1172,7 @@ const PurchaseStepsPage = ({
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image4")}
                 />
-                {imageError.image3 && (
+                {imageError.image4 && (
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
@@ -1257,7 +1257,7 @@ const PurchaseStepsPage = ({
                   className="upload-label"
                   htmlFor="file-upload-competitor"
                 >
-                  {uploaded.image4
+                  {uploaded.image5
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -1267,7 +1267,7 @@ const PurchaseStepsPage = ({
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image5")}
                 />
-                {imageError.image4 && (
+                {imageError.image5 && (
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
@@ -1358,7 +1358,7 @@ const PurchaseStepsPage = ({
                   className="upload-label"
                   htmlFor="file-upload-competitor1"
                 >
-                  {uploaded.image5
+                  {uploaded.image6
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -1368,7 +1368,7 @@ const PurchaseStepsPage = ({
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image6")}
                 />
-                {imageError.image5 && (
+                {imageError.image6 && (
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
@@ -1380,7 +1380,7 @@ const PurchaseStepsPage = ({
                   className="upload-label"
                   htmlFor="file-upload-competitor2"
                 >
-                  {uploaded.image6
+                  {uploaded.image7
                     ? "Изображение загружено"
                     : "Выберите изображение"}
                 </label>
@@ -1390,7 +1390,7 @@ const PurchaseStepsPage = ({
                   className="upload-input"
                   onChange={(e) => handleFileUpload(e, "image7")}
                 />
-                {imageError.image6 && (
+                {imageError.image7 && (
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
