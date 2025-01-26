@@ -1,4 +1,4 @@
-name: Deploy TestBot
+name: Deploy website_WB back
 
 on:
   push:
@@ -31,11 +31,11 @@ jobs:
           SSH_CMD="ssh -o UserKnownHostsFile=/tmp/ssh/known_hosts -o StrictHostKeyChecking=yes"
           sshpass -p "$PASSWORD" rsync -avz --delete -e "$SSH_CMD" ./api_full/ root@$HOST:/var/www/test_bot/git/backend/
 
-          # Копируем файлы из api_full/api в /var/www/test_bot/api/
-          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" ./api_full/api/ root@$HOST:/var/www/test_bot/api/
+          # Копируем файлы из api_full/api в /var/www/test_bot/api/ с заменой
+          sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/api/ root@$HOST:/var/www/test_bot/api/
 
-          # Копируем файлы из api_full/report в /var/www/test_bot/report/
-          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" ./api_full/report/ root@$HOST:/var/www/test_bot/report/
+          # Копируем файлы из api_full/report в /var/www/test_bot/report/ с заменой
+          sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/report/ root@$HOST:/var/www/test_bot/report/
 
-          # Копируем файлы из api_full/updater в /var/www/test_bot/updater/
-          sshpass -p "$PASSWORD" rsync -avz --ignore-existing -e "$SSH_CMD" ./api_full/updater/ root@$HOST:/var/www/test_bot/updater/
+          # Копируем файлы из api_full/updater в /var/www/test_bot/updater/ с заменой
+          sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/updater/ root@$HOST:/var/www/test_bot/updater/
