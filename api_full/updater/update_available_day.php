@@ -51,13 +51,13 @@ try {
     foreach ($expiredProducts as $product) {
         $productId = $product['id'];
 
-        // Delete steps with step between '0' and '5' for expired products
-        $deleteExpiredStepsStmt = $pdo->prepare("DELETE FROM steps WHERE id_product = :id_product AND step IN ('1', '2', '3', '4', '5')");
+        // Delete steps with step between '0' and '6' for expired products
+        $deleteExpiredStepsStmt = $pdo->prepare("DELETE FROM steps WHERE id_product = :id_product AND step IN ('1', '2', '3', '4', '5', '6')");
         $deleteExpiredStepsStmt->bindParam(':id_product', $productId, PDO::PARAM_INT);
         $deleteExpiredStepsStmt->execute();
     }
 
-    echo "Steps with step between '0' and '5' removed for expired products.\n";
+    echo "Steps with step between '0' and '6' removed for expired products.\n";
   
     $threeMonthsAgo = $currentDate->sub(new DateInterval('P3M'))->format('Y-m-d');
 

@@ -80,7 +80,7 @@ try {
     $idProduct = $row['id_product'];
     
 
-    if ($currentStep >= 0 && $currentStep <= 5) {
+    if ($currentStep >= 0 && $currentStep <= 6) {
         $stmt = $pdo->prepare('SELECT available_day_current FROM products WHERE id = :id_product');
         $stmt->bindParam(':id_product', $idProduct, PDO::PARAM_INT);
         $stmt->execute();
@@ -100,7 +100,7 @@ try {
     }
     
 
-    if ($currentStep == 5 || $currentStep == 7) {
+    if ($currentStep == 6 || $currentStep == 8) {
         $stmt = $pdo->prepare('SELECT tg_nick, name FROM products WHERE id = :id_product');
         $stmt->bindParam(':id_product', $idProduct, PDO::PARAM_INT);
         $stmt->execute();
@@ -167,17 +167,17 @@ try {
 
 
     elseif ($currentStep === '2') {
-        if (!isset($data['image2'])) {
+        if (!isset($data['image1'])) {
             echo json_encode(['success' => false, 'error' => 'Second image data not provided']);
             exit;
         }
-        $imageData = $data['image2'];
+        $imageData = $data['image1'];
         $imageDirectory = 'uploads/'; 
         $imageName = uniqid() . '.png'; 
         $imagePath = $imageDirectory . $imageName;
         $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
         if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
-            $stmt = $pdo->prepare('UPDATE steps SET image2 = :imagePath, step = 3 WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE steps SET image1 = :imagePath, step = 3 WHERE id = :id');
             $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
@@ -202,17 +202,17 @@ try {
 
     
     elseif ($currentStep === '3') {
-        if (!isset($data['image1'])) {
+        if (!isset($data['image2'])) {
             echo json_encode(['success' => false, 'error' => 'Image data not provided']);
             exit;
         }
-        $imageData = $data['image1'];
+        $imageData = $data['image2'];
         $imageDirectory = 'uploads/'; 
         $imageName = uniqid() . '.png'; 
         $imagePath = $imageDirectory . $imageName;
         $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
         if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
-            $stmt = $pdo->prepare('UPDATE steps SET image1 = :imagePath, step = 4 WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE steps SET image2 = :imagePath, step = 4 WHERE id = :id');
             $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
@@ -226,57 +226,83 @@ try {
     }
     
     
-    
-
-
-
-
-
-
-
-
-    
-    elseif ($currentStep === '4') {
-            if (!isset($data['cardNumber']) || !isset($data['bankName']) || !isset($data['cardHolder']) || !isset($data['phone'])) {
-            echo json_encode(['success' => false, 'error' => 'Missing data for step 4']);
-            exit;
-        }
-        $cardNumber = $data['cardNumber'];
-        $bankName = $data['bankName'];
-        $cardHolder = $data['cardHolder'];
-        $phone = $data['phone'];
-            $stmt = $pdo->prepare('UPDATE steps SET cardNumber = :cardNumber, bankName = :bankName, cardHolder = :cardHolder, phone = :phone, step = 5 WHERE id = :id');
-        $stmt->bindParam(':cardNumber', $cardNumber, PDO::PARAM_STR);
-        $stmt->bindParam(':bankName', $bankName, PDO::PARAM_STR);
-        $stmt->bindParam(':cardHolder', $cardHolder, PDO::PARAM_STR);
-        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
-        if ($stmt->execute()) {
-            echo json_encode(['success' => true, 'message' => 'Data saved and step updated to 4 successfully']);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'Failed to update step to 4']);
-        }
-    } 
+   
     
     
-    
-    
-
-
-
-
-
-
-
-
-   elseif ($currentStep === '5') {
+// Новый шаг 4
+elseif ($currentStep === '4') {
     if (!isset($data['image3'])) {
+        echo json_encode(['success' => false, 'error' => 'Image data not provided for step 4']);
+        exit;
+    }
+    $imageData = $data['image3'];
+    $imageDirectory = 'uploads/';
+    $imageName = uniqid() . '.png';
+    $imagePath = $imageDirectory . $imageName;
+    $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
+    if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
+        $stmt = $pdo->prepare('UPDATE steps SET image3 = :imagePath, step = 5 WHERE id = :id');
+        $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            echo json_encode(['success' => true, 'message' => 'Image saved and step updated to 5 successfully']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Failed to update step to 5']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to save image']);
+    }
+}
+
+
+
+
+
+
+
+    
+// Обновленный шаг 5 (был шаг 4)
+elseif ($currentStep === '5') {
+    if (!isset($data['cardNumber']) || !isset($data['bankName']) || !isset($data['cardHolder']) || !isset($data['phone'])) {
+        echo json_encode(['success' => false, 'error' => 'Missing data for step 5']);
+        exit;
+    }
+    $cardNumber = $data['cardNumber'];
+    $bankName = $data['bankName'];
+    $cardHolder = $data['cardHolder'];
+    $phone = $data['phone'];
+    $stmt = $pdo->prepare('UPDATE steps SET cardNumber = :cardNumber, bankName = :bankName, cardHolder = :cardHolder, phone = :phone, step = 6 WHERE id = :id');
+    $stmt->bindParam(':cardNumber', $cardNumber, PDO::PARAM_STR);
+    $stmt->bindParam(':bankName', $bankName, PDO::PARAM_STR);
+    $stmt->bindParam(':cardHolder', $cardHolder, PDO::PARAM_STR);
+    $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true, 'message' => 'Data saved and step updated to 5 successfully']);
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to update step to 5']);
+    }
+}
+    
+    
+    
+    
+
+
+
+
+
+
+
+// Обновленный шаг 6 (был шаг 5)
+   elseif ($currentStep === '6') {
+    if (!isset($data['image4'])) {
         echo json_encode(['success' => false, 'error' => 'Image data not provided']);
         exit;
     }
     
-    $imageData = $data['image3'];
+    $imageData = $data['image4'];
     $imageDirectory = 'uploads/'; 
     $imageName = uniqid() . '.png'; 
     $imagePath = $imageDirectory . $imageName;
@@ -286,7 +312,7 @@ try {
         $pdo->beginTransaction();
         try {
             // Обновляем таблицу steps: устанавливаем image3 и обновляем шаг до 6
-            $stmt = $pdo->prepare('UPDATE steps SET image3 = :imagePath, step = 6 WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE steps SET image4 = :imagePath, step = 7 WHERE id = :id');
             $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             
@@ -396,13 +422,13 @@ try {
                     $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle);
 
                     $pdo->commit();
-                    echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 6, and product availability and keywords updated successfully']);
+                    echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
                 } else {
                     throw new Exception("Product with ID $idProduct not found");
                 }
             } else {
                 $pdo->rollBack();
-                echo json_encode(['success' => false, 'error' => 'Failed to update step to 6']);
+                echo json_encode(['success' => false, 'error' => 'Failed to update step to 7']);
             }
         } catch (Exception $e) {
             $pdo->rollBack();
@@ -422,25 +448,25 @@ try {
 
 
 
-
-    elseif ($currentStep === '6') {
-        if (!isset($data['image4'])) {
+// Обновленный шаг 7 (был шаг 6)
+    elseif ($currentStep === '7') {
+        if (!isset($data['image5'])) {
             echo json_encode(['success' => false, 'error' => 'Image data not provided']);
             exit;
         }
-        $imageData = $data['image4'];
+        $imageData = $data['image5'];
         $imageDirectory = 'uploads/'; 
         $imageName = uniqid() . '.png'; 
         $imagePath = $imageDirectory . $imageName;
         $imageDecoded = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData));
         if ($imageDecoded !== false && file_put_contents($imagePath, $imageDecoded)) {
-            $stmt = $pdo->prepare('UPDATE steps SET image4 = :imagePath, step = 7 WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE steps SET image5 = :imagePath, step = 8 WHERE id = :id');
             $stmt->bindParam(':imagePath', $imagePath, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             if ($stmt->execute()) {
-                echo json_encode(['success' => true, 'message' => 'Image saved and step updated to 7 successfully']);
+                echo json_encode(['success' => true, 'message' => 'Image saved and step updated to 8 successfully']);
             } else {
-                echo json_encode(['success' => false, 'error' => 'Failed to update step to 7']);
+                echo json_encode(['success' => false, 'error' => 'Failed to update step to 8']);
             }
         } else {
             echo json_encode(['success' => false, 'error' => 'Failed to save image']);
@@ -457,32 +483,32 @@ try {
 
 
 
-
-    elseif ($currentStep === '7') {
-        if (!isset($data['image5']) || !isset($data['image6'])) {
+// Обновленный шаг 8 (был шаг 7)
+    elseif ($currentStep === '8') {
+        if (!isset($data['image6']) || !isset($data['image7'])) {
             echo json_encode(['success' => false, 'error' => 'Fifth and/or sixth image data not provided']);
             exit;
         }
         
-        $imageData5 = $data['image5'];
         $imageData6 = $data['image6'];
+        $imageData7 = $data['image7'];
         $imageDirectory = 'uploads/'; 
-        $imageName5 = uniqid() . '.png'; 
-        $imagePath5 = $imageDirectory . $imageName5;
-        $imageDecoded5 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData5));
         $imageName6 = uniqid() . '.png'; 
         $imagePath6 = $imageDirectory . $imageName6;
         $imageDecoded6 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData6));
+        $imageName7 = uniqid() . '.png'; 
+        $imagePath7 = $imageDirectory . $imageName7;
+        $imageDecoded7 = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imageData7));
     
 
-        if ($imageDecoded5 !== false && file_put_contents($imagePath5, $imageDecoded5) &&
-            $imageDecoded6 !== false && file_put_contents($imagePath6, $imageDecoded6)) {
+        if ($imageDecoded6 !== false && file_put_contents($imagePath6, $imageDecoded6) &&
+            $imageDecoded7 !== false && file_put_contents($imagePath7, $imageDecoded7)) {
             
           
             $stmt = $pdo->prepare('UPDATE steps SET image5 = :imagePath5, image6 = :imagePath6, step = :finalStep WHERE id = :id');
             $finalStep = 'Завершено'; 
-            $stmt->bindParam(':imagePath5', $imagePath5, PDO::PARAM_STR);
-            $stmt->bindParam(':imagePath6', $imagePath6, PDO::PARAM_STR);
+            $stmt->bindParam(':imagePath5', $imagePath6, PDO::PARAM_STR);
+            $stmt->bindParam(':imagePath6', $imagePath7, PDO::PARAM_STR);
             $stmt->bindParam(':finalStep', $finalStep, PDO::PARAM_STR);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             

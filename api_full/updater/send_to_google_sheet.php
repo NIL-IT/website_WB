@@ -39,7 +39,7 @@ try {
 
     // Получение данных из steps и соответствующих данных из users и products
     $stmt = $pdo->prepare("
-    SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.updated_at, s.verified, s.paid,
+    SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid,
         u1.username AS step_username, 
         p.tg_nick, p.name AS product_name, p.image_path AS product_image_path, p.article, p.expire, p.market_price, p.your_price,
         u2.id_usertg AS product_user_id, u2.username AS product_username
@@ -89,7 +89,8 @@ try {
             (string)(!empty($row['image3']) ? 'https://testingnil6.ru:8000/' . $row['image3'] : 'Шаг не пройден'),
             (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'),
             (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'),
-            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден')
+            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден'),
+            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден')
         ];
     }
 

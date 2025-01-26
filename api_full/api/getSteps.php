@@ -42,8 +42,8 @@ function getUserSteps($id_usertg) {
         $filteredResults = [];
 
         foreach ($results as $row) {
-            // Проверяем, если expire = true и step < 5, то пропускаем элемент
-            if (filter_var($row['expire'], FILTER_VALIDATE_BOOLEAN) && $row['step'] < 5 && $row['step'] !== 'Завершено') {
+            // Проверяем, если expire = true и step < 6, то пропускаем элемент
+            if (filter_var($row['expire'], FILTER_VALIDATE_BOOLEAN) && $row['step'] < 6 && $row['step'] !== 'Завершено') {
                 continue;
             }
         
