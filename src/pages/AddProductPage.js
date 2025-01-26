@@ -172,7 +172,7 @@ const handleRemoveField = (event) => {
     };
 
     // Отправка данных на сервер
-    fetch("https://testingnil.ru:8000/addProduct.php", {
+    fetch("https://testingnil6.ru:8000/addProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dataToSend),

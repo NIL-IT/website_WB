@@ -44,7 +44,9 @@ const CatalogPage = ({ products, categories }) => {
   return (
     <div className="catalog-page">
       <div className={`catalog-content ${showPopup ? "blur-background" : ""}`}>
-        <div className="title-class">Каталог</div>
+<div className="title-class">Каталог</div>
+<div className="info-text">Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</div>
+
         <div className="search-container">
           <div className="search-bar-wrapper">
             <svg
