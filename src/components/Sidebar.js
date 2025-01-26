@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from "react-router-dom";
 import "../styles/Sidebar.css";
 
 const Sidebar = ({ userInfo }) => {
-  const [username, setUsername] = useState(userInfo.username);
   return (
     <nav className="sidebar">
       {userInfo && userInfo.status === 'admin' && (
