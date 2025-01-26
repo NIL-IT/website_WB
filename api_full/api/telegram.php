@@ -1,6 +1,6 @@
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : '';
-$reportUrl = "https://testingnil.ru/report/{$id}";
+$reportUrl = "https://testingnil6.ru/report/{$id}";
 $admin_id = -4244600119;
 $encoded_admin_id = urlencode($admin_id);
 

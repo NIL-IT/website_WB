@@ -66,7 +66,7 @@ function getUserSteps($id_usertg) {
             }
         
             // Добавляем полный URL для изображения
-            $row['image'] = 'https://testingnil.ru:8000/' . $row['image'];
+            $row['image'] = 'https://testingnil6.ru:8000/' . $row['image'];
             $filteredResults[] = $row;
         }
 

@@ -49,7 +49,7 @@ try {
                 // Добавление префикса к URL изображениям
                 for ($i = 1; $i <= 6; $i++) {
                     if (!empty($step["image$i"])) {
-                        $step["image$i"] = 'https://testingnil.ru:8000/' . $step["image$i"];
+                        $step["image$i"] = 'https://testingnil6.ru:8000/' . $step["image$i"];
                     }
                 }
 

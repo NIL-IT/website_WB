@@ -32,7 +32,7 @@ function getAllProducts($conn) {
             if ($product['expire'] !== true) {
                 $imagePath = $product['image'];
                 if (file_exists($imagePath)) {
-                    $product['image'] = 'https://testingnil.ru:8000/' . $imagePath;
+                    $product['image'] = 'https://testingnil6.ru:8000/' . $imagePath;
                 } else {
                     $product['image'] = null;
                 }

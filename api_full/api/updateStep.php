@@ -28,7 +28,7 @@ try {
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
         
         $message = "<b>Заказ получен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
-        $reportUrl = "https://testingnil.ru/report/$dealNumber"; 
+        $reportUrl = "https://testingnil6.ru/report/$dealNumber"; 
 
         $replyMarkup = '{"inline_keyboard":[[{"text":"Отчет","web_app":{"url":"' . $reportUrl . '"}}]]}';
         

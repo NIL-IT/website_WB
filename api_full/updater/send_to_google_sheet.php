@@ -57,7 +57,7 @@ try {
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
         // Формирование URL отчёта
-        $telegramUrl = "https://testingnil.ru:81/?id=" . $row['step_id'];
+        $telegramUrl = "https://testingnil6.ru:81/?id=" . $row['step_id'];
         // Проверка expire и запись "да" или "нет"
         $inIssue = $row['expire'] ? 'Нет' : 'Да';
 
@@ -78,18 +78,18 @@ try {
             (string)$row['article'],
             (string)$profit, // Выгода покупателя
             (string)$inIssue, // Новое поле "Товар в выдаче?"
-            (string)'https://testingnil.ru:8000/' . $row['product_image_path'],
+            (string)'https://testingnil6.ru:8000/' . $row['product_image_path'],
             (string)$row['step'],
             (string)$updatedAt,
             (string)$telegramUrl,
             (string)$verifiedStatus,
             (string)$paidStatus,
-            (string)(!empty($row['image1']) ? 'https://testingnil.ru:8000/' . $row['image1'] : 'Шаг не пройден'),
-            (string)(!empty($row['image2']) ? 'https://testingnil.ru:8000/' . $row['image2'] : 'Шаг не пройден'),
-            (string)(!empty($row['image3']) ? 'https://testingnil.ru:8000/' . $row['image3'] : 'Шаг не пройден'),
-            (string)(!empty($row['image4']) ? 'https://testingnil.ru:8000/' . $row['image4'] : 'Шаг не пройден'),
-            (string)(!empty($row['image5']) ? 'https://testingnil.ru:8000/' . $row['image5'] : 'Шаг не пройден'),
-            (string)(!empty($row['image6']) ? 'https://testingnil.ru:8000/' . $row['image6'] : 'Шаг не пройден')
+            (string)(!empty($row['image1']) ? 'https://testingnil6.ru:8000/' . $row['image1'] : 'Шаг не пройден'),
+            (string)(!empty($row['image2']) ? 'https://testingnil6.ru:8000/' . $row['image2'] : 'Шаг не пройден'),
+            (string)(!empty($row['image3']) ? 'https://testingnil6.ru:8000/' . $row['image3'] : 'Шаг не пройден'),
+            (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'),
+            (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'),
+            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден')
         ];
     }
 
