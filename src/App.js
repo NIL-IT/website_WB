@@ -13,14 +13,13 @@ import BackButton from './components/BackButton';
 import './index.css';
 
 const App = () => {
-  
- const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://testingnil6.ru:8000/';
-  // const [userInfo, setUserInfo] = useState([
+// const [userInfo, setUserInfo] = useState([
   //   {
   //     id_usertg: 934574143,
   //     status: "admin",
@@ -127,7 +126,7 @@ const App = () => {
                         
    ]);  */
 
-   const API = {
+  const API = {
     async getUser(id, username) {
         try {
             const option = {
@@ -206,7 +205,7 @@ const App = () => {
       console.error('Error fetching products:', error);
     }
   };
-  
+
   const fetchUserSteps = async (id_usertg) => {
     try {
         const response = await API.getUserSteps(id_usertg);
@@ -223,7 +222,7 @@ const App = () => {
         return null;
     }
 };
-useEffect(() => {
+  useEffect(() => {
     localStorage.clear();
     const tg = window.Telegram.WebApp;
     tg.expand(); // Расширяет приложение на весь экран
@@ -280,7 +279,7 @@ useEffect(() => {
     };
 
   fetchData();
-}, []);
+  }, []);
 
   if (isLoading) {
     return <div>Загрузка...</div>;
@@ -293,19 +292,19 @@ useEffect(() => {
   return (
     <Router>
       <div className="app-container">
-        <BackButton /> 
-        <Sidebar />
+        <BackButton />
+        <Sidebar userInfo={userInfo} />
         <div className="content">
           <Routes>
             <Route exact path="/" element={<CatalogPage products={products} categories={categories} />} />
-            <Route path="/catalog" element={<CatalogPage products={products} categories={categories}/>} />
-            <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories}/>} />
+            <Route path="/catalog" element={<CatalogPage products={products} categories={categories} />} />
+            <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories} />} />
             <Route path="/add-product" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
-            <Route path="/purchases" element={<PurchasesPage  userSteps={userSteps} userInfo={userInfo} />} />
-            <Route path="/profile" element={<ProfilePage userInfo={userInfo}/>} />
+            <Route path="/purchases" element={<PurchasesPage userSteps={userSteps} userInfo={userInfo} />} />
+            <Route path="/profile" element={<ProfilePage userInfo={userInfo} />} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
-            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete} />} />
-            <Route path="/report/:id" element={<ReportPage userInfo={userInfo}/> } />
+            <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete}/>} />
+            <Route path="/report/:id" element={<ReportPage userInfo={userInfo} />} />
           </Routes>
         </div>
       </div>
