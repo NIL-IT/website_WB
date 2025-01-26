@@ -1559,7 +1559,7 @@ const PurchaseStepsPage = ({
               >
                 Поддержка
               </button>
-              <p className="purchase-step-subtitle-12px-400">
+              <p className="purchase-step-subtitle-12px-400" style={{ marginTop: '10px'}}>
               INHOMEKA - дизайнерские решения для каждого дома» после кнопки «поддержка
               </p>
             </div>
