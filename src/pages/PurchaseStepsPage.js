@@ -271,7 +271,7 @@ const PurchaseStepsPage = ({
       try {
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
-          formDataToSend.append("image2", formData.image1);
+          formDataToSend.append("image1", formData.image1);
   
           const response = await fetch(`${baseURL}updateStep.php`, {
               method: "POST",
