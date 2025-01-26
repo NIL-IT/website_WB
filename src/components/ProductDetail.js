@@ -70,7 +70,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
   };
 
   const handleDeleteClick = async () => {
-    if (userInfo?.status !== 'admin') {
+    if (userInfo && userInfo.status !== 'admin') {
       alert('У вас нет прав для удаления этого товара');
       return;
     }
