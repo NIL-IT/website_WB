@@ -252,8 +252,8 @@ const PurchaseStepsPage = ({
           localStorage.clear();
       }
   } else if (step === 2) {
-      if (!uploaded.image2) {
-          setImageError({ ...imageError, image2: true });
+      if (!uploaded.image1) {
+          setImageError({ ...imageError, image1: true });
           return;
       }
       if (!formData.article.trim()) {
@@ -271,7 +271,7 @@ const PurchaseStepsPage = ({
       try {
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
-          formDataToSend.append("image2", formData.image2);
+          formDataToSend.append("image2", formData.image1);
   
           const response = await fetch(`${baseURL}updateStep.php`, {
               method: "POST",
@@ -293,8 +293,8 @@ const PurchaseStepsPage = ({
           localStorage.clear();
       }
   } else if (step === 3) {
-      if (!uploaded.image1) { // Проверка на наличие image1
-          setImageError({ ...imageError, image1: true });
+      if (!uploaded.image2) { // Проверка на наличие image1
+          setImageError({ ...imageError, image2: true });
           return;
       }
   
@@ -306,7 +306,7 @@ const PurchaseStepsPage = ({
       try {
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
-          formDataToSend.append("image1", formData.image1); // Добавляем image1
+          formDataToSend.append("image2", formData.image2); // Добавляем image2
   
           const response = await fetch(`${baseURL}updateStep.php`, {
               method: "POST",
@@ -486,7 +486,7 @@ const PurchaseStepsPage = ({
         setImageError({ ...imageError, image6: true });
         return;
       }
-      if (!uploaded.image6) {
+      if (!uploaded.image7) {
         setImageError({ ...imageError, image7: true });
         return;
       }
