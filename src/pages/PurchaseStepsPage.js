@@ -594,7 +594,7 @@ const PurchaseStepsPage = ({
                 такие как:
                 <br /> 1. Найдите товар по инструкции;
                 <br /> 2. Добавьте товар и бренд в избранное;
-                <br /> 2. Подпишитесь на социальную сеть бренда;
+                <br /> 3. Подписаться на одну из социальных сетей бренда на выбор (инстаграм, телеграм, вконтакте);
                 <br />
                 3. Купите товар - 1 шт;
                 <br />
@@ -813,6 +813,9 @@ const PurchaseStepsPage = ({
                 </svg>
                 Написать продавцу
               </button>
+              <p className="purchase-step-subtitle-12px-400">
+              INHOMEKA – комплекты для ванной комнаты, собранные дизайнерами
+              </p>
               <div className="step-footer-container">
                 <button
                   className="purchase-step-button"
@@ -898,6 +901,9 @@ const PurchaseStepsPage = ({
                 </svg>
                 Написать продавцу
               </button>
+              <p className="purchase-step-subtitle-12px-400">
+              INHOMEKA – мы предлагаем готовые дизайнерские решения для дома в виде комплектов, чтобы упростить выбор стильных товаров
+              </p>
               <div className="step-footer-container"></div>
               <button
                 className="purchase-step-button"
@@ -942,7 +948,7 @@ const PurchaseStepsPage = ({
                   </a>
                   </div>
                   <div className="upload-section" style={{ marginTop: "20px" }}>
-                <p className="upload-title">Загрузите скрин подтверждения подписки на социальную сеть бренда</p>
+                <p className="upload-title">Загрузите скрин подписки</p>
                 <label className="upload-label" htmlFor="file-upload">
                   {uploaded.image1
                     ? "Изображение загружено"
@@ -1333,6 +1339,10 @@ const PurchaseStepsPage = ({
                   поставьте 5 звёзд;
                 </li>
                 <li>
+                  Будем благодарны если в своём отзыве Вы упомяните название нашего бренда INHOMEKA, 
+                  например «Спасибо бренду INHOMEKA!»;
+                </li>
+                <li>
                   Сделайте скриншот с разрезанным штрих-кодом на фоне товара;
                 </li>
                 <li>
@@ -1550,6 +1560,9 @@ const PurchaseStepsPage = ({
               >
                 Поддержка
               </button>
+              <p className="purchase-step-subtitle-12px-400">
+              INHOMEKA - дизайнерские решения для каждого дома» после кнопки «поддержка
+              </p>
             </div>
           </div>
         );
