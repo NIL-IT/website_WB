@@ -26,16 +26,19 @@ function renderApplications() {
     const applicationsContainer = document.getElementById('applications');
     applicationsContainer.innerHTML = '';
 
-    applicationsData.forEach(app => {
+    // Sort applications by status: 2 (in progress) first, then 1 (waiting)
+    const sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+
+    sortedApplications.forEach((app, index) => {
         const appDiv = document.createElement('div');
-        appDiv.className = 'application';
+        appDiv.className = `application ${getStatusClass(app.status)}`;
         appDiv.innerHTML = `
-            <p>Банк: ${app.bank}</p>
-            <p>Номер: ${app.phone}</p>
-            <p>Номер карты: ${app.cardNumber}</p>
-            <p>Выгода: ${app.profit}</p>
-            <p class="status">Статус: ${getStatusText(app.status)}</p>
-            <button class="button" onclick="handleButtonClick(${app.status})">${getButtonText(app.status)}</button>
+            <p><strong>Банк:</strong> ${app.bank}</p>
+            <p><strong>Номер:</strong> ${app.phone}</p>
+            <p><strong>Номер карты:</strong> ${app.cardNumber}</p>
+            <p><strong>Выгода:</strong> ${app.profit}</p>
+            <p class="status"><strong>Статус:</strong> ${getStatusText(app.status)}</p>
+            <button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>
         `;
         applicationsContainer.appendChild(appDiv);
     });
@@ -52,16 +55,34 @@ function getStatusText(status) {
 }
 
 function getButtonText(status) {
-    return status === 1 ? 'Начать' : 'Завершить';
+    return status === 1 ? 'Начать' : status === 2 ? 'Завершить' : '';
 }
 
-function handleButtonClick(status) {
-    // Logic to handle button click based on status
-    if (status === 1) {
+function getStatusClass(status) {
+    switch (status) {
+        case 1: return 'waiting';
+        case 2: return 'in-progress';
+        case 3: return 'completed';
+        default: return '';
+    }
+}
+
+function getButtonClass(status) {
+    return status === 1 ? 'start' : status === 2 ? 'complete' : '';
+}
+
+function handleButtonClick(index) {
+    const app = applicationsData[index];
+
+    if (app.status === 1) {
+        app.status = 2; // Change to "In Progress"
         alert('Статус изменен на "В работе"');
-    } else {
+    } else if (app.status === 2) {
+        app.status = 3; // Change to "Completed"
         alert('Заявка завершена');
     }
+
+    renderApplications();
 }
 
 function refreshApplications() {
