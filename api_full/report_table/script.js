@@ -148,10 +148,12 @@ function handleButtonClick(index) {
         app.status = 2; // Change to "In Progress"
     } else if (app.status === 2) {
         app.status = 3; // Change to "Completed"
+        applicationsData.splice(index, 1); // Remove the application from the array
     }
 
-    renderApplications();
+    renderApplications(); // Re-render the applications
 }
+
 
 function refreshApplications() {
     // Mock new data fetching for the demo (in real scenario, fetch updated data from server)
