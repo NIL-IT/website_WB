@@ -52,22 +52,22 @@ try {
     $stepsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Подготовка данных для отправки в Google Таблицу
-    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт","Подтверждён товар?","Оплачен товар?", "Cкрин корзины", "Скрин товара продавца", "Скрин заказа в `Доставке`", "Скриншот о доставке", "Скриншот отзыва", "Фотография с штрих-кодом на фоне товара"]];
-    
+    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт", "Подтверждён товар?", "Оплачен товар?", "Скрин товара в конкурентной выдаче", "Скрин корзины", "Скрин подписки", "Скрин заказа", "Скриншот о доставке", "Скриншот отзыва", "Фотография с разрезанным штрих-кодом на фоне товара"]];
+
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
         // Формирование URL отчёта
         $telegramUrl = "https://testingnil6.ru:81/?id=" . $row['step_id'];
         // Проверка expire и запись "да" или "нет"
         $inIssue = $row['expire'] ? 'Нет' : 'Да';
-
+    
         // Вычисление выгоды покупателя
         $profit = $row['market_price'] - $row['your_price'];
-
+    
         // Определение статуса verified и paid
         $verifiedStatus = $row['verified'] ? 'Подтверждён' : 'Не подтвержден';
         $paidStatus = $row['paid'] ? 'Оплачен' : 'Не оплачен';
-
+    
         $values[] = [
             (string)$row['step_id'], 
             (string)$row['step_user_id'], 
@@ -84,13 +84,13 @@ try {
             (string)$telegramUrl,
             (string)$verifiedStatus,
             (string)$paidStatus,
-            (string)(!empty($row['image1']) ? 'https://testingnil6.ru:8000/' . $row['image1'] : 'Шаг не пройден'),
-            (string)(!empty($row['image2']) ? 'https://testingnil6.ru:8000/' . $row['image2'] : 'Шаг не пройден'),
-            (string)(!empty($row['image3']) ? 'https://testingnil6.ru:8000/' . $row['image3'] : 'Шаг не пройден'),
-            (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'),
-            (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'),
-            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден'),
-            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден')
+            (string)(!empty($row['image1']) ? 'https://testingnil6.ru:8000/' . $row['image1'] : 'Шаг не пройден'), // Скрин товара в конкурентной выдаче
+            (string)(!empty($row['image2']) ? 'https://testingnil6.ru:8000/' . $row['image2'] : 'Шаг не пройден'), // Скрин корзины
+            (string)(!empty($row['image3']) ? 'https://testingnil6.ru:8000/' . $row['image3'] : 'Шаг не пройден'), // Скрин подписки
+            (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'), // Скрин заказа
+            (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'), // Скриншот о доставке
+            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден'), // Скриншот отзыва
+            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден')  // Фотография с разрезанным штрих-кодом на фоне товара
         ];
     }
 

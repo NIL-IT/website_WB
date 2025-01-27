@@ -26,12 +26,13 @@ document.addEventListener("DOMContentLoaded", function () {
         
         const screenshotsDiv = document.getElementById("screenshots");
         const screenshots = [
-          { url: data.data.image1, caption: "Скриншот корзины" },
-          { url: data.data.image2, caption: "Скриншот товара в конкурентной выдаче" },
-          { url: data.data.image3, caption: 'Скриншот из раздела "Доставки" в личном кабинете' },
-          { url: data.data.image4, caption: "Скриншот о том, что заказ доставлен" },
-          { url: data.data.image5, caption: "Скриншот опубликованного отзыва" },
-          { url: data.data.image6, caption: "Фотография с разрезанным штрих-кодом на фоне товара" },
+          { url: data.data.image1, caption: "Скриншот товара в конкурентной выдаче" },
+          { url: data.data.image2, caption: "Скриншот корзины" },
+          { url: data.data.image3, caption: "Скриншот подписки" },
+          { url: data.data.image4, caption: "Скриншот заказа" },
+          { url: data.data.image5, caption: "Скриншот, подтверждающий, что заказ доставлен" },
+          { url: data.data.image6, caption: "Скриншот опубликованного отзыва" },
+          { url: data.data.image7, caption: "Фотография с разрезанным штрих-кодом на фоне товара" },
         ];
 
         screenshots.forEach((screenshot, index) => {
