@@ -22,6 +22,54 @@ const applicationsData = [
         cardNumber: "5536093455667888",
         profit: "2149 руб.",
         status: 1 // Waiting for payment
+    },
+    {
+        cardholder: "Иванов Иван Иванович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 2 // In progress
+    },
+    {
+        cardholder: "Петров Петр Петрович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 1 // Waiting for payment
+    },
+    {
+        cardholder: "Сидоров Сидор Сидорович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 1 // Waiting for payment
+    },
+    {
+        cardholder: "Иванов Иван Иванович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 2 // In progress
+    },
+    {
+        cardholder: "Петров Петр Петрович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 1 // Waiting for payment
+    },
+    {
+        cardholder: "Сидоров Сидор Сидорович",
+        bank: "Совкомбанк",
+        phone: "+79062828242",
+        cardNumber: "5536093455667888",
+        profit: "2149 руб.",
+        status: 1 // Waiting for payment
     }
 ];
 
