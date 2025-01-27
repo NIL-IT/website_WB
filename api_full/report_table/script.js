@@ -37,15 +37,17 @@ function renderApplications() {
         appDiv.className = `application ${getStatusClass(app.status)}`;
         appDiv.innerHTML = `
             <div class="cardholder">${app.cardholder}</div>
+            <div class="application-main">
             <div class="application-content">
-                <p><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
-                <p><strong>Телефон:</strong> <span class="gray">${app.phone}</span></p>
-                <p><strong>Номер карты:</strong> ${app.cardNumber}</p>
-                <p><strong>Выгода:</strong> ${app.profit}</p>
+                <p class="gray"><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
+                <p class="gray"><strong>Телефон:</strong> <span>${app.phone}</span></p>
+                <p class="gray"><strong>Номер карты:</strong> ${app.cardNumber}</p>
+                <p class="gray"><strong>Выгода:</strong> ${app.profit}</p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
                 <button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>
+            </div>
             </div>
         `;
         applicationsContainer.appendChild(appDiv);

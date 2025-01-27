@@ -11,7 +11,7 @@ body {
 }
 
 .application {
-    border: 1px solid #D9D9D9;
+    border: 1px solid #000000;
     border-radius: 8px;
     padding: 10px;
     margin-bottom: 30px;
@@ -19,7 +19,7 @@ body {
     text-align: center;
 }
 
-.application.in-progress {
+.cardholder.in-progress {
     background-color: #FFDA0B;
 }
 
@@ -28,8 +28,10 @@ body {
     font-size: 14px;
     font-weight: 700;
     color: #000000;
-    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
+    border-bottom: 1px solid #D9D9D9;
 }
 
 .application-content {
@@ -39,6 +41,10 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+}
+
+.application-main {
+    padding: 20px;
 }
 
 .application-content p {
