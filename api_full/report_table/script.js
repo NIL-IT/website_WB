@@ -34,24 +34,44 @@ function renderApplications() {
 
     sortedApplications.forEach((app, index) => {
         const appDiv = document.createElement('div');
-        appDiv.className = `application ${getStatusClass(app.status)}`;
+        appDiv.className = `application`;
         appDiv.innerHTML = `
-            <div class="cardholder">${app.cardholder}</div>
-            <div class="application-main">
+            <div class="cardholder ${getStatusClass(app.status)}">${app.cardholder}</div>
             <div class="application-content">
-                <p class="gray"><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
-                <p class="gray"><strong>Телефон:</strong> <span>${app.phone}</span></p>
-                <p class="gray"><strong>Номер карты:</strong> ${app.cardNumber}</p>
-                <p class="gray"><strong>Выгода:</strong> ${app.profit}</p>
+                <p><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
+                <p><strong>Телефон:</strong> <span class="black">${app.phone}</span></p>
+                <p><strong>Номер карты:</strong> <span class="black">${app.cardNumber}</span></p>
+                <p><strong>Выгода:</strong> <span class="black">${app.profit}</span></p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
                 <button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>
             </div>
-            </div>
         `;
         applicationsContainer.appendChild(appDiv);
     });
+
+    // Ensure main content is scrollable
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.style.overflowY = 'auto';
+    }
+
+    // Adjust footer positioning
+    const footer = document.querySelector('.footer');
+    if (footer) {
+        footer.style.position = 'sticky';
+        footer.style.bottom = '0';
+        footer.style.borderTop = '1px solid #000000';
+    }
+
+    // Style refresh button
+    const refreshButton = document.querySelector('.refresh-button');
+    if (refreshButton) {
+        refreshButton.style.padding = '20px';
+        refreshButton.style.border = 'none';
+        refreshButton.style.borderRadius = '16px';
+    }
 }
 
 function getStatusText(status) {

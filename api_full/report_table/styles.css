@@ -13,7 +13,6 @@ body {
 .application {
     border: 1px solid #000000;
     border-radius: 8px;
-    padding: 10px;
     margin-bottom: 30px;
     background-color: #fff;
     text-align: center;
@@ -54,6 +53,10 @@ body {
 
 .application-content .gray {
     color: #A4A4A4;
+}
+
+.application-content .black {
+    color: #000000;
 }
 
 .status-container {
@@ -112,7 +115,6 @@ body {
     display: block;
     margin: 20px auto;
     transition: background-color 0.3s ease;
-    border: 1px solid #000000;
 }
 
 .refresh-button:hover {
