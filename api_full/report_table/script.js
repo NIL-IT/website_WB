@@ -64,14 +64,6 @@ function renderApplications() {
         footer.style.bottom = '0';
         footer.style.borderTop = '1px solid #000000';
     }
-
-    // Style refresh button
-    const refreshButton = document.querySelector('.refresh-button');
-    if (refreshButton) {
-        refreshButton.style.padding = '20px';
-        refreshButton.style.border = 'none';
-        refreshButton.style.borderRadius = '16px';
-    }
 }
 
 function getStatusText(status) {

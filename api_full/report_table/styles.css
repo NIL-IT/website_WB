@@ -7,6 +7,9 @@ body {
 
 .container {
     height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
 }
 
 #applications {
@@ -45,6 +48,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    padding: 0 10px;
 }
 
 .application-main {
@@ -53,7 +57,7 @@ body {
 
 .application-content p {
     margin: 0;
-    color: #000000;
+    color: #A4A4A4;
 }
 
 .application-content .gray {
@@ -69,6 +73,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-top: 10px;
+    padding: 0 10px 10px;
 }
 
 .status {
@@ -115,7 +120,7 @@ body {
     background-color: #000DFF;
     padding: 15px 24px;
     border: none;
-    border-radius: 8px;
+    border-radius: 16px;
     cursor: pointer;
     display: block;
     margin: 20px auto;
