@@ -39,3 +39,6 @@ jobs:
 
           # Копируем файлы из api_full/updater в /var/www/test_bot/updater/ с заменой
           sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/updater/ root@$HOST:/var/www/test_bot/updater/
+          
+           # Копируем файлы из api_full/report_table в /var/www/test_bot/report_table/ с заменой
+           sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/report_table/ root@$HOST:/var/www/test_bot/report_table/
