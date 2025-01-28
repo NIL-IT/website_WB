@@ -47,15 +47,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Установка текста и стилей для кнопки verifyBtn
         const verifyBtn = document.getElementById("verifyBtn");
-        verifyBtn.textContent = "Подтвердить верификацию и передать в оплату";
-        verifyBtn.classList.add("btn-gray");
+        verifyBtn.textContent = data.data.verified ? "Отменить верификацию товара" : "Подтвердить верификацию и передать в оплату";
+        verifyBtn.classList.add(data.data.verified ? "btn-green" : "btn-gray");
 
         // Установка текста и стилей для кнопки payBtn
         const payBtn = document.getElementById("payBtn");
-        payBtn.textContent = "Подтвердить оплату";
-        payBtn.classList.add("btn-gray");
-        payBtn.disabled = true;
-        payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
+        payBtn.textContent = data.data.paid ? "Отменить оплату" : "Подтвердить оплату";
+        payBtn.classList.add(data.data.paid ? "btn-green" : "btn-gray");
+        payBtn.disabled = !data.data.verified;
+        if (!data.data.verified) {
+          payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
+        }
         payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
 
         // Получение поля для загрузки чека из HTML
