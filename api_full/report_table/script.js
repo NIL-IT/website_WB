@@ -29,9 +29,8 @@ function renderApplications() {
             <div class="application-content">
                 <p><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
                 <p><strong>Телефон:</strong> <span class="black">${app.phone}</span></p>
-                <p><strong>Номер карты:</strong> <span class="black">${app.cardNumber}</span></p>
+                <p><strong>Номер карты:</strong> <span class="black">${app.cardnumber}</span></p>
                 <p><strong>Выгода:</strong> <span class="black">${app.profit}</span></p>
-                <p><strong>URL:</strong> <a href="${app.url}" target="_blank">${app.url}</a></p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
