@@ -20,15 +20,22 @@ function sendTelegramMessage($chatId, $message) {
     return $output;
 }
 
-function sendTelegramPhoto($chatId, $photoPath) {
+function sendTelegramPhoto($chatId, $photoUrl, $caption = '') {
     $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
-    
-    $url = "$apiUrl?chat_id=$chatId&photo=" . urlencode($photoPath);
+
+    $postFields = [
+        'chat_id' => $chatId,
+        'photo' => $photoUrl, // Прямой URL изображения
+        'caption' => $caption,
+        'parse_mode' => 'HTML' // Поддержка форматирования подписи
+    ];
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $output = curl_exec($ch);
     curl_close($ch);
