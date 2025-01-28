@@ -16,6 +16,7 @@ try {
     $id = $_POST['id'];
 
     // Обработка изображения
+    $imagePath = null;
     if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
         $imageDirectory = '../api/uploads/';
         if (!is_dir($imageDirectory)) {
@@ -30,18 +31,16 @@ try {
             echo json_encode(['success' => false, 'error' => 'Failed to save image']);
             exit;
         }
-    } else {
-        echo json_encode(['success' => false, 'error' => 'No image uploaded']);
-        exit;
     }
 
     // Получение текущего значения paid и status из таблицы steps
-    $stmt = $pdo->prepare('SELECT paid, status FROM steps WHERE id = :id');
+    $stmt = $pdo->prepare('SELECT paid, status, receipt_image FROM steps WHERE id = :id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $currentPaid = $row['paid'];
     $currentStatus = $row['status'];
+    $currentReceiptImage = $row['receipt_image'];
 
     // Проверка значения status
     if ($currentStatus != 1 && $currentStatus != 2) {
@@ -53,12 +52,21 @@ try {
     $newPaid = !$currentPaid;
 
     // Обновление значения paid и пути к изображению в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
+    $newStatus = $newPaid ? 3 : 2;
+    $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, status = :status WHERE id = :id');
     $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
-    $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
-    $newStatus = 3;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+    if ($newPaid) {
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
+        $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
+    } else {
+        if ($currentReceiptImage && file_exists($currentReceiptImage)) {
+            unlink($currentReceiptImage);
+        }
+    }
+
     $updateStmt->execute();
 
     echo json_encode(['success' => true, 'paid' => $newPaid]);
