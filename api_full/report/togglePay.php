@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
 
-function sendTelegramMessage($chatId, $message, $imagePath = null) {
+function sendTelegramMessage($chatId, $message) {
     $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
     
@@ -17,17 +17,21 @@ function sendTelegramMessage($chatId, $message, $imagePath = null) {
     $output = curl_exec($ch);
     curl_close($ch);
 
-    if ($imagePath) {
-        $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
-        $url = "$apiUrl?chat_id=$chatId&photo=" . urlencode($imagePath);
+    return $output;
+}
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $output = curl_exec($ch);
-        curl_close($ch);
-    }
+function sendTelegramPhoto($chatId, $photoPath) {
+    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
+    
+    $url = "$apiUrl?chat_id=$chatId&photo=" . urlencode($photoPath);
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $output = curl_exec($ch);
+    curl_close($ch);
 
     return $output;
 }
@@ -111,19 +115,24 @@ try {
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
-    // Отправка сообщения в Telegram бота
-    $stmt = $pdo->prepare('SELECT id_usertg FROM steps WHERE id = :id');
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Отправка сообщения в Telegram бота, если не отменено
+    if ($newPaid) {
+        $stmt = $pdo->prepare('SELECT id_usertg FROM steps WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        $chatId = $user['id_usertg'];
-        $message1 = "Спасибо за участие! Приглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
-        $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
+        if ($user) {
+            $chatId = $user['id_usertg'];
+            $message1 = "Спасибо за участие! Приглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
+            $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
 
-        sendTelegramMessage($chatId, $message1, $imagePath ? 'https://testingnil6.ru:8000/' . $imagePath : null);
-        sendTelegramMessage($chatId, $message2);
+            sendTelegramMessage($chatId, $message1);
+            if ($imagePath) {
+                sendTelegramPhoto($chatId, 'https://testingnil6.ru:8000/' . $imagePath);
+            }
+            sendTelegramMessage($chatId, $message2);
+        }
     }
 
     echo json_encode(['success' => true, 'paid' => $newPaid]);
