@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <img src="${screenshot.url}" alt="Шаг ${index + 1}" class="product-image-detail" />
           `;
           screenshotsDiv.appendChild(screenshotDiv);
-        });
+        }); 
 
         // Добавление изображения receipt_image чека
         const receiptImageDiv = document.createElement("div");
@@ -140,37 +140,43 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
           }
 
-          const formData = new FormData();
-          formData.append("id", id);
-          formData.append("receipt", receiptUpload.files[0]);
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const base64Image = event.target.result;
 
-          payBtn.classList.add("loading");
-
-          fetch("togglePay.php", {
-            method: "POST",
-            body: formData,
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              payBtn.classList.remove("loading");
-              if (data.success) {
-                if (data.paid) {
-                  payBtn.textContent = "Отменить оплату";
-                  payBtn.classList.remove("btn-gray");
-                  payBtn.classList.add("btn-green");
-                } else {
-                  payBtn.textContent = "Подтвердить оплату";
-                  payBtn.classList.remove("btn-green");
-                  payBtn.classList.add("btn-gray");
-                }
-              } else {
-                console.error("Ошибка при выполнении запроса для payBtn:", data.error);
-              }
+            fetch("togglePay.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                id: id,
+                receipt: base64Image
+              }),
             })
-            .catch((error) => {
-              payBtn.classList.remove("loading");
-              console.error("Ошибка при выполнении запроса для payBtn:", error);
-            });
+              .then((response) => response.json())
+              .then((data) => {
+                payBtn.classList.remove("loading");
+                if (data.success) {
+                  if (data.paid) {
+                    payBtn.textContent = "Отменить оплату";
+                    payBtn.classList.remove("btn-gray");
+                    payBtn.classList.add("btn-green");
+                  } else {
+                    payBtn.textContent = "Подтвердить оплату";
+                    payBtn.classList.remove("btn-green");
+                    payBtn.classList.add("btn-gray");
+                  }
+                } else {
+                  console.error("Ошибка при выполнении запроса для payBtn:", data.error);
+                }
+              })
+              .catch((error) => {
+                payBtn.classList.remove("loading");
+                console.error("Ошибка при выполнении запроса для payBtn:", error);
+              });
+          };
+          reader.readAsDataURL(receiptUpload.files[0]);
         });
 
       } else {
