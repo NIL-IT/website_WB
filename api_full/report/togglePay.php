@@ -31,6 +31,9 @@ try {
             echo json_encode(['success' => false, 'error' => 'Failed to save image']);
             exit;
         }
+
+        // Сохранение относительного пути в базу данных
+        $imagePath = 'uploads/' . $imageName;
     }
 
     // Получение текущего значения paid и status из таблицы steps
@@ -57,9 +60,15 @@ try {
         $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
         $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
     } else {
-        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, status = :status WHERE id = :id');
-        if ($currentReceiptImage && file_exists($currentReceiptImage)) {
-            unlink($currentReceiptImage);
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = NULL, status = :status WHERE id = :id');
+        if ($currentReceiptImage && file_exists('../api/' . $currentReceiptImage)) {
+            unlink('../api/' . $currentReceiptImage);
+        }
+        if ($imagePath) {
+            $fullImagePath = '/var/www/test_bot/api/' . $imagePath;
+            if (file_exists($fullImagePath)) {
+                unlink($fullImagePath);
+            }
         }
     }
     $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
