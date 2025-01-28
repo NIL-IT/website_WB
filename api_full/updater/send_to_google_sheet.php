@@ -39,7 +39,7 @@ try {
 
     // Получение данных из steps и соответствующих данных из users и products
     $stmt = $pdo->prepare("
-    SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid,
+    SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid, s.receipt_image,
         u1.username AS step_username, 
         p.tg_nick, p.name AS product_name, p.image_path AS product_image_path, p.article, p.expire, p.market_price, p.your_price,
         u2.id_usertg AS product_user_id, u2.username AS product_username
@@ -52,7 +52,7 @@ try {
     $stepsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Подготовка данных для отправки в Google Таблицу
-    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт", "Подтверждён товар?", "Оплачен товар?", "Скрин товара в конкурентной выдаче", "Скрин корзины", "Скрин подписки", "Скрин заказа", "Скриншот о доставке", "Скриншот отзыва", "Фотография с разрезанным штрих-кодом на фоне товара"]];
+    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт", "Подтверждён товар?", "Оплачен товар?", "Скрин товара в конкурентной выдаче", "Скрин корзины", "Скрин подписки", "Скрин заказа", "Скриншот о доставке", "Скриншот отзыва", "Фотография с разрезанным штрих-кодом на фоне товара", "Чек"]];
 
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
@@ -90,7 +90,8 @@ try {
             (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'), // Скрин заказа
             (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'), // Скриншот о доставке
             (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден'), // Скриншот отзыва
-            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден')  // Фотография с разрезанным штрих-кодом на фоне товара
+            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден'),  // Фотография с разрезанным штрих-кодом на фоне товара
+            (string)(!empty($row['receipt_image']) ? 'https://testingnil6.ru:8000/' . $row['receipt_image'] : 'Чек не приложен')  // Чек
         ];
     }
 

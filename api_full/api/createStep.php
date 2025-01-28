@@ -20,7 +20,7 @@ try {
     $id_product = $data['id_product'];
 
     // Вставка данных в таблицу steps
-    $stmt = $pdo->prepare('INSERT INTO steps (step, id_usertg, id_product, verified, paid) VALUES (0, :id_usertg, :id_product, false, false)');
+    $stmt = $pdo->prepare('INSERT INTO steps (step, id_usertg, id_product, verified, paid, status) VALUES (0, :id_usertg, :id_product, false, false, 0)');
     $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
     $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
 
