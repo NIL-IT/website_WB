@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
         payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
         payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
 
-        // Добавление поля для загрузки чека
+        // Добавление поля для загрузки чека под кнопками
         const receiptUpload = document.createElement("input");
         receiptUpload.type = "file";
         receiptUpload.id = "receiptUpload";
@@ -127,17 +127,19 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
           }
 
+          const formData = new FormData();
+          formData.append("id", id);
+          formData.append("receipt", receiptUpload.files[0]);
+
+          payBtn.classList.add("loading");
+
           fetch("togglePay.php", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              id: id
-            }),
+            body: formData,
           })
             .then((response) => response.json())
             .then((data) => {
+              payBtn.classList.remove("loading");
               if (data.success) {
                 if (data.paid) {
                   payBtn.textContent = "Отменить оплату";
@@ -153,6 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             })
             .catch((error) => {
+              payBtn.classList.remove("loading");
               console.error("Ошибка при выполнении запроса для payBtn:", error);
             });
         });
