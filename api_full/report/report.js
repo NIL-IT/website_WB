@@ -45,6 +45,21 @@ document.addEventListener("DOMContentLoaded", function () {
           screenshotsDiv.appendChild(screenshotDiv);
         });
 
+        // Добавление изображения receipt_image чека
+        const receiptImageDiv = document.createElement("div");
+        receiptImageDiv.style.marginBottom = "20px";
+        if (data.data.receipt_image) {
+          receiptImageDiv.innerHTML = `
+            <p class="purchase-step-text">Изображение чека:</p>
+            <img src="${data.data.receipt_image}" alt="Чек" class="product-image-detail" />
+          `;
+        } else {
+          receiptImageDiv.innerHTML = `
+            <p class="purchase-step-text">Чек не приложен</p>
+          `;
+        }
+        screenshotsDiv.appendChild(receiptImageDiv);
+
         // Установка текста и стилей для кнопки verifyBtn
         const verifyBtn = document.getElementById("verifyBtn");
         verifyBtn.textContent = data.data.verified ? "Отменить верификацию товара" : "Подтвердить верификацию и передать в оплату";
