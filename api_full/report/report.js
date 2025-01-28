@@ -58,12 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
         payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
         payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
 
-        // Добавление поля для загрузки чека под кнопками
-        const receiptUpload = document.createElement("input");
-        receiptUpload.type = "file";
-        receiptUpload.id = "receiptUpload";
-        receiptUpload.accept = "image/*";
-        document.getElementById("app").appendChild(receiptUpload);
+        // Получение поля для загрузки чека из HTML
+        const receiptUpload = document.getElementById("receiptUpload");
 
         // Блокировка кнопки payBtn до загрузки изображения
         receiptUpload.addEventListener("change", function () {
