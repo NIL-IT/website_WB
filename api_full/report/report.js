@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const payBtn = document.getElementById("payBtn");
         payBtn.textContent = data.data.paid ? "Отменить оплату" : "Подтвердить оплату";
         payBtn.classList.add(data.data.paid ? "btn-green" : "btn-gray");
-        payBtn.disabled = !data.data.verified;
-        if (!data.data.verified) {
+        payBtn.disabled = !data.data.verified && !data.data.paid;
+        if (!data.data.verified && !data.data.paid) {
           payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
         }
         payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
@@ -120,14 +120,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки payBtn
         payBtn.addEventListener("click", function () {
-          if (receiptUpload.files.length === 0) {
+          if (!data.data.paid && receiptUpload.files.length === 0) {
             alert("Пожалуйста, загрузите изображение чека.");
             return;
           }
 
           const formData = new FormData();
           formData.append("id", id);
-          formData.append("receipt", receiptUpload.files[0]);
+          if (!data.data.paid) {
+            formData.append("receipt", receiptUpload.files[0]);
+          }
 
           payBtn.classList.add("loading");
 
