@@ -55,6 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         payBtn.textContent = "Подтвердить оплату";
         payBtn.classList.add("btn-gray");
         payBtn.disabled = true;
+        payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
 
         // Добавление поля для загрузки чека
         const receiptUpload = document.createElement("input");
@@ -67,8 +68,12 @@ document.addEventListener("DOMContentLoaded", function () {
         receiptUpload.addEventListener("change", function () {
           if (receiptUpload.files.length > 0) {
             payBtn.disabled = false;
+            payBtn.querySelector('.disabled-icon').remove();
           } else {
             payBtn.disabled = true;
+            if (!payBtn.querySelector('.disabled-icon')) {
+              payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
+            }
           }
         });
 
@@ -91,11 +96,15 @@ document.addEventListener("DOMContentLoaded", function () {
                   verifyBtn.classList.remove("btn-gray");
                   verifyBtn.classList.add("btn-green");
                   payBtn.disabled = false;
+                  payBtn.querySelector('.disabled-icon').remove();
                 } else {
                   verifyBtn.textContent = "Подтвердить верификацию и передать в оплату";
                   verifyBtn.classList.remove("btn-green");
                   verifyBtn.classList.add("btn-gray");
                   payBtn.disabled = true;
+                  if (!payBtn.querySelector('.disabled-icon')) {
+                    payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
+                  }
                 }
               } else {
                 console.error("Ошибка при выполнении запроса для verifyBtn:", data.error);
