@@ -20,27 +20,27 @@ function sendTelegramMessage($chatId, $message) {
     return $output;
 }
 
-function sendTelegramPhoto($chatId, $photoUrl, $caption = '') {
+function sendTelegramMessage_final($chatId, $dealNumber, $imagePath) {
     $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
-    $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+    
+    $message = "Ваш чек";
+    $reportUrl = "https://testingnil6.ru:8000/$imagePath";
 
-    $postFields = [
-        'chat_id' => $chatId,
-        'photo' => $photoUrl, // Прямой URL изображения
-        'caption' => $caption,
-        'parse_mode' => 'HTML' // Поддержка форматирования подписи
-    ];
+    $replyMarkup = '{"inline_keyboard":[[{"text":"Чек","web_app":{"url":"' . $reportUrl . '"}}]]}';
+    
+    $url = "$apiUrl?chat_id=$chatId&text=" . urlencode($message) . "&parse_mode=HTML&reply_markup=" . urlencode($replyMarkup);
 
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $output = curl_exec($ch);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) {
+        echo 'Ошибка cURL: ' . curl_error($ch);
+    }
     curl_close($ch);
-
-    return $output;
+    return $response;
 }
 
 try {
@@ -134,10 +134,8 @@ try {
             $message1 = "Спасибо за участие! Приглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
             $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
 
+            sendTelegramMessage_final($chatId, $id, $imagePath);
             sendTelegramMessage($chatId, $message1);
-            if ($imagePath) {
-                sendTelegramPhoto($chatId, 'https://testingnil6.ru:8000/' . $imagePath);
-            }
             sendTelegramMessage($chatId, $message2);
         }
     }
