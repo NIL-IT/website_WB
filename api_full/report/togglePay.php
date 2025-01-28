@@ -17,7 +17,7 @@ try {
 
     // Обработка изображения
     if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
-        $imageDirectory = 'uploads/';
+        $imageDirectory = '../api/uploads/';
         if (!is_dir($imageDirectory)) {
             mkdir($imageDirectory, 0755, true);
         }
