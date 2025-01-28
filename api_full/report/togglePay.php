@@ -7,27 +7,33 @@ try {
     // Получение соединения с базой данных
     $pdo = getDbConnection();
 
+    // Получение данных из запроса
+    $data = json_decode(file_get_contents('php://input'), true);
+
     // Проверка наличия ID
-    if (!isset($_POST['id'])) {
+    if (!isset($data['id'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input']);
         exit;
     }
 
-    $id = $_POST['id'];
+    $id = $data['id'];
 
     // Обработка изображения
     $imagePath = null;
-    if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
+    if (isset($data['receipt'])) {
         $imageDirectory = '../api/uploads/';
         if (!is_dir($imageDirectory)) {
             mkdir($imageDirectory, 0755, true);
         }
 
-        $imageTmpPath = $_FILES['receipt']['tmp_name'];
-        $imageName = uniqid() . '.' . pathinfo($_FILES['receipt']['name'], PATHINFO_EXTENSION);
+        $imageData = $data['receipt'];
+        $imageName = uniqid() . '.png';
         $imagePath = $imageDirectory . $imageName;
 
-        if (!move_uploaded_file($imageTmpPath, $imagePath)) {
+        $imageData = str_replace('data:image/png;base64,', '', $imageData);
+        $imageData = base64_decode($imageData);
+
+        if (!file_put_contents($imagePath, $imageData)) {
             echo json_encode(['success' => false, 'error' => 'Failed to save image']);
             exit;
         }
