@@ -32,7 +32,7 @@ try {
     // Обновление значения verified и status в таблице steps
     $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
-    $newStatus = ($currentStatus == 1) ? 2 : $currentStatus;
+    $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
