@@ -1,77 +1,18 @@
-const applicationsData = [
-    {
-        cardholder: "Иванов Иван Иванович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 2 // In progress
-    },
-    {
-        cardholder: "Петров Петр Петрович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    },
-    {
-        cardholder: "Сидоров Сидор Сидорович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    },
-    {
-        cardholder: "Иванов Иван Иванович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 2 // In progress
-    },
-    {
-        cardholder: "Петров Петр Петрович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    },
-    {
-        cardholder: "Сидоров Сидор Сидорович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    },
-    {
-        cardholder: "Иванов Иван Иванович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 2 // In progress
-    },
-    {
-        cardholder: "Петров Петр Петрович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    },
-    {
-        cardholder: "Сидоров Сидор Сидорович",
-        bank: "Совкомбанк",
-        phone: "+79062828242",
-        cardNumber: "5536093455667888",
-        profit: "2149 руб.",
-        status: 1 // Waiting for payment
-    }
-];
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("fetchApplications.php")
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                applicationsData = data.data;
+                renderApplications();
+            } else {
+                console.error("Ошибка при получении данных:", data.error);
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при получении данных:", error);
+        });
+});
 
 function renderApplications() {
     const applicationsContainer = document.getElementById('applications');
@@ -154,20 +95,18 @@ function handleButtonClick(index) {
     renderApplications(); // Re-render the applications
 }
 
-
 function refreshApplications() {
-    // Mock new data fetching for the demo (in real scenario, fetch updated data from server)
-    applicationsData.push({
-        cardholder: "Новиков Николай Николаевич",
-        bank: "Новый банк",
-        phone: "+79012345678",
-        cardNumber: "1234567812345678",
-        profit: "3000 руб.",
-        status: 1 // Waiting for payment
-    });
-
-    renderApplications();
+    fetch("fetchApplications.php")
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                applicationsData = data.data;
+                renderApplications();
+            } else {
+                console.error("Ошибка при получении данных:", data.error);
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при получении данных:", error);
+        });
 }
-
-// Initial render
-renderApplications();
