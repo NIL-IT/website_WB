@@ -47,23 +47,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Установка текста и стилей для кнопки verifyBtn
         const verifyBtn = document.getElementById("verifyBtn");
-        if (data.data.verified) {
-          verifyBtn.textContent = "Отменить верификацию товара";
-          verifyBtn.classList.add("btn-green");
-        } else {
-          verifyBtn.textContent = "Подтвердить верификацию товара";
-          verifyBtn.classList.add("btn-gray");
-        }
+        verifyBtn.textContent = "Подтвердить верификацию и передать в оплату";
+        verifyBtn.classList.add("btn-gray");
 
         // Установка текста и стилей для кнопки payBtn
         const payBtn = document.getElementById("payBtn");
-        if (data.data.paid) {
-          payBtn.textContent = "Отменить оплату";
-          payBtn.classList.add("btn-green");
-        } else {
-          payBtn.textContent = "Подтвердить оплату";
-          payBtn.classList.add("btn-gray");
-        }
+        payBtn.textContent = "Подтвердить оплату";
+        payBtn.classList.add("btn-gray");
+        payBtn.disabled = true;
+
+        // Добавление поля для загрузки чека
+        const receiptUpload = document.createElement("input");
+        receiptUpload.type = "file";
+        receiptUpload.id = "receiptUpload";
+        receiptUpload.accept = "image/*";
+        document.getElementById("app").appendChild(receiptUpload);
+
+        // Блокировка кнопки payBtn до загрузки изображения
+        receiptUpload.addEventListener("change", function () {
+          if (receiptUpload.files.length > 0) {
+            payBtn.disabled = false;
+          } else {
+            payBtn.disabled = true;
+          }
+        });
 
         // Добавление логики для кнопки verifyBtn
         verifyBtn.addEventListener("click", function () {
@@ -81,12 +88,14 @@ document.addEventListener("DOMContentLoaded", function () {
               if (data.success) {
                 if (data.verified) {
                   verifyBtn.textContent = "Отменить верификацию товара";
-                  verifyBtn.classList.remove("btn-green");
-                  verifyBtn.classList.add("btn-gray");
-                } else {
-                  verifyBtn.textContent = "Подтвердить верификацию товара";
                   verifyBtn.classList.remove("btn-gray");
                   verifyBtn.classList.add("btn-green");
+                  payBtn.disabled = false;
+                } else {
+                  verifyBtn.textContent = "Подтвердить верификацию и передать в оплату";
+                  verifyBtn.classList.remove("btn-green");
+                  verifyBtn.classList.add("btn-gray");
+                  payBtn.disabled = true;
                 }
               } else {
                 console.error("Ошибка при выполнении запроса для verifyBtn:", data.error);
@@ -99,6 +108,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки payBtn
         payBtn.addEventListener("click", function () {
+          if (receiptUpload.files.length === 0) {
+            alert("Пожалуйста, загрузите изображение чека.");
+            return;
+          }
+
           fetch("togglePay.php", {
             method: "POST",
             headers: {
@@ -113,12 +127,12 @@ document.addEventListener("DOMContentLoaded", function () {
               if (data.success) {
                 if (data.paid) {
                   payBtn.textContent = "Отменить оплату";
-                  payBtn.classList.remove("btn-green");
-                  payBtn.classList.add("btn-gray");
-                } else {
-                  payBtn.textContent = "Подтвердить оплату";
                   payBtn.classList.remove("btn-gray");
                   payBtn.classList.add("btn-green");
+                } else {
+                  payBtn.textContent = "Подтвердить оплату";
+                  payBtn.classList.remove("btn-green");
+                  payBtn.classList.add("btn-gray");
                 }
               } else {
                 console.error("Ошибка при выполнении запроса для payBtn:", data.error);
