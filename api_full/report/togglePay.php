@@ -20,6 +20,29 @@ function sendTelegramMessage($chatId, $message) {
     return $output;
 }
 
+function sendTelegramPhoto($chatId, $photoUrl, $caption = '') {
+    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
+
+    $postFields = [
+        'chat_id' => $chatId,
+        'photo' => $photoUrl, // Прямой URL изображения
+        'caption' => $caption,
+        'parse_mode' => 'HTML' // Поддержка форматирования подписи
+    ];
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    return $output;
+}
+
 function sendTelegramMessage_final($chatId, $dealNumber, $imagePath) {
     $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
@@ -131,10 +154,10 @@ try {
 
         if ($user) {
             $chatId = $user['id_usertg'];
-            $message1 = "Спасибо за участие! Приглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
+            $message1 = "Спасибо за участие! Ваш чек по кнопке ниже. Приглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
             $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
 
-            sendTelegramMessage_final($chatId, $id, $imagePath);
+            sendTelegramPhoto($chatId, 'https://testingnil6.ru:8000/' . $imagePath, "Ваш чек");
             sendTelegramMessage($chatId, $message1);
             sendTelegramMessage($chatId, $message2);
         }
