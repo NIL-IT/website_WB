@@ -31,6 +31,7 @@ function renderApplications() {
                 <p><strong>Телефон:</strong> <span class="black">${app.phone}</span></p>
                 <p><strong>Номер карты:</strong> <span class="black">${app.cardNumber}</span></p>
                 <p><strong>Выгода:</strong> <span class="black">${app.profit}</span></p>
+                <p><strong>URL:</strong> <a href="${app.url}" target="_blank">${app.url}</a></p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
@@ -86,13 +87,29 @@ function handleButtonClick(index) {
     const app = applicationsData[index];
 
     if (app.status === 1) {
-        app.status = 2; // Change to "In Progress"
+        fetch("updateStatus.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: app.id
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                window.location.href = app.url;
+            } else {
+                console.error("Ошибка при обновлении статуса:", data.error);
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при обновлении статуса:", error);
+        });
     } else if (app.status === 2) {
-        app.status = 3; // Change to "Completed"
-        applicationsData.splice(index, 1); // Remove the application from the array
+        window.location.href = app.url;
     }
-
-    renderApplications(); // Re-render the applications
 }
 
 function refreshApplications() {
