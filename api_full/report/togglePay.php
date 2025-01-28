@@ -7,29 +7,57 @@ try {
     // Получение соединения с базой данных
     $pdo = getDbConnection();
 
-    // Получение данных из запроса
-    $data = json_decode(file_get_contents('php://input'), true);
-
-    // Проверка наличия необходимых данных
-    if (!isset($data['id'])) {
+    // Проверка наличия ID
+    if (!isset($_POST['id'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input']);
         exit;
     }
 
-    $id = $data['id'];
+    $id = $_POST['id'];
 
-    // Получение текущего значения paid из таблицы steps
-    $stmt = $pdo->prepare('SELECT paid FROM steps WHERE id = :id');
+    // Обработка изображения
+    if (isset($_FILES['receipt']) && $_FILES['receipt']['error'] === UPLOAD_ERR_OK) {
+        $imageDirectory = 'uploads/';
+        if (!is_dir($imageDirectory)) {
+            mkdir($imageDirectory, 0755, true);
+        }
+
+        $imageTmpPath = $_FILES['receipt']['tmp_name'];
+        $imageName = uniqid() . '.' . pathinfo($_FILES['receipt']['name'], PATHINFO_EXTENSION);
+        $imagePath = $imageDirectory . $imageName;
+
+        if (!move_uploaded_file($imageTmpPath, $imagePath)) {
+            echo json_encode(['success' => false, 'error' => 'Failed to save image']);
+            exit;
+        }
+    } else {
+        echo json_encode(['success' => false, 'error' => 'No image uploaded']);
+        exit;
+    }
+
+    // Получение текущего значения paid и status из таблицы steps
+    $stmt = $pdo->prepare('SELECT paid, status FROM steps WHERE id = :id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $currentPaid = $stmt->fetchColumn();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $currentPaid = $row['paid'];
+    $currentStatus = $row['status'];
+
+    // Проверка значения status
+    if ($currentStatus != 1 && $currentStatus != 2) {
+        echo json_encode(['success' => false, 'error' => 'Invalid status']);
+        exit;
+    }
 
     // Инвертирование значения paid
     $newPaid = !$currentPaid;
 
-    // Обновление значения paid в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid WHERE id = :id');
+    // Обновление значения paid и пути к изображению в таблице steps
+    $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
     $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
+    $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
+    $newStatus = 3;
+    $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 

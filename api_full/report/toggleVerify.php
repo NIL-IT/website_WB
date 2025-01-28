@@ -18,18 +18,22 @@ try {
 
     $id = $data['id'];
 
-    // Получение текущего значения verified из таблицы steps
-    $stmt = $pdo->prepare('SELECT verified FROM steps WHERE id = :id');
+    // Получение текущего значения verified и status из таблицы steps
+    $stmt = $pdo->prepare('SELECT verified, status FROM steps WHERE id = :id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
-    $currentVerified = $stmt->fetchColumn();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $currentVerified = $row['verified'];
+    $currentStatus = $row['status'];
 
     // Инвертирование значения verified
     $newVerified = !$currentVerified;
 
-    // Обновление значения verified в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified WHERE id = :id');
+    // Обновление значения verified и status в таблице steps
+    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
+    $newStatus = ($currentStatus == 1) ? 2 : $currentStatus;
+    $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
