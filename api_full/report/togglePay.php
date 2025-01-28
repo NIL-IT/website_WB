@@ -43,7 +43,7 @@ try {
     $currentReceiptImage = $row['receipt_image'];
 
     // Проверка значения status
-    if ($currentStatus != 1 && $currentStatus != 2 && $currentStatus != 2) {
+    if ($currentStatus != 1 && $currentStatus != 2 && $currentStatus != 3) {
         echo json_encode(['success' => false, 'error' => 'Invalid status']);
         exit;
     }
@@ -53,20 +53,18 @@ try {
 
     // Обновление значения paid и пути к изображению в таблице steps
     $newStatus = $newPaid ? 3 : 2;
-    $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, status = :status WHERE id = :id');
-    $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
-    $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
-    $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
-
     if ($newPaid) {
         $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
         $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
     } else {
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, status = :status WHERE id = :id');
         if ($currentReceiptImage && file_exists($currentReceiptImage)) {
             unlink($currentReceiptImage);
         }
     }
-
+    $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
+    $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
+    $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
     echo json_encode(['success' => true, 'paid' => $newPaid]);
