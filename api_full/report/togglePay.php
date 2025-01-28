@@ -43,7 +43,7 @@ try {
     $currentReceiptImage = $row['receipt_image'];
 
     // Проверка значения status
-    if ($currentStatus != 1 && $currentStatus != 2 && $currentStatus != 3) {
+    if ($currentStatus != 1 && $currentStatus != 2 && $currentStatus != 2) {
         echo json_encode(['success' => false, 'error' => 'Invalid status']);
         exit;
     }

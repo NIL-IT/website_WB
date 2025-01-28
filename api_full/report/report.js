@@ -120,16 +120,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки payBtn
         payBtn.addEventListener("click", function () {
-          if (!data.data.paid && receiptUpload.files.length === 0) {
+          if (receiptUpload.files.length === 0) {
             alert("Пожалуйста, загрузите изображение чека.");
             return;
           }
 
           const formData = new FormData();
           formData.append("id", id);
-          if (!data.data.paid) {
-            formData.append("receipt", receiptUpload.files[0]);
-          }
+          formData.append("receipt", receiptUpload.files[0]);
 
           payBtn.classList.add("loading");
 
