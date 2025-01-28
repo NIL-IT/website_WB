@@ -55,7 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
         payBtn.textContent = "Подтвердить оплату";
         payBtn.classList.add("btn-gray");
         payBtn.disabled = true;
-        payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
+        payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
+        payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
 
         // Добавление поля для загрузки чека
         const receiptUpload = document.createElement("input");
@@ -67,12 +68,14 @@ document.addEventListener("DOMContentLoaded", function () {
         // Блокировка кнопки payBtn до загрузки изображения
         receiptUpload.addEventListener("change", function () {
           if (receiptUpload.files.length > 0) {
-            payBtn.disabled = false;
-            payBtn.querySelector('.disabled-icon').remove();
+            payBtn.querySelector('.upload-lock').remove();
+            if (!payBtn.querySelector('.verify-lock')) {
+              payBtn.disabled = false;
+            }
           } else {
             payBtn.disabled = true;
-            if (!payBtn.querySelector('.disabled-icon')) {
-              payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
+            if (!payBtn.querySelector('.upload-lock')) {
+              payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
             }
           }
         });
@@ -95,15 +98,17 @@ document.addEventListener("DOMContentLoaded", function () {
                   verifyBtn.textContent = "Отменить верификацию товара";
                   verifyBtn.classList.remove("btn-gray");
                   verifyBtn.classList.add("btn-green");
-                  payBtn.disabled = false;
-                  payBtn.querySelector('.disabled-icon').remove();
+                  payBtn.querySelector('.verify-lock').remove();
+                  if (!payBtn.querySelector('.upload-lock')) {
+                    payBtn.disabled = false;
+                  }
                 } else {
                   verifyBtn.textContent = "Подтвердить верификацию и передать в оплату";
                   verifyBtn.classList.remove("btn-green");
                   verifyBtn.classList.add("btn-gray");
                   payBtn.disabled = true;
-                  if (!payBtn.querySelector('.disabled-icon')) {
-                    payBtn.innerHTML += ' <span class="disabled-icon">🔒</span>';
+                  if (!payBtn.querySelector('.verify-lock')) {
+                    payBtn.innerHTML += ' <span class="disabled-icon verify-lock">🔒</span>';
                   }
                 }
               } else {
