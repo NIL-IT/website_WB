@@ -1074,7 +1074,7 @@ const PurchaseStepsPage = ({
                   <p className="red-error">Заполните поле</p>
                 )}
               </div>
-              <div className="article-input" style={{ marginBottom: "25vh" }}>
+              <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                   Телефон для перевода
                 </p>
