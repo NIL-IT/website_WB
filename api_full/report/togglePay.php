@@ -39,15 +39,15 @@ function sendTelegramMessageWithReceipt($chatId, $imagePath) {
 
 
 function sendTelegramInvitationMessage($chatId) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $botToken = "7088761576:AAG2JhO4r1MTZ4A5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
-    $message = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
+    $message = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.\n\n[Закрытый клуб](https://t.me/wb_cashback_nsk_bot)";
 
     $postFields = [
         'chat_id' => $chatId,
         'text' => $message,
-        'parse_mode' => 'HTML',
+        'parse_mode' => 'Markdown',
     ];
 
     $ch = curl_init();
@@ -61,6 +61,7 @@ function sendTelegramInvitationMessage($chatId) {
 
     return $response;
 }
+
 
 try {
     // Получение соединения с базой данных
