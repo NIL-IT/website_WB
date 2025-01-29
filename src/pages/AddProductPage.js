@@ -630,7 +630,22 @@ const handleRemoveField = (event) => {
                   <input
                     type="number"
                     name={dateString}
-                    value={formData.availableDay[dateString]}
+                    value={formData.availableDay[dateString] === 0 ? "" : formData.availableDay[dateString]}
+                    onFocus={() => setFormData(prev => ({
+                      ...prev,
+                      availableDay: {
+                        ...prev.availableDay,
+                        [dateString]: ""
+                      }
+                    }))}
+                    onBlur={() => setFormData(prev => ({
+                      ...prev,
+                      availableDay: {
+                        ...prev.availableDay,
+                        [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
+                      }
+                    }))}
+
                     onChange={handleAvailableDayChange}
                   />
                 </label>
