@@ -31,6 +31,7 @@ function renderApplications() {
                 <p><strong>Телефон:</strong> <span class="black">${app.phone}</span></p>
                 <p><strong>Номер карты:</strong> <span class="black">${app.cardnumber}</span></p>
                 <p><strong>Выгода:</strong> <span class="black">${app.profit}</span></p>
+                <p><strong>Товар:</strong> <span class="black">${app.product_name}</span></p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
