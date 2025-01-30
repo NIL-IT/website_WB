@@ -566,7 +566,7 @@ const handleRemoveField = (event) => {
             <span style={{ color: "red" }}>* </span>Обязательное поле для
             заполнения
           </div>
-          <button type="submit" className="continue-button">
+          <button type="submit" className="continue-button" style={{ marginBottom: "200px" }}>
             Продолжить
           </button>
         </div>
