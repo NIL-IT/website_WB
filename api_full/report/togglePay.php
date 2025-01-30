@@ -4,11 +4,11 @@ include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
 
 function sendTelegramMessageWithReceipt($chatId, $imagePath) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $botToken = "7088761576:AAG2JhO4r1MTZ4A5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
     $reportUrl = "https://testingnil6.ru:8000/$imagePath";
-    $message = "Спасибо за участие! Ваш чек по кнопке ниже.\n\nПриглашай в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешли ему сообщение ниже:";
+    $message = "❤️ Спасибо за участие! Ваш чек по кнопке ниже";
 
     $replyMarkup = json_encode([
         'inline_keyboard' => [
@@ -25,40 +25,45 @@ function sendTelegramMessageWithReceipt($chatId, $imagePath) {
         'reply_markup' => $replyMarkup
     ];
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    return $response;
+    sendTelegramRequest($apiUrl, $postFields);
 }
 
-
 function sendTelegramInvitationMessage($chatId) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $botToken = "7088761576:AAG2JhO4r1MTZ4A5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
-    $message = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! Это моя персональная пригласительная ссылка для тебя. Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.\n\n[Закрытый клуб](https://t.me/wb_cashback_nsk_bot)";
-
-    $postFields = [
+    // Второе сообщение
+    $message1 = "🎉 Приглашайте в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешлите ему сообщение ниже:";
+    
+    $postFields1 = [
         'chat_id' => $chatId,
-        'text' => $message,
-        'parse_mode' => 'Markdown',
+        'text' => $message1,
+        'parse_mode' => 'HTML'
     ];
+    sendTelegramRequest($apiUrl, $postFields1);
 
+    // Третье сообщение
+    $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! 🎁\n\n"
+        . "🔵 Это моя персональная пригласительная ссылка для тебя.\n"
+        . "Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
+
+    $postFields2 = [
+        'chat_id' => $chatId,
+        'text' => $message2,
+        'parse_mode' => 'HTML'
+    ];
+    sendTelegramRequest($apiUrl, $postFields2);
+}
+
+function sendTelegramRequest($url, $fields) {
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $response = curl_exec($ch);
     curl_close($ch);
-
     return $response;
 }
 
