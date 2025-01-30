@@ -904,7 +904,6 @@ const PurchaseStepsPage = ({
               <p className="purchase-step-subtitle-12px-400" style={{ marginBottom: '10px'}}>
               INHOMEKA – мы предлагаем готовые дизайнерские решения для дома в виде комплектов, чтобы упростить выбор стильных товаров
               </p>
-              <div className="step-footer-container"></div>
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
@@ -997,7 +996,6 @@ const PurchaseStepsPage = ({
                 </svg>
                 Написать продавцу
               </button>
-              <div className="step-footer-container"></div>
               <button
                 className="purchase-step-button"
                 onClick={handleStepSubmit}
