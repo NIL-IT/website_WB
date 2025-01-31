@@ -37,7 +37,7 @@ try {
     $userCount = $stmt->fetch(PDO::FETCH_ASSOC)['user_count'];
 
     // Получение количества отзывов
-    $stmt = $pdo->query('SELECT COUNT(*) AS review_count FROM steps WHERE step = "завершено"');
+    $stmt = $pdo->query('SELECT COUNT(*) AS review_count FROM steps WHERE step = "Завершено"');
     $reviewCount = $stmt->fetch(PDO::FETCH_ASSOC)['review_count'];
 
     // Получение суммы выплаченных средств
