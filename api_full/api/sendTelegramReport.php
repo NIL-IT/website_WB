@@ -2,7 +2,7 @@
 require_once 'db.php'; // Подключение к базе данных
 
 function sendTelegramMessage($chatId, $message) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4A5YpmRhzYs8OaGz1KV90";
+    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
     $postFields = [
