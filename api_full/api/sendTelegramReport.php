@@ -40,19 +40,19 @@ try {
     $stmt = $pdo->query("SELECT COUNT(*) AS review_count FROM steps WHERE step = 'Завершено'");
     $reviewCount = $stmt->fetch(PDO::FETCH_ASSOC)['review_count'];
 
-    // Получение суммы выплаченных средств
-    $stmt = $pdo->query('SELECT SUM(amount) AS paid_amount FROM steps WHERE paid = true');
-    $paidAmount = $stmt->fetch(PDO::FETCH_ASSOC)['paid_amount'];
+    // Получение количества выплаченных строк
+    $stmt = $pdo->query("SELECT COUNT(*) AS paid_count FROM steps WHERE paid = true");
+    $paidCount = $stmt->fetch(PDO::FETCH_ASSOC)['paid_count'];
 
-    // Получение суммы невыплаченных средств
-    $stmt = $pdo->query('SELECT SUM(amount) AS unpaid_amount FROM steps WHERE verified = true');
-    $unpaidAmount = $stmt->fetch(PDO::FETCH_ASSOC)['unpaid_amount'];
+    // Получение количества невыплаченных строк
+    $stmt = $pdo->query("SELECT COUNT(*) AS unpaid_count FROM steps WHERE verified = true");
+    $unpaidCount = $stmt->fetch(PDO::FETCH_ASSOC)['unpaid_count'];
 
     // Формирование сообщения
     $message = "Пользователи: $userCount\n";
     $message .= "Отзывов: $reviewCount\n";
-    $message .= "Выплачено: $paidAmount\n";
-    $message .= "Не выплачено: $unpaidAmount\n";
+    $message .= "Выплаченные заказы: $paidCount\n";
+    $message .= "Невыплаченные заказы: $unpaidCount\n";
 
     // Отправка сообщения в Telegram
     sendTelegramMessage($chatId, $message);
@@ -64,4 +64,5 @@ try {
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
 }
+
 ?>
