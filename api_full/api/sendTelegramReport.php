@@ -2,7 +2,7 @@
 require_once 'db.php'; // Подключение к базе данных
 
 function sendTelegramMessage($chatId, $message) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4A5YpmRhzYs8OaGz1KV90";
+    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
     $postFields = [
@@ -37,22 +37,22 @@ try {
     $userCount = $stmt->fetch(PDO::FETCH_ASSOC)['user_count'];
 
     // Получение количества отзывов
-    $stmt = $pdo->query('SELECT COUNT(*) AS review_count FROM steps WHERE step = "Завершено"');
+    $stmt = $pdo->query("SELECT COUNT(*) AS review_count FROM steps WHERE step = 'Завершено'");
     $reviewCount = $stmt->fetch(PDO::FETCH_ASSOC)['review_count'];
 
-    // Получение суммы выплаченных средств
-    $stmt = $pdo->query('SELECT SUM(amount) AS paid_amount FROM steps WHERE paid = true');
-    $paidAmount = $stmt->fetch(PDO::FETCH_ASSOC)['paid_amount'];
+    // Получение количества выплаченных строк
+    $stmt = $pdo->query("SELECT COUNT(*) AS paid_count FROM steps WHERE paid = true");
+    $paidCount = $stmt->fetch(PDO::FETCH_ASSOC)['paid_count'];
 
-    // Получение суммы невыплаченных средств
-    $stmt = $pdo->query('SELECT SUM(amount) AS unpaid_amount FROM steps WHERE verified = true AND paid = false ');
-    $unpaidAmount = $stmt->fetch(PDO::FETCH_ASSOC)['unpaid_amount'];
+    // Получение количества невыплаченных строк
+    $stmt = $pdo->query("SELECT COUNT(*) AS unpaid_count FROM steps WHERE verified = true AND paid = false"); 
+    $unpaidCount = $stmt->fetch(PDO::FETCH_ASSOC)['unpaid_count'];
 
     // Формирование сообщения
     $message = "Пользователи: $userCount\n";
     $message .= "Отзывов: $reviewCount\n";
-    $message .= "Выплачено: $paidAmount\n";
-    $message .= "Не выплачено: $unpaidAmount\n";
+    $message .= "Выплаченные заказы: $paidCount\n";
+    $message .= "Невыплаченные заказы: $unpaidCount\n";
 
     // Отправка сообщения в Telegram
     sendTelegramMessage($chatId, $message);
@@ -64,4 +64,5 @@ try {
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
 }
+
 ?>
