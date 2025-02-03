@@ -47,6 +47,13 @@
     body {
       background-color: white;
     }
+    .disabled-icon {
+      margin-left: 5px;
+    }
+    .loading {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
   </style>
 </head>
 <body>
@@ -57,7 +64,7 @@
     <div>
       <button id="verifyBtn" class="btn"></button><br><br>
       <button id="payBtn" class="btn"></button><br><br>
-      <input type="file" id="receiptUpload" accept="image/*">
+      <input type="file" id="receiptUpload" accept="image/png, image/jpeg">
     </div>
     <div class="purchase-step-content" style="padding-bottom: 8vh;">
       <div id="user-info"></div>
