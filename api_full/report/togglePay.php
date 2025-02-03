@@ -82,6 +82,7 @@ try {
     }
 
     $id = $data['id'];
+    $comment = isset($data['comment']) ? $data['comment'] : null;
 
     // Обработка изображения
     $imagePath = null;
@@ -125,13 +126,13 @@ try {
     // Инвертирование значения paid
     $newPaid = !$currentPaid;
 
-    // Обновление значения paid и пути к изображению в таблице steps
+    // Обновление значения paid, пути к изображению и комментария в таблице steps
     $newStatus = $newPaid ? 3 : 2;
     if ($newPaid) {
-        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status, comment = :comment WHERE id = :id');
         $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
     } else {
-        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = NULL, status = :status WHERE id = :id');
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = NULL, status = :status, comment = :comment WHERE id = :id');
         if ($currentReceiptImage && file_exists('../api/' . $currentReceiptImage)) {
             unlink('../api/' . $currentReceiptImage);
         }
@@ -144,6 +145,7 @@ try {
     }
     $updateStmt->bindParam(':paid', $newPaid, PDO::PARAM_BOOL);
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
+    $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 

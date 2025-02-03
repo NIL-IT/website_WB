@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="purchase-step-text">Номер: ${data.data.phone}</p>
           <p class="purchase-step-text">Номер карты: ${data.data.cardnumber}</p>
           <p class="purchase-step-text">Выгода: ${data.benefit} руб.</p>
+          <p class="purchase-step-text">Комментарий: ${data.data.comment || 'Комментарий отсутствует'}</p>
         `;
         
         const screenshotsDiv = document.getElementById("screenshots");
@@ -77,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Получение поля для загрузки чека из HTML
         const receiptUpload = document.getElementById("receiptUpload");
+        const commentField = document.getElementById("comment");
 
         // Блокировка кнопки payBtn до загрузки изображения
         receiptUpload.addEventListener("change", function () {
@@ -177,7 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify({
                   id: id,
-                  receipt: base64Image
+                  receipt: base64Image,
+                  comment: commentField.value
                 }),
               })
                 .then((response) => response.json())

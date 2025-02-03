@@ -58,11 +58,12 @@ try {
                 $step['receipt_image'] = 'https://testingnil6.ru:8000/' . $step['receipt_image'];
             }
 
-            // Добавление значения выгоды в ответ
+            // Добавление значения выгоды и комментария в ответ
             $response = [
                 'success' => true,
                 'data' => $step,
-                'benefit' => $benefit
+                'benefit' => $benefit,
+                'comment' => $step['comment']
             ];
 
             echo json_encode($response);
