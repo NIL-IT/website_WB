@@ -150,12 +150,26 @@ document.addEventListener("DOMContentLoaded", function () {
           }
 
           payBtn.classList.add("loading");
+          const file = receiptUpload.files[0];
           const reader = new FileReader();
+        
           reader.onload = function (event) {
-            const base64Image = event.target.result;
-
             const img = new Image();
             img.onload = function () {
+              // Создаем canvas для конвертации в PNG
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+        
+              // Устанавливаем размеры canvas равными размеру изображения
+              canvas.width = img.width;
+              canvas.height = img.height;
+        
+              // Рисуем изображение на canvas
+              ctx.drawImage(img, 0, 0);
+        
+              // Получаем изображение в формате PNG
+              const base64Image = canvas.toDataURL("image/png");
+        
               fetch("togglePay.php", {
                 method: "POST",
                 headers: {
@@ -188,9 +202,10 @@ document.addEventListener("DOMContentLoaded", function () {
                   console.error("Ошибка при выполнении запроса для payBtn:", error);
                 });
             };
-            img.src = base64Image;
+            img.src = event.target.result;
           };
-          reader.readAsDataURL(receiptUpload.files[0]);
+        
+          reader.readAsDataURL(file);
         });
 
       } else {
