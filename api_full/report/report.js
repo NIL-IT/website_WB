@@ -81,15 +81,23 @@ document.addEventListener("DOMContentLoaded", function () {
         // Блокировка кнопки payBtn до загрузки изображения
         receiptUpload.addEventListener("change", function () {
           const file = receiptUpload.files[0];
-          if (file && (file.type === "image/png" || file.type === "image/jpeg")) {
-            payBtn.querySelector('.upload-lock').remove();
-            if (!payBtn.querySelector('.verify-lock')) {
-              payBtn.disabled = false;
-            }
-          } else {
-            payBtn.disabled = true;
-            if (!payBtn.querySelector('.upload-lock')) {
-              payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
+        
+          if (file) {
+            const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
+            console.log("Тип файла:", file.type, "Имя файла:", file.name);
+        
+            if (allowedTypes.includes(file.type)) {
+              payBtn.querySelector('.upload-lock')?.remove();
+              if (!payBtn.querySelector('.verify-lock')) {
+                payBtn.disabled = false;
+              }
+            } else {
+              payBtn.disabled = true;
+              if (!payBtn.querySelector('.upload-lock')) {
+                payBtn.innerHTML += ' <span class="disabled-icon upload-lock">🔒</span>';
+              }
+              alert("Можно загружать только изображения форматов JPG и PNG.");
+              receiptUpload.value = ""; // Очистка поля загрузки
             }
           }
         });
