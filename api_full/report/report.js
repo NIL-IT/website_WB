@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Пожалуйста, загрузите изображение чека.");
             return;
           }
-
+        
           payBtn.classList.add("loading");
           const file = receiptUpload.files[0];
           const reader = new FileReader();
@@ -172,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
               // Получаем изображение в формате PNG
               const base64Image = canvas.toDataURL("image/png");
         
+              // Отправляем изображение на сервер
               fetch("togglePay.php", {
                 method: "POST",
                 headers: {
@@ -208,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
             img.src = event.target.result;
           };
         
-          reader.readAsDataURL(file);
+          reader.readAsDataURL(file); // Чтение файла как Data URL
         });
 
       } else {
