@@ -57,7 +57,7 @@ try {
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
         // Формирование URL отчёта
-        $telegramUrl = "https://testingnil6.ru:81/?id=" . $row['step_id'];
+        $telegramUrl = "https://inhomeka.online:81/?id=" . $row['step_id'];
         // Проверка expire и запись "да" или "нет"
         $inIssue = $row['expire'] ? 'Нет' : 'Да';
     
@@ -78,20 +78,20 @@ try {
             (string)$row['article'],
             (string)$profit, // Выгода покупателя
             (string)$inIssue, // Новое поле "Товар в выдаче?"
-            (string)'https://testingnil6.ru:8000/' . $row['product_image_path'],
+            (string)'https://inhomeka.online:8000/' . $row['product_image_path'],
             (string)$row['step'],
             (string)$updatedAt,
             (string)$telegramUrl,
             (string)$verifiedStatus,
             (string)$paidStatus,
-            (string)(!empty($row['image1']) ? 'https://testingnil6.ru:8000/' . $row['image1'] : 'Шаг не пройден'), // Скрин товара в конкурентной выдаче
-            (string)(!empty($row['image2']) ? 'https://testingnil6.ru:8000/' . $row['image2'] : 'Шаг не пройден'), // Скрин корзины
-            (string)(!empty($row['image3']) ? 'https://testingnil6.ru:8000/' . $row['image3'] : 'Шаг не пройден'), // Скрин подписки
-            (string)(!empty($row['image4']) ? 'https://testingnil6.ru:8000/' . $row['image4'] : 'Шаг не пройден'), // Скрин заказа
-            (string)(!empty($row['image5']) ? 'https://testingnil6.ru:8000/' . $row['image5'] : 'Шаг не пройден'), // Скриншот о доставке
-            (string)(!empty($row['image6']) ? 'https://testingnil6.ru:8000/' . $row['image6'] : 'Шаг не пройден'), // Скриншот отзыва
-            (string)(!empty($row['image7']) ? 'https://testingnil6.ru:8000/' . $row['image7'] : 'Шаг не пройден'),  // Фотография с разрезанным штрих-кодом на фоне товара
-            (string)(!empty($row['receipt_image']) ? 'https://testingnil6.ru:8000/' . $row['receipt_image'] : 'Чек не приложен')  // Чек
+            (string)(!empty($row['image1']) ? 'https://inhomeka.online:8000/' . $row['image1'] : 'Шаг не пройден'), // Скрин товара в конкурентной выдаче
+            (string)(!empty($row['image2']) ? 'https://inhomeka.online:8000/' . $row['image2'] : 'Шаг не пройден'), // Скрин корзины
+            (string)(!empty($row['image3']) ? 'https://inhomeka.online:8000/' . $row['image3'] : 'Шаг не пройден'), // Скрин подписки
+            (string)(!empty($row['image4']) ? 'https://inhomeka.online:8000/' . $row['image4'] : 'Шаг не пройден'), // Скрин заказа
+            (string)(!empty($row['image5']) ? 'https://inhomeka.online:8000/' . $row['image5'] : 'Шаг не пройден'), // Скриншот о доставке
+            (string)(!empty($row['image6']) ? 'https://inhomeka.online:8000/' . $row['image6'] : 'Шаг не пройден'), // Скриншот отзыва
+            (string)(!empty($row['image7']) ? 'https://inhomeka.online:8000/' . $row['image7'] : 'Шаг не пройден'),  // Фотография с разрезанным штрих-кодом на фоне товара
+            (string)(!empty($row['receipt_image']) ? 'https://inhomeka.online:8000/' . $row['receipt_image'] : 'Чек не приложен')  // Чек
         ];
     }
 

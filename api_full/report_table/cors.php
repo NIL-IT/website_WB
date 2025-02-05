@@ -4,7 +4,7 @@ $origin = $_SERVER['HTTP_ORIGIN'];
 
 // Установить разрешенный домен в зависимости от значения заголовка Origin
 
-    $allowed_origin = "https://nilurl.ru";
+    $allowed_origin = "https://inhomeka.online";
 
 
 header("Access-Control-Allow-Origin: $allowed_origin"); // Разрешить запросы с фронтенд сервера

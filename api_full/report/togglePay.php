@@ -4,10 +4,10 @@ include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
 
 function sendTelegramMessageWithReceipt($chatId, $imagePath) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
-    $reportUrl = "https://testingnil6.ru:8000/$imagePath";
+    $reportUrl = "https://inhomeka.online:8000/$imagePath";
     $message = "❤️ Спасибо за участие! Ваш чек по кнопке ниже";
 
     $replyMarkup = json_encode([
@@ -29,7 +29,7 @@ function sendTelegramMessageWithReceipt($chatId, $imagePath) {
 }
 
 function sendTelegramInvitationMessage($chatId) {
-    $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
     // Второе сообщение

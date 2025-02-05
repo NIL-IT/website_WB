@@ -6,7 +6,7 @@ require_once 'db.php';
 try {
     function sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle) {
         //  $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-        $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+        $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
         
         $message = "<b>Заказ оформлен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
@@ -25,13 +25,13 @@ try {
     }
     function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle) {
       //  $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-        $botToken = "7088761576:AAG2JhO4r1MTZ4aC5YpmRhzYs8OaGz1KV90";
+        $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
      
         
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
         
         $message = "<b>Заказ получен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
-        $reportUrl = "https://testingnil6.ru:81/?id=$dealNumber"; 
+        $reportUrl = "https://inhomeka.online:81/?id=$dealNumber"; 
 
         $replyMarkup = '{"inline_keyboard":[[{"text":"Отчет","web_app":{"url":"' . $reportUrl . '"}}]]}';
         

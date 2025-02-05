@@ -49,13 +49,13 @@ try {
             // Добавление префикса к URL изображениям
             for ($i = 1; $i <= 7; $i++) {
                 if (!empty($step["image$i"])) {
-                    $step["image$i"] = 'https://testingnil6.ru:8000/' . $step["image$i"];
+                    $step["image$i"] = 'https://inhomeka.online:8000/' . $step["image$i"];
                 }
             }
 
             // Добавление префикса к URL для receipt_image
             if (!empty($step['receipt_image'])) {
-                $step['receipt_image'] = 'https://testingnil6.ru:8000/' . $step['receipt_image'];
+                $step['receipt_image'] = 'https://inhomeka.online:8000/' . $step['receipt_image'];
             }
 
             // Добавление значения выгоды и комментария в ответ

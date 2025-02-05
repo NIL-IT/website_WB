@@ -22,7 +22,7 @@ try {
 
         if ($product) {
             $profit = $product['market_price'] - $product['your_price'];
-            $url = 'https://testingnil6.ru:81/?id=' . $app['id'];
+            $url = 'https://inhomeka.online:81/?id=' . $app['id'];
 
             $result[] = [
                 'id' => $app['id'],

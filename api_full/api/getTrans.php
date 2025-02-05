@@ -49,7 +49,7 @@ try {
                 // Добавление префикса к URL изображениям
                 for ($i = 1; $i <= 7; $i++) {
                     if (!empty($step["image$i"])) {
-                        $step["image$i"] = 'https://testingnil6.ru:8000/' . $step["image$i"];
+                        $step["image$i"] = 'https://inhomeka.online:8000/' . $step["image$i"];
                     }
                 }
 
