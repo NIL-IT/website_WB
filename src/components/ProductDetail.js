@@ -38,7 +38,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://testingnil6.ru:8000/createStep.php`, {
+      const response = await fetch(`https://inhomeka.online:8000/createStep.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://testingnil6.ru:8000/deleteProduct.php`, {
+      const response = await fetch(`https://inhomeka.online:8000/deleteProduct.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
 
   const handleConfirmClick = async () => {
     try {
-      const response = await fetch(`https://testingnil6.ru:8000/confirmProduct.php`, {
+      const response = await fetch(`https://inhomeka.online:8000/confirmProduct.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

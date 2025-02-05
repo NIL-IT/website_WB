@@ -23,7 +23,7 @@ const ProfilePage = ({userInfo}) => {
 
   const handleSaveClick = () => {
     // Отправка данных на сервер
-    fetch('https://testingnil6.ru:8000/update-username.php', {
+    fetch('https://inhomeka.online:8000/update-username.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

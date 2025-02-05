@@ -10,7 +10,7 @@ const PurchaseStepsPage = ({
   fetchProducts,
 }) => {
   const { id } = useParams();
-  const baseURL = "https://testingnil6.ru:8000/";
+  const baseURL = "https://inhomeka.online:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
   const [showPopup, setShowPopup] = useState(false);
 
