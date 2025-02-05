@@ -566,7 +566,7 @@ const handleRemoveField = (event) => {
             <span style={{ color: "red" }}>* </span>Обязательное поле для
             заполнения
           </div>
-          <button type="submit" className="continue-button">
+          <button type="submit" className="continue-button" style={{ marginBottom: "200px" }}>
             Продолжить
           </button>
         </div>
@@ -630,7 +630,22 @@ const handleRemoveField = (event) => {
                   <input
                     type="number"
                     name={dateString}
-                    value={formData.availableDay[dateString]}
+                    value={formData.availableDay[dateString] === 0 ? "" : formData.availableDay[dateString]}
+                    onFocus={() => setFormData(prev => ({
+                      ...prev,
+                      availableDay: {
+                        ...prev.availableDay,
+                        [dateString]: ""
+                      }
+                    }))}
+                    onBlur={() => setFormData(prev => ({
+                      ...prev,
+                      availableDay: {
+                        ...prev.availableDay,
+                        [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
+                      }
+                    }))}
+
                     onChange={handleAvailableDayChange}
                   />
                 </label>

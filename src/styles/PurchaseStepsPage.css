@@ -30,9 +30,9 @@
 
 .social-media-buttons {
   display: flex;
+  gap: 30px;
   justify-content: center;
   width: 100%;
-  height: 35px;
   padding: 10px;
   background-color: rgba(255, 255, 255, 1);
   border-radius: 8px 8px 0 0;
@@ -98,15 +98,17 @@
 
 .step-footer-container {
   position: fixed;
-  bottom: 12vh;
+  bottom: 10vh;
   left: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 20px;
+  padding: 10px 20px;
   box-sizing: border-box;
   gap: 10px;
+  background-color: #fff;
+  border-top: 1px solid;
 }
 
 .purchase-step-footer {

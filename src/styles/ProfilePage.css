@@ -1,10 +1,10 @@
 .profile-page {
   display: flex;
   flex-direction: column;
-  height: 92vh;
+  height: 90vh;
   width: 100%;
-  min-height: 94vh;
   background-color: #000000;
+  overflow-y: hidden;
 }
 
 .profile-header {
@@ -118,21 +118,4 @@
   font-family: "Helvetica Neue Cyr";
   font-size: 18px;
   font-weight: 400;
-}
-
-/* Media Queries */
-@media (min-width: 600px) {
-  .profile-buttons button {
-    max-width: 160px;
-  }
-
-  .profile-page {
-    height: 91vh;
-  }
-}
-
-@media (min-width: 768px) {
-  .profile-page {
-    height: 90vh;
-  }
 }
