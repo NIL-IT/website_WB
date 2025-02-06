@@ -3,6 +3,33 @@ header('Content-Type: application/json');
 include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
 
+function sendTelegramMessageWithComment($chatId, $comment) {
+    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+
+    $message = "Комментарий: $comment";
+
+    $postFields = [
+        'chat_id' => $chatId,
+        'text' => $message,
+        'parse_mode' => 'HTML'
+    ];
+
+    sendTelegramRequest($apiUrl, $postFields);
+}
+
+function sendTelegramRequest($url, $fields) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
+}
+
 try {
     // Получение соединения с базой данных
     $pdo = getDbConnection();
@@ -17,25 +44,33 @@ try {
     }
 
     $id = $data['id'];
+    $comment = isset($data['comment']) ? $data['comment'] : null;
 
     // Получение текущего значения verified и status из таблицы steps
-    $stmt = $pdo->prepare('SELECT verified, status FROM steps WHERE id = :id');
+    $stmt = $pdo->prepare('SELECT verified, status, id_usertg FROM steps WHERE id = :id');
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $currentVerified = $row['verified'];
     $currentStatus = $row['status'];
+    $chatId = $row['id_usertg'];
 
     // Инвертирование значения verified
     $newVerified = !$currentVerified;
 
-    // Обновление значения verified и status в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status WHERE id = :id');
+    // Обновление значения verified, status и comment в таблице steps
+    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
     $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
+    $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
+
+    // Отправка комментария пользователю в бота
+    if ($comment && $chatId) {
+        sendTelegramMessageWithComment($chatId, $comment);
+    }
 
     echo json_encode(['success' => true, 'verified' => $newVerified]);
 

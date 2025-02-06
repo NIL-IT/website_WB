@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Получение поля для загрузки чека из HTML
         const receiptUpload = document.getElementById("receiptUpload");
         const commentField = document.getElementById("comment");
+        const saveCommentBtn = document.getElementById("saveCommentBtn");
 
         // Блокировка кнопки payBtn до загрузки изображения
         receiptUpload.addEventListener("change", function () {
@@ -104,6 +105,31 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
 
+        // Добавление логики для кнопки saveCommentBtn
+        saveCommentBtn.addEventListener("click", function () {
+          fetch("saveComment.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: id,
+              comment: commentField.value
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Комментарий сохранен");
+              } else {
+                console.error("Ошибка при сохранении комментария:", data.error);
+              }
+            })
+            .catch((error) => {
+              console.error("Ошибка при сохранении комментария:", error);
+            });
+        });
+
         // Добавление логики для кнопки verifyBtn
         verifyBtn.addEventListener("click", function () {
           fetch("toggleVerify.php", {
@@ -112,7 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              id: id
+              id: id,
+              comment: commentField.value
             }),
           })
             .then((response) => response.json())
@@ -180,8 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify({
                   id: id,
-                  receipt: base64Image,
-                  comment: commentField.value
+                  receipt: base64Image
                 }),
               })
                 .then((response) => response.json())
