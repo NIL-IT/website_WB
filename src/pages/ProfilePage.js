@@ -157,7 +157,7 @@ const ProfilePage = ({userInfo}) => {
             />
           </svg>
         </div>
-        {userInfo && userInfo.status === 'admin' && (
+        {/* {userInfo && userInfo.status === 'admin' && ( */}
           <div className="profile-item" onClick={() => navigate('/add-product')}>
           <div className="item-text">
             <span className="item-title">Разместить товар</span>
@@ -176,7 +176,7 @@ const ProfilePage = ({userInfo}) => {
             />
           </svg>
         </div>
-        )}
+       {/* )} */}
         <div className="profile-item" onClick={() => navigate('/catalog')}>
           <div className="item-text">
             <span className="item-title">Каталог</span>
