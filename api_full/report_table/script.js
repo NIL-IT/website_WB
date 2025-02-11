@@ -155,16 +155,47 @@ function refreshApplications() {
 // New functions for sorting
 function sortByStatus() {
     renderApplications('status');
+    setActiveButton('status');
 }
 
 function sortByCardholder(order) {
     renderApplications('cardholder', order);
+    setActiveButton('cardholder', order);
 }
 
 function sortByProfit(order) {
     renderApplications('profit', order);
+    setActiveButton('profit', order);
 }
 
 function sortByProductName(order) {
     renderApplications('product_name', order);
+    setActiveButton('product_name', order);
+}
+
+function setActiveButton(sortBy, order = 'desc') {
+    const buttons = document.querySelectorAll('.sort-buttons button');
+    buttons.forEach(button => button.classList.remove('active'));
+
+    let activeButton;
+    switch (sortBy) {
+        case 'status':
+            activeButton = buttons[1];
+            break;
+        case 'cardholder':
+            activeButton = order === 'asc' ? buttons[2] : buttons[3];
+            break;
+        case 'profit':
+            activeButton = order === 'asc' ? buttons[4] : buttons[5];
+            break;
+        case 'product_name':
+            activeButton = order === 'asc' ? buttons[6] : buttons[7];
+            break;
+        default:
+            activeButton = buttons[0];
+    }
+
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
 }

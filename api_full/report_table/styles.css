@@ -90,12 +90,12 @@ body {
 
 .button {
     font-family: 'Inter', sans-serif;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
     color: #fff;
-    padding: 6px 10px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -152,7 +152,7 @@ body {
 }
 
 .sort-buttons button:nth-child(1) {
-    background-color: #007BFF;
+    background-color: #6C757D;
 }
 
 .sort-buttons button:nth-child(2),
@@ -171,9 +171,13 @@ body {
 }
 
 .sort-buttons button:nth-child(8) {
-    background-color: #6C757D;
+    background-color: #007BFF;
 }
-
 .sort-buttons button:hover {
     opacity: 0.9;
+}
+
+/* Active button style */
+.sort-buttons button.active {
+    border: 2px solid #000;
 }
