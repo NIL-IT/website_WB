@@ -243,14 +243,10 @@ function showManagerSuggestions(input) {
     const suggestionsContainer = document.getElementById('manager-suggestions');
     suggestionsContainer.innerHTML = '';
 
-    if (input.length === 0) {
-        return;
-    }
-
     const suggestions = originalData
         .map(app => app.tg_nick_manager)
         .filter((value, index, self) => self.indexOf(value) === index) // Уникальные значения
-        .filter(nick => nick.toLowerCase().includes(input))
+        .filter(nick => input.length === 0 || nick.toLowerCase().includes(input))
         .slice(0, 5); // Ограничиваем количество предложений
 
     suggestions.forEach(suggestion => {
