@@ -58,9 +58,9 @@ try {
 
         $insertStmt = $conn->prepare("
             INSERT INTO products (
-                brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords
+                brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager
             ) VALUES (
-                :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords
+                :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager
             )
         ");
 
@@ -83,6 +83,7 @@ try {
         $insertStmt->bindParam(':isConfirmed', $isConfirmed, PDO::PARAM_BOOL);
         $insertStmt->bindParam(':expire', $isConfirmed, PDO::PARAM_BOOL);
         $insertStmt->bindParam(':keywords', $keywords, PDO::PARAM_STR); // Привязываем keywords как обычную строку
+        $insertStmt->bindParam(':tg_nick_manager', $data['tg_nick_manager']);
 
         $insertStmt->execute();
 

@@ -15,7 +15,7 @@ try {
     $result = [];
     foreach ($applications as $app) {
         // Получение market_price, your_price и name из таблицы products
-        $stmt = $pdo->prepare('SELECT market_price, your_price, name FROM products WHERE id = :id_product');
+        $stmt = $pdo->prepare('SELECT market_price, your_price, name, tg_nick_manager FROM products WHERE id = :id_product');
         $stmt->bindParam(':id_product', $app['id_product'], PDO::PARAM_INT);
         $stmt->execute();
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -33,7 +33,8 @@ try {
                 'profit' => $profit . ' руб.',
                 'status' => $app['status'],
                 'url' => $url,
-                'product_name' => $product['name']
+                'product_name' => $product['name'],
+                'tg_nick_manager' => $product['tg_nick_manager']
             ];
         }
     }
