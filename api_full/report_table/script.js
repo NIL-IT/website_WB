@@ -22,6 +22,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+document.addEventListener('click', function (event) {
+    const suggestionsContainer = document.getElementById('manager-suggestions');
+    if (!document.getElementById('manager-filter').contains(event.target)) {
+        suggestionsContainer.style.display = 'none';
+    }
+});
+
 function toggleSortMenu() {
     const sortMenu = document.getElementById('sort-menu');
     sortMenu.style.display = sortMenu.style.display === 'none' ? 'block' : 'none';
@@ -252,8 +259,11 @@ function showManagerSuggestions(input) {
         suggestionDiv.innerText = suggestion;
         suggestionDiv.onclick = () => {
             document.getElementById('manager-filter').value = suggestion;
+            suggestionsContainer.style.display = 'none'; // Скрываем предложения
             filterByManager();
         };
         suggestionsContainer.appendChild(suggestionDiv);
     });
+
+    suggestionsContainer.style.display = 'block'; // Показываем предложения
 }
