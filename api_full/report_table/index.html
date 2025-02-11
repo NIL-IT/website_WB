@@ -9,20 +9,29 @@
 <body>
     <div class="container">
         <div class="sort-buttons">
-            <button onclick="sortByStatus()">Сортировать по статусу</button>
-            <button onclick="sortByCardholder('asc')">Сортировать по ФИО (А-Я)</button>
-            <button onclick="sortByCardholder('desc')">Сортировать по ФИО (Я-А)</button>
-            <button onclick="sortByProfit('asc')">Сортировать по выгоде (возрастание)</button>
-            <button onclick="sortByProfit('desc')">Сортировать по выгоде (убывание)</button>
-            <button onclick="sortByProductName('asc')">Сортировать по товару (возрастание)</button>
-            <button onclick="sortByProductName('desc')">Сортировать по товару (убывание)</button>
-            <button onclick="renderApplications()">По умолчанию</button>
+            <button onclick="toggleSortMenu()">Сортировать</button>
+            <div id="sort-menu" class="sort-menu" style="display: none;">
+                <button onclick="sortByStatus()">По статусу</button>
+                <button onclick="sortByCardholder('asc')">По ФИО (А-Я)</button>
+                <button onclick="sortByCardholder('desc')">По ФИО (Я-А)</button>
+                <button onclick="sortByProfit('asc')">По выгоде (возрастание)</button>
+                <button onclick="sortByProfit('desc')">По выгоде (убывание)</button>
+                <button onclick="sortByProductName('asc')">По товару (возрастание)</button>
+                <button onclick="sortByProductName('desc')">По товару (убывание)</button>
+                <button onclick="renderApplications()">По умолчанию</button>
+            </div>
         </div>
         <div id="applications"></div>
         <div class="footer">
-        <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
+            <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
         </div>
     </div>
     <script src="script.js"></script>
+    <script>
+        function toggleSortMenu() {
+            const sortMenu = document.getElementById('sort-menu');
+            sortMenu.style.display = sortMenu.style.display === 'none' ? 'block' : 'none';
+        }
+    </script>
 </body>
 </html>

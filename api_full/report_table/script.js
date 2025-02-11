@@ -36,6 +36,15 @@ function renderApplications(sortBy = 'status', order = 'desc') {
             sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
     }
 
+    // Ensure status 2 is above status 1
+    sortedApplications = sortedApplications.sort((a, b) => {
+        if (a.status === 2 && b.status !== 2) return -1;
+        if (a.status !== 2 && b.status === 2) return 1;
+        if (a.status === 1 && b.status !== 1) return -1;
+        if (a.status !== 1 && b.status === 1) return 1;
+        return 0;
+    });
+
     sortedApplications.forEach((app, index) => {
         const appDiv = document.createElement('div');
         appDiv.className = `application`;
