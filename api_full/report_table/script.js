@@ -263,3 +263,8 @@ function showManagerSuggestions(input) {
 
     suggestionsContainer.style.display = 'block'; // Показываем предложения
 }
+
+// Show suggestions on input focus
+document.getElementById('manager-filter').addEventListener('focus', function () {
+    showManagerSuggestions(this.value);
+});
