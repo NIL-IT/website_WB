@@ -221,3 +221,39 @@ function sortByDefault() {
     renderApplications();
     setActiveButton('default');
 }
+
+// Function for filtering by manager
+function filterByManager() {
+    const managerInput = document.getElementById('manager-filter').value.toLowerCase();
+    const filteredApplications = originalData.filter(app => app.tg_nick_manager.toLowerCase().includes(managerInput));
+    applicationsData = filteredApplications;
+    renderApplications();
+    showManagerSuggestions(managerInput);
+}
+
+// Function to show manager suggestions
+function showManagerSuggestions(input) {
+    const suggestionsContainer = document.getElementById('manager-suggestions');
+    suggestionsContainer.innerHTML = '';
+
+    if (input.length === 0) {
+        return;
+    }
+
+    const suggestions = originalData
+        .map(app => app.tg_nick_manager)
+        .filter((value, index, self) => self.indexOf(value) === index) // Уникальные значения
+        .filter(nick => nick.toLowerCase().includes(input))
+        .slice(0, 5); // Ограничиваем количество предложений
+
+    suggestions.forEach(suggestion => {
+        const suggestionDiv = document.createElement('div');
+        suggestionDiv.className = 'suggestion';
+        suggestionDiv.innerText = suggestion;
+        suggestionDiv.onclick = () => {
+            document.getElementById('manager-filter').value = suggestion;
+            filterByManager();
+        };
+        suggestionsContainer.appendChild(suggestionDiv);
+    });
+}

@@ -20,6 +20,10 @@
                 <button onclick="sortByProductName('desc')">По товару (Я-А)</button>
             </div>
         </div>
+        <div class="filter-container">
+            <input type="text" id="manager-filter" oninput="filterByManager()" placeholder="Фильтр по менеджеру">
+            <div id="manager-suggestions" class="suggestions"></div>
+        </div>
         <div id="applications"></div>
         <div class="footer">
             <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
