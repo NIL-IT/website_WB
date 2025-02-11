@@ -1,11 +1,18 @@
+let originalData = []; // Сохраняем изначальные данные
+
 document.addEventListener("DOMContentLoaded", function () {
     fetch("fetchApplications.php")
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
                 applicationsData = data.data;
+                originalData = [...applicationsData]; // Копируем оригинальные данные
+
                 // Сортируем так, чтобы сначала были status = 2, потом status = 1
-                sortByDefault();
+                applicationsData.sort((a, b) => b.status - a.status);
+
+                renderApplications();
+                setActiveButton('default'); // Активируем кнопку "по умолчанию"
             } else {
                 console.error("Ошибка при получении данных:", data.error);
             }
@@ -209,7 +216,7 @@ function setActiveButton(sortBy, order = 'desc') {
 
 // Function for default sorting
 function sortByDefault() {
-    applicationsData.sort((a, b) => b.status - a.status);
+    applicationsData = [...originalData]; // Восстанавливаем исходные данные
     renderApplications();
     setActiveButton('default');
 }
