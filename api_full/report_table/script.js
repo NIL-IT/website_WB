@@ -14,12 +14,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
-function renderApplications() {
+function renderApplications(sortBy = 'status', order = 'desc') {
     const applicationsContainer = document.getElementById('applications');
     applicationsContainer.innerHTML = '';
 
-    // Sort applications by status: 2 (in progress) first, then 1 (waiting)
-    const sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+    let sortedApplications;
+    switch (sortBy) {
+        case 'status':
+            sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+            break;
+        case 'cardholder':
+            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
+            break;
+        case 'profit':
+            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.profit - b.profit : b.profit - a.profit);
+            break;
+        case 'product_name':
+            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
+            break;
+        default:
+            sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+    }
 
     sortedApplications.forEach((app, index) => {
         const appDiv = document.createElement('div');
@@ -126,4 +141,21 @@ function refreshApplications() {
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
         });
+}
+
+// New functions for sorting
+function sortByStatus() {
+    renderApplications('status');
+}
+
+function sortByCardholder(order) {
+    renderApplications('cardholder', order);
+}
+
+function sortByProfit(order) {
+    renderApplications('profit', order);
+}
+
+function sortByProductName(order) {
+    renderApplications('product_name', order);
 }

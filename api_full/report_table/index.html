@@ -8,6 +8,16 @@
 </head>
 <body>
     <div class="container">
+        <div class="sort-buttons">
+            <button onclick="sortByStatus()">Сортировать по статусу</button>
+            <button onclick="sortByCardholder('asc')">Сортировать по ФИО (А-Я)</button>
+            <button onclick="sortByCardholder('desc')">Сортировать по ФИО (Я-А)</button>
+            <button onclick="sortByProfit('asc')">Сортировать по выгоде (возрастание)</button>
+            <button onclick="sortByProfit('desc')">Сортировать по выгоде (убывание)</button>
+            <button onclick="sortByProductName('asc')">Сортировать по товару (возрастание)</button>
+            <button onclick="sortByProductName('desc')">Сортировать по товару (убывание)</button>
+            <button onclick="renderApplications()">По умолчанию</button>
+        </div>
         <div id="applications"></div>
         <div class="footer">
         <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
