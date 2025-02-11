@@ -21,13 +21,13 @@ function renderApplications(sortBy = 'status', order = 'desc') {
     let sortedApplications;
     switch (sortBy) {
         case 'status':
-            sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+            sortedApplications = applicationsData.sort((a, b) => a.status - b.status);
             break;
         case 'cardholder':
             sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
             break;
         case 'profit':
-            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.profit - b.profit : b.profit - a.profit);
+            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? parseFloat(a.profit) - parseFloat(b.profit) : parseFloat(b.profit) - parseFloat(a.profit));
             break;
         case 'product_name':
             sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
