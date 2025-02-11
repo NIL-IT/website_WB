@@ -34,7 +34,7 @@ try {
                 'status' => $app['status'],
                 'url' => $url,
                 'product_name' => $product['name'],
-                'tg_nick_manager' => $product['tg_nick_manager']
+                'tg_nick_manager' => !empty($product['tg_nick_manager']) ? $product['tg_nick_manager'] : 'Не указан'
             ];
         }
     }
