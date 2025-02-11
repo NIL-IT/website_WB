@@ -14,6 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 });
 
+function toggleSortMenu() {
+    const sortMenu = document.getElementById('sort-menu');
+    sortMenu.style.display = sortMenu.style.display === 'none' ? 'block' : 'none';
+
+    // Снимаем выделение с кнопки "Сортировка"
+    document.querySelector('.sort-buttons button').classList.remove('active');
+}
+
 function renderApplications(sortBy = 'status', order = 'desc') {
     const applicationsContainer = document.getElementById('applications');
     applicationsContainer.innerHTML = '';
@@ -174,25 +182,23 @@ function sortByProductName(order) {
 }
 
 function setActiveButton(sortBy, order = 'desc') {
-    const buttons = document.querySelectorAll('.sort-buttons button');
+    const buttons = document.querySelectorAll('.sort-menu button');
     buttons.forEach(button => button.classList.remove('active'));
 
     let activeButton;
     switch (sortBy) {
-        case 'status':
-            activeButton = buttons[1];
+        case 'default':
+            activeButton = buttons[0]; // Первая кнопка "По умолчанию"
             break;
         case 'cardholder':
-            activeButton = order === 'asc' ? buttons[2] : buttons[3];
+            activeButton = order === 'asc' ? buttons[1] : buttons[2];
             break;
         case 'profit':
-            activeButton = order === 'asc' ? buttons[4] : buttons[5];
+            activeButton = order === 'asc' ? buttons[3] : buttons[4];
             break;
         case 'product_name':
-            activeButton = order === 'asc' ? buttons[6] : buttons[7];
+            activeButton = order === 'asc' ? buttons[5] : buttons[6];
             break;
-        default:
-            activeButton = buttons[0];
     }
 
     if (activeButton) {
@@ -202,6 +208,7 @@ function setActiveButton(sortBy, order = 'desc') {
 
 // Function for default sorting
 function sortByDefault() {
-    renderApplications();
+    renderApplications('status', 'desc'); // Передаем параметры явно
     setActiveButton('default');
 }
+
