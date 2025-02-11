@@ -540,7 +540,7 @@ const handleRemoveField = (event) => {
           </span>
         </label>
         <label>
-          Ник менеджера<span style={{ color: "red" }}> *</span>
+          Ник менеджера оплаты<span style={{ color: "red" }}> *</span>
           <input
             type="text"
             name="tg_nick_manager"
