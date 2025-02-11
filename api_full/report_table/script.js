@@ -4,12 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((data) => {
             if (data.success) {
                 applicationsData = data.data;
-                
                 // Сортируем так, чтобы сначала были status = 2, потом status = 1
-                applicationsData.sort((a, b) => b.status - a.status);
-
-                renderApplications(); // Отображаем отсортированные данные
-                setActiveButton('default'); // Выделяем кнопку "по умолчанию"
+                sortByDefault();
             } else {
                 console.error("Ошибка при получении данных:", data.error);
             }
@@ -213,7 +209,7 @@ function setActiveButton(sortBy, order = 'desc') {
 
 // Function for default sorting
 function sortByDefault() {
-    const sortedData = [...originalData].sort((a, b) => b.status - a.status);
-    renderApplications(sortedData);
+    applicationsData.sort((a, b) => b.status - a.status);
+    renderApplications();
     setActiveButton('default');
 }
