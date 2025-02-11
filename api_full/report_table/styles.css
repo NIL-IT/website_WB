@@ -136,3 +136,44 @@ body {
     background-color: #f5f5f5;
     border-top: 1px solid #000000;
 }
+
+/* New styles for sort buttons */
+.sort-buttons button {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 5px;
+}
+
+.sort-buttons button:nth-child(1) {
+    background-color: #007BFF;
+}
+
+.sort-buttons button:nth-child(2),
+.sort-buttons button:nth-child(3) {
+    background-color: #28A745;
+}
+
+.sort-buttons button:nth-child(4),
+.sort-buttons button:nth-child(5) {
+    background-color: #FFC107;
+}
+
+.sort-buttons button:nth-child(6),
+.sort-buttons button:nth-child(7) {
+    background-color: #DC3545;
+}
+
+.sort-buttons button:nth-child(8) {
+    background-color: #6C757D;
+}
+
+.sort-buttons button:hover {
+    opacity: 0.9;
+}
