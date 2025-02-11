@@ -199,3 +199,9 @@ function setActiveButton(sortBy, order = 'desc') {
         activeButton.classList.add('active');
     }
 }
+
+// Function for default sorting
+function sortByDefault() {
+    renderApplications();
+    setActiveButton('default');
+}

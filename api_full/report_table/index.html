@@ -11,13 +11,13 @@
         <div class="sort-buttons">
             <button onclick="toggleSortMenu()">Сортировать</button>
             <div id="sort-menu" class="sort-menu" style="display: none;">
-                <button onclick="renderApplications()">По умолчанию</button>
+                <button onclick="sortByDefault()">По умолчанию</button>
                 <button onclick="sortByCardholder('asc')">По ФИО (А-Я)</button>
                 <button onclick="sortByCardholder('desc')">По ФИО (Я-А)</button>
                 <button onclick="sortByProfit('asc')">По выгоде (возрастание)</button>
                 <button onclick="sortByProfit('desc')">По выгоде (убывание)</button>
-                <button onclick="sortByProductName('asc')">По товару (возрастание)</button>
-                <button onclick="sortByProductName('desc')">По товару (убывание)</button>
+                <button onclick="sortByProductName('asc')">По товару (А-Я)</button>
+                <button onclick="sortByProductName('desc')">По товару (Я-А)</button>
             </div>
         </div>
         <div id="applications"></div>
