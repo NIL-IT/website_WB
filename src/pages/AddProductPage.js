@@ -31,6 +31,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     keywords: "",
     article: "",
     tg_nick: userInfo.username,
+    tg_nick_manager: "",
     terms: "",
     marketPrice: "",
     yourPrice: "",
@@ -536,6 +537,20 @@ const handleRemoveField = (event) => {
           />
           <span className="warning-message">
             Ваш ник не должен содержать @, https://t.me/
+          </span>
+        </label>
+        <label>
+          Ник менеджера<span style={{ color: "red" }}> *</span>
+          <input
+            type="text"
+            name="tg_nick_manager"
+            value={formData.tg_nick_manager}
+            onChange={handleChange}
+            placeholder="Например: Alexon"
+            required
+          />
+          <span className="warning-message">
+            Ник не должен содержать @, https://t.me/
           </span>
         </label>
         <label>
