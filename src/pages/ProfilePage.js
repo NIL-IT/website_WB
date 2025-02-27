@@ -6,6 +6,7 @@ const ProfilePage = ({userInfo}) => {
   const [username, setUsername] = useState(userInfo?.username || null);
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleInstructionClick = () => {
     window.open("https://telegra.ph/Instrukciya-razmeshcheniya-06-21", "_blank", "noopener,noreferrer");
@@ -22,6 +23,7 @@ const ProfilePage = ({userInfo}) => {
   };
 
   const handleSaveClick = () => {
+    setIsSaving(true);
     // Отправка данных на сервер
     fetch('https://inhomeka.online:8000/update-username.php', {
       method: 'POST',
@@ -42,6 +44,9 @@ const ProfilePage = ({userInfo}) => {
     })
     .catch((error) => {
       console.error('Error:', error);
+    })
+    .finally(() => {
+      setIsSaving(false);
     });
   };
 
@@ -89,6 +94,7 @@ const ProfilePage = ({userInfo}) => {
                     type="text"
                     value={username}
                     onChange={handleUsernameChange}
+                    disabled={isSaving}
                   />
                   <button onClick={handleSaveClick}>Сохранить</button>
                 </>
