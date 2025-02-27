@@ -102,7 +102,7 @@ const ProfilePage = ({userInfo}) => {
                 <button onClick={handleEditClick}>Изменить</button>
               )
             ) : (
-              <span>{username}</span>
+              <span>{userInfo.username}</span>
             )}
           </div>
         </div>
