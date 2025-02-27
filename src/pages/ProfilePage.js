@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "../styles/ProfilePage.css";
 
 const ProfilePage = ({userInfo}) => {
-  const [username, setUsername] = useState(userInfo.username);
+  const [username, setUsername] = useState(userInfo?.username || null);
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
 
