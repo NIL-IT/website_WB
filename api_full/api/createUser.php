@@ -2,12 +2,20 @@
 header('Content-Type: application/json');
 require 'db.php';
 include 'cors.php';
+
 $input = json_decode(file_get_contents('php://input'), true);
 $id = $input['id'];
 $username = $input['username'];
 
 try {
     $conn = getDbConnection();
+
+    // Удаление существующей записи
+    $deleteStmt = $conn->prepare("DELETE FROM users WHERE id_userTG = :id");
+    $deleteStmt->bindParam(':id', $id);
+    $deleteStmt->execute();
+
+    // Вставка новой записи
     $stmt = $conn->prepare("INSERT INTO users (id_userTG, username, status) VALUES (:id, :username, 'user')");
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':username', $username);
