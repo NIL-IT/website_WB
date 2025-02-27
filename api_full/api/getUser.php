@@ -6,7 +6,7 @@ require 'db.php';
 // Получение данных из POST запроса
 $data = json_decode(file_get_contents("php://input"), true);
 
-if (!isset($data['id']) || !isset($data['username'])) {
+if (!isset($data['id'])) {
     echo json_encode(['success' => false, 'message' => 'Invalid input: id or username is missing']);
     exit;
 }
