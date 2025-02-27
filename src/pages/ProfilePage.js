@@ -81,7 +81,7 @@ const ProfilePage = ({userInfo}) => {
             </svg>
           </div>
           <div className="profile-name">
-            {userInfo.username === '' || userInfo.username === null ? (
+            {username === '' || username === null ? (
               isEditing ? (
                 <>
                   <input
@@ -96,7 +96,7 @@ const ProfilePage = ({userInfo}) => {
                 <button onClick={handleEditClick}>Изменить</button>
               )
             ) : (
-              <span>{userInfo.username}</span>
+              <span>{username}</span>
             )}
           </div>
         </div>
