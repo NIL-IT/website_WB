@@ -86,7 +86,7 @@ const ProfilePage = ({userInfo}) => {
             </svg>
           </div>
           <div className="profile-name">
-            {username === '' || username === null ? (
+            {userInfo.username === '' || userInfo.username === null ? (
               isEditing ? (
                 <>
                   <input
