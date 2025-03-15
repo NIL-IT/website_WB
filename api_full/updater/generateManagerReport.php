@@ -35,8 +35,8 @@ try {
         $sheet->setCellValue('C1', 'Количество выплат');
         $sheet->setCellValue('D1', 'Сумма выплат');
         $sheet->setCellValue('E1', ''); // Пропуск
-        $sheet->setCellValue('F1', 'Осталось выплатить');
-        $sheet->setCellValue('G1', 'Осталось выплатить сумма');
+        $sheet->setCellValue('F1', 'Осталось выплатить (количество)');
+        $sheet->setCellValue('G1', 'Осталось выплатить (сумма)');
 
         // Форматирование заголовков
         $headerStyle = [
@@ -129,9 +129,9 @@ try {
         $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
 
-        // Стилизуем общую сумму красным цветом
+        // Стилизуем общую сумму менее ярким красным цветом
         $redStyle = [
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF0000']]
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF6666']]
         ];
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
 
