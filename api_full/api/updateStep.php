@@ -508,11 +508,13 @@ elseif ($currentStep === '5') {
             $imageDecoded7 !== false && file_put_contents($imagePath7, $imageDecoded7)) {
             
           
-            $stmt = $pdo->prepare('UPDATE steps SET image6 = :imagePath6, image7 = :imagePath7, step = :finalStep WHERE id = :id');
+            $stmt = $pdo->prepare('UPDATE steps SET image6 = :imagePath6, image7 = :imagePath7, step = :finalStep, completed_at = :completed_at WHERE id = :id');
             $finalStep = 'Завершено'; 
+            $completedAt = date('Y-m-d H:i'); // Фиксируем текущее время
             $stmt->bindParam(':imagePath6', $imagePath6, PDO::PARAM_STR);
             $stmt->bindParam(':imagePath7', $imagePath7, PDO::PARAM_STR);
             $stmt->bindParam(':finalStep', $finalStep, PDO::PARAM_STR);
+            $stmt->bindParam(':completed_at', $completedAt, PDO::PARAM_STR); // Добавляем параметр времени завершения
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);
             
             if ($stmt->execute()) {
