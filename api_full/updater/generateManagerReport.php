@@ -4,7 +4,7 @@ include 'db.php';
 header('Content-Type: application/json');
 
 // Подключение библиотеки PhpSpreadsheet
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
