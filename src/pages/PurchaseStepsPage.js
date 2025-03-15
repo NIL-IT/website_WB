@@ -791,6 +791,7 @@ const PurchaseStepsPage = ({
                   value={formData.article}
                   onChange={handleArticleChange}
                   placeholder="Введите артикул"
+                  onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
                 />
                 {articleError && (
                   <p className="red-error">Введен неверный артикул</p>
@@ -1037,6 +1038,7 @@ const PurchaseStepsPage = ({
                   value={formData.cardNumber}
                   onChange={handleInputChange}
                   placeholder="Введите номер карты"
+                  onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
                 />
                 {errors.cardNumber && (
                   <p className="red-error">Заполните поле</p>
