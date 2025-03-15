@@ -31,9 +31,9 @@ try {
 
         // Запись заголовков
         $sheet->setCellValue('A1', 'Название товара');
-        $sheet->setCellValue('B1', 'Выгода');
-        $sheet->setCellValue('C1', 'Количество завершенных шагов');
-        $sheet->setCellValue('D1', 'Общая выгода');
+        $sheet->setCellValue('B1', 'Цена одной выплаты');
+        $sheet->setCellValue('C1', 'Количество выплат');
+        $sheet->setCellValue('D1', 'Сумма выплат');
 
         // Форматирование заголовков
         $headerStyle = [
