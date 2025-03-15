@@ -57,8 +57,13 @@ function renderApplications(sortBy = 'status', order = 'desc') {
             break;
         case 'completed_at':
             sortedApplications = applicationsData.sort((a, b) => {
-                const dateA = a.completed_at ? new Date(a.completed_at) : new Date(0);
-                const dateB = b.completed_at ? new Date(b.completed_at) : new Date(0);
+                const dateA = a.completed_at ? new Date(a.completed_at) : null;
+                const dateB = b.completed_at ? new Date(b.completed_at) : null;
+
+                if (dateA === null && dateB === null) return 0;
+                if (dateA === null) return order === 'asc' ? -1 : 1;
+                if (dateB === null) return order === 'asc' ? 1 : -1;
+
                 return order === 'asc' ? dateA - dateB : dateB - dateA;
             });
             break;
