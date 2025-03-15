@@ -7,6 +7,9 @@ header('Content-Type: application/json');
 require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 try {
     // Подключение к базе данных
@@ -31,6 +34,16 @@ try {
         $sheet->setCellValue('B1', 'Выгода');
         $sheet->setCellValue('C1', 'Количество завершенных шагов');
         $sheet->setCellValue('D1', 'Общая выгода');
+
+        // Форматирование заголовков
+        $headerStyle = [
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
+        ];
+        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+        $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Запрос товаров для текущего менеджера
         $stmt = $pdo->prepare("SELECT id, name, market_price, your_price FROM products WHERE tg_nick_manager = :managerNick");
@@ -60,6 +73,14 @@ try {
             $sheet->setCellValue('C' . $rowIndex, $stepCount);
             $sheet->setCellValue('D' . $rowIndex, $totalProductBenefit);
 
+            // Форматирование содержимого таблицы
+            $contentStyle = [
+                'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
+                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+            ];
+            $sheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($contentStyle);
+            $sheet->getRowDimension($rowIndex)->setRowHeight(20);
+
             $totalBenefit += $totalProductBenefit;
             $rowIndex++;
         }
@@ -67,6 +88,21 @@ try {
         // Запись общей суммы под таблицей
         $sheet->setCellValue('C' . $rowIndex, 'Итого');
         $sheet->setCellValue('D' . $rowIndex, $totalBenefit);
+
+        // Форматирование итогов
+        $totalStyle = [
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
+        ];
+        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
+        $sheet->getRowDimension($rowIndex)->setRowHeight(20);
+
+        // Установка автоширины для столбцов
+        foreach (range('A', 'D') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
     }
 
     // Создание итогового листа
@@ -76,6 +112,10 @@ try {
     // Запись заголовков
     $summarySheet->setCellValue('A1', 'Менеджер');
     $summarySheet->setCellValue('B1', 'Общая сумма');
+
+    // Форматирование заголовков
+    $summarySheet->getStyle('A1:B1')->applyFromArray($headerStyle);
+    $summarySheet->getRowDimension('1')->setRowHeight(20);
 
     $rowIndex = 2;
     $grandTotal = 0;
@@ -92,6 +132,10 @@ try {
         $summarySheet->setCellValue('A' . $rowIndex, $managerNick);
         $summarySheet->setCellValue('B' . $rowIndex, $total);
 
+        // Форматирование содержимого таблицы
+        $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($contentStyle);
+        $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+
         $grandTotal += $total;
         $rowIndex++;
     }
@@ -99,6 +143,15 @@ try {
     // Запись общей суммы всех менеджеров
     $summarySheet->setCellValue('A' . $rowIndex, 'Общая сумма');
     $summarySheet->setCellValue('B' . $rowIndex, $grandTotal);
+
+    // Форматирование итогов
+    $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($totalStyle);
+    $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+
+    // Установка автоширины для столбцов
+    foreach (range('A', 'B') as $columnID) {
+        $summarySheet->getColumnDimension($columnID)->setAutoSize(true);
+    }
 
     // Удаление первого пустого листа
     $spreadsheet->removeSheetByIndex(0);
