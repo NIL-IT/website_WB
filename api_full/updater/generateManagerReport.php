@@ -108,9 +108,15 @@ try {
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
             // Установка денежного типа ячейки
-            $sheet->getStyle('B' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
-            $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
-            $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
+            $sheet->getStyle('B' . $rowIndex)
+                  ->getNumberFormat()
+                  ->setFormatCode('#,##0 ₽');
+            $sheet->getStyle('D' . $rowIndex)
+                  ->getNumberFormat()
+                  ->setFormatCode('#,##0 ₽');
+            $sheet->getStyle('G' . $rowIndex)
+                  ->getNumberFormat()
+                  ->setFormatCode('#,##0 ₽');
 
             $totalBenefit += $totalProductBenefit;
             $rowIndex++;
@@ -140,8 +146,12 @@ try {
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
 
         // Установка денежного типа ячейки для итогов
-        $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
-        $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
+        $sheet->getStyle('D' . $rowIndex)
+              ->getNumberFormat()
+              ->setFormatCode('#,##0 ₽');
+        $sheet->getStyle('G' . $rowIndex)
+              ->getNumberFormat()
+              ->setFormatCode('#,##0 ₽');
 
         // Установка автоширины для столбцов
         foreach (range('A', 'G') as $columnID) {
