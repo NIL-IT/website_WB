@@ -106,6 +106,11 @@ try {
             $sheet->getStyle('A' . $rowIndex . ':G' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
+            // Установка денежного типа ячейки
+            $sheet->getStyle('B' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+
             $totalBenefit += $totalProductBenefit;
             $rowIndex++;
         }
@@ -132,6 +137,10 @@ try {
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF6666']]
         ];
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
+
+        // Установка денежного типа ячейки для итогов
+        $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
 
         // Установка автоширины для столбцов
         foreach (range('A', 'G') as $columnID) {
