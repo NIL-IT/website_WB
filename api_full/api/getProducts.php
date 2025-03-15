@@ -45,16 +45,15 @@ function getAllProducts($conn) {
             }
         }
 
-        // Sort products by cashback percentage and availableday
-                // Разделяем товары
-        $productsWithAvailableDay = [];
-        $productsWithoutAvailableDay = [];
+        // Разделяем товары
+        $productsWithavailableday = [];
+        $productsWithoutavailableday = [];
 
         foreach ($filteredProducts as $product) {
-            if ($product['availableDay'] > 0) {
-                $productsWithAvailableDay[] = $product;
+            if ($product['availableday'] > 0) {
+                $productsWithavailableday[] = $product;
             } else {
-                $productsWithoutAvailableDay[] = $product;
+                $productsWithoutavailableday[] = $product;
             }
         }
 
@@ -66,12 +65,12 @@ function getAllProducts($conn) {
             return $cashbackPercentageB <=> $cashbackPercentageA;
         };
 
-        // Сортируем каждую группу по кэшбеку
-        usort($productsWithAvailableDay, $sortByCashback);
-        usort($productsWithoutAvailableDay, $sortByCashback);
+        // Сортируем только товары с availableday > 0
+        usort($productsWithavailableday, $sortByCashback);
 
-        // Объединяем массивы
-        $filteredProducts = array_merge($productsWithAvailableDay, $productsWithoutAvailableDay);
+        // Объединяем массивы: сначала отсортированные, потом неотсортированные
+        $filteredProducts = [...$productsWithavailableday, ...$productsWithoutavailableday];
+
 
         return $filteredProducts;
     } else {
