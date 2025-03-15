@@ -190,6 +190,11 @@ try {
         $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($contentStyle);
         $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
 
+        // Установка денежного типа ячейки
+        $summarySheet->getStyle('B' . $rowIndex)
+                     ->getNumberFormat()
+                     ->setFormatCode('#,##0 ₽');
+
         $grandTotal += $total;
         $rowIndex++;
     }
@@ -201,6 +206,11 @@ try {
     // Форматирование итогов
     $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($totalStyle);
     $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+
+    // Установка денежного типа ячейки для общей суммы
+    $summarySheet->getStyle('B' . $rowIndex)
+                 ->getNumberFormat()
+                 ->setFormatCode('#,##0 ₽');
 
     // Установка автоширины для столбцов
     foreach (range('A', 'B') as $columnID) {
