@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 try {
     // Подключение к базе данных
@@ -107,9 +108,9 @@ try {
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
             // Установка денежного типа ячейки
-            $sheet->getStyle('B' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
-            $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
-            $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+            $sheet->getStyle('B' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
+            $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
+            $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
 
             $totalBenefit += $totalProductBenefit;
             $rowIndex++;
@@ -139,8 +140,8 @@ try {
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
 
         // Установка денежного типа ячейки для итогов
-        $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
-        $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
+        $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_CURRENCY_RUB_SIMPLE);
 
         // Установка автоширины для столбцов
         foreach (range('A', 'G') as $columnID) {
