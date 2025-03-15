@@ -45,13 +45,13 @@ function getAllProducts($conn) {
             }
         }
 
-        // Sort products by cashback and availableDay
+        // Sort products by cashback percentage and availableDay
         usort($filteredProducts, function($a, $b) {
-            $cashbackA = $a['marketPrice'] - $a['yourPrice'];
-            $cashbackB = $b['marketPrice'] - $b['yourPrice'];
+            $cashbackPercentageA = ($a['marketPrice'] - $a['yourPrice']) / $a['marketPrice'];
+            $cashbackPercentageB = ($b['marketPrice'] - $b['yourPrice']) / $b['marketPrice'];
             if ($a['availableDay'] == 0 && $b['availableDay'] != 0) return 1;
             if ($a['availableDay'] != 0 && $b['availableDay'] == 0) return -1;
-            return $cashbackB - $cashbackA;
+            return $cashbackPercentageB - $cashbackPercentageA;
         });
 
         return $filteredProducts;
