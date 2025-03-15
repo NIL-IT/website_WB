@@ -250,6 +250,7 @@ const handleRemoveField = (event) => {
             placeholder="Укажите цену на маркетплейсе"
             required
             className={errors.marketPrice ? "error" : ""}
+            onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
         <label>
@@ -262,6 +263,7 @@ const handleRemoveField = (event) => {
             placeholder="Введите цену клиента"
             required
             className={errors.yourPrice ? "error" : ""}
+            onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
         <label>
@@ -403,6 +405,7 @@ const handleRemoveField = (event) => {
                 marginTop: "5px",
                 textAlign: "center",
               }}
+              onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
             />
           </div>
         ))}
@@ -523,6 +526,7 @@ const handleRemoveField = (event) => {
             placeholder="Введите артикул"
             required
             className={errors.article ? "error" : ""}
+            onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
         <label>
@@ -662,6 +666,7 @@ const handleRemoveField = (event) => {
                     }))}
 
                     onChange={handleAvailableDayChange}
+                    onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
                   />
                 </label>
               );
