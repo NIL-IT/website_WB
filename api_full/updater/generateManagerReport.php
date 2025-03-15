@@ -64,7 +64,6 @@ try {
 
         $rowIndex = 2;
         $totalBenefit = 0;
-        $totalRemainingCount = 0;
         $totalRemainingBenefit = 0;
 
         foreach ($products as $product) {
@@ -88,7 +87,6 @@ try {
 
             $remainingBenefit = $benefit * $remainingCount;
 
-            $totalRemainingCount += $remainingCount;
             $totalRemainingBenefit += $remainingBenefit;
 
             // Запись данных в таблицу
@@ -116,7 +114,7 @@ try {
         $sheet->setCellValue('C' . $rowIndex, 'Итого');
         $sheet->setCellValue('D' . $rowIndex, $totalBenefit);
         $sheet->setCellValue('E' . $rowIndex, ''); // Пропуск
-        $sheet->setCellValue('F' . $rowIndex, $totalRemainingCount);
+        $sheet->setCellValue('F' . $rowIndex, 'Итого');
         $sheet->setCellValue('G' . $rowIndex, $totalRemainingBenefit);
 
         // Форматирование итогов
