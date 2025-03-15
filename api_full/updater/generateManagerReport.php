@@ -34,6 +34,8 @@ try {
         $sheet->setCellValue('B1', 'Цена одной выплаты');
         $sheet->setCellValue('C1', 'Количество выплат');
         $sheet->setCellValue('D1', 'Сумма выплат');
+        $sheet->setCellValue('E1', 'Осталось выплатить');
+        $sheet->setCellValue('F1', 'Осталось выплатить сумма');
 
         // Форматирование заголовков
         $headerStyle = [
@@ -42,7 +44,7 @@ try {
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
         ];
-        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
         $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Запрос товаров для текущего менеджера
@@ -52,6 +54,8 @@ try {
 
         $rowIndex = 2;
         $totalBenefit = 0;
+        $totalRemainingCount = 0;
+        $totalRemainingBenefit = 0;
 
         foreach ($products as $product) {
             $productId = $product['id'];
@@ -67,18 +71,30 @@ try {
 
             $totalProductBenefit = $benefit * $stepCount;
 
+            // Запрос количества оставшихся выплат для текущего товара
+            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM steps WHERE id_product = :productId AND step = 'Завершено' AND (status = 1 OR status = 2)");
+            $stmt->execute(['productId' => $productId]);
+            $remainingCount = $stmt->fetchColumn();
+
+            $remainingBenefit = $benefit * $remainingCount;
+
+            $totalRemainingCount += $remainingCount;
+            $totalRemainingBenefit += $remainingBenefit;
+
             // Запись данных в таблицу
             $sheet->setCellValue('A' . $rowIndex, $productName);
             $sheet->setCellValue('B' . $rowIndex, $benefit);
             $sheet->setCellValue('C' . $rowIndex, $stepCount);
             $sheet->setCellValue('D' . $rowIndex, $totalProductBenefit);
+            $sheet->setCellValue('E' . $rowIndex, $remainingCount);
+            $sheet->setCellValue('F' . $rowIndex, $remainingBenefit);
 
             // Форматирование содержимого таблицы
             $contentStyle = [
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
             ];
-            $sheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($contentStyle);
+            $sheet->getStyle('A' . $rowIndex . ':F' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
             $totalBenefit += $totalProductBenefit;
@@ -88,6 +104,8 @@ try {
         // Запись общей суммы под таблицей
         $sheet->setCellValue('C' . $rowIndex, 'Итого');
         $sheet->setCellValue('D' . $rowIndex, $totalBenefit);
+        $sheet->setCellValue('E' . $rowIndex, $totalRemainingCount);
+        $sheet->setCellValue('F' . $rowIndex, $totalRemainingBenefit);
 
         // Форматирование итогов
         $totalStyle = [
@@ -96,11 +114,17 @@ try {
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
         ];
-        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
+        $sheet->getStyle('C' . $rowIndex . ':F' . $rowIndex)->applyFromArray($totalStyle);
         $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
+        // Стилизуем общую сумму красным цветом
+        $redStyle = [
+            'font' => ['color' => ['argb' => 'FFFF0000']]
+        ];
+        $sheet->getStyle('E' . $rowIndex . ':F' . $rowIndex)->applyFromArray($redStyle);
+
         // Установка автоширины для столбцов
-        foreach (range('A', 'D') as $columnID) {
+        foreach (range('A', 'F') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
