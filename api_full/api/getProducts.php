@@ -46,12 +46,20 @@ function getAllProducts($conn) {
         }
 
         // Sort products by cashback percentage and availableDay
-        usort($filteredProducts, function($a, $b) {
-            $cashbackPercentageA = ($a['marketPrice'] - $a['yourPrice']) / $a['marketPrice'];
-            $cashbackPercentageB = ($b['marketPrice'] - $b['yourPrice']) / $b['marketPrice'];
+        usort($filteredProducts, function ($a, $b) {
+            $cashbackPercentageA = ((float)$a['marketPrice'] - (float)$a['yourPrice']) / (float)$a['marketPrice'];
+            $cashbackPercentageB = ((float)$b['marketPrice'] - (float)$b['yourPrice']) / (float)$b['marketPrice'];
+        
+            // Проверка на нули в availableDay
             if ($a['availableDay'] == 0 && $b['availableDay'] != 0) return 1;
             if ($a['availableDay'] != 0 && $b['availableDay'] == 0) return -1;
-            return $cashbackPercentageB - $cashbackPercentageA;
+            
+            // Если оба 0, сортируем по кэшбеку
+            if ($a['availableDay'] == 0 && $b['availableDay'] == 0) {
+                return $cashbackPercentageB <=> $cashbackPercentageA;
+            }
+        
+            return $cashbackPercentageB <=> $cashbackPercentageA;
         });
 
         return $filteredProducts;
