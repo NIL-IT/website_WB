@@ -30,16 +30,24 @@ const CatalogPage = ({ products, categories }) => {
     setShowPopup(false);
   };
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearchTerm = product.name
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(product.category);
-    const isConfirmed = product.is_confirmed;
-    return matchesSearchTerm && matchesCategory && isConfirmed;
-  });
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesSearchTerm = product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        selectedCategories.length === 0 ||
+        selectedCategories.includes(product.category);
+      const isConfirmed = product.is_confirmed;
+      return matchesSearchTerm && matchesCategory && isConfirmed;
+    })
+    .sort((a, b) => {
+      const cashbackA = a.marketPrice - a.yourPrice;
+      const cashbackB = b.marketPrice - b.yourPrice;
+      if (a.availableDay === 0 && b.availableDay !== 0) return 1;
+      if (a.availableDay !== 0 && b.availableDay === 0) return -1;
+      return cashbackB - cashbackA;
+    });
 
   return (
     <div className="catalog-page">
