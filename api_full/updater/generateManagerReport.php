@@ -34,8 +34,9 @@ try {
         $sheet->setCellValue('B1', 'Цена одной выплаты');
         $sheet->setCellValue('C1', 'Количество выплат');
         $sheet->setCellValue('D1', 'Сумма выплат');
-        $sheet->setCellValue('E1', 'Осталось выплатить');
-        $sheet->setCellValue('F1', 'Осталось выплатить сумма');
+        $sheet->setCellValue('E1', ''); // Пропуск
+        $sheet->setCellValue('F1', 'Осталось выплатить');
+        $sheet->setCellValue('G1', 'Осталось выплатить сумма');
 
         // Форматирование заголовков
         $headerStyle = [
@@ -44,7 +45,16 @@ try {
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
         ];
-        $sheet->getStyle('A1:F1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+
+        $secondHeaderStyle = [
+            'font' => ['bold' => true],
+            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC0CB']]
+        ];
+        $sheet->getStyle('F1:G1')->applyFromArray($secondHeaderStyle);
+
         $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Запрос товаров для текущего менеджера
@@ -86,15 +96,16 @@ try {
             $sheet->setCellValue('B' . $rowIndex, $benefit);
             $sheet->setCellValue('C' . $rowIndex, $stepCount);
             $sheet->setCellValue('D' . $rowIndex, $totalProductBenefit);
-            $sheet->setCellValue('E' . $rowIndex, $remainingCount);
-            $sheet->setCellValue('F' . $rowIndex, $remainingBenefit);
+            $sheet->setCellValue('E' . $rowIndex, ''); // Пропуск
+            $sheet->setCellValue('F' . $rowIndex, $remainingCount);
+            $sheet->setCellValue('G' . $rowIndex, $remainingBenefit);
 
             // Форматирование содержимого таблицы
             $contentStyle = [
                 'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
                 'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
             ];
-            $sheet->getStyle('A' . $rowIndex . ':F' . $rowIndex)->applyFromArray($contentStyle);
+            $sheet->getStyle('A' . $rowIndex . ':G' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
             $totalBenefit += $totalProductBenefit;
@@ -104,8 +115,9 @@ try {
         // Запись общей суммы под таблицей
         $sheet->setCellValue('C' . $rowIndex, 'Итого');
         $sheet->setCellValue('D' . $rowIndex, $totalBenefit);
-        $sheet->setCellValue('E' . $rowIndex, $totalRemainingCount);
-        $sheet->setCellValue('F' . $rowIndex, $totalRemainingBenefit);
+        $sheet->setCellValue('E' . $rowIndex, ''); // Пропуск
+        $sheet->setCellValue('F' . $rowIndex, $totalRemainingCount);
+        $sheet->setCellValue('G' . $rowIndex, $totalRemainingBenefit);
 
         // Форматирование итогов
         $totalStyle = [
@@ -114,17 +126,17 @@ try {
             'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
             'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
         ];
-        $sheet->getStyle('C' . $rowIndex . ':F' . $rowIndex)->applyFromArray($totalStyle);
-        $sheet->getRowDimension($rowIndex)->setRowHeight(20);
+        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
+        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
 
         // Стилизуем общую сумму красным цветом
         $redStyle = [
-            'font' => ['color' => ['argb' => 'FFFF0000']]
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF0000']]
         ];
-        $sheet->getStyle('E' . $rowIndex . ':F' . $rowIndex)->applyFromArray($redStyle);
+        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
 
         // Установка автоширины для столбцов
-        foreach (range('A', 'F') as $columnID) {
+        foreach (range('A', 'G') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
