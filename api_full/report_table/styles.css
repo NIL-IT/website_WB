@@ -173,6 +173,12 @@ body {
 .sort-buttons button:nth-child(8) {
     background-color: #007BFF;
 }
+
+.sort-buttons button:nth-child(9),
+.sort-buttons button:nth-child(10) {
+    background-color: #17A2B8;
+}
+
 .sort-buttons button:hover {
     opacity: 0.9;
 }

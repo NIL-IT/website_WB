@@ -55,6 +55,13 @@ function renderApplications(sortBy = 'status', order = 'desc') {
         case 'product_name':
             sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
             break;
+        case 'completed_at':
+            sortedApplications = applicationsData.sort((a, b) => {
+                const dateA = a.completed_at ? new Date(a.completed_at) : new Date(0);
+                const dateB = b.completed_at ? new Date(b.completed_at) : new Date(0);
+                return order === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+            break;
         default:
             sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
     }
@@ -80,6 +87,7 @@ function renderApplications(sortBy = 'status', order = 'desc') {
                 <p><strong>Выгода:</strong> <span class="black">${app.profit}</span></p>
                 <p><strong>Товар:</strong> <span class="black">${app.product_name}</span></p>
                 <p><strong>Менеджер:</strong> <span class="black">${app.tg_nick_manager}</span></p>
+                <p><strong>Дата поступления:</strong> <span class="black">${app.completed_at ? app.completed_at : 'Не указано'}</span></p>
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
@@ -197,6 +205,11 @@ function sortByProductName(order) {
     setActiveButton('product_name', order);
 }
 
+function sortByCompletedAt(order) {
+    renderApplications('completed_at', order);
+    setActiveButton('completed_at', order);
+}
+
 function setActiveButton(sortBy, order = 'desc') {
     const buttons = document.querySelectorAll('.sort-menu button');
     buttons.forEach(button => button.classList.remove('active'));
@@ -214,6 +227,9 @@ function setActiveButton(sortBy, order = 'desc') {
             break;
         case 'product_name':
             activeButton = order === 'asc' ? buttons[5] : buttons[6];
+            break;
+        case 'completed_at':
+            activeButton = order === 'asc' ? buttons[7] : buttons[8];
             break;
     }
 
