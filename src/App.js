@@ -283,24 +283,32 @@ const App = () => {
   fetchData();
 
   // Устанавливаем таймер для скрытия логотипа через 1 секунду
-  const timer = setTimeout(() => {
-    setShowLogo(false);
-  }, 1000);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLogo(false);
+    }, 1000);
 
-  return () => clearTimeout(timer); // Очищаем таймер при размонтировании компонента
+    return () => clearTimeout(timer);
   }, []);
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center w-[100wh] h-[100vh]">
+      <div className="flex justify-center items-center w-screen h-screen">
         {showLogo ? (
-          <img src={logo} alt="Loading Logo" className="fade-out" />
+          <img
+            src={logo}
+            alt="Loading Logo"
+            className="fade-out max-w-[80%] max-h-[50%]"
+          />
         ) : (
           <span className="loader"></span>
         )}
       </div>
     );
   }
+
+  return null;
+};
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
