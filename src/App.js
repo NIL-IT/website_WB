@@ -11,12 +11,14 @@ import PurchaseStepsPage from './pages/PurchaseStepsPage';
 import Sidebar from './components/Sidebar';
 import BackButton from './components/BackButton';
 import './index.css';
+import logo from './assets/logo.png'; // Убедитесь, что путь к изображению правильный
 
 const App = () => {
   const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
   const [userInfo, setUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showLogo, setShowLogo] = useState(true); // Добавлено состояние для отображения логотипа
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://inhomeka.online:8000/';
 // const [userInfo, setUserInfo] = useState([
@@ -279,12 +281,23 @@ const App = () => {
     };
 
   fetchData();
+
+  // Устанавливаем таймер для скрытия логотипа через 1 секунду
+  const timer = setTimeout(() => {
+    setShowLogo(false);
+  }, 1000);
+
+  return () => clearTimeout(timer); // Очищаем таймер при размонтировании компонента
   }, []);
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center w-[100wh] h-[100vh]">
-        <span className="loader"></span>
+        {showLogo ? (
+          <img src={logo} alt="Loading Logo" className="fade-out" />
+        ) : (
+          <span className="loader"></span>
+        )}
       </div>
     );
   }

@@ -92,3 +92,16 @@ body {
 .purchase-step-keywords::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
