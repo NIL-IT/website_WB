@@ -282,7 +282,11 @@ const App = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Загрузка...</div>;
+    return (
+      <div className="flex justify-center items-center w-[100wh] h-[100vh]">
+        <span className="loader"></span>
+      </div>
+    );
   }
 
   const handleStepComplete = (step, formData) => {
