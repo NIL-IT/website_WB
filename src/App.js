@@ -298,6 +298,7 @@ const App = () => {
             src={logo}
             alt="Loading Logo"
             className="fade-out max-w-full max-h-full object-contain"
+            style={{ width: "90vw", height: "90vh" }}
           />
         ) : (
           <span className="loader"></span>
