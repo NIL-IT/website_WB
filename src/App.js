@@ -283,12 +283,11 @@ const App = () => {
   fetchData();
 
   // Устанавливаем таймер для скрытия логотипа через 1 секунду
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLogo(false);
-    }, 1000);
+  const timer = setTimeout(() => {
+    setShowLogo(false);
+  }, 1000);
 
-    return () => clearTimeout(timer);
+  return () => clearTimeout(timer); // Очищаем таймер при размонтировании компонента
   }, []);
 
   if (isLoading) {
@@ -306,9 +305,6 @@ const App = () => {
       </div>
     );
   }
-
-  return null;
-};
 
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
