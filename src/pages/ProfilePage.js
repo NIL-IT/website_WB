@@ -237,7 +237,7 @@ const ProfilePage = ({userInfo}) => {
             />
           </svg>
         </div>
-        <div className="profile-item" onClick={() => {window.open(`https://inhomeka.ru/main`, "_blank", "noopener,noreferrer");} }>
+        <div className="profile-item" onClick={() => {window.open(` https://inhomeka.ru/main?utm_source=tg&utm_medium=club&utm_campaign=profile`, "_blank", "noopener,noreferrer");} }>
           <div className="item-text">
             <span className="item-title">
               О бренде INHOMEKA
