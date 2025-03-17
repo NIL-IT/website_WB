@@ -47,14 +47,14 @@
   }
 }
 .loader {
-  width: 10px;
-  height: 10px;
+  width: 1em;
+  height: 1em;
   border-radius: 50%;
   display: block;
-  margin: 15px auto;
+  margin: 1.5em auto;
   position: relative;
   color: #fff;
-  left: -100px;
+  left: -10%; /* Используем % вместо фиксированных пикселей */
   box-sizing: border-box;
   animation: shadowRolling 2s linear infinite;
 }

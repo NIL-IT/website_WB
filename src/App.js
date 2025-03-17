@@ -292,12 +292,12 @@ const App = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center w-screen h-screen">
+      <div className="flex justify-center items-center w-full h-full min-h-screen">
         {showLogo ? (
           <img
             src={logo}
             alt="Loading Logo"
-            className="fade-out max-w-[80%] max-h-[50%]"
+            className="fade-out max-w-full max-h-full object-contain"
           />
         ) : (
           <span className="loader"></span>
