@@ -16,7 +16,7 @@ try {
     $pdo = getDbConnection();
 
     // Запрос всех пользователей с завершенными шагами
-    $stmt = $pdo->query("SELECT DISTINCT username FROM users WHERE id IN (SELECT id_user FROM steps WHERE step = 'Завершено' AND status = 3)");
+    $stmt = $pdo->query("SELECT DISTINCT username FROM users WHERE id IN (SELECT id_usertg FROM steps WHERE step = 'Завершено' AND status = 3)");
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Создание нового объекта Spreadsheet
@@ -70,7 +70,7 @@ try {
                    (p.market_price - p.your_price) * COUNT(s.id) AS total_benefit
             FROM products p
             JOIN steps s ON p.id = s.id_product
-            WHERE s.id_user = (SELECT id FROM users WHERE username = :username)
+            WHERE s.id_usertg = (SELECT id FROM users WHERE username = :username)
               AND s.step = 'Завершено' AND s.status = 3
             GROUP BY p.id
         ");
