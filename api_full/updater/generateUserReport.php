@@ -11,6 +11,10 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
+// Увеличение времени выполнения и лимита памяти
+set_time_limit(300); // Увеличиваем лимит времени выполнения до 300 секунд
+ini_set('memory_limit', '512M'); // Увеличиваем лимит памяти до 512 МБ
+
 try {
     // Подключение к базе данных
     $pdo = getDbConnection();
