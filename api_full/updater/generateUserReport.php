@@ -21,7 +21,7 @@ try {
 
     $spreadsheet = new Spreadsheet();
     $mainSheet = $spreadsheet->getActiveSheet();
-    $mainSheet->setTitle('Пользователи');
+    $mainSheet->setTitle('1');
 
     $mainSheet->setCellValue('A1', 'Пользователь');
     $mainSheet->setCellValue('B1', 'Ссылка на страницу');
@@ -36,19 +36,19 @@ try {
     $mainSheet->getRowDimension('1')->setRowHeight(20);
 
     $rowIndex = 2;
+    $sheetIndex = 2;
 
     foreach ($users as $user) {
         $username = $user['username'];
         $userId = $user['id_usertg'];
-        $safeUsername = preg_replace('/[^a-zA-Z0-9_]/', '_', $username);
-        $safeUsername = substr($safeUsername, 0, 31);
+        $sheetName = (string) $sheetIndex;
 
         $mainSheet->setCellValue('A' . $rowIndex, $username);
-        $mainSheet->setCellValue('B' . $rowIndex, "Ссылка на страницу $username");
-        $mainSheet->getCell('B' . $rowIndex)->getHyperlink()->setUrl("sheet://$safeUsername");
+        $mainSheet->setCellValue('B' . $rowIndex, "Ссылка на страницу");
+        $mainSheet->getCell('B' . $rowIndex)->getHyperlink()->setUrl("sheet://$sheetName");
 
         $userSheet = $spreadsheet->createSheet();
-        $userSheet->setTitle($safeUsername);
+        $userSheet->setTitle($sheetName);
 
         $userSheet->setCellValue('A1', 'Название товара');
         $userSheet->setCellValue('B1', 'Цена одной выплаты');
@@ -76,7 +76,9 @@ try {
 
         $userSheet->setCellValue('C' . $userRowIndex, 'Итого');
         $userSheet->setCellValue('D' . $userRowIndex, $userTotal);
+        
         $rowIndex++;
+        $sheetIndex++;
     }
 
     $filename = 'UserReport.xlsx';
