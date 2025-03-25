@@ -65,34 +65,34 @@ try {
         // Запись заголовков
         $userSheet->setCellValue('A1', 'Название товара');
         $userSheet->setCellValue('B1', 'Цена одной выплаты');
-        $userSheet->setCellValue('C1', 'Количество выплат');
+        $userSheet->setCellValue('C1', 'Выгода');
         $userSheet->setCellValue('D1', 'Сумма выплат');
 
         // Форматирование заголовков
         $userSheet->getStyle('A1:D1')->applyFromArray($headerStyle);
         $userSheet->getRowDimension('1')->setRowHeight(20);
 
-        // Запрос транзакций для пользователя
+        // Запрос товаров для пользователя
         $stmt = $pdo->prepare("
-            SELECT p.name, (p.market_price - p.your_price) AS benefit, COUNT(s.id) AS step_count, 
-                   (p.market_price - p.your_price) * COUNT(s.id) AS total_benefit
+            SELECT p.name, p.market_price, p.your_price, 
+                   (p.market_price - p.your_price) AS benefit, 
+                   (p.market_price - p.your_price) AS total_benefit
             FROM products p
             JOIN steps s ON p.id = s.id_product
             WHERE s.id_usertg = :userId
               AND s.step = 'Завершено' AND s.status = 3
-            GROUP BY p.id
         ");
         $stmt->execute(['userId' => $userId]);
-        $transactions = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $userRowIndex = 2;
         $userTotal = 0;
 
-        foreach ($transactions as $transaction) {
-            $userSheet->setCellValue('A' . $userRowIndex, $transaction['name']);
-            $userSheet->setCellValue('B' . $userRowIndex, $transaction['benefit']);
-            $userSheet->setCellValue('C' . $userRowIndex, $transaction['step_count']);
-            $userSheet->setCellValue('D' . $userRowIndex, $transaction['total_benefit']);
+        foreach ($products as $product) {
+            $userSheet->setCellValue('A' . $userRowIndex, $product['name']);
+            $userSheet->setCellValue('B' . $userRowIndex, $product['your_price']);
+            $userSheet->setCellValue('C' . $userRowIndex, $product['benefit']);
+            $userSheet->setCellValue('D' . $userRowIndex, $product['total_benefit']);
 
             // Форматирование содержимого таблицы
             $contentStyle = [
@@ -106,11 +106,14 @@ try {
             $userSheet->getStyle('B' . $userRowIndex)
                       ->getNumberFormat()
                       ->setFormatCode('#,##0 ₽');
+            $userSheet->getStyle('C' . $userRowIndex)
+                      ->getNumberFormat()
+                      ->setFormatCode('#,##0 ₽');
             $userSheet->getStyle('D' . $userRowIndex)
                       ->getNumberFormat()
                       ->setFormatCode('#,##0 ₽');
 
-            $userTotal += $transaction['total_benefit'];
+            $userTotal += $product['total_benefit'];
             $userRowIndex++;
         }
 
