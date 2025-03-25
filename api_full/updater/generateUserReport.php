@@ -46,14 +46,17 @@ try {
         $username = $user['username'];
         $userId = $user['id_usertg'];
 
+        // Очистка имени пользователя для использования в названии листа
+        $safeUsername = preg_replace('/[\\\\\\/\\?\\*\\[\\]:]/', '_', $username);
+
         // Запись данных в основную таблицу
         $mainSheet->setCellValue('A' . $rowIndex, $username);
         $mainSheet->setCellValue('B' . $rowIndex, "Ссылка на страницу $username");
-        $mainSheet->getCell('B' . $rowIndex)->getHyperlink()->setUrl("sheet://$username");
+        $mainSheet->getCell('B' . $rowIndex)->getHyperlink()->setUrl("sheet://$safeUsername");
 
         // Создание страницы для пользователя
         $userSheet = $spreadsheet->createSheet();
-        $userSheet->setTitle($username);
+        $userSheet->setTitle($safeUsername);
 
         // Запись заголовков
         $userSheet->setCellValue('A1', 'Название товара');
