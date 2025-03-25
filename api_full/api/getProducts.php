@@ -11,8 +11,8 @@ function getAllProducts($conn) {
                 terms,
                 available_day_current AS availableday,
                 available_day AS availabledays,
-                market_price AS marketPrice,
-                your_price AS yourPrice,
+                market_price AS marketprice,
+                your_price AS yourprice,
                 keywords,
                 article,
                 tg_nick,
@@ -59,8 +59,8 @@ function getAllProducts($conn) {
 
         // Функция сортировки по кэшбеку
         $sortByCashback = function ($a, $b) {
-            $cashbackPercentageA = ((float)$a['marketPrice'] - (float)$a['yourPrice']) / (float)$a['marketPrice'];
-            $cashbackPercentageB = ((float)$b['marketPrice'] - (float)$b['yourPrice']) / (float)$b['marketPrice'];
+            $cashbackPercentageA = ((float)$a['marketprice'] - (float)$a['yourprice']) / (float)$a['marketprice'];
+            $cashbackPercentageB = ((float)$b['marketprice'] - (float)$b['yourprice']) / (float)$b['marketprice'];
 
             return $cashbackPercentageB <=> $cashbackPercentageA;
         };
