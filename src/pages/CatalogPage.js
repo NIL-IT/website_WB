@@ -91,7 +91,7 @@ const CatalogPage = ({ products, categories }) => {
         </div>
 
         <div className="products-grid">
-        <div className="info-text">Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</div>
+        <div className="info-text"><p>Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</p> <p><b> Новые товары в каталоге появляются каждый день! Заходите утром, чтобы успеть выкупить понравившийся товар</b></p></div>
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
