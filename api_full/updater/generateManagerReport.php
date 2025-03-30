@@ -158,8 +158,8 @@ try {
         $sheet->setCellValue('F' . $rowIndex, 'Итого');
         $sheet->setCellValue('G' . $rowIndex, $totalRemainingBenefit);
 
-        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
-        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
+        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyleGreen);
+        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyleRed);
 
         $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
         $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
