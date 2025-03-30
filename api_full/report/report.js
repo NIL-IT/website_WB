@@ -112,8 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки saveCommentBtn
         saveCommentBtn.addEventListener("click", function () {
-          if (!commentField.value || !modifiedPaymentField.value) {
-            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата.");
+          const isCommentFilled = !!commentField.value.trim();
+          const isModifiedPaymentFilled = !!modifiedPaymentField.value.trim();
+        
+          if (isCommentFilled !== isModifiedPaymentFilled) {
+            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата, либо оставьте их пустыми.");
             return;
           }
         
@@ -143,8 +146,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки verifyBtn
         verifyBtn.addEventListener("click", function () {
-          if (!commentField.value || !modifiedPaymentField.value) {
-            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата.");
+          const isCommentFilled = !!commentField.value.trim();
+          const isModifiedPaymentFilled = !!modifiedPaymentField.value.trim();
+        
+          if (isCommentFilled !== isModifiedPaymentFilled) {
+            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата, либо оставьте их пустыми.");
             return;
           }
         
