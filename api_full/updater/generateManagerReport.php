@@ -23,6 +23,21 @@ try {
     // Создание нового объекта Spreadsheet
     $spreadsheet = new Spreadsheet();
 
+    // Создание итогового листа
+    $summarySheet = $spreadsheet->createSheet();
+    $summarySheet->setTitle('Итоги');
+
+    // Запись заголовков
+    $summarySheet->setCellValue('A1', 'Менеджер');
+    $summarySheet->setCellValue('B1', 'Общая сумма');
+
+    // Форматирование заголовков
+    $summarySheet->getStyle('A1:B1')->applyFromArray($headerStyle);
+    $summarySheet->getRowDimension('1')->setRowHeight(20);
+
+    $rowIndexSummary = 2; // Индекс строки для итогового листа
+    $grandTotal = 0; // Общая сумма всех менеджеров
+
     foreach ($managers as $manager) {
         $managerNick = $manager['tg_nick_manager'];
 
@@ -39,23 +54,8 @@ try {
         $sheet->setCellValue('F1', 'Осталось выплатить (количество)');
         $sheet->setCellValue('G1', 'Осталось выплатить (сумма)');
 
-        // Форматирование заголовков
-        $headerStyle = [
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
-        ];
         $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
-
-        $secondHeaderStyle = [
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC0CB']]
-        ];
         $sheet->getStyle('F1:G1')->applyFromArray($secondHeaderStyle);
-
         $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Запрос товаров для текущего менеджера
@@ -107,24 +107,12 @@ try {
             $sheet->setCellValue('F' . $rowIndex, $remainingCount);
             $sheet->setCellValue('G' . $rowIndex, $remainingBenefit);
 
-            // Форматирование содержимого таблицы
-            $contentStyle = [
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-                'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
-            ];
             $sheet->getStyle('A' . $rowIndex . ':G' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
-            // Установка денежного типа ячейки
-            $sheet->getStyle('B' . $rowIndex)
-                  ->getNumberFormat()
-                  ->setFormatCode('#,##0 ₽');
-            $sheet->getStyle('D' . $rowIndex)
-                  ->getNumberFormat()
-                  ->setFormatCode('#,##0 ₽');
-            $sheet->getStyle('G' . $rowIndex)
-                  ->getNumberFormat()
-                  ->setFormatCode('#,##0 ₽');
+            $sheet->getStyle('B' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
+            $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
+            $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
 
             $totalBenefit += $totalProductBenefit;
             $rowIndex++;
@@ -137,93 +125,37 @@ try {
         $sheet->setCellValue('F' . $rowIndex, 'Итого');
         $sheet->setCellValue('G' . $rowIndex, $totalRemainingBenefit);
 
-        // Форматирование итогов
-        $totalStyle = [
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT],
-            'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
-        ];
         $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
 
-        // Стилизуем общую сумму менее ярким красным цветом
-        $redStyle = [
-            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF6666']]
-        ];
-        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
+        $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
+        $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
 
-        // Установка денежного типа ячейки для итогов
-        $sheet->getStyle('D' . $rowIndex)
-              ->getNumberFormat()
-              ->setFormatCode('#,##0 ₽');
-        $sheet->getStyle('G' . $rowIndex)
-              ->getNumberFormat()
-              ->setFormatCode('#,##0 ₽');
-
-        // Установка автоширины для столбцов
         foreach (range('A', 'G') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
-    }
 
-    // Создание итогового листа
-    $summarySheet = $spreadsheet->createSheet();
-    $summarySheet->setTitle('Итоги');
+        // Добавление данных на итоговую страницу
+        $summarySheet->setCellValue('A' . $rowIndexSummary, $managerNick);
+        $summarySheet->setCellValue('B' . $rowIndexSummary, $totalBenefit);
 
-    // Запись заголовков
-    $summarySheet->setCellValue('A1', 'Менеджер');
-    $summarySheet->setCellValue('B1', 'Общая сумма');
+        $summarySheet->getStyle('A' . $rowIndexSummary . ':B' . $rowIndexSummary)->applyFromArray($contentStyle);
+        $summarySheet->getStyle('B' . $rowIndexSummary)->getNumberFormat()->setFormatCode('#,##0 ₽');
 
-    // Форматирование заголовков
-    $summarySheet->getStyle('A1:B1')->applyFromArray($headerStyle);
-    $summarySheet->getRowDimension('1')->setRowHeight(20);
-
-    $rowIndex = 2;
-    $grandTotal = 0;
-
-    foreach ($managers as $manager) {
-        $managerNick = $manager['tg_nick_manager'];
-
-        // Запрос общей суммы для текущего менеджера
-        $stmt = $pdo->prepare("SELECT SUM((market_price - your_price) * (SELECT COUNT(*) FROM steps WHERE id_product = products.id AND step = 'Завершено' AND status = 3)) as total FROM products WHERE tg_nick_manager = :managerNick");
-        $stmt->execute(['managerNick' => $managerNick]);
-        $total = $stmt->fetchColumn();
-
-        // Запись данных в итоговую таблицу
-        $summarySheet->setCellValue('A' . $rowIndex, $managerNick);
-        $summarySheet->setCellValue('B' . $rowIndex, $total);
-
-        // Форматирование содержимого таблицы
-        $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($contentStyle);
-        $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
-
-        // Установка денежного типа ячейки
-        $summarySheet->getStyle('B' . $rowIndex)
-                     ->getNumberFormat()
-                     ->setFormatCode('#,##0 ₽');
-
-        $grandTotal += $total;
-        $rowIndex++;
+        $grandTotal += $totalBenefit;
+        $rowIndexSummary++;
     }
 
     // Запись общей суммы всех менеджеров
-    $summarySheet->setCellValue('A' . $rowIndex, 'Общая сумма');
-    $summarySheet->setCellValue('B' . $rowIndex, $grandTotal);
+    $summarySheet->setCellValue('A' . $rowIndexSummary, 'Общая сумма');
+    $summarySheet->setCellValue('B' . $rowIndexSummary, $grandTotal);
 
-    // Форматирование итогов
-    $summarySheet->getStyle('A' . $rowIndex . ':B' . $rowIndex)->applyFromArray($totalStyle);
-    $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+    $summarySheet->getStyle('A' . $rowIndexSummary . ':B' . $rowIndexSummary)->applyFromArray($totalStyle);
+    $summarySheet->getStyle('B' . $rowIndexSummary)->getNumberFormat()->setFormatCode('#,##0 ₽');
 
-    // Установка денежного типа ячейки для общей суммы
-    $summarySheet->getStyle('B' . $rowIndex)
-                 ->getNumberFormat()
-                 ->setFormatCode('#,##0 ₽');
-
-    // Установка автоширины для столбцов
-    foreach (range('A', 'B') as $columnID) {
-        $summarySheet->getColumnDimension($columnID)->setAutoSize(true);
-    }
+    // Перемещение итогового листа в конец
+    $summarySheetIndex = $spreadsheet->getIndex($summarySheet);
+    $spreadsheet->setSheetIndex($summarySheetIndex)->moveSheetToEnd();
 
     // Удаление первого пустого листа
     $spreadsheet->removeSheetByIndex(0);
