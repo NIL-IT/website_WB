@@ -149,6 +149,12 @@ try {
         $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
         $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
 
+        // Стилизуем общую сумму менее ярким красным цветом
+        $redStyle = [
+            'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFF6666']]
+        ];
+        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($redStyle);
+
         $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
         $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
 
@@ -173,6 +179,10 @@ try {
 
     $summarySheet->getStyle('A' . $rowIndexSummary . ':B' . $rowIndexSummary)->applyFromArray($totalStyle);
     $summarySheet->getStyle('B' . $rowIndexSummary)->getNumberFormat()->setFormatCode('#,##0 ₽');
+
+    // Установка ширины для столбцов на странице "Итоги"
+    $summarySheet->getColumnDimension('A')->setWidth(30); // Ширина для столбца "Менеджер"
+    $summarySheet->getColumnDimension('B')->setWidth(20); // Ширина для столбца "Общая сумма"
 
     // Перемещение итогового листа в конец
     $summarySheetIndex = $spreadsheet->getIndex($summarySheet);
