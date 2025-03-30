@@ -114,9 +114,15 @@ document.addEventListener("DOMContentLoaded", function () {
         saveCommentBtn.addEventListener("click", function () {
           const isCommentFilled = !!commentField.value.trim();
           const isModifiedPaymentFilled = !!modifiedPaymentField.value.trim();
+          const isModifiedPaymentValid = Number.isInteger(Number(modifiedPaymentField.value)) && Number(modifiedPaymentField.value) >= 0;
         
           if (isCommentFilled !== isModifiedPaymentFilled) {
             alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата, либо оставьте их пустыми.");
+            return;
+          }
+        
+          if (isModifiedPaymentFilled && !isModifiedPaymentValid) {
+            alert("Изменённая выплата должна быть целым положительным числом.");
             return;
           }
         
@@ -148,9 +154,15 @@ document.addEventListener("DOMContentLoaded", function () {
         verifyBtn.addEventListener("click", function () {
           const isCommentFilled = !!commentField.value.trim();
           const isModifiedPaymentFilled = !!modifiedPaymentField.value.trim();
+          const isModifiedPaymentValid = Number.isInteger(Number(modifiedPaymentField.value)) && Number(modifiedPaymentField.value) >= 0;
         
           if (isCommentFilled !== isModifiedPaymentFilled) {
             alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата, либо оставьте их пустыми.");
+            return;
+          }
+        
+          if (isModifiedPaymentFilled && !isModifiedPaymentValid) {
+            alert("Изменённая выплата должна быть целым положительным числом.");
             return;
           }
         
