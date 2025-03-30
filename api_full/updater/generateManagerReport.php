@@ -12,6 +12,32 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
+$headerStyle = [
+    'font' => ['bold' => true, 'size' => 12],
+    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    'borders' => ['bottom' => ['style' => Border::BORDER_THIN]],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE599']],
+];
+
+$secondHeaderStyle = [
+    'font' => ['bold' => true, 'size' => 12],
+    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    'borders' => ['bottom' => ['style' => Border::BORDER_THIN]],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFD9EAD3']],
+];
+
+$contentStyle = [
+    'font' => ['size' => 11],
+    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
+];
+
+$totalStyle = [
+    'font' => ['bold' => true, 'size' => 12],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFDDDDDD']],
+    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
+];
+
 try {
     // Подключение к базе данных
     $pdo = getDbConnection();
