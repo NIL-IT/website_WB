@@ -73,31 +73,34 @@ try {
             $marketPrice = $product['market_price'];
             $yourPrice = $product['your_price'];
 
-            // Вычисление выгоды с учётом modified_payment
-            $stmt = $pdo->prepare("SELECT modified_payment FROM steps WHERE id_product = :productId LIMIT 1");
+            // Запрос всех шагов для текущего товара
+            $stmt = $pdo->prepare("SELECT modified_payment, status FROM steps WHERE id_product = :productId AND step = 'Завершено'");
             $stmt->execute(['productId' => $productId]);
-            $modifiedPayment = $stmt->fetchColumn();
-            $benefit = !is_null($modifiedPayment) ? $modifiedPayment : ($marketPrice - $yourPrice);
+            $steps = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            // Запрос количества завершенных шагов для текущего товара
-            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM steps WHERE id_product = :productId AND step = 'Завершено' AND status = 3");
-            $stmt->execute(['productId' => $productId]);
-            $stepCount = $stmt->fetchColumn();
+            $stepCount = 0;
+            $totalProductBenefit = 0;
+            $remainingCount = 0;
+            $remainingBenefit = 0;
 
-            $totalProductBenefit = $benefit * $stepCount;
+            foreach ($steps as $step) {
+                $benefit = !is_null($step['modified_payment']) ? $step['modified_payment'] : ($marketPrice - $yourPrice);
 
-            // Запрос количества оставшихся выплат для текущего товара
-            $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM steps WHERE id_product = :productId AND step = 'Завершено' AND (status = 1 OR status = 2)");
-            $stmt->execute(['productId' => $productId]);
-            $remainingCount = $stmt->fetchColumn();
-
-            $remainingBenefit = $benefit * $remainingCount;
+                // Проверяем статус шага
+                if ($step['status'] == 3) { // Завершённый шаг
+                    $stepCount++;
+                    $totalProductBenefit += $benefit;
+                } elseif (in_array($step['status'], [1, 2])) { // Оставшиеся выплаты
+                    $remainingCount++;
+                    $remainingBenefit += $benefit;
+                }
+            }
 
             $totalRemainingBenefit += $remainingBenefit;
 
             // Запись данных в таблицу
             $sheet->setCellValue('A' . $rowIndex, $productName);
-            $sheet->setCellValue('B' . $rowIndex, $benefit);
+            $sheet->setCellValue('B' . $rowIndex, $marketPrice - $yourPrice); // Средняя цена одной выплаты
             $sheet->setCellValue('C' . $rowIndex, $stepCount);
             $sheet->setCellValue('D' . $rowIndex, $totalProductBenefit);
             $sheet->setCellValue('E' . $rowIndex, ''); // Пропуск
