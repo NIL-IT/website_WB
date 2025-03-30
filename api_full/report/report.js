@@ -112,6 +112,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки saveCommentBtn
         saveCommentBtn.addEventListener("click", function () {
+          if (!commentField.value || !modifiedPaymentField.value) {
+            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата.");
+            return;
+          }
+        
           fetch("saveComment.php", {
             method: "POST",
             headers: {
@@ -138,6 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Добавление логики для кнопки verifyBtn
         verifyBtn.addEventListener("click", function () {
+          if (!commentField.value || !modifiedPaymentField.value) {
+            alert("Пожалуйста, заполните оба поля: комментарий и изменённая выплата.");
+            return;
+          }
+        
           fetch("toggleVerify.php", {
             method: "POST",
             headers: {
