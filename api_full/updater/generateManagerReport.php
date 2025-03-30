@@ -33,7 +33,7 @@ $contentStyle = [
 
 $totalStyleGreen = [
     'font' => ['bold' => true, 'size' => 12],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFC6EFCE']], // Светло-зеленый
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB7E1CD']], // Зелёный
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
     'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
 ];
