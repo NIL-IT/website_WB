@@ -15,15 +15,15 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 $headerStyle = [
     'font' => ['bold' => true, 'size' => 12],
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['bottom' => ['style' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE599']],
+    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE599']], // Светло-желтый
 ];
 
 $secondHeaderStyle = [
     'font' => ['bold' => true, 'size' => 12],
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['bottom' => ['style' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFD9EAD3']],
+    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC7CE']], // Светло-красный
 ];
 
 $contentStyle = [
@@ -31,9 +31,16 @@ $contentStyle = [
     'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
 ];
 
-$totalStyle = [
+$totalStyleGreen = [
     'font' => ['bold' => true, 'size' => 12],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFDDDDDD']],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFC6EFCE']], // Светло-зеленый
+    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+    'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
+];
+
+$totalStyleRed = [
+    'font' => ['bold' => true, 'size' => 12],
+    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC7CE']], // Красный
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
     'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
 ];
