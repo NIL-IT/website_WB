@@ -63,7 +63,7 @@ try {
                 'success' => true,
                 'data' => $step,
                 'benefit' => $benefit,
-                'comment' => $step['comment']
+                'comment' => $step['comment'] // Убедитесь, что комментарий включен
             ];
 
             echo json_encode($response);

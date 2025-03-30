@@ -79,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Получение поля для загрузки чека из HTML
         const receiptUpload = document.getElementById("receiptUpload");
         const commentField = document.getElementById("comment");
+        commentField.value = data.data.comment || ""; // Установка значения комментария
         const saveCommentBtn = document.getElementById("saveCommentBtn");
 
         // Блокировка кнопки payBtn до загрузки изображения
