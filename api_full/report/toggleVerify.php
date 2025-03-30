@@ -45,7 +45,7 @@ try {
 
     $id = $data['id'];
     $comment = isset($data['comment']) ? $data['comment'] : null;
-    $modifiedPayment = isset($data['modified_payment']) ? $data['modified_payment'] : null;
+    $modifiedPayment = isset($data['modified_payment']) && $data['modified_payment'] !== "" ? $data['modified_payment'] : null;
 
     // Получение текущего значения verified и status из таблицы steps
     $stmt = $pdo->prepare('SELECT verified, status, id_usertg FROM steps WHERE id = :id');
@@ -65,7 +65,7 @@ try {
     $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
-    $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_STR);
+    $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_NULL | PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 

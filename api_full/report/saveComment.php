@@ -18,12 +18,12 @@ try {
 
     $id = $data['id'];
     $comment = $data['comment'];
-    $modifiedPayment = $data['modified_payment'];
+    $modifiedPayment = $data['modified_payment'] !== "" ? $data['modified_payment'] : null;
 
     // Обновление комментария и изменённой выплаты в таблице steps
     $updateStmt = $pdo->prepare('UPDATE steps SET comment = :comment, modified_payment = :modified_payment WHERE id = :id');
     $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
-    $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_STR);
+    $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_NULL | PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
