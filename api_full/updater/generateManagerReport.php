@@ -183,7 +183,7 @@ try {
     // Перемещение итогового листа в конец
     $summarySheetIndex = $spreadsheet->getIndex($summarySheet);
     $spreadsheet->setActiveSheetIndex($summarySheetIndex);
-    $spreadsheet->moveSheetToEnd();
+    $spreadsheet->setActiveSheetIndex($spreadsheet->getSheetCount() - 1);
 
     // Удаление первого пустого листа
     $spreadsheet->removeSheetByIndex(0);
