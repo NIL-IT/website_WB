@@ -80,6 +80,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const receiptUpload = document.getElementById("receiptUpload");
         const commentField = document.getElementById("comment");
         commentField.value = data.data.comment || ""; // Установка значения комментария
+
+        const modifiedPaymentField = document.getElementById("modifiedPayment");
+        modifiedPaymentField.value = data.data.modified_payment || ""; // Установка значения изменённой выплаты
+
         const saveCommentBtn = document.getElementById("saveCommentBtn");
 
         // Блокировка кнопки payBtn до загрузки изображения
@@ -115,7 +119,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({
               id: id,
-              comment: commentField.value
+              comment: commentField.value,
+              modified_payment: modifiedPaymentField.value // Отправка изменённой выплаты
             }),
           })
             .then((response) => response.json())
@@ -140,7 +145,8 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify({
               id: id,
-              comment: commentField.value
+              comment: commentField.value,
+              modified_payment: modifiedPaymentField.value // Отправка изменённой выплаты
             }),
           })
             .then((response) => response.json())

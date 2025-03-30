@@ -63,7 +63,8 @@ try {
                 'success' => true,
                 'data' => $step,
                 'benefit' => $benefit,
-                'comment' => $step['comment'] // Убедитесь, что комментарий включен
+                'comment' => $step['comment'], // Убедитесь, что комментарий включен
+                'modified_payment' => $step['modified_payment'] // Добавьте изменённую выплату
             ];
 
             echo json_encode($response);

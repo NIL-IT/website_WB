@@ -11,17 +11,19 @@ try {
     $data = json_decode(file_get_contents('php://input'), true);
 
     // Проверка наличия необходимых данных
-    if (!isset($data['id']) || !isset($data['comment'])) {
+    if (!isset($data['id']) || !isset($data['comment']) || !isset($data['modified_payment'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input']);
         exit;
     }
 
     $id = $data['id'];
     $comment = $data['comment'];
+    $modifiedPayment = $data['modified_payment'];
 
-    // Обновление комментария в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET comment = :comment WHERE id = :id');
+    // Обновление комментария и изменённой выплаты в таблице steps
+    $updateStmt = $pdo->prepare('UPDATE steps SET comment = :comment, modified_payment = :modified_payment WHERE id = :id');
     $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
+    $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
