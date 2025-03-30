@@ -41,7 +41,7 @@ try {
     $stmt = $pdo->prepare("
     SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid, s.receipt_image,
         u1.username AS step_username, 
-        p.tg_nick, p.name AS product_name, p.image_path AS product_image_path, p.article, p.expire, p.market_price, p.your_price,
+        p.tg_nick, p.name AS product_name, p.image_path AS product_image_path, p.article, p.expire, p.market_price, p.your_price, p.modified_payment,
         u2.id_usertg AS product_user_id, u2.username AS product_username
     FROM steps s
     LEFT JOIN users u1 ON s.id_usertg = u1.id_usertg
@@ -62,7 +62,7 @@ try {
         $inIssue = $row['expire'] ? 'Нет' : 'Да';
     
         // Вычисление выгоды покупателя
-        $profit = $row['market_price'] - $row['your_price'];
+        $profit = !is_null($row['modified_payment']) ? $row['modified_payment'] : ($row['market_price'] - $row['your_price']);
     
         // Определение статуса verified и paid
         $verifiedStatus = $row['verified'] ? 'Подтверждён' : 'Не подтвержден';
