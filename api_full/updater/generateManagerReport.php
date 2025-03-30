@@ -12,33 +12,6 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-// Определение стилей
-$headerStyle = [
-    'font' => ['bold' => true],
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
-];
-
-$secondHeaderStyle = [
-    'font' => ['bold' => true],
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC0CB']]
-];
-
-$contentStyle = [
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
-    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
-];
-
-$totalStyle = [
-    'font' => ['bold' => true],
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT],
-    'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
-];
-
 try {
     // Подключение к базе данных
     $pdo = getDbConnection();
@@ -182,7 +155,6 @@ try {
 
     // Перемещение итогового листа в конец
     $summarySheetIndex = $spreadsheet->getIndex($summarySheet);
-    $spreadsheet->setActiveSheetIndex($summarySheetIndex);
     $spreadsheet->setActiveSheetIndex($spreadsheet->getSheetCount() - 1);
 
     // Удаление первого пустого листа
