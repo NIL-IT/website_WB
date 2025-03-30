@@ -12,43 +12,31 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-$headerStyle = [
-    'font' => ['bold' => true, 'size' => 12],
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE599']], // Светло-желтый
-];
-
-$secondHeaderStyle = [
-    'font' => ['bold' => true, 'size' => 12],
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC7CE']], // Светло-красный
-];
-
-$contentStyle = [
-    'font' => ['size' => 11],
-    'borders' => ['allBorders' => ['style' => Border::BORDER_THIN]],
-];
-
-$totalStyleGreen = [
-    'font' => ['bold' => true, 'size' => 12],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB7E1CD']], // Зелёный
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
-];
-
-$totalStyleRed = [
-    'font' => ['bold' => true, 'size' => 12],
-    'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC7CE']], // Красный
-    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-    'borders' => ['allBorders' => ['style' => Border::BORDER_MEDIUM]],
-];
-
 try {
     // Подключение к базе данных
     $pdo = getDbConnection();
-
+    $totalStyle = [
+        'font' => ['bold' => true],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_RIGHT],
+        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFB2FFB2']]
+    ];
+    $headerStyle = [
+        'font' => ['bold' => true],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFE0B2']]
+    ];
+    $contentStyle = [
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
+        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+    ];
+    $secondHeaderStyle = [
+        'font' => ['bold' => true],
+        'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+        'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
+        'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFFFC0CB']]
+    ];
     // Запрос всех менеджеров из таблицы products
     $stmt = $pdo->query("SELECT DISTINCT tg_nick_manager FROM products WHERE tg_nick_manager IS NOT NULL AND tg_nick_manager != ''");
     $managers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -158,8 +146,8 @@ try {
         $sheet->setCellValue('F' . $rowIndex, 'Итого');
         $sheet->setCellValue('G' . $rowIndex, $totalRemainingBenefit);
 
-        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyleGreen);
-        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyleRed);
+        $sheet->getStyle('C' . $rowIndex . ':D' . $rowIndex)->applyFromArray($totalStyle);
+        $sheet->getStyle('F' . $rowIndex . ':G' . $rowIndex)->applyFromArray($totalStyle);
 
         $sheet->getStyle('D' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
         $sheet->getStyle('G' . $rowIndex)->getNumberFormat()->setFormatCode('#,##0 ₽');
