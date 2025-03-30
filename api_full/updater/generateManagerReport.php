@@ -32,7 +32,7 @@ try {
 
         // Запись заголовков
         $sheet->setCellValue('A1', 'Название товара');
-        $sheet->setCellValue('B1', 'Цена одной выплаты');
+        $sheet->setCellValue('B1', 'Средняя цена одной выплаты');
         $sheet->setCellValue('C1', 'Количество выплат');
         $sheet->setCellValue('D1', 'Сумма выплат');
         $sheet->setCellValue('E1', ''); // Пропуск
@@ -72,7 +72,12 @@ try {
             $productName = $product['name'];
             $marketPrice = $product['market_price'];
             $yourPrice = $product['your_price'];
-            $benefit = $marketPrice - $yourPrice;
+
+            // Вычисление выгоды с учётом modified_payment
+            $stmt = $pdo->prepare("SELECT modified_payment FROM steps WHERE id_product = :productId LIMIT 1");
+            $stmt->execute(['productId' => $productId]);
+            $modifiedPayment = $stmt->fetchColumn();
+            $benefit = !is_null($modifiedPayment) ? $modifiedPayment : ($marketPrice - $yourPrice);
 
             // Запрос количества завершенных шагов для текущего товара
             $stmt = $pdo->prepare("SELECT COUNT(*) as count FROM steps WHERE id_product = :productId AND step = 'Завершено' AND status = 3");
