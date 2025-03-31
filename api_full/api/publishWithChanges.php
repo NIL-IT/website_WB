@@ -1,16 +1,19 @@
 <?php
-header('Content-Type: application/json');
-include 'cors.php';
-require 'db.php';
+header("Content-Type: application/json");
+include 'db.php';
 
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents("php://input"), true);
 
 if (!$data) {
     echo json_encode(["success" => false, "message" => "Invalid input"]);
     exit;
 }
 
-$article = $data['article'];
+if (!isset($data['selectedDate'])) {
+    echo json_encode(["success" => false, "message" => "Не указана дата публикации."]);
+    exit;
+}
+
 $conn = getDbConnection();
 
 try {
@@ -56,11 +59,13 @@ try {
         // Получаем значение keywords как обычную строку
         $keywords = isset($data['keywords']) ? $data['keywords'] : null;
 
+        $scheduledTime = $data['selectedDate'];
+
         $insertStmt = $conn->prepare("
-            INSERT INTO products (
-                brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager, delete_date
+            INSERT INTO pending_products (
+                brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager, scheduled_time, delete_date
             ) VALUES (
-                :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :deleteDate
+                :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :scheduledTime, :deleteDate
             )
         ");
 
@@ -86,11 +91,12 @@ try {
         $insertStmt->bindParam(':expire', $isConfirmed, PDO::PARAM_BOOL);
         $insertStmt->bindParam(':keywords', $keywords, PDO::PARAM_STR); // Привязываем keywords как обычную строку
         $insertStmt->bindParam(':tg_nick_manager', $data['tg_nick_manager']);
+        $insertStmt->bindParam(':scheduledTime', $scheduledTime);
         $insertStmt->bindParam(':deleteDate', $deleteDate);
 
         $insertStmt->execute();
 
-        echo json_encode(["success" => true, "message" => "Product added successfully"]);
+        echo json_encode(["success" => true, "message" => "Product scheduled successfully"]);
     } else {
         echo json_encode(["success" => false, "message" => "Failed to save image"]);
     }
@@ -98,4 +104,3 @@ try {
     echo json_encode(["success" => false, "message" => "Database error: " . $e->getMessage()]);
 }
 ?>
-
