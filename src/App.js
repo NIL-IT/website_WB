@@ -322,6 +322,7 @@ const App = () => {
             <Route path="/catalog" element={<CatalogPage products={products} categories={categories} />} />
             <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories} />} />
             <Route path="/add-product" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
+            <Route path="/publishWithChanges" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchases" element={<PurchasesPage userSteps={userSteps} userInfo={userInfo} />} />
             <Route path="/profile" element={<ProfilePage userInfo={userInfo} />} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />

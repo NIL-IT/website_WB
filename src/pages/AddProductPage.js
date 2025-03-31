@@ -45,6 +45,14 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     validationMessage: "",
   });
 
+  const [isAdmin, setIsAdmin] = useState(userInfo.status === "admin");
+  const [showAdminMenu, setShowAdminMenu] = useState(false);
+  const [selectedDate, setSelectedDate] = useState("");
+  const [deleteDate, setDeleteDate] = useState("");
+  const [publishWithChanges, setPublishWithChanges] = useState(false);
+  const [isPublishButtonDisabled, setIsPublishButtonDisabled] = useState(true);
+  const [deleteOnly, setDeleteOnly] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -166,33 +174,111 @@ const handleRemoveField = (event) => {
       return;
     }
 
-    // Формирование данных для отправки
-    const dataToSend = {
-      ...formData,
-      keywordsWithCount: hasInputFields ? keywordsWithCount : undefined, // Добавляем массив ключевых слов с количеством
-    };
+    if (isAdmin) {
+      setShowAdminMenu(true); // Открыть меню администратора
+    } else {
+      // Формирование данных для отправки
+      const dataToSend = {
+        ...formData,
+        keywordsWithCount: hasInputFields ? keywordsWithCount : undefined, // Добавляем массив ключевых слов с количеством
+      };
 
-    // Отправка данных на сервер
-    fetch("https://inhomeka.online:8000/addProduct.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dataToSend),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          setShowPopup(true);
-          setTimeout(() => {
-            setShowPopup(false);
+      // Отправка данных на сервер
+      fetch("https://inhomeka.online:8000/addProduct.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            setShowPopup(true);
+            setTimeout(() => {
+              setShowPopup(false);
+              fetchProducts();
+              navigate("/catalog");
+            }, 5000);
+          } else {
+            alert("Error: " + data.message);
+            navigate("/catalog");
+          }
+        })
+        .catch((error) => alert("Error: " + error));
+    }
+  };
+
+  // Обработчик для изменения состояния галочек
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    if (name === "publishWithChanges") {
+      setPublishWithChanges(checked);
+    } else if (name === "deleteOnly") {
+      setDeleteOnly(checked);
+    }
+    validateAdminMenu();
+  };
+
+  // Проверка валидности меню администратора
+  const validateAdminMenu = () => {
+    if (publishWithChanges && !selectedDate) {
+      setIsPublishButtonDisabled(true);
+    } else if (deleteOnly) {
+      setIsPublishButtonDisabled(true); // Блокируем кнопку "Опубликовать"
+    } else {
+      setIsPublishButtonDisabled(false);
+    }
+  };
+
+  // Обработчик отправки данных для публикации
+  const handleAdminSubmit = (type) => {
+    if (type === "publish" && !deleteOnly) {
+      handleSubmit(); // Публикация без изменений
+    } else if (type === "publishWithChanges" && selectedDate && !deleteOnly) {
+      const dataToSend = {
+        ...formData,
+        selectedDate,
+        deleteDate,
+      };
+
+      fetch("https://inhomeka.online:8000/publishWithChanges.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Товар успешно опубликован с изменениями!");
             fetchProducts();
             navigate("/catalog");
-          }, 5000);
-        } else {
-          alert("Error: " + data.message);
-          navigate("/catalog");
-        }
+          } else {
+            alert("Ошибка: " + data.message);
+          }
+        })
+        .catch((error) => alert("Ошибка: " + error));
+    } else if (deleteOnly) {
+      const dataToSend = {
+        ...formData,
+        deleteDate,
+      };
+
+      fetch("https://inhomeka.online:8000/addProduct.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
       })
-      .catch((error) => alert("Error: " + error));
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Товар успешно удален!");
+            fetchProducts();
+            navigate("/catalog");
+          } else {
+            alert("Ошибка: " + data.message);
+          }
+        })
+        .catch((error) => alert("Ошибка: " + error));
+    }
   };
 
   return (
@@ -660,7 +746,6 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
-                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
@@ -672,6 +757,60 @@ const handleRemoveField = (event) => {
               );
             })}
             <button onClick={() => setShowInputPopup(false)}>Сохранить</button>
+          </div>
+        </div>
+      )}
+      {showAdminMenu && isAdmin && (
+        <div className="admin-menu">
+          <h3>Меню администратора</h3>
+          <label>
+            Отложенная публикация
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+            <span>(Выбранные дни и доступные товары будут перенесены на выбранный день)</span>
+          </label>
+          <label>
+            Удаление товара в выбранный день
+            <input
+              type="date"
+              value={deleteDate}
+              onChange={(e) => setDeleteDate(e.target.value)}
+            />
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="publishWithChanges"
+              checked={publishWithChanges}
+              onChange={handleCheckboxChange}
+            />
+            Опубликовать с дополнениями
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              name="deleteOnly"
+              checked={deleteOnly}
+              onChange={handleCheckboxChange}
+            />
+            Только удалить
+          </label>
+          <div className="admin-menu-buttons">
+            <button
+              onClick={() => handleAdminSubmit("publish")}
+              disabled={deleteOnly || publishWithChanges}
+            >
+              Опубликовать
+            </button>
+            <button
+              onClick={() => handleAdminSubmit("publishWithChanges")}
+              disabled={isPublishButtonDisabled}
+            >
+              Опубликовать с дополнениями
+            </button>
           </div>
         </div>
       )}
