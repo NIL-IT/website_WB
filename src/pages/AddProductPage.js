@@ -176,37 +176,39 @@ const handleRemoveField = (event) => {
       return;
     }
 
-    if (userInfo && userInfo.status === 'admin') {
+    // Проверяем статус пользователя перед открытием меню администратора
+    if (userInfo?.status === "admin") {
       setShowAdminMenu(true); // Открыть меню администратора
-    } else {
-      // Формирование данных для отправки
-      const dataToSend = {
-        ...formData,
-        keywordsWithCount: hasInputFields ? keywordsWithCount : undefined, // Добавляем массив ключевых слов с количеством
-      };
-
-      // Отправка данных на сервер
-      fetch("https://inhomeka.online:8000/addProduct.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            setShowPopup(true);
-            setTimeout(() => {
-              setShowPopup(false);
-              fetchProducts();
-              navigate("/catalog");
-            }, 5000);
-          } else {
-            alert("Error: " + data.message);
-            navigate("/catalog");
-          }
-        })
-        .catch((error) => alert("Error: " + error));
+      return; // Прерываем выполнение, чтобы не отправлять данные
     }
+
+    // Формирование данных для отправки
+    const dataToSend = {
+      ...formData,
+      keywordsWithCount: hasInputFields ? keywordsWithCount : undefined, // Добавляем массив ключевых слов с количеством
+    };
+
+    // Отправка данных на сервер
+    fetch("https://inhomeka.online:8000/addProduct.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+            fetchProducts();
+            navigate("/catalog");
+          }, 5000);
+        } else {
+          alert("Error: " + data.message);
+          navigate("/catalog");
+        }
+      })
+      .catch((error) => alert("Error: " + error));
   };
 
   // Обработчик для изменения состояния галочек
