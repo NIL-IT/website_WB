@@ -174,7 +174,7 @@ const handleRemoveField = (event) => {
     }
 
     // Проверяем статус пользователя перед открытием меню администратора
-    if (userInfo?.status === "admin") {
+    if (userInfo?.status === "adminаа") {
       setShowAdminMenu(true); // Открыть меню администратора
       return; // Прерываем выполнение, чтобы не отправлять данные
     }
@@ -767,7 +767,7 @@ const handleRemoveField = (event) => {
           </div>
         </div>
       )}
-      {showAdminMenu && userInfo && userInfo.status === 'admin' && (
+      {showAdminMenu && userInfo && userInfo.status === 'adminвв' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div
             className="admin-menu-popup"
