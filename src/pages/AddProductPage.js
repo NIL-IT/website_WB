@@ -181,7 +181,7 @@ const handleRemoveField = (event) => {
       setShowAdminMenu(true); // Открыть меню администратора
       return; // Прерываем выполнение, чтобы не отправлять данные
     }
-
+    console.log(userInfo.status);
     // Формирование данных для отправки
     const dataToSend = {
       ...formData,
