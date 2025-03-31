@@ -174,11 +174,11 @@ const handleRemoveField = (event) => {
     }
 
     // Проверяем статус пользователя перед открытием меню администратора
-    if (userInfo?.status === "admin") {
-      setShowAdminMenu(true); // Открыть меню администратора
-      return; // Прерываем выполнение, чтобы не отправлять данные
-    }
-    console.log(userInfo.status);
+    // if (userInfo?.status === "admin") {
+    //   setShowAdminMenu(true); // Открыть меню администратора
+    //   return; // Прерываем выполнение, чтобы не отправлять данные
+    // }
+    // console.log(userInfo.status);
     // Формирование данных для отправки
     const dataToSend = {
       ...formData,
@@ -209,18 +209,18 @@ const handleRemoveField = (event) => {
   };
 
   // Обработчик для изменения состояния галочек
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
+  // const handleCheckboxChange = (e) => {
+  //   const { name, checked } = e.target;
   
-    if (name === "publishWithChanges") {
-      setPublishWithChanges(checked);
-      if (!checked) setSelectedDate(""); // Очистить дату, если галочка снята
-    } else if (name === "deleteOnly") {
-      setDeleteOnly(checked);
-      if (!checked) setDeleteDate(""); // Очистить дату, если галочка снята
-    }
-    validateAdminMenu();
-  };
+  //   if (name === "publishWithChanges") {
+  //     setPublishWithChanges(checked);
+  //     if (!checked) setSelectedDate(""); // Очистить дату, если галочка снята
+  //   } else if (name === "deleteOnly") {
+  //     setDeleteOnly(checked);
+  //     if (!checked) setDeleteDate(""); // Очистить дату, если галочка снята
+  //   }
+  //   validateAdminMenu();
+  // };
   
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
@@ -236,56 +236,56 @@ const handleRemoveField = (event) => {
   };
 
   // Обработчик отправки данных для публикации
-  const handleAdminSubmit = (type) => {
-    if (type === "publish" && !deleteOnly) {
-      handleSubmit(); // Публикация без изменений
-    } else if (type === "publishWithChanges" && selectedDate && !deleteOnly) {
-      const dataToSend = {
-        ...formData,
-        selectedDate,
-        deleteDate,
-      };
+  // const handleAdminSubmit = (type) => {
+  //   if (type === "publish" && !deleteOnly) {
+  //     handleSubmit(); // Публикация без изменений
+  //   } else if (type === "publishWithChanges" && selectedDate && !deleteOnly) {
+  //     const dataToSend = {
+  //       ...formData,
+  //       selectedDate,
+  //       deleteDate,
+  //     };
 
-      fetch("https://inhomeka.online:8000/publishWithChanges.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Товар успешно опубликован с изменениями!");
-            fetchProducts();
-            navigate("/catalog");
-          } else {
-            alert("Ошибка: " + data.message);
-          }
-        })
-        .catch((error) => alert("Ошибка: " + error));
-    } else if (deleteOnly) {
-      const dataToSend = {
-        ...formData,
-        deleteDate,
-      };
+  //     fetch("https://inhomeka.online:8000/publishWithChanges.php", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(dataToSend),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           alert("Товар успешно опубликован с изменениями!");
+  //           fetchProducts();
+  //           navigate("/catalog");
+  //         } else {
+  //           alert("Ошибка: " + data.message);
+  //         }
+  //       })
+  //       .catch((error) => alert("Ошибка: " + error));
+  //   } else if (deleteOnly) {
+  //     const dataToSend = {
+  //       ...formData,
+  //       deleteDate,
+  //     };
 
-      fetch("https://inhomeka.online:8000/addProduct.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Товар успешно удален!");
-            fetchProducts();
-            navigate("/catalog");
-          } else {
-            alert("Ошибка: " + data.message);
-          }
-        })
-        .catch((error) => alert("Ошибка: " + error));
-    }
-  };
+  //     fetch("https://inhomeka.online:8000/addProduct.php", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(dataToSend),
+  //     })
+  //       .then((response) => response.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           alert("Товар успешно удален!");
+  //           fetchProducts();
+  //           navigate("/catalog");
+  //         } else {
+  //           alert("Ошибка: " + data.message);
+  //         }
+  //       })
+  //       .catch((error) => alert("Ошибка: " + error));
+  //   }
+  // };
 
   return (
     <div className="add-product-page">
@@ -752,6 +752,7 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
+                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
@@ -766,7 +767,7 @@ const handleRemoveField = (event) => {
           </div>
         </div>
       )}
-      {showAdminMenu && userInfo && userInfo.status === 'admin' && (
+      {/* {showAdminMenu && userInfo && userInfo.status === 'admin' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div
             className="admin-menu-popup"
@@ -845,7 +846,7 @@ const handleRemoveField = (event) => {
             </button>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
