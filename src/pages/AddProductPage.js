@@ -761,55 +761,66 @@ const handleRemoveField = (event) => {
         </div>
       )}
       {showAdminMenu && isAdmin && (
-        <div className="admin-menu">
-          <h3>Меню администратора</h3>
-          <label>
-            Отложенная публикация
-            <input
-              type="date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-            <span>(Выбранные дни и доступные товары будут перенесены на выбранный день)</span>
-          </label>
-          <label>
-            Удаление товара в выбранный день
-            <input
-              type="date"
-              value={deleteDate}
-              onChange={(e) => setDeleteDate(e.target.value)}
-            />
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="publishWithChanges"
-              checked={publishWithChanges}
-              onChange={handleCheckboxChange}
-            />
-            Опубликовать с дополнениями
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="deleteOnly"
-              checked={deleteOnly}
-              onChange={handleCheckboxChange}
-            />
-            Только удалить
-          </label>
-          <div className="admin-menu-buttons">
-            <button
-              onClick={() => handleAdminSubmit("publish")}
-              disabled={deleteOnly || publishWithChanges}
-            >
-              Опубликовать
-            </button>
-            <button
-              onClick={() => handleAdminSubmit("publishWithChanges")}
-              disabled={isPublishButtonDisabled}
-            >
+        <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
+          <div
+            className="admin-menu-popup"
+            onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы не закрывать меню при клике внутри
+          >
+            <h3>Меню администратора</h3>
+            <label>
+              Отложенная публикация
+              <input
+                type="date"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+              <span>(Выбранные дни и доступные товары будут перенесены на выбранный день)</span>
+            </label>
+            <label>
+              Удаление товара в выбранный день
+              <input
+                type="date"
+                value={deleteDate}
+                onChange={(e) => setDeleteDate(e.target.value)}
+              />
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="publishWithChanges"
+                checked={publishWithChanges}
+                onChange={handleCheckboxChange}
+              />
               Опубликовать с дополнениями
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="deleteOnly"
+                checked={deleteOnly}
+                onChange={handleCheckboxChange}
+              />
+              Только удалить
+            </label>
+            <div className="admin-menu-buttons">
+              <button
+                onClick={() => handleAdminSubmit("publish")}
+                disabled={deleteOnly || publishWithChanges}
+              >
+                Опубликовать
+              </button>
+              <button
+                onClick={() => handleAdminSubmit("publishWithChanges")}
+                disabled={isPublishButtonDisabled}
+              >
+                Опубликовать с дополнениями
+              </button>
+            </div>
+            <button
+              className="close-admin-menu"
+              onClick={() => setShowAdminMenu(false)}
+            >
+              Закрыть
             </button>
           </div>
         </div>
