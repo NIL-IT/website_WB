@@ -211,22 +211,27 @@ const handleRemoveField = (event) => {
   // Обработчик для изменения состояния галочек
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
+  
     if (name === "publishWithChanges") {
       setPublishWithChanges(checked);
+      if (!checked) setSelectedDate(""); // Очистить дату, если галочка снята
     } else if (name === "deleteOnly") {
       setDeleteOnly(checked);
+      if (!checked) setDeleteDate(""); // Очистить дату, если галочка снята
     }
     validateAdminMenu();
   };
-
+  
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
-    if (publishWithChanges && !selectedDate) {
-      setIsPublishButtonDisabled(true);
-    } else if (deleteOnly) {
-      setIsPublishButtonDisabled(true); // Блокируем кнопку "Опубликовать"
-    } else {
+    if (publishWithChanges && selectedDate && !deleteOnly) {
       setIsPublishButtonDisabled(false);
+    } else if (deleteOnly && deleteDate && !publishWithChanges) {
+      setIsPublishButtonDisabled(false);
+    } else if (publishWithChanges && deleteOnly && selectedDate && deleteDate) {
+      setIsPublishButtonDisabled(false);
+    } else {
+      setIsPublishButtonDisabled(true);
     }
   };
 
@@ -768,51 +773,66 @@ const handleRemoveField = (event) => {
             onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы не закрывать меню при клике внутри
           >
             <h3>Меню администратора</h3>
-            <label>
-              Отложенная публикация
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="publishWithChanges"
+                  checked={publishWithChanges}
+                  onChange={handleCheckboxChange}
+                />
+                Отложенная публикация
+              </label>
               <input
                 type="date"
                 value={selectedDate}
                 onChange={(e) => setSelectedDate(e.target.value)}
+                disabled={!publishWithChanges}
+                style={{
+                  backgroundColor: publishWithChanges ? "white" : "#f0f0f0",
+                  cursor: publishWithChanges ? "pointer" : "not-allowed",
+                }}
               />
-              <span>(Выбранные дни и доступные товары будут перенесены на выбранный день)</span>
-            </label>
-            <label>
-              Удаление товара в выбранный день
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  name="deleteOnly"
+                  checked={deleteOnly}
+                  onChange={handleCheckboxChange}
+                />
+                Удаление товара в выбранный день
+              </label>
               <input
                 type="date"
                 value={deleteDate}
                 onChange={(e) => setDeleteDate(e.target.value)}
+                disabled={!deleteOnly}
+                style={{
+                  backgroundColor: deleteOnly ? "white" : "#f0f0f0",
+                  cursor: deleteOnly ? "pointer" : "not-allowed",
+                }}
               />
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="publishWithChanges"
-                checked={publishWithChanges}
-                onChange={handleCheckboxChange}
-              />
-              Опубликовать с дополнениями
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="deleteOnly"
-                checked={deleteOnly}
-                onChange={handleCheckboxChange}
-              />
-              Только удалить
-            </label>
+            </div>
             <div className="admin-menu-buttons">
               <button
                 onClick={() => handleAdminSubmit("publish")}
-                disabled={deleteOnly || publishWithChanges}
+                disabled={publishWithChanges || deleteOnly}
+                style={{
+                  backgroundColor: publishWithChanges || deleteOnly ? "#d3d3d3" : "#690DC9",
+                  cursor: publishWithChanges || deleteOnly ? "not-allowed" : "pointer",
+                }}
               >
                 Опубликовать
               </button>
               <button
                 onClick={() => handleAdminSubmit("publishWithChanges")}
                 disabled={isPublishButtonDisabled}
+                style={{
+                  backgroundColor: isPublishButtonDisabled ? "#d3d3d3" : "#690DC9",
+                  cursor: isPublishButtonDisabled ? "not-allowed" : "pointer",
+                }}
               >
                 Опубликовать с дополнениями
               </button>
