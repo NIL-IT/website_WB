@@ -21,6 +21,7 @@ const App = () => {
   const [showLogo, setShowLogo] = useState(true); // Добавлено состояние для отображения логотипа
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://inhomeka.online:8000/';
+  const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false); // Новый флаг
 // const [userInfo, setUserInfo] = useState([
   //   {
   //     id_usertg: 934574143,
@@ -251,8 +252,6 @@ const App = () => {
               valid = false; // Обновляем значение valid
             }
             setUserInfo(newUserResponse.data);
-            fetchProducts();
-            setIsLoading(false);
           }
         } else {
           if (!response.validUsername) {
@@ -260,9 +259,9 @@ const App = () => {
             valid = false; // Обновляем значение valid
           }
           setUserInfo(response.data);
-          fetchProducts();
-          setIsLoading(false);
         }
+
+        setIsUserInfoLoaded(true); // Устанавливаем флаг после загрузки данных пользователя
 
         const stepsResponse = await API.getUserSteps(userId);
         if (stepsResponse.success) {
@@ -275,6 +274,9 @@ const App = () => {
         } else {
           console.error('Failed to fetch user steps:', stepsResponse.error);
         }
+
+        fetchProducts();
+        setIsLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -290,7 +292,7 @@ const App = () => {
   return () => clearTimeout(timer); // Очищаем таймер при размонтировании компонента
   }, []);
 
-  if (isLoading) {
+  if (isLoading || !isUserInfoLoaded) { // Учитываем новый флаг
     return (
       <div className="flex justify-center items-center w-full h-full min-h-screen">
         {showLogo ? (

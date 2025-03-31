@@ -4,6 +4,9 @@ import imageCompression from "browser-image-compression";
 import "../styles/AddProductPage.css";
 
 const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
+  if (!userInfo) {
+    return <div>Загрузка...</div>; // Показываем сообщение, пока данные пользователя не загружены
+  }
   const [showPopup, setShowPopup] = useState(false);
   const [showInputPopup, setShowInputPopup] = useState(false);
   const [showPopup2, setShowPopup2] = useState(false);
