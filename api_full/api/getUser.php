@@ -36,10 +36,13 @@ try {
             }
         }
 
+        // Получение статуса пользователя
+        $status = $user['status'];
+
         // Определение, является ли username валидным
         $validUsername = ($user['username'] !== null && $user['username'] !== '' && $user['username'] !== 'undefined');
 
-        echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername]);
+        echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername, "status" => $status]);
     } else {
         echo json_encode(["success" => false, "message" => "User not found"]);
     }
