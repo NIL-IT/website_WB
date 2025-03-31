@@ -48,7 +48,6 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     validationMessage: "",
   });
 
-  const [isAdmin, setIsAdmin] = useState(userInfo.status === "admin");
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [deleteDate, setDeleteDate] = useState("");
@@ -177,7 +176,7 @@ const handleRemoveField = (event) => {
       return;
     }
 
-    if (isAdmin) {
+    if (userInfo && userInfo.status === 'admin') {
       setShowAdminMenu(true); // Открыть меню администратора
     } else {
       // Формирование данных для отправки
@@ -763,7 +762,7 @@ const handleRemoveField = (event) => {
           </div>
         </div>
       )}
-      {showAdminMenu && isAdmin && (
+      {showAdminMenu && userInfo && userInfo.status === 'admin' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div
             className="admin-menu-popup"
