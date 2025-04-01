@@ -234,6 +234,31 @@
 
 }
 
+.admin-menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.admin-menu-buttons button {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 1);
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(105, 13, 201, 1);
+  color: rgba(255, 255, 255, 1);
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+}
+
+.admin-menu-buttons button:disabled {
+  background-color: #d3d3d3;
+  cursor: not-allowed;
+}
+
 /* Задний фон для всплывающего меню */
 .admin-menu-overlay {
   position: fixed;
