@@ -151,6 +151,22 @@ const handleRemoveField = (event) => {
     }));
   };
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+  
+    setStateValue((prev) => {
+      if (name === "publishWithChanges") {
+        return checked ? prev | 0b10 : prev & 0b01;
+      } else if (name === "deleteOnly") {
+        return checked ? prev | 0b01 : prev & 0b10;
+      }
+      return prev;
+    });
+  
+    if (name === "publishWithChanges" && !checked) setSelectedDate("");
+    if (name === "deleteOnly" && !checked) setDeleteDate("");
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
