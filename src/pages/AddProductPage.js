@@ -52,8 +52,9 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [selectedDate, setSelectedDate] = useState("");
   const [deleteDate, setDeleteDate] = useState("");
   const [publishWithChanges, setPublishWithChanges] = useState(false);
-  const [isPublishButtonDisabled, setIsPublishButtonDisabled] = useState(true);
+  const [isPublishButtonDisabled, setIsPublishButtonDisabled] = useState(false);
   const [deleteOnly, setDeleteOnly] = useState(false);
+  const [isPublishWithChangesDisabled, setIsPublishWithChangesDisabled] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
