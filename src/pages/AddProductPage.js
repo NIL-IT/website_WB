@@ -167,6 +167,32 @@ const handleRemoveField = (event) => {
     if (name === "deleteOnly" && !checked) setDeleteDate("");
   };
   
+  const validateDates = () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+  
+    if (selectedDate && new Date(selectedDate) < tomorrow) {
+      alert("Дата отложенной публикации должна быть не раньше завтрашнего дня.");
+      setSelectedDate("");
+      return false;
+    }
+  
+    if (deleteDate && new Date(deleteDate) < tomorrow) {
+      alert("Дата удаления должна быть не раньше завтрашнего дня.");
+      setDeleteDate("");
+      return false;
+    }
+  
+    if (selectedDate && deleteDate && new Date(deleteDate) <= new Date(selectedDate)) {
+      alert("Дата удаления должна быть как минимум на следующий день после даты отложенной публикации.");
+      setDeleteDate("");
+      return false;
+    }
+  
+    return true;
+  };
+  
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -229,6 +255,8 @@ const handleRemoveField = (event) => {
 
   // Обработчик для изменения состояния галочек
   const handleAdminSubmit = (type) => {
+    if (!validateDates()) return;
+  
     if (type === "publishWithChanges" && ((stateValue & 0b10 && !selectedDate) || (stateValue & 0b01 && !deleteDate))) {
       alert("Пожалуйста, заполните все поля для выбранных настроек.");
       return;
