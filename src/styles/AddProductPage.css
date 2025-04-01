@@ -271,10 +271,14 @@
 .admin-menu-popup label {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 5px; /* Уменьшенный отступ между галочкой и текстом */
   font-family: "Helvetica Neue Cyr";
   font-size: 16px;
   font-weight: 400;
+}
+
+.admin-menu-popup input[type="checkbox"] {
+  margin-left: 0; /* Смещение галочки максимально влево */
 }
 
 .admin-menu-popup input[type="date"] {
@@ -323,6 +327,8 @@
   font-size: 16px;
   cursor: pointer;
   color: #333;
+  padding: 5px 10px; /* Вернули компактный размер кнопки */
+  border-radius: 4px;
 }
 
 .close-admin-menu {
