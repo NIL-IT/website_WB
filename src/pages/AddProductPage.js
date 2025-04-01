@@ -229,14 +229,22 @@ const handleRemoveField = (event) => {
   
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
-    if (publishWithChanges && selectedDate && !deleteOnly) {
-      setIsPublishButtonDisabled(false);
-    } else if (deleteOnly && deleteDate && !publishWithChanges) {
-      setIsPublishButtonDisabled(false);
-    } else if (publishWithChanges && deleteOnly && selectedDate && deleteDate) {
-      setIsPublishButtonDisabled(false);
-    } else {
-      setIsPublishButtonDisabled(true);
+    switch (true) {
+      case !publishWithChanges && !deleteOnly:
+        setIsPublishButtonDisabled(false); // Кнопка "Опубликовать" доступна
+        break;
+      case publishWithChanges && !selectedDate:
+      case deleteOnly && !deleteDate:
+      case publishWithChanges && deleteOnly && (!selectedDate || !deleteDate):
+        setIsPublishButtonDisabled(true); // Кнопка "Опубликовать с дополнениями" недоступна
+        break;
+      case publishWithChanges && selectedDate && !deleteOnly:
+      case deleteOnly && deleteDate && !publishWithChanges:
+      case publishWithChanges && deleteOnly && selectedDate && deleteDate:
+        setIsPublishButtonDisabled(false); // Кнопка "Опубликовать с дополнениями" доступна
+        break;
+      default:
+        setIsPublishButtonDisabled(true);
     }
   };
 
@@ -824,13 +832,13 @@ const handleRemoveField = (event) => {
             <div className="admin-menu-buttons">
               <button
                 onClick={() => handleAdminSubmit("publish")}
-                disabled={publishWithChanges || deleteOnly}
+                disabled={publishWithChanges || deleteOnly} // Заблокирована, если нажата любая галочка
               >
                 Опубликовать
               </button>
               <button
                 onClick={() => handleAdminSubmit("publishWithChanges")}
-                disabled={isPublishButtonDisabled}
+                disabled={isPublishButtonDisabled} // Логика активации через validateAdminMenu
               >
                 Опубликовать с дополнениями
               </button>
