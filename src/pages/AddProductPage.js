@@ -766,6 +766,7 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
+                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
