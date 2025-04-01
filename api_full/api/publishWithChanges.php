@@ -30,6 +30,17 @@ try {
 
     if (file_put_contents($imagePath, $imageDecoded)) {
         $availableDay = $data['availableDay'];
+
+        if (isset($data['selectedDate']) && !empty($data['selectedDate'])) {
+            $selectedDate = new DateTime($data['selectedDate']);
+            $newAvailableDay = [];
+            foreach ($availableDay as $key => $value) {
+                $newAvailableDay[$selectedDate->format('Y-m-d')] = $value;
+                $selectedDate->modify('+1 day');
+            }
+            $availableDay = $newAvailableDay;
+        }
+
         $availableDayJson = json_encode($availableDay);
 
         $availableDaySum = array_sum($availableDay);
@@ -55,9 +66,11 @@ try {
         // Получаем значение keywords как обычную строку
         $keywords = isset($data['keywords']) ? $data['keywords'] : null;
 
-        $scheduledTime = $data['selectedDate'];
+        $isConfirmed = isset($data['selectedDate']) && !empty($data['selectedDate']);
+        $expire = false; // expire всегда false
 
-        if (isset($data['selectedDate']) && !empty($data['selectedDate'])) {
+        if ($isConfirmed) {
+            $scheduledTime = $data['selectedDate'];
             // Вставка в таблицу pending_products
             $insertStmt = $conn->prepare("
                 INSERT INTO pending_products (
@@ -66,6 +79,7 @@ try {
                     :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :scheduledTime, :deleteDate
                 )
             ");
+            $insertStmt->bindParam(':scheduledTime', $scheduledTime);
         } else {
             // Вставка в таблицу products
             $insertStmt = $conn->prepare("
@@ -79,8 +93,6 @@ try {
 
         $deleteDate = isset($data['deleteDate']) ? $data['deleteDate'] : null;
 
-        $isConfirmed = false;
-        
         $insertStmt->bindParam(':brand', $data['brand']);
         $insertStmt->bindParam(':name', $data['name']);
         $insertStmt->bindParam(':category', $data['category']);
@@ -96,10 +108,9 @@ try {
         $insertStmt->bindParam(':marketPrice', $data['marketPrice']);
         $insertStmt->bindParam(':yourPrice', $data['yourPrice']);
         $insertStmt->bindParam(':isConfirmed', $isConfirmed, PDO::PARAM_BOOL);
-        $insertStmt->bindParam(':expire', $isConfirmed, PDO::PARAM_BOOL);
+        $insertStmt->bindParam(':expire', $expire, PDO::PARAM_BOOL);
         $insertStmt->bindParam(':keywords', $keywords, PDO::PARAM_STR); // Привязываем keywords как обычную строку
         $insertStmt->bindParam(':tg_nick_manager', $data['tg_nick_manager']);
-        $insertStmt->bindParam(':scheduledTime', $scheduledTime);
         $insertStmt->bindParam(':deleteDate', $deleteDate);
 
         $insertStmt->execute();
