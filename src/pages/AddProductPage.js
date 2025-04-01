@@ -234,16 +234,8 @@ const handleRemoveField = (event) => {
       // Если ни одна галочка не выбрана, кнопка "Опубликовать" активна
       setIsPublishButtonDisabled(false);
       setIsPublishWithChangesDisabled(true);
-    } else if (
-      (publishWithChanges && !selectedDate) ||
-      (deleteOnly && !deleteDate) ||
-      (publishWithChanges && deleteOnly && (!selectedDate || !deleteDate))
-    ) {
-      // Если выбрана одна или две галочки, но не все соответствующие поля заполнены - обе кнопки отключены
-      setIsPublishButtonDisabled(true);
-      setIsPublishWithChangesDisabled(true);
     } else {
-      // Если выбрана одна галочка с заполненным полем ИЛИ две галочки с обоими заполненными полями
+      // Если выбрана хотя бы одна галочка, кнопка "Опубликовать" блокируется
       setIsPublishButtonDisabled(true);
       setIsPublishWithChangesDisabled(false);
     }
@@ -251,63 +243,53 @@ const handleRemoveField = (event) => {
 
   // Обработчик отправки данных для публикации
   const handleAdminSubmit = (type) => {
+    if (type === "publishWithChanges") {
+      // Проверка заполненности полей для выбранных галочек
+      if (
+        (publishWithChanges && !selectedDate) ||
+        (deleteOnly && !deleteDate)
+      ) {
+        alert("Пожалуйста, заполните все поля для выбранных настроек.");
+        return;
+      }
+    }
+  
     const dataToSend = {
       ...formData,
       selectedDate: publishWithChanges ? selectedDate : undefined,
       deleteDate: deleteOnly ? deleteDate : undefined,
     };
   
-    if (type === "publish") {
-      // Отправка через старый запрос (addProduct.php)
-      fetch("https://inhomeka.online:8000/addProduct.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
+    const url =
+      type === "publishWithChanges"
+        ? "https://inhomeka.online:8000/publishWithChanges.php"
+        : "https://inhomeka.online:8000/addProduct.php";
+  
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dataToSend),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          setShowAdminMenu(false);
+          setPopupMessage(
+            type === "publishWithChanges"
+              ? "Ваш товар был подтверждён и будет опубликован в соответствии с выбранными настройками"
+              : "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
+          );
+          setShowPopup(true);
+          setTimeout(() => {
+            setShowPopup(false);
+            fetchProducts();
+            navigate("/catalog");
+          }, 5000);
+        } else {
+          alert("Ошибка: " + data.message);
+        }
       })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            setShowAdminMenu(false);
-            setPopupMessage(
-              "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
-            );
-            setShowPopup(true);
-            setTimeout(() => {
-              setShowPopup(false);
-              fetchProducts();
-              navigate("/catalog");
-            }, 5000);
-          } else {
-            alert("Ошибка: " + data.message);
-          }
-        })
-        .catch((error) => alert("Ошибка: " + error));
-    } else if (type === "publishWithChanges") {
-      // Отправка через новый запрос (publishWithChanges.php)
-      fetch("https://inhomeka.online:8000/publishWithChanges.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            setShowAdminMenu(false);
-            setPopupMessage(
-              "Ваш товар был подтверждён и будет опубликован в соответствии с выбранными настройками"
-            );
-            setShowPopup(true);
-            setTimeout(() => {
-              setShowPopup(false);
-              fetchProducts();
-              navigate("/catalog");
-            }, 5000);
-          } else {
-            alert("Ошибка: " + data.message);
-          }
-        })
-        .catch((error) => alert("Ошибка: " + error));
-    }
+      .catch((error) => alert("Ошибка: " + error));
   };
 
   return (
