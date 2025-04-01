@@ -763,7 +763,6 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
-                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
@@ -782,6 +781,7 @@ const handleRemoveField = (event) => {
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div className="admin-menu-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Дополнительные настройки</h3>
+            <div style={{ marginBottom: "10px" }}></div> {/* Отступ после заголовка */}
             <div>
               <label>
                 <input
