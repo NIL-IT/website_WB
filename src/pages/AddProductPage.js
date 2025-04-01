@@ -770,7 +770,7 @@ const handleRemoveField = (event) => {
       {showAdminMenu && userInfo && userInfo.status === 'admin' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div
-            className="admin-menвu-popup"
+            className="admin-menu-popup"
             onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы не закрывать меню при клике внутри
           >
             <h3>Дополнительные настройки</h3>
