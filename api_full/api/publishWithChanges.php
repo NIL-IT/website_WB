@@ -10,11 +10,6 @@ if (!$data) {
     exit;
 }
 
-if (!isset($data['selectedDate'])) {
-    echo json_encode(["success" => false, "message" => "Не указана дата публикации."]);
-    exit;
-}
-
 $conn = getDbConnection();
 
 try {
@@ -71,9 +66,6 @@ try {
                     :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :scheduledTime, :deleteDate
                 )
             ");
-
-            $scheduledTime = $data['scheduled_time'];
-            $insertStmt->bindParam(':scheduledTime', $scheduledTime);
         } else {
             // Вставка в таблицу products
             $insertStmt = $conn->prepare("
