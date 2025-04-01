@@ -173,19 +173,18 @@ const handleRemoveField = (event) => {
       return;
     }
 
-    // Проверяем статус пользователя перед открытием меню администратора
+    // Если пользователь админ, открываем меню дополнительных настроек
     if (userInfo?.status === "admin") {
-      setShowAdminMenu(true); // Открыть меню администратора
-      return; // Прерываем выполнение, чтобы не отправлять данные
+      setShowAdminMenu(true);
+      return;
     }
-    console.log(userInfo.status);
-    // Формирование данных для отправки
+
+    // Отправка через старый запрос (addProduct.php) для не админов
     const dataToSend = {
       ...formData,
-      keywordsWithCount: hasInputFields ? keywordsWithCount : undefined, // Добавляем массив ключевых слов с количеством
+      keywordsWithCount: hasInputFields ? keywordsWithCount : undefined,
     };
 
-    // Отправка данных на сервер
     fetch("https://inhomeka.online:8000/addProduct.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -201,11 +200,11 @@ const handleRemoveField = (event) => {
             navigate("/catalog");
           }, 5000);
         } else {
-          alert("Error: " + data.message);
+          alert("Ошибка: " + data.message);
           navigate("/catalog");
         }
       })
-      .catch((error) => alert("Error: " + error));
+      .catch((error) => alert("Ошибка: " + error));
   };
 
   // Обработчик для изменения состояния галочек
@@ -237,15 +236,32 @@ const handleRemoveField = (event) => {
 
   // Обработчик отправки данных для публикации
   const handleAdminSubmit = (type) => {
-    if (type === "publish" && !deleteOnly) {
-      handleSubmit(); // Публикация без изменений
-    } else if (type === "publishWithChanges" && selectedDate && !deleteOnly) {
-      const dataToSend = {
-        ...formData,
-        selectedDate,
-        deleteDate,
-      };
-
+    const dataToSend = {
+      ...formData,
+      selectedDate: publishWithChanges ? selectedDate : undefined,
+      deleteDate: deleteOnly ? deleteDate : undefined,
+    };
+  
+    if (type === "publish") {
+      // Отправка через старый запрос (addProduct.php)
+      fetch("https://inhomeka.online:8000/addProduct.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(dataToSend),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Товар успешно опубликован!");
+            fetchProducts();
+            navigate("/catalog");
+          } else {
+            alert("Ошибка: " + data.message);
+          }
+        })
+        .catch((error) => alert("Ошибка: " + error));
+    } else if (type === "publishWithChanges") {
+      // Отправка через новый запрос (publishWithChanges.php)
       fetch("https://inhomeka.online:8000/publishWithChanges.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -255,28 +271,6 @@ const handleRemoveField = (event) => {
         .then((data) => {
           if (data.success) {
             alert("Товар успешно опубликован с изменениями!");
-            fetchProducts();
-            navigate("/catalog");
-          } else {
-            alert("Ошибка: " + data.message);
-          }
-        })
-        .catch((error) => alert("Ошибка: " + error));
-    } else if (deleteOnly) {
-      const dataToSend = {
-        ...formData,
-        deleteDate,
-      };
-
-      fetch("https://inhomeka.online:8000/addProduct.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            alert("Товар успешно удален!");
             fetchProducts();
             navigate("/catalog");
           } else {
@@ -752,7 +746,6 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
-                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
