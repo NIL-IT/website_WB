@@ -225,21 +225,23 @@ const handleRemoveField = (event) => {
       setDeleteOnly(checked);
       if (!checked) setDeleteDate(""); // Очистить дату, если галочка снята
     }
-    validateAdminMenu();
+  
+    setTimeout(validateAdminMenu, 0); // Обновить состояние после изменения
   };
   
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
     if (!publishWithChanges && !deleteOnly) {
-      // Если ни одна галочка не выбрана, кнопка "Опубликовать" активна
-      setIsPublishButtonDisabled(false);
-      setIsPublishWithChangesDisabled(true);
+      // Если ни одна галочка не выбрана
+      setIsPublishButtonDisabled(false); // "Опубликовать" доступна
+      setIsPublishWithChangesDisabled(true); // "Опубликовать с дополнениями" недоступна
     } else {
-      // Если выбрана хотя бы одна галочка, кнопка "Опубликовать" блокируется
-      setIsPublishButtonDisabled(true);
-      setIsPublishWithChangesDisabled(false);
+      // Если выбрана хотя бы одна галочка
+      setIsPublishButtonDisabled(true); // "Опубликовать" блокируется
+      setIsPublishWithChangesDisabled(!(publishWithChanges && selectedDate) && !(deleteOnly && deleteDate));
     }
   };
+  
 
   // Обработчик отправки данных для публикации
   const handleAdminSubmit = (type) => {
