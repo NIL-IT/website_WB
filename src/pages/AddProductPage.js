@@ -770,7 +770,7 @@ const handleRemoveField = (event) => {
       {showAdminMenu && userInfo && userInfo.status === 'admin' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
           <div
-            className="admin-menu-popup"
+            className="admin-menвu-popup"
             onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы не закрывать меню при клике внутри
           >
             <h3>Дополнительные настройки</h3>
@@ -822,12 +822,7 @@ const handleRemoveField = (event) => {
                 Опубликовать с дополнениями
               </button>
             </div>
-            <button
-              className="close-admin-menu"
-              onClick={() => setShowAdminMenu(false)}
-            >
-              Закрыть
-            </button>
+            <button className="close-admin-menu" onClick={() => setShowAdminMenu(false)} />
           </div>
         </div>
       )}
