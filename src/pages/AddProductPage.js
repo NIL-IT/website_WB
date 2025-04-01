@@ -9,6 +9,9 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showPopup2, setShowPopup2] = useState(false);
   const [inputFields, setInputFields] = useState([{ keyword: "", count: "" }]);
   const [keywordsWithCount, setKeywordsWithCount] = useState([]); // Массив для ключевых слов с количеством
+  const [popupMessage, setPopupMessage] = useState(
+    "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
+  );
 
   const navigate = useNavigate();
 
@@ -193,6 +196,9 @@ const handleRemoveField = (event) => {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
+          setPopupMessage(
+            "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
+          );
           setShowPopup(true);
           setTimeout(() => {
             setShowPopup(false);
@@ -252,9 +258,15 @@ const handleRemoveField = (event) => {
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            alert("Товар успешно опубликован!");
-            fetchProducts();
-            navigate("/catalog");
+            setPopupMessage(
+              "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
+            );
+            setShowPopup(true);
+            setTimeout(() => {
+              setShowPopup(false);
+              fetchProducts();
+              navigate("/catalog");
+            }, 5000);
           } else {
             alert("Ошибка: " + data.message);
           }
@@ -270,9 +282,15 @@ const handleRemoveField = (event) => {
         .then((response) => response.json())
         .then((data) => {
           if (data.success) {
-            alert("Товар успешно опубликован с изменениями!");
-            fetchProducts();
-            navigate("/catalog");
+            setPopupMessage(
+              "Ваш товар был подтверждён и будет опубликован в соответствии с выбранными настройками"
+            );
+            setShowPopup(true);
+            setTimeout(() => {
+              setShowPopup(false);
+              fetchProducts();
+              navigate("/catalog");
+            }, 5000);
           } else {
             alert("Ошибка: " + data.message);
           }
@@ -677,46 +695,48 @@ const handleRemoveField = (event) => {
         </div>
       </form>
       {showPopup && (
-        <div className="catalog-popup-overlay">
-          <div className="catalog-popup">
-            <svg
-              width="42"
-              height="42"
-              viewBox="0 0 42 42"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M21 42C32.598 42 42 32.598 42 21C42 9.40202 32.598 0 21 0C9.40202 0 0 9.40202 0 21C0 32.598 9.40202 42 21 42Z"
-                fill="#4CAF50"
-              />
-              <path
-                d="M31.6001 11.6L18.0001 25.2L12.4001 19.6L9.6001 22.4L18.0001 30.8L34.4001 14.4L31.6001 11.6Z"
-                fill="#CCFF90"
-              />
-            </svg>
+        <>
+          {setShowAdminMenu(false) /* Скрываем меню "Дополнительные настройки" */}
+          <div className="catalog-popup-overlay">
+            <div className="catalog-popup">
+              <svg
+                width="42"
+                height="42"
+                viewBox="0 0 42 42"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 42C32.598 42 42 32.598 42 21C42 9.40202 32.598 0 21 0C9.40202 0 0 9.40202 0 21C0 32.598 9.40202 42 21 42Z"
+                  fill="#4CAF50"
+                />
+                <path
+                  d="M31.6001 11.6L18.0001 25.2L12.4001 19.6L9.6001 22.4L18.0001 30.8L34.4001 14.4L31.6001 11.6Z"
+                  fill="#CCFF90"
+                />
+              </svg>
 
-            <p
-              style={{
-                fontFamily: "Helvetica Neue Cyr",
-                fontSize: "20px",
-                fontWeight: 500,
-              }}
-            >
-              Все готово!
-            </p>
-            <p
-              style={{
-                fontFamily: "Helvetica Neue Cyr",
-                fontSize: "16px",
-                fontWeight: 400,
-              }}
-            >
-              Ваш товар отправлен на модерацию. Если вашего товара долго нет, то
-              напишите в поддержку
-            </p>
+              <p
+                style={{
+                  fontFamily: "Helvetica Neue Cyr",
+                  fontSize: "20px",
+                  fontWeight: 500,
+                }}
+              >
+                Все готово!
+              </p>
+              <p
+                style={{
+                  fontFamily: "Helvetica Neue Cyr",
+                  fontSize: "16px",
+                  fontWeight: 400,
+                }}
+              >
+                {popupMessage}
+              </p>
+            </div>
           </div>
-        </div>
+        </>
       )}
       {showInputPopup && (
         <div
@@ -746,7 +766,6 @@ const handleRemoveField = (event) => {
                     onBlur={() => setFormData(prev => ({
                       ...prev,
                       availableDay: {
-                        ...prev.availableDay,
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
