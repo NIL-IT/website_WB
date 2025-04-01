@@ -304,13 +304,16 @@
 
 /* Поле даты */
 .admin-menu-popup input[type="date"] {
-  flex: 1;
+  flex: none; /* Убираем растяжение */
+  width: 200px; /* Фиксированная ширина */
+  height: 40px; /* Фиксированная высота */
   padding: 8px;
   border: 1px solid rgba(0, 0, 0, 1);
   border-radius: 8px;
   font-family: "Helvetica Neue Cyr";
   font-size: 14px;
   background-color: white;
+  color: black; /* Цвет текста черный */
   cursor: pointer;
 }
 
