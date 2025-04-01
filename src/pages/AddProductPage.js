@@ -51,10 +51,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [deleteDate, setDeleteDate] = useState("");
-  const [publishWithChanges, setPublishWithChanges] = useState(false);
-  const [isPublishButtonDisabled, setIsPublishButtonDisabled] = useState(false);
-  const [deleteOnly, setDeleteOnly] = useState(false);
-  const [isPublishWithChangesDisabled, setIsPublishWithChangesDisabled] = useState(true);
+  const [stateValue, setStateValue] = useState(0b00); // 0 - оба выключены
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -215,57 +212,21 @@ const handleRemoveField = (event) => {
   };
 
   // Обработчик для изменения состояния галочек
-  const handleCheckboxChange = (e) => {
-    const { name, checked } = e.target;
-  
-    if (name === "publishWithChanges") {
-      setPublishWithChanges(checked);
-      if (!checked) setSelectedDate(""); // Очистить дату, если галочка снята
-    } else if (name === "deleteOnly") {
-      setDeleteOnly(checked);
-      if (!checked) setDeleteDate(""); // Очистить дату, если галочка снята
-    }
-  
-    setTimeout(validateAdminMenu, 0); // Обновить состояние после изменения
-  };
-  
-  // Проверка валидности меню администратора
-  const validateAdminMenu = () => {
-    if (publishWithChanges || deleteOnly) {
-      // Если выбрана хотя бы одна галочка
-      setIsPublishButtonDisabled(true); // "Опубликовать" блокируется
-      setIsPublishWithChangesDisabled(false); // "Опубликовать с дополнениями" доступна
-    } else {
-      // Если ни одна галочка не выбрана
-      setIsPublishButtonDisabled(false); // "Опубликовать" доступна
-      setIsPublishWithChangesDisabled(true); // "Опубликовать с дополнениями" блокируется
-    }
-  };
-  
-
-  // Обработчик отправки данных для публикации
   const handleAdminSubmit = (type) => {
-    if (type === "publishWithChanges") {
-      // Проверка заполненности полей для выбранных галочек
-      if (
-        (publishWithChanges && !selectedDate) ||
-        (deleteOnly && !deleteDate)
-      ) {
-        alert("Пожалуйста, заполните все поля для выбранных настроек.");
-        return;
-      }
+    if (type === "publishWithChanges" && ((stateValue & 0b10 && !selectedDate) || (stateValue & 0b01 && !deleteDate))) {
+      alert("Пожалуйста, заполните все поля для выбранных настроек.");
+      return;
     }
   
     const dataToSend = {
       ...formData,
-      selectedDate: publishWithChanges ? selectedDate : undefined,
-      deleteDate: deleteOnly ? deleteDate : undefined,
+      selectedDate: stateValue & 0b10 ? selectedDate : undefined,
+      deleteDate: stateValue & 0b01 ? deleteDate : undefined,
     };
   
-    const url =
-      type === "publishWithChanges"
-        ? "https://inhomeka.online:8000/publishWithChanges.php"
-        : "https://inhomeka.online:8000/addProduct.php";
+    const url = type === "publishWithChanges"
+      ? "https://inhomeka.online:8000/publishWithChanges.php"
+      : "https://inhomeka.online:8000/addProduct.php";
   
     fetch(url, {
       method: "POST",
@@ -782,7 +743,7 @@ const handleRemoveField = (event) => {
                 <input
                   type="checkbox"
                   name="publishWithChanges"
-                  checked={publishWithChanges}
+                  checked={!!(stateValue & 0b10)}
                   onChange={handleCheckboxChange}
                 />
                 Отложенная публикация
@@ -790,7 +751,7 @@ const handleRemoveField = (event) => {
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  disabled={!publishWithChanges}
+                  disabled={!(stateValue & 0b10)}
                 />
               </label>
             </div>
@@ -799,7 +760,7 @@ const handleRemoveField = (event) => {
                 <input
                   type="checkbox"
                   name="deleteOnly"
-                  checked={deleteOnly}
+                  checked={!!(stateValue & 0b01)}
                   onChange={handleCheckboxChange}
                 />
                 Удаление товара в выбранный день
@@ -807,20 +768,20 @@ const handleRemoveField = (event) => {
                   type="date"
                   value={deleteDate}
                   onChange={(e) => setDeleteDate(e.target.value)}
-                  disabled={!deleteOnly}
+                  disabled={!(stateValue & 0b01)}
                 />
               </label>
             </div>
             <div className="admin-menu-buttons">
               <button
                 onClick={() => handleAdminSubmit("publish")}
-                disabled={isPublishButtonDisabled} // Используем обновлённую логику
+                disabled={stateValue !== 0b00} // "Опубликовать" только при 00
               >
                 Опубликовать
               </button>
               <button
                 onClick={() => handleAdminSubmit("publishWithChanges")}
-                disabled={isPublishWithChangesDisabled} // "Опубликовать с дополнениями"
+                disabled={stateValue === 0b00} // "Опубликовать с дополнениями" при 10, 01, 11
               >
                 Опубликовать с дополнениями
               </button>
