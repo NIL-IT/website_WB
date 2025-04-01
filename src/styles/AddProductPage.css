@@ -241,7 +241,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5); /* Вернули затемнённый фон */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -254,33 +254,30 @@
   border-radius: 8px;
   padding: 20px;
   width: 90%;
-  max-width: 500px;
+  max-width: 500px; /* Вернули старый размер */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   font-family: 'Inter', sans-serif;
   position: relative;
 }
 
-.admin-menu-popup h3 {
-  font-family: "Helvetica Neue Cyr";
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
+/* Галочки */
 .admin-menu-popup label {
   display: flex;
   align-items: center;
-  gap: 5px; /* Уменьшенный отступ между галочкой и текстом */
+  gap: 10px; /* Вернули отступ между галочкой и текстом */
   font-family: "Helvetica Neue Cyr";
   font-size: 16px;
   font-weight: 400;
 }
 
+/* Чекбокс */
 .admin-menu-popup input[type="checkbox"] {
-  margin-left: 0; /* Смещение галочки максимально влево */
+  margin-left: 0;
+  width: 18px;
+  height: 18px;
 }
 
+/* Поле даты */
 .admin-menu-popup input[type="date"] {
   flex: 1;
   padding: 8px;
@@ -290,31 +287,6 @@
   font-size: 14px;
   background-color: white;
   cursor: pointer;
-}
-
-.admin-menu-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.admin-menu-buttons button {
-  width: 100%;
-  border: 1px solid rgba(0, 0, 0, 1);
-  padding: 12px;
-  border-radius: 8px;
-  background-color: rgba(105, 13, 201, 1);
-  color: rgba(255, 255, 255, 1);
-  font-size: 18px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-}
-
-.admin-menu-buttons button:disabled {
-  background-color: #d3d3d3;
-  cursor: not-allowed;
 }
 
 /* Кнопка закрытия меню в виде крестика */
