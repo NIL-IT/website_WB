@@ -229,22 +229,22 @@ const handleRemoveField = (event) => {
   
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
-    switch (true) {
-      case !publishWithChanges && !deleteOnly:
-        setIsPublishButtonDisabled(false); // Кнопка "Опубликовать" доступна
-        break;
-      case publishWithChanges && !selectedDate:
-      case deleteOnly && !deleteDate:
-      case publishWithChanges && deleteOnly && (!selectedDate || !deleteDate):
-        setIsPublishButtonDisabled(true); // Кнопка "Опубликовать с дополнениями" недоступна
-        break;
-      case publishWithChanges && selectedDate && !deleteOnly:
-      case deleteOnly && deleteDate && !publishWithChanges:
-      case publishWithChanges && deleteOnly && selectedDate && deleteDate:
-        setIsPublishButtonDisabled(false); // Кнопка "Опубликовать с дополнениями" доступна
-        break;
-      default:
-        setIsPublishButtonDisabled(true);
+    if (!publishWithChanges && !deleteOnly) {
+      // Если ни одна галочка не выбрана, кнопка "Опубликовать" активна
+      setIsPublishButtonDisabled(false);
+      setIsPublishWithChangesDisabled(true);
+    } else if (
+      (publishWithChanges && !selectedDate) ||
+      (deleteOnly && !deleteDate) ||
+      (publishWithChanges && deleteOnly && (!selectedDate || !deleteDate))
+    ) {
+      // Если выбрана одна или две галочки, но не все соответствующие поля заполнены - обе кнопки отключены
+      setIsPublishButtonDisabled(true);
+      setIsPublishWithChangesDisabled(true);
+    } else {
+      // Если выбрана одна галочка с заполненным полем ИЛИ две галочки с обоими заполненными полями
+      setIsPublishButtonDisabled(true);
+      setIsPublishWithChangesDisabled(false);
     }
   };
 
@@ -790,10 +790,7 @@ const handleRemoveField = (event) => {
       )}
       {showAdminMenu && userInfo && userInfo.status === 'admin' && (
         <div className="admin-menu-overlay" onClick={() => setShowAdminMenu(false)}>
-          <div
-            className="admin-menu-popup"
-            onClick={(e) => e.stopPropagation()} // Останавливаем всплытие события, чтобы не закрывать меню при клике внутри
-          >
+          <div className="admin-menu-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Дополнительные настройки</h3>
             <div>
               <label>
@@ -832,13 +829,13 @@ const handleRemoveField = (event) => {
             <div className="admin-menu-buttons">
               <button
                 onClick={() => handleAdminSubmit("publish")}
-                disabled={publishWithChanges || deleteOnly} // Заблокирована, если нажата любая галочка
+                disabled={publishWithChanges || deleteOnly} // Блокируем, если нажата любая галочка
               >
                 Опубликовать
               </button>
               <button
                 onClick={() => handleAdminSubmit("publishWithChanges")}
-                disabled={isPublishButtonDisabled} // Логика активации через validateAdminMenu
+                disabled={isPublishWithChangesDisabled} // Активация через validateAdminMenu
               >
                 Опубликовать с дополнениями
               </button>
