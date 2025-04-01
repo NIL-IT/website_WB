@@ -125,13 +125,17 @@ try {
     // Инвертирование значения paid
     $newPaid = !$currentPaid;
 
-    // Обновление значения paid, пути к изображению и комментария в таблице steps
+    // Получение текущей даты и времени
+    $receiptTimestamp = $newPaid ? date('Y-m-d H:i:s') : null;
+
+    // Обновление значения paid, пути к изображению, комментария и времени прикладывания чека в таблице steps
     $newStatus = $newPaid ? 3 : 2;
     if ($newPaid) {
-        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status WHERE id = :id');
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = :receipt_image, status = :status, receipt_timestamp = :receipt_timestamp WHERE id = :id');
         $updateStmt->bindParam(':receipt_image', $imagePath, PDO::PARAM_STR);
+        $updateStmt->bindParam(':receipt_timestamp', $receiptTimestamp, PDO::PARAM_STR);
     } else {
-        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = NULL, status = :status WHERE id = :id');
+        $updateStmt = $pdo->prepare('UPDATE steps SET paid = :paid, receipt_image = NULL, status = :status, receipt_timestamp = NULL WHERE id = :id');
         if ($currentReceiptImage && file_exists('../api/' . $currentReceiptImage)) {
             unlink('../api/' . $currentReceiptImage);
         }
