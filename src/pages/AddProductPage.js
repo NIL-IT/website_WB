@@ -231,14 +231,14 @@ const handleRemoveField = (event) => {
   
   // Проверка валидности меню администратора
   const validateAdminMenu = () => {
-    if (!publishWithChanges && !deleteOnly) {
-      // Если ни одна галочка не выбрана
-      setIsPublishButtonDisabled(false); // "Опубликовать" доступна
-      setIsPublishWithChangesDisabled(true); // "Опубликовать с дополнениями" недоступна
-    } else {
+    if (publishWithChanges || deleteOnly) {
       // Если выбрана хотя бы одна галочка
       setIsPublishButtonDisabled(true); // "Опубликовать" блокируется
-      setIsPublishWithChangesDisabled(!(publishWithChanges && selectedDate) && !(deleteOnly && deleteDate));
+      setIsPublishWithChangesDisabled(false); // "Опубликовать с дополнениями" доступна
+    } else {
+      // Если ни одна галочка не выбрана
+      setIsPublishButtonDisabled(false); // "Опубликовать" доступна
+      setIsPublishWithChangesDisabled(true); // "Опубликовать с дополнениями" блокируется
     }
   };
   
@@ -814,13 +814,13 @@ const handleRemoveField = (event) => {
             <div className="admin-menu-buttons">
               <button
                 onClick={() => handleAdminSubmit("publish")}
-                disabled={publishWithChanges || deleteOnly} // Блокируем, если нажата любая галочка
+                disabled={isPublishButtonDisabled} // Используем обновлённую логику
               >
                 Опубликовать
               </button>
               <button
                 onClick={() => handleAdminSubmit("publishWithChanges")}
-                disabled={isPublishWithChangesDisabled} // Активация через validateAdminMenu
+                disabled={isPublishWithChangesDisabled} // "Опубликовать с дополнениями"
               >
                 Опубликовать с дополнениями
               </button>
