@@ -61,13 +61,28 @@ try {
 
         $scheduledTime = $data['selectedDate'];
 
-        $insertStmt = $conn->prepare("
-            INSERT INTO pending_products (
-                brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager, scheduled_time, delete_date
-            ) VALUES (
-                :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :scheduledTime, :deleteDate
-            )
-        ");
+        if (isset($data['scheduled_time']) && !empty($data['scheduled_time'])) {
+            // Вставка в таблицу pending_products
+            $insertStmt = $conn->prepare("
+                INSERT INTO pending_products (
+                    brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager, scheduled_time, delete_date
+                ) VALUES (
+                    :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :scheduledTime, :deleteDate
+                )
+            ");
+
+            $scheduledTime = $data['scheduled_time'];
+            $insertStmt->bindParam(':scheduledTime', $scheduledTime);
+        } else {
+            // Вставка в таблицу products
+            $insertStmt = $conn->prepare("
+                INSERT INTO products (
+                    brand, name, category, image_path, available_day, available_day_current, keywords_with_count, article, tg_nick, terms, market_price, your_price, is_confirmed, expire, keywords, tg_nick_manager, delete_date
+                ) VALUES (
+                    :brand, :name, :category, :imagePath, :availableDayJson, :availableDayCurrent, :keywordsWithCountJson, :article, :tg_nick, :terms, :marketPrice, :yourPrice, :isConfirmed, :expire, :keywords, :tg_nick_manager, :deleteDate
+                )
+            ");
+        }
 
         $deleteDate = isset($data['deleteDate']) ? $data['deleteDate'] : null;
 
@@ -96,7 +111,7 @@ try {
 
         $insertStmt->execute();
 
-        echo json_encode(["success" => true, "message" => "Product scheduled successfully"]);
+        echo json_encode(["success" => true, "message" => isset($data['scheduled_time']) ? "Product scheduled successfully" : "Product added successfully"]);
     } else {
         echo json_encode(["success" => false, "message" => "Failed to save image"]);
     }
