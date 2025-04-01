@@ -57,7 +57,7 @@ try {
 
         $scheduledTime = $data['selectedDate'];
 
-        if (isset($data['scheduled_time']) && !empty($data['scheduled_time'])) {
+        if (isset($data['selectedDate']) && !empty($data['selectedDate'])) {
             // Вставка в таблицу pending_products
             $insertStmt = $conn->prepare("
                 INSERT INTO pending_products (
@@ -104,7 +104,7 @@ try {
 
         $insertStmt->execute();
 
-        echo json_encode(["success" => true, "message" => isset($data['scheduled_time']) ? "Product scheduled successfully" : "Product added successfully"]);
+        echo json_encode(["success" => true, "message" => isset($data['selectedDate']) ? "Product scheduled successfully" : "Product added successfully"]);
     } else {
         echo json_encode(["success" => false, "message" => "Failed to save image"]);
     }
