@@ -63,6 +63,7 @@ try {
     
         // Вычисление выгоды покупателя
         $profit = !is_null($row['modified_payment']) ? $row['modified_payment'] : ($row['market_price'] - $row['your_price']);
+        $profitColor = !is_null($row['modified_payment']) ? 'blue' : null; // Условие для синего цвета
     
         // Определение статуса verified и paid
         $verifiedStatus = $row['verified'] ? 'Подтверждён' : 'Не подтвержден';
@@ -79,7 +80,10 @@ try {
             (string)$row['product_username'],
             (string)$row['product_name'],
             (string)$row['article'],
-            (string)$profit, // Выгода покупателя
+            [
+                'value' => (string)$profit, // Выгода покупателя
+                'color' => $profitColor // Применение цвета
+            ],
             (string)$inIssue, // Новое поле "Товар в выдаче?"
             (string)'https://inhomeka.online:8000/' . $row['product_image_path'],
             (string)$row['step'],
