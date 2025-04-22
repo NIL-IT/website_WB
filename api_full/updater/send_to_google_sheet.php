@@ -56,22 +56,16 @@ try {
 
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
-        // Формирование URL отчёта
         $telegramUrl = "https://inhomeka.online:81/?id=" . $row['step_id'];
-        // Проверка expire и запись "да" или "нет"
         $inIssue = $row['expire'] ? 'Нет' : 'Да';
-    
+
         // Вычисление выгоды покупателя
         $profit = !is_null($row['modified_payment']) ? $row['modified_payment'] : ($row['market_price'] - $row['your_price']);
-        $profitColor = !is_null($row['modified_payment']) ? 'blue' : null; // Условие для синего цвета
-    
-        // Определение статуса verified и paid
+
         $verifiedStatus = $row['verified'] ? 'Подтверждён' : 'Не подтвержден';
         $paidStatus = $row['paid'] ? 'Оплачен' : 'Не оплачен';
-    
-        // Время фиксирования чека
         $receiptTimestamp = !empty($row['receipt_timestamp']) ? $row['receipt_timestamp'] : 'Время не указано';
-    
+
         $values[] = [
             (string)$row['step_id'], 
             (string)$row['step_user_id'], 
@@ -80,10 +74,7 @@ try {
             (string)$row['product_username'],
             (string)$row['product_name'],
             (string)$row['article'],
-            [
-                'value' => (string)$profit, // Выгода покупателя
-                'color' => $profitColor // Применение цвета
-            ],
+            (string)$profit, // Выгода покупателя
             (string)$inIssue, // Новое поле "Товар в выдаче?"
             (string)'https://inhomeka.online:8000/' . $row['product_image_path'],
             (string)$row['step'],
@@ -102,8 +93,6 @@ try {
             (string)$receiptTimestamp // Время фиксирования чека
         ];
     }
-
-
 
     // Отправка данных в Google Таблицу
     $updatedCells = sendDataToGoogleSheet($values);
