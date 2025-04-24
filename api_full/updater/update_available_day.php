@@ -127,7 +127,7 @@ try {
         $stepId = $step['id'];
         $id_product = $step['id_product'];
         $updated_at = new DateTime($step['updated_at'], new DateTimeZone('Europe/Moscow'));
-
+    
         if ($updated_at < new DateTime($threeMonthsAgo, new DateTimeZone('Europe/Moscow'))) {
             // Delete images
             for ($i = 1; $i <= 6; $i++) {
@@ -139,7 +139,15 @@ try {
                     }
                 }
             }
-            
+    
+            // Delete receipt_image
+            if (!empty($step['receipt_image'])) {
+                $receiptImagePath = '/var/www/test_bot/api/' . $step['receipt_image'];
+                if (file_exists($receiptImagePath)) {
+                    unlink($receiptImagePath);
+                }
+            }
+    
             // Delete the step
             $deleteStepStmt = $pdo->prepare("DELETE FROM steps WHERE id = :id");
             $deleteStepStmt->bindParam(':id', $stepId, PDO::PARAM_INT);
