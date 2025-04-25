@@ -33,6 +33,9 @@ try {
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ];
 
+    // Создание массива для хранения сумм выплат по менеджерам
+    $managerPayments = [];
+
     foreach ($managers as $manager) {
         $managerNick = $manager['tg_nick_manager'];
 
@@ -67,11 +70,24 @@ try {
         $steps = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $rowIndex = 2;
+        $totalSpecifiedPayment = 0; // Сумма указанных выплат
+        $totalCalculatedPayment = 0; // Сумма посчитанных выплат
         foreach ($steps as $step) {
             $sheet->setCellValue('A' . $rowIndex, $step['user']);
             $sheet->setCellValue('B' . $rowIndex, $step['completed_at']);
             $sheet->setCellValue('C' . $rowIndex, $step['receipt_timestamp']);
             $sheet->setCellValue('D' . $rowIndex, $step['payment']);
+
+            // Применение стилей для ячеек на основе источника значения
+            if ($step['payment'] == $step['modified_payment']) {
+                $sheet->getStyle('D' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FFBBDEFB'); // Синий цвет
+                $totalSpecifiedPayment += $step['payment']; // Указанная выплата
+            } else {
+                $sheet->getStyle('D' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('FFFFCDD2'); // Красный цвет
+                $totalCalculatedPayment += $step['payment']; // Посчитанная выплата
+            }
 
             $sheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
@@ -79,10 +95,61 @@ try {
             $rowIndex++;
         }
 
+        // Сохраняем суммы выплат для текущего менеджера
+        $managerPayments[$managerNick] = [
+            'specified' => $totalSpecifiedPayment,
+            'calculated' => $totalCalculatedPayment
+        ];
+
         // Установка ширины для столбцов
         foreach (range('A', 'D') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
+    }
+
+    // Добавление итоговой страницы с суммами выплат
+    $summarySheet = $spreadsheet->createSheet();
+    $summarySheet->setTitle('Суммы выплат');
+
+    // Запись заголовков
+    $summarySheet->setCellValue('A1', 'Менеджер');
+    $summarySheet->setCellValue('B1', 'Указанные выплаты');
+    $summarySheet->setCellValue('C1', 'Посчитанные выплаты');
+    $summarySheet->setCellValue('D1', 'Общая сумма');
+    $summarySheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+    $summarySheet->getRowDimension('1')->setRowHeight(20);
+
+    // Запись данных
+    $rowIndex = 2;
+    $totalSpecifiedAll = 0; // Общая сумма указанных выплат
+    $totalCalculatedAll = 0; // Общая сумма посчитанных выплат
+    foreach ($managerPayments as $managerNick => $payments) {
+        $totalSpecifiedAll += $payments['specified'];
+        $totalCalculatedAll += $payments['calculated'];
+        $totalAll = $payments['specified'] + $payments['calculated'];
+
+        $summarySheet->setCellValue('A' . $rowIndex, $managerNick);
+        $summarySheet->setCellValue('B' . $rowIndex, $payments['specified']);
+        $summarySheet->setCellValue('C' . $rowIndex, $payments['calculated']);
+        $summarySheet->setCellValue('D' . $rowIndex, $totalAll);
+
+        $summarySheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($contentStyle);
+        $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+
+        $rowIndex++;
+    }
+
+    // Запись общей суммы для всех менеджеров
+    $summarySheet->setCellValue('A' . $rowIndex, 'Итого');
+    $summarySheet->setCellValue('B' . $rowIndex, $totalSpecifiedAll);
+    $summarySheet->setCellValue('C' . $rowIndex, $totalCalculatedAll);
+    $summarySheet->setCellValue('D' . $rowIndex, $totalSpecifiedAll + $totalCalculatedAll);
+    $summarySheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($headerStyle);
+    $summarySheet->getRowDimension($rowIndex)->setRowHeight(20);
+
+    // Установка ширины для столбцов
+    foreach (range('A', 'D') as $columnID) {
+        $summarySheet->getColumnDimension($columnID)->setAutoSize(true);
     }
 
     // Удаление первого пустого листа
