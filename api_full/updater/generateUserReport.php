@@ -59,7 +59,8 @@ try {
                 s.completed_at,
                 s.receipt_timestamp,
                 COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment,
-                s.updated_at
+                s.updated_at,
+                s.modified_payment
             FROM steps s
             INNER JOIN products p ON s.id_product = p.id
             INNER JOIN users u ON s.id_usertg = u.id_usertg -- Замените 'u.id' на 'u.user_id', если это правильное имя колонки
@@ -79,7 +80,7 @@ try {
             $sheet->setCellValue('D' . $rowIndex, $step['payment']);
 
             // Применение стилей для ячеек на основе источника значения
-            if ($step['payment'] == $step['modified_payment']) {
+            if (!is_null($step['modified_payment'])) {
                 $sheet->getStyle('D' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('FFBBDEFB'); // Синий цвет
                 $totalSpecifiedPayment += $step['payment']; // Указанная выплата
