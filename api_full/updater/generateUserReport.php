@@ -42,7 +42,7 @@ try {
 
         // Запись заголовков
         $sheet->setCellValue('A1', 'Пользователь');
-        $sheet->setCellValue('B1', 'Время завершения шага');
+        $sheet->setCellValue('B1', 'Время завершения финального шага');
         $sheet->setCellValue('C1', 'Время выплаты чека');
         $sheet->setCellValue('D1', 'Выплата');
 
@@ -55,11 +55,13 @@ try {
                 u.username AS user,
                 s.completed_at,
                 s.receipt_timestamp,
-                COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment
+                COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment,
+                s.updated_at
             FROM steps s
             INNER JOIN products p ON s.id_product = p.id
             INNER JOIN users u ON s.id_usertg = u.id_usertg -- Замените 'u.id' на 'u.user_id', если это правильное имя колонки
             WHERE p.tg_nick_manager = :managerNick AND s.step = 'Завершено' AND s.status = 3
+            ORDER BY s.updated_at DESC
         ");
         $stmt->execute(['managerNick' => $managerNick]);
         $steps = $stmt->fetchAll(PDO::FETCH_ASSOC);
