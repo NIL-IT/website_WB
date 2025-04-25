@@ -58,7 +58,7 @@ try {
                 COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment
             FROM steps s
             INNER JOIN products p ON s.id_product = p.id
-            INNER JOIN users u ON s.id_usertg = u.id
+            INNER JOIN users u ON s.id_usertg = u.id_usertg -- Замените 'u.id' на 'u.user_id', если это правильное имя колонки
             WHERE p.tg_nick_manager = :managerNick AND s.step = 'Завершено' AND s.status = 3
         ");
         $stmt->execute(['managerNick' => $managerNick]);
