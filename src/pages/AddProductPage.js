@@ -653,12 +653,17 @@ const handleRemoveField = (event) => {
             type="text"
             name="tg_nick_manager"
             value={formData.tg_nick_manager}
-            onChange={handleChange}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (!value.includes("@") && !/\s/.test(value)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Например: Alexon"
             required
           />
           <span className="warning-message">
-            Ник не должен содержать @, https://t.me/
+            Ник не должен содержать @, пробелов или https://t.me/
           </span>
         </label>
         <label>
