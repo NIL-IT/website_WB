@@ -45,10 +45,10 @@ try {
 
         // Запись заголовков
         $sheet->setCellValue('A1', 'Пользователь');
-        $sheet->setCellValue('B1', 'Время завершения финального шага');
-        $sheet->setCellValue('C1', 'Артикул товара'); // Добавлен заголовок для артикля
-        $sheet->setCellValue('D1', 'Выплата');
-        $sheet->setCellValue('E1', 'Дата перехода на 1 шаг'); // Добавлен заголовок для даты перехода
+        $sheet->setCellValue('B1', 'Дата перехода на 1 шаг'); // Перемещён заголовок для даты перехода
+        $sheet->setCellValue('C1', 'Время завершения финального шага');
+        $sheet->setCellValue('D1', 'Артикул товара');
+        $sheet->setCellValue('E1', 'Выплата');
 
         $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
         $sheet->getRowDimension('1')->setRowHeight(20);
@@ -77,18 +77,18 @@ try {
         $totalCalculatedPayment = 0; // Сумма посчитанных выплат
         foreach ($steps as $step) {
             $sheet->setCellValue('A' . $rowIndex, $step['user']);
-            $sheet->setCellValue('B' . $rowIndex, $step['completed_at']);
-            $sheet->setCellValue('C' . $rowIndex, $step['article']); // Артикул товара
-            $sheet->setCellValue('D' . $rowIndex, $step['payment']);
-            $sheet->setCellValue('E' . $rowIndex, $step['updated_at']); // Дата перехода на 1 шаг
+            $sheet->setCellValue('B' . $rowIndex, $step['updated_at']); // Дата перехода на 1 шаг
+            $sheet->setCellValue('C' . $rowIndex, $step['completed_at']); // Время завершения финального шага
+            $sheet->setCellValue('D' . $rowIndex, $step['article']); // Артикул товара
+            $sheet->setCellValue('E' . $rowIndex, $step['payment']); // Выплата
 
             // Применение стилей для ячеек на основе источника значения
             if (!is_null($step['modified_payment'])) {
-                $sheet->getStyle('D' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
+                $sheet->getStyle('E' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('FFBBDEFB'); // Синий цвет
                 $totalSpecifiedPayment += $step['payment']; // Указанная выплата
             } else {
-                $sheet->getStyle('D' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
+                $sheet->getStyle('E' . $rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('FFFFCDD2'); // Красный цвет
                 $totalCalculatedPayment += $step['payment']; // Посчитанная выплата
             }
@@ -106,7 +106,7 @@ try {
         ];
 
         // Установка ширины для столбцов
-        foreach (range('A', 'E') as $columnID) { // Увеличен диапазон для нового столбца
+        foreach (range('A', 'E') as $columnID) { // Увеличен диапазон для нового порядка столбцов
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
