@@ -46,10 +46,11 @@ try {
         // Запись заголовков
         $sheet->setCellValue('A1', 'Пользователь');
         $sheet->setCellValue('B1', 'Время завершения финального шага');
-        $sheet->setCellValue('C1', 'Время выплаты чека');
+        $sheet->setCellValue('C1', 'Артикул товара'); // Добавлен заголовок для артикля
         $sheet->setCellValue('D1', 'Выплата');
+        $sheet->setCellValue('E1', 'Дата перехода на 1 шаг'); // Добавлен заголовок для даты перехода
 
-        $sheet->getStyle('A1:D1')->applyFromArray($headerStyle);
+        $sheet->getStyle('A1:E1')->applyFromArray($headerStyle);
         $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Запрос данных для отчёта
@@ -59,7 +60,8 @@ try {
                 s.completed_at,
                 s.receipt_timestamp,
                 COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment,
-                s.updated_at,
+                s.updated_at, -- Дата перехода на 1 шаг
+                p.article, -- Артикул товара
                 s.modified_payment
             FROM steps s
             INNER JOIN products p ON s.id_product = p.id
@@ -76,8 +78,9 @@ try {
         foreach ($steps as $step) {
             $sheet->setCellValue('A' . $rowIndex, $step['user']);
             $sheet->setCellValue('B' . $rowIndex, $step['completed_at']);
-            $sheet->setCellValue('C' . $rowIndex, $step['receipt_timestamp']);
+            $sheet->setCellValue('C' . $rowIndex, $step['article']); // Артикул товара
             $sheet->setCellValue('D' . $rowIndex, $step['payment']);
+            $sheet->setCellValue('E' . $rowIndex, $step['updated_at']); // Дата перехода на 1 шаг
 
             // Применение стилей для ячеек на основе источника значения
             if (!is_null($step['modified_payment'])) {
@@ -90,7 +93,7 @@ try {
                 $totalCalculatedPayment += $step['payment']; // Посчитанная выплата
             }
 
-            $sheet->getStyle('A' . $rowIndex . ':D' . $rowIndex)->applyFromArray($contentStyle);
+            $sheet->getStyle('A' . $rowIndex . ':E' . $rowIndex)->applyFromArray($contentStyle);
             $sheet->getRowDimension($rowIndex)->setRowHeight(20);
 
             $rowIndex++;
@@ -103,7 +106,7 @@ try {
         ];
 
         // Установка ширины для столбцов
-        foreach (range('A', 'D') as $columnID) {
+        foreach (range('A', 'E') as $columnID) { // Увеличен диапазон для нового столбца
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
     }
