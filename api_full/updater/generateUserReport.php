@@ -62,7 +62,8 @@ try {
                 COALESCE(s.modified_payment, p.market_price - p.your_price) AS payment,
                 s.updated_at, -- Дата перехода на 1 шаг
                 p.article, -- Артикул товара
-                s.modified_payment
+                s.modified_payment,
+                u.id_usertg
             FROM steps s
             INNER JOIN products p ON s.id_product = p.id
             INNER JOIN users u ON s.id_usertg = u.id_usertg -- Замените 'u.id' на 'u.user_id', если это правильное имя колонки
@@ -76,7 +77,10 @@ try {
         $totalSpecifiedPayment = 0; // Сумма указанных выплат
         $totalCalculatedPayment = 0; // Сумма посчитанных выплат
         foreach ($steps as $step) {
-            $sheet->setCellValue('A' . $rowIndex, $step['user']);
+            // Проверка на null для username
+            $username = !is_null($step['user']) ? $step['user'] : 'Не найден username. Id = ' . $step['id_usertg'];
+
+            $sheet->setCellValue('A' . $rowIndex, $username); // Пользователь
             $sheet->setCellValue('B' . $rowIndex, $step['updated_at']); // Дата перехода на 1 шаг
             $sheet->setCellValue('C' . $rowIndex, $step['completed_at']); // Время завершения финального шага
             $sheet->setCellValue('D' . $rowIndex, $step['article']); // Артикул товара
