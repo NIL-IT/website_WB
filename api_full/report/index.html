@@ -14,6 +14,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
+      position: relative;
     }
     .title-class-step {
       font-size: 24px;
@@ -54,11 +55,27 @@
       cursor: not-allowed;
       opacity: 0.6;
     }
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 28px;
+      color: #333;
+      z-index: 10;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: #007BFF;
+    }
   </style>
 </head>
 <body>
   <div id="app" class="purchase-step-page">
     <div class="purchase-step-header">
+      <a href="https://inhomeka.online:83/" class="back-btn" title="Назад">&#8592;</a>
       <p id="report-title" class="title-class-step"></p>
     </div>
     <div>

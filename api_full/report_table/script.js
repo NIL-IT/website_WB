@@ -8,11 +8,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 applicationsData = data.data;
                 originalData = [...applicationsData]; // Копируем оригинальные данные
 
-                // Сортируем так, чтобы сначала были status = 2, потом status = 1
-                applicationsData.sort((a, b) => b.status - a.status);
-
-                renderApplications();
-                setActiveButton('default'); // Активируем кнопку "по умолчанию"
+                // Сортировка "Сначала старые" при загрузке и активация соответствующей кнопки
+                sortByCompletedAt('asc');
+                setActiveButton('completed_at', 'asc');
             } else {
                 console.error("Ошибка при получении данных:", data.error);
             }
