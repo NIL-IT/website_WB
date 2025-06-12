@@ -1,6 +1,6 @@
 <?php
-require_once '../api_full/db.php';
-require_once '../api_full/vendor/autoload.php';
+include 'db.php';
+require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Border;
