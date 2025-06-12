@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/AddProductPage.css";
@@ -12,6 +12,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [popupMessage, setPopupMessage] = useState(
     "Ваш товар отправлен на модерацию. Если вашего товара долго нет, то напишите в поддержку"
   );
+  const [managers, setManagers] = useState([]); // Список менеджеров
 
   const navigate = useNavigate();
 
@@ -53,6 +54,23 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
   const [deleteDate, setDeleteDate] = useState("");
   const [stateValue, setStateValue] = useState(0b00); // 0 - оба выключены
 
+  useEffect(() => {
+    // Получение списка менеджеров с бэкенда
+    fetch("https://inhomeka.online:8000/getManagers.php", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.managers)) {
+          setManagers(data.managers);
+        } else {
+          setManagers([]);
+        }
+      })
+      .catch(() => setManagers([]));
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -68,6 +86,12 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     } else {
       setErrors({ ...errors, [name]: false });
       setFormData({ ...formData, [name]: value });
+    }
+
+    // Обработка выбора менеджера из выпадающего списка
+    if (name === "tg_nick_manager") {
+      setFormData({ ...formData, tg_nick_manager: value });
+      return;
     }
   };
 
@@ -649,21 +673,23 @@ const handleRemoveField = (event) => {
         </label>
         <label>
           Ник менеджера оплаты<span style={{ color: "red" }}> *</span>
-          <input
-            type="text"
+          <select
             name="tg_nick_manager"
             value={formData.tg_nick_manager}
-            onChange={(e) => {
-              const value = e.target.value;
-              if (!value.includes("@") && !/\s/.test(value)) {
-                handleChange(e);
-              }
-            }}
-            placeholder="Например: Alexon"
+            onChange={handleChange}
             required
-          />
+          >
+            <option value="" disabled>
+              Выберите менеджера
+            </option>
+            {managers.map((manager) => (
+              <option key={manager.id} value={manager.manager_username}>
+                {manager.manager_username}
+              </option>
+            ))}
+          </select>
           <span className="warning-message">
-            Ник не должен содержать @, пробелов или https://t.me/
+            Выберите ник менеджера из списка.
           </span>
         </label>
         <label>
