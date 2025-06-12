@@ -27,6 +27,17 @@ try {
         exit;
     }
 
+    // Проверяем, существует ли пользователь в таблице referrals
+    $stmtRef = $pdo->prepare("SELECT id FROM referrals WHERE id_usertg = ?");
+    $stmtRef->execute([$useridTG]);
+    $rowRef = $stmtRef->fetch(PDO::FETCH_ASSOC);
+
+    // Если пользователя нет — создаём его
+    if (!$rowRef) {
+        $insertRef = $pdo->prepare("INSERT INTO referrals (id_usertg) VALUES (?)");
+        $insertRef->execute([$useridTG]);
+    }
+
     $stmt = $pdo->prepare("SELECT referral_id FROM users WHERE id_usertg = ?");
     $stmt->execute([$useridTG]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
