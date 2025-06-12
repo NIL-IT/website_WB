@@ -25,12 +25,13 @@ try {
     }
 
     // Получаем всех менеджеров
-    $managers = $pdo->query("SELECT id, manager_username, balance FROM managers")->fetchAll(PDO::FETCH_ASSOC);
+    $managers = $pdo->query("SELECT id, manager_id, manager_username, balance FROM managers")->fetchAll(PDO::FETCH_ASSOC);
 
     $result = [];
 
     foreach ($managers as $manager) {
-        $manager_id = $manager['id'];
+        $manager_id = $manager['manager_id'];
+        $id = $manager['id'];
         $manager_username = $manager['manager_username'];
         $balance = floatval($manager['balance']);
 
@@ -64,7 +65,7 @@ try {
         $amount = $sum + $balance;
 
         $result[] = [
-            'id' => $manager_id,
+            'id' => $id,
             'manager_id' => $manager_id,
             'manager_username' => $manager_username,
             'amount' => $amount,
