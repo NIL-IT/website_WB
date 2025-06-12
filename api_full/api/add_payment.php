@@ -21,20 +21,20 @@ try {
     $amount = $data['amount'] ?? 0;
 
     if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
-        echo json_encode(['status' => false, 'message' => 'Нет доступа']);
+        echo json_encode(['success' => false, 'message' => 'Нет доступа']);
         exit;
     }
 
     if (!$manager_id || !$amount) {
-        echo json_encode(['status' => false, 'message' => 'manager_id и amount обязательны']);
+        echo json_encode(['success' => false, 'message' => 'manager_id и amount обязательны']);
         exit;
     }
 
     $stmt = $pdo->prepare("INSERT INTO payouts (manager_id, path_reciept_img, amount, paid_by) VALUES (?, ?, ?, ?)");
     $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
 
-    echo json_encode(['status' => true]);
+    echo json_encode(['success' => true]);
 } catch (Exception $e) {
-    echo json_encode(['status' => false, 'message' => $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 ?>
