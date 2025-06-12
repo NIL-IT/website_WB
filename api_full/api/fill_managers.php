@@ -11,11 +11,11 @@ try {
     $added = 0;
     foreach ($uniqueManagers as $managerUsername) {
         // Проверяем, существует ли уже такой менеджер
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM managers WHERE manager_username = ?");
+        $stmt = $pdo->prepare("SELECT manager_id FROM managers WHERE manager_username = ?");
         $stmt->execute([$managerUsername]);
-        $exists = $stmt->fetchColumn();
+        $managerIdInManagers = $stmt->fetchColumn();
 
-        if (!$exists) {
+        if ($managerIdInManagers === false) {
             // Ищем id_usertg по username в таблице users
             $userStmt = $pdo->prepare("SELECT id_usertg FROM users WHERE username = ?");
             $userStmt->execute([$managerUsername]);
@@ -25,6 +25,16 @@ try {
             $insert = $pdo->prepare("INSERT INTO managers (manager_username, manager_id, balance) VALUES (?, ?, 0)");
             $insert->execute([$managerUsername, $managerId]);
             $added++;
+        } else if (empty($managerIdInManagers)) {
+            // Если менеджер уже есть, но manager_id пустой, обновляем его
+            $userStmt = $pdo->prepare("SELECT id_usertg FROM users WHERE username = ?");
+            $userStmt->execute([$managerUsername]);
+            $managerId = $userStmt->fetchColumn();
+
+            if (!empty($managerId)) {
+                $update = $pdo->prepare("UPDATE managers SET manager_id = ? WHERE manager_username = ?");
+                $update->execute([$managerId, $managerUsername]);
+            }
         }
     }
 
