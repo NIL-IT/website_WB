@@ -1,5 +1,6 @@
 <?php
-require_once '../website_WB/api_full/db.php';
+require_once 'db.php';
+require_once 'cors.php';
 header('Content-Type: application/json');
 
 // Генерация уникального referral_id
