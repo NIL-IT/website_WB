@@ -62,8 +62,8 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.managers)) {
-          setManagers(data.managers);
+        if (data.success && Array.isArray(data.data)) {
+          setManagers(data.data);
         } else {
           setManagers([]);
         }
