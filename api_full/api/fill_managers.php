@@ -16,9 +16,14 @@ try {
         $exists = $stmt->fetchColumn();
 
         if (!$exists) {
-            // Вставляем нового менеджера с балансом 0
-            $insert = $pdo->prepare("INSERT INTO managers (manager_username, balance) VALUES (?, 0)");
-            $insert->execute([$managerUsername]);
+            // Ищем id_usertg по username в таблице users
+            $userStmt = $pdo->prepare("SELECT id_usertg FROM users WHERE username = ?");
+            $userStmt->execute([$managerUsername]);
+            $managerId = $userStmt->fetchColumn();
+
+            // Вставляем нового менеджера с manager_id и балансом 0
+            $insert = $pdo->prepare("INSERT INTO managers (manager_username, manager_id, balance) VALUES (?, ?, 0)");
+            $insert->execute([$managerUsername, $managerId]);
             $added++;
         }
     }
