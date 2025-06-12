@@ -5,15 +5,15 @@ header('Content-Type: application/json');
 
 try {
     $pdo = getDbConnection();
-    $useridTG = $_GET['useridTG'] ?? null;
-    if (!$useridTG) {
-        echo json_encode(['success' => false, 'message' => 'Не указан useridTG']);
+    $id_usertg = $_GET['id_usertg'] ?? null;
+    if (!$id_usertg) {
+        echo json_encode(['success' => false, 'message' => 'Не указан id_usertg']);
         exit;
     }
 
     // Получаем score и invited из referrals
     $stmt = $pdo->prepare("SELECT score, invited FROM referrals WHERE id_usertg = ?");
-    $stmt->execute([$useridTG]);
+    $stmt->execute([$id_usertg]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$row) {
