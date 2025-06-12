@@ -927,8 +927,7 @@ const PurchaseStepsPage = ({
               </div>
               <div className="purchase-step-content">
                 <p className="purchase-step-text">
-                Наш бренд растет и развивается на новых площадках, мы приглашаем. Вам нужно подписаться на социальные сети нашего бренда INHOMEKA - Инстаграм (принадлежит компании Meta, признанной экстремистской и запрещённой на территории РФ), 
-                ВКонтакте, Телеграм, для того, чтобы быть в нашем закрытом клубе.
+                Бренд INHOMEKA растёт и развивается на новых площадках. Чтобы оставаться в закрытом клубе, подпишитесь на наши социальные сети: Instagram (принадлежит компании Meta, признанной экстремистской и запрещённой на территории РФ), ВКонтакте и Telegram..
                 </p>
                 <div className="social-media-buttons">
   <a href="https://www.instagram.com/inhomeka.ru?igsh=ZGJpMTYwejA0YmVu" target="_blank" rel="noopener noreferrer">
@@ -1242,9 +1241,10 @@ const PurchaseStepsPage = ({
                 </li>
               </ul>
               <p className="purchase-step-text" style={{ marginTop: "20px" }}>
-                <span className="important">Важно!</span> Напоминаем, что вы
-                согласились с условием сделки и товар не может быть сдан
-                обратно.
+                <span className="important">Важно!</span> Напоминаем, что вы 
+                согласились с условием сделки и товар не может быть сдан 
+                обратно. Заберите его, даже если товар пришел с браком, 
+                и сообщите об этом нам 
               </p>
               <div className="article-input">
                 <p className="upload-title" style={{ marginBottom: 0 }}>
@@ -1283,7 +1283,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Сообщить продавцу о браке
               </button>
               <div className="step-footer-container">
                 <div
@@ -1341,7 +1341,12 @@ const PurchaseStepsPage = ({
                 <li>
                   Прикрепите скриншот, где видно, что отзыв уже опубликован;
                 </li>
-                <li>Прикрепите скриншот с разрезанным штрих-кодом.</li>
+                <li>
+                  Прикрепите скриншот с разрезанным штрих-кодом.
+                </li>
+                <li>
+                  Если товар пришел с браком или некачественный, сообщите об этом продавцу. Для получения кешбека оставьте отзыв 5* согласно инструкции выше.
+                </li>
               </ul>
               <div className="article-input">
                 <p className="upload-title" style={{ marginBottom: 0 }}>
@@ -1402,7 +1407,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Сообщить продавцу о браке
               </button>
               <div className="step-footer-container">
                 <div
