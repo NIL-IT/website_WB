@@ -76,7 +76,7 @@ try {
         $sheet->getRowDimension('1')->setRowHeight(20);
 
         // Получаем выплаты по менеджеру
-        $stmt = $pdo->prepare("SELECT create_at, amount, paid_by, path_reciept_img FROM payouts WHERE manager_id = ?");
+        $stmt = $pdo->prepare("SELECT created_at, amount, paid_by, path_reciept_img FROM payouts WHERE manager_id = ?");
         $stmt->execute([$managerId]);
         $payouts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -84,7 +84,7 @@ try {
         $total = 0;
 
         foreach ($payouts as $payout) {
-            $date = $payout['create_at'];
+            $date = $payout['created_at'];
             $amount = $payout['amount'];
             $paid_by = $payout['paid_by'];
             $img = $payout['path_reciept_img'];
