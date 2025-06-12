@@ -1,12 +1,14 @@
 <?php
-require_once '../website_WB/api_full/db.php';
+require_once 'db.php';
+require_once 'cors.php';
 header('Content-Type: application/json');
 
+// Проверка на админа по id_usertg
 function isAdmin($id_usertg, $pdo) {
-    $stmt = $pdo->prepare("SELECT is_admin FROM users WHERE id_usertg = ?");
+    $stmt = $pdo->prepare("SELECT status FROM users WHERE id_usertg = ?");
     $stmt->execute([$id_usertg]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row && $row['is_admin'];
+    return $row && $row['status'] === 'admin';
 }
 
 try {
@@ -14,19 +16,22 @@ try {
     $data = json_decode(file_get_contents('php://input'), true);
 
     $id_usertg = $data['id_usertg'] ?? null;
+    $manager_id = $data['manager_id'] ?? null;
+    $path_reciept_img = $data['path_reciept_img'] ?? '';
+    $amount = $data['amount'] ?? 0;
+
     if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
         echo json_encode(['status' => false, 'message' => 'Нет доступа']);
         exit;
     }
 
-    $manager_username = $data['manager_username'] ?? '';
-    $admin_username = $data['admin_username'] ?? '';
-    $path_reciept_img = $data['path_reciept_img'] ?? '';
-    $amount = $data['amount'] ?? 0;
+    if (!$manager_id || !$amount) {
+        echo json_encode(['status' => false, 'message' => 'manager_id и amount обязательны']);
+        exit;
+    }
 
-    // Пример вставки (реализуйте свою логику)
-    $stmt = $pdo->prepare("INSERT INTO payments (manager_username, admin_username, path_reciept_img, amount, created_at) VALUES (?, ?, ?, ?, NOW())");
-    $stmt->execute([$manager_username, $admin_username, $path_reciept_img, $amount]);
+    $stmt = $pdo->prepare("INSERT INTO payouts (manager_id, path_reciept_img, amount, paid_by) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
 
     echo json_encode(['status' => true]);
 } catch (Exception $e) {
