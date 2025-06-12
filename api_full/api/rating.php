@@ -16,6 +16,11 @@ try {
     $stmt->execute([$useridTG]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if (!$row) {
+        echo json_encode(['success' => false, 'referral' => false]);
+        exit;
+    }
+
     $score = $row['score'] ?? 0;
     $invited = $row['invited'] ?? 0;
     $top = 0;
@@ -27,15 +32,11 @@ try {
         $topRow = $stmtTop->fetch(PDO::FETCH_ASSOC);
         $top = $topRow['place'] ?? 0;
     }
-
-    $googleTableUrl = 'https://docs.google.com/spreadsheets/d/ВАШ_ID_ТАБЛИЦЫ';
-
     echo json_encode([
         'success' => true,
         'score' => $score,
         'invited' => $invited,
-        'top' => $top,
-        'google_table_url' => $googleTableUrl
+        'top' => $top
     ]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
