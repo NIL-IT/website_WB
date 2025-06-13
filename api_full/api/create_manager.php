@@ -35,7 +35,7 @@ try {
     }
 
     // Поиск пользователя по username
-    $stmt = $conn->prepare("SELECT id_userTG FROM users WHERE username = :manager_username");
+    $stmt = $conn->prepare("SELECT id_usertg FROM users WHERE username = :manager_username");
     $stmt->bindParam(':manager_username', $manager_username, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -45,7 +45,7 @@ try {
         exit;
     }
 
-    $manager_id = $user['id_userTG'];
+    $manager_id = $user['id_usertg'];
 
     // Добавление менеджера с manager_id и balance = 0
     $stmt = $conn->prepare("INSERT INTO managers (manager_username, manager_id, balance) VALUES (:manager_username, :manager_id, 0)");
