@@ -45,7 +45,8 @@ try {
     $manager = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($manager) {
-        $new_balance = $manager['balance'] + $amount;
+        $amount_num = floatval($amount);
+        $new_balance = $manager['balance'] + $amount_num;
         $stmt = $pdo->prepare("UPDATE managers SET balance = ? WHERE id = ?");
         $stmt->execute([$new_balance, $manager_id]);
     }
