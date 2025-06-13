@@ -5,7 +5,8 @@ from aiogram.filters import Command
 from aiogram import Router, types, F, filters
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
-from core.keyboards_bot.keyboards_admin import admin_corect_all, mailing_button, get_btn_mailing, mailing_castom_button, payments_btn, keyboard_otchet
+from core.keyboards_bot.keyboards_admin import admin_corect_all, mailing_button, get_btn_mailing, mailing_castom_button, payments_btn, keyboard_otchet, \
+    get_managers_list_kb
 from aiogram.types import Message,CallbackQuery
 import aiohttp
 from aiogram.types import InputFile
@@ -13,7 +14,7 @@ import sqlite3
 from core.text_bot.message_text import welcome_text_admin
 import io
 
-
+from core.settings import BACK_URL, UPLOAD_FOLDER
 
 import core.utils as utils
 
@@ -21,11 +22,16 @@ from core import keyboards_bot
 from core.filters_bot import ChatTypeFilterMes, ChatTypeFilterCall, is_admin
 from core.states import Admin
 
+import uuid
+import os
+import logging
+
+
 admin_private_router = Router()
 admin_private_router.message.filter(ChatTypeFilterMes(['private']))
 admin_private_router.callback_query.filter(ChatTypeFilterCall(['private']))
 
-
+logging.basicConfig(level=logging.INFO)
 
 
 class AdminPanel(StatesGroup):
@@ -339,3 +345,278 @@ async def cmd_admin(message: types.Message, state: FSMContext):
     await state.clear()
 
     #     # https://testingnil6.ru:8000/update_status?id_usertg=
+
+
+
+
+# ===================================================================== #
+                # ===  ДОРАБОТКИ от 11/06/2025 ===
+# ===================================================================== #
+
+# === ДОБАВЛЕНИЕ МЕНЕДЖЕРА === #
+@admin_private_router.message(is_admin(), Command("create_manager"))
+async def start_create_manager(message: Message, state: FSMContext):
+    """ Запрос username пользователя для создания менеджера """
+    
+    await message.answer(
+        text="Введите telegram username пользователя для назначения его менеджером."
+    )
+    
+    await state.set_state(Admin.get_username)
+    
+
+@admin_private_router.message(Admin.get_username)
+async def get_username_to_create(message: Message, state: FSMContext):
+    """ Получение username для назначения пользователя менеджером """
+    
+    username = message.text
+    
+    API_CREATE_MANAGER = BACK_URL + "/create_manager"
+    id_usertg = message.from_user.id
+    json = {
+        "id_usertg": id_usertg,
+        "manager_username": username
+    }
+    # Запрос на назначение менеджера
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_CREATE_MANAGER, json=json) as response:
+            data = await response.json()
+            success = data.get("success")
+            if not success:
+                logging.info(f"Ошибка при назначении менеджера: {response.status}")
+                await message.answer(
+                    text="❌ Не удалось назначить пользователя менеджером. Убедитесь, что username был введен правильно.\n"
+                         "Попробуйте еще раз."
+                )
+                return
+    
+    await message.answer(
+        text="✅ Пользователь был успешно назначен менеджером."
+    )
+    
+    await state.clear()
+
+
+# === УДАЛЕНИЕ МЕНЕДЖЕРА === #
+@admin_private_router.message(is_admin(), Command("delete_manager"))
+async def start_delete_manager(message: Message, state: FSMContext):
+    """ Получение списка менеджеров на удаление """
+    
+    id_usertg = message.from_user.id
+    API_MANAGER_LIST = BACK_URL + "/delete_manager_list"
+    # Запрос для получения списка менеджеров для удаления
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_MANAGER_LIST, json={"id_usertg": id_usertg}) as response:
+            data = await response.json()
+            success = data.get("success")
+            if not success:
+                await message.answer(
+                    text="❌ Не удалось получить список менеджеров."
+                )
+                return
+    
+    managers = data.get("data")
+    await message.answer(
+        text="Выберите менеджера из списка для удаления:",
+        reply_markup=get_managers_list_kb(managers_list=managers)
+    )
+    
+    await state.set_state(Admin.get_manager_to_delete)
+
+
+@admin_private_router.callback_query(Admin.get_manager_to_delete)
+async def get_manager_to_delete(callback: CallbackQuery, state: FSMContext):
+    """ Удаление полученного менеджера """
+    
+    _, manager_id = callback.data.split(":")
+    
+    id_usertg = callback.from_user.id
+    API_MANAGER_LIST = BACK_URL + "/delete_manager"
+    json = {
+        "id_usertg": id_usertg,
+        "manager_id": manager_id
+    }
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_MANAGER_LIST, json=json) as response:
+            data = await response.json()
+            if not data.get("success"):
+                await callback.message.answer(
+                    text="❌ Не удалось удалить выбранного менеджера."
+                )
+                await callback.answer()
+                return
+    
+    await callback.answer(
+        text="Менеджер был успешно удален."
+    )
+    
+    await state.clear()
+    await callback.answer()
+
+
+# === СБРОС РЕЙТИНГА === #
+@admin_private_router.message(is_admin(), Command("reset_rating"))
+async def reset_rating(message: Message):
+    """ Команда для сброса рейтинга """
+    
+    # Запрос на сброс рейтинга (передать admin_id)
+    
+
+
+# === БАЛАНС МЕНЕДЖЕРОВ === #
+
+@admin_private_router.message(is_admin(), Command("/payout_balances"))
+async def get_managers_list(message: Message, state: FSMContext):
+    """ Вывод списка менеджеров """
+    
+    await message.answer(
+        text="Собираю информацию о менеджерах..."
+    )
+    
+    API_BALANCES = BACK_URL + "/payout_balances"
+    id_usertg = message.from_user.id
+    # Запрос на получение информации о менеджерах
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_BALANCES, json={"id_usertg": id_usertg}) as response:
+            data = await response.json()
+            print(data)
+            success = data.get("success")
+            if not success:
+                logging.info(f"Ошибка при получении информации о менеджерах: {response.status}")
+                await message.answer(
+                    text="❌ Не удалось получить информацию о менеджерах"
+                )
+                return
+            
+    manager_info = data.get("data")
+    answer = "<b>Список менеджеров:</b>"
+    for manager in manager_info:
+        answer += f"\n◽ @{manager.get('manager_username')}: {manager.get('amount')} ₽ (заявок: {manager.get('request')})"
+    
+    answer += "\n\n👨‍💼 Выберите менеджера, которому хотите пополнить баланс:"
+    
+    await message.answer(
+        text=answer,
+        reply_markup=get_managers_list_kb(managers_list=manager_info),
+        parse_mode="HTML"
+    )
+    
+    await state.set_state(Admin.get_manager)
+    
+
+@admin_private_router.callback_query(F.data.startswith("manager"), Admin.get_manager)
+async def get_manager(callback: CallbackQuery, state: FSMContext):
+    """ Получение username менеджера для перевода """
+    
+    _, manager_id = callback.data.split(":")
+    
+    await callback.message.answer(
+        text="💰 Введите сумму для пополнения"
+    )
+    
+    await state.update_data(manager_id=manager_id)
+    await state.set_state(Admin.get_sum)
+    await callback.answer()
+
+
+@admin_private_router.message(Admin.get_sum)
+async def get_sum(message: Message, state: FSMContext):
+    """ Получение суммы для пополнения """
+    
+    amount = message.text
+    try:
+        amount = float(amount)
+    except:
+        await message.answer(
+            text="❌ Формат введенной суммы неверный! Сумма пополнения должна быть числом.\n"
+                 "Пожалуйста, введите сумму еще раз."
+        )
+        return
+    
+    await message.answer(
+        text="🧾 Пожалуйста, отправьте чек."
+    )
+    
+    await state.update_data(amount=amount)
+    await state.set_state(Admin.get_check)
+
+
+@admin_private_router.message(Admin.get_check)
+async def get_check(message: Message, bot: Bot, state: FSMContext):
+    """ Получение чека """
+    
+    photo_id = message.photo[-1].file_id if message.photo else None
+    if not photo_id:
+        await message.answer(
+            text="❌ Ошибка! Пожалуйста, отправьте чек одной фотографией еще раз."
+        )
+        return
+    
+    data = await state.get_data()
+    manager_id = data.get("manager_id")
+    amount = data.get("amount")
+    
+    # Сохранение чека в директории
+    # Получаем File object
+    file = await bot.get_file(photo_id)
+    
+    # Генерируем уникальное имя
+    unique_filename = f"{uuid.uuid4().hex}.png"
+    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+    file_path = file_path.replace("\\", '/')
+
+    # Скачиваем и сохраняем
+    await bot.download_file(file.file_path, destination=file_path)
+    
+    # Сохранение информации в бд
+    API_PAYMENT = BACK_URL + "/add_payment"
+    id_usertg = message.from_user.id
+    json = {
+        "manager_id": manager_id,
+        "path_reciept_img": file_path,
+        "amount": amount,
+        "id_usertg": id_usertg,
+        "admin_username": message.from_user.username
+    }
+    # Запрос на получение информации о менеджерах
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_PAYMENT, json=json) as response:
+            data = await response.json()
+    
+    success = data.get("success")
+    if not success:
+        logging.info(f"Ошибка при получении информации о менеджерах: {response.status}")
+        await message.answer(
+            text="❌ Не удалось cохранить информацию о пополнении. Попробуйте еще раз."
+        )
+        return
+    
+    # Отправка информации менеджеру
+    try:
+        await bot.send_photo(
+            chat_id=manager_id,
+            photo=photo_id,
+            caption="Чек на пополнение баланса"
+        )
+    except Exception as e:
+        await message.answer(
+            text="❌ Не удалось отправить сообщение менеджеру!"
+        )
+        logging.info(f"Не удалось отправить сообщение менеджеру: {e}")
+        await state.clear()
+        return
+    
+    await message.answer(
+        text="✅ Иформация была успешно направлена менеджеру."
+    )
+    
+    await state.clear()
+    return
+
+
+# === ИСТОРИЯ ПОПОЛНЕНИЙ === #
+@admin_private_router.message(is_admin(), Command("payout_history"))
+async def start_payout_history(message: Message, state: FSMContext):
+    """ Получение истории пополенний о всех менеджерах """
+    
+    # запрос для формирования Excel

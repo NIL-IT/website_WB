@@ -5,6 +5,8 @@ from aiogram.filters import Command
 
 import core.utils as utils
 from core.handlers.admin import *
+from core.handlers.admin_private import *
+from core.handlers.user_private import *
 
 
 async def main(dp: utils.create_dp.Dispatcher):
@@ -19,7 +21,9 @@ async def main(dp: utils.create_dp.Dispatcher):
     dp.callback_query.register(quith_user, F.data.startswith("quith_"))
     dp.callback_query.register(done_quiz, Command(commands=['start_opros']))
     dp.message.register(update_opros, Command(commands=['res_opros']))
-
+    dp.message.register(get_managers_list, Command(commands=['payout_balances']))
+    dp.message.register(get_raiting_table, Command(commands=['raiting']))
+    
     try:
         await dp.start_polling(utils.bot)
     finally:

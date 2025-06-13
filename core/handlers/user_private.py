@@ -16,6 +16,8 @@ from core.logger_csm import CustomFormatter
 from core.text_bot.message_text import start_message, notif_message, remind_message, referal_text
 from core.filters_bot.isAdmin import admin_utils
 
+import aiohttp
+from core.settings import BACK_URL
 
 
 logger = logging.getLogger(__name__)
@@ -222,3 +224,26 @@ async def subskr(callback: types.CallbackQuery):
 # @user_private_router.message(Command(commands=['payments_dashboard']))
 # async def cmd_start(message: types.Message):
 #     await message.answer(text="Страница просмотра заявок на выплату", reply_markup=payments_btn())
+
+
+
+
+# ===================================================================== #
+                # ===  ДОРАБОТКИ от 11/06/2025 ===
+# ===================================================================== #
+
+# === РЕЙТИНГ ПОЛЬЗОВАТЕЛЕЙ === #
+@user_private_router.message(Command("rating"))
+async def get_raiting_table(message: types.Message):
+    """ Получение гугл таблицы с рейтингом пользователей """
+    
+    await message.answer(
+        text="Получаю информацию о вашем рейтинге..."
+    )
+    
+    API_RAITING = BACK_URL + "/raiting"
+    json = { "id_usertg": message.from_user.id }
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_RAITING, json=json) as response:
+            data = await response.json()
+            print(data)

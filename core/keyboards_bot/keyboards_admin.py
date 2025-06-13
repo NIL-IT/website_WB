@@ -78,3 +78,10 @@ keyboard_otchet = InlineKeyboardMarkup(inline_keyboard=[
     ])
 
 
+def get_managers_list_kb(managers_list: list[dict]):
+    keyboard_builder = InlineKeyboardBuilder()
+    for manager in managers_list:
+        keyboard_builder.button(text=f"{manager.get('manager_username')}", callback_data=f"manager:{manager.get('manager_id')}")
+    keyboard_builder.adjust(1)
+    
+    return keyboard_builder.as_markup()
