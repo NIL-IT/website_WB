@@ -30,8 +30,25 @@ try {
         exit;
     }
 
+    // Проверка на отрицательное значение amount и на 0
+    if ($amount <= 0) {
+        echo json_encode(['success' => false, 'message' => 'amount должен быть больше 0']);
+        exit;
+    }
+
     $stmt = $pdo->prepare("INSERT INTO payouts (manager_id, path_reciept_img, amount, paid_by) VALUES (?, ?, ?, ?)");
     $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
+
+    // Поиск manager_id в таблице managers и обновление balance
+    $stmt = $pdo->prepare("SELECT balance FROM managers WHERE id = ?");
+    $stmt->execute([$manager_id]);
+    $manager = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($manager) {
+        $new_balance = $manager['balance'] + $amount;
+        $stmt = $pdo->prepare("UPDATE managers SET balance = ? WHERE id = ?");
+        $stmt->execute([$new_balance, $manager_id]);
+    }
 
     echo json_encode(['success' => true]);
 } catch (Exception $e) {
