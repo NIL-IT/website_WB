@@ -36,9 +36,6 @@ try {
         exit;
     }
 
-    $stmt = $pdo->prepare("INSERT INTO payouts (manager_id, path_reciept_img, amount, paid_by) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
-
     // Поиск manager_id в таблице managers и обновление balance
     $stmt = $pdo->prepare("SELECT balance FROM managers WHERE manager_id = ?");
     $stmt->execute([$manager_id]);
@@ -48,10 +45,17 @@ try {
         $amount_num = floatval($amount);
         $new_balance = $manager['balance'] + $amount_num;
         $stmt = $pdo->prepare("UPDATE managers SET balance = ? WHERE manager_id = ?");
-        $stmt->execute([$new_balance, $manager_id]);
+        $updateSuccess = $stmt->execute([$new_balance, $manager_id]);
+        if ($updateSuccess) {
+            $stmt = $pdo->prepare("INSERT INTO payouts (manager_id, path_reciept_img, amount, paid_by) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
+            echo json_encode(['success' => true]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Ошибка обновления баланса менеджера']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Менеджер не найден']);
     }
-
-    echo json_encode(['success' => true]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
