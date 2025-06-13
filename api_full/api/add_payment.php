@@ -40,14 +40,14 @@ try {
     $stmt->execute([$manager_id, $path_reciept_img, $amount, $id_usertg]);
 
     // Поиск manager_id в таблице managers и обновление balance
-    $stmt = $pdo->prepare("SELECT balance FROM managers WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT balance FROM managers WHERE manager_id = ?");
     $stmt->execute([$manager_id]);
     $manager = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($manager) {
         $amount_num = floatval($amount);
         $new_balance = $manager['balance'] + $amount_num;
-        $stmt = $pdo->prepare("UPDATE managers SET balance = ? WHERE id = ?");
+        $stmt = $pdo->prepare("UPDATE managers SET balance = ? WHERE manager_id = ?");
         $stmt->execute([$new_balance, $manager_id]);
     }
 
