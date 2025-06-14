@@ -10,7 +10,7 @@ function sendTopToGoogleSheet($values) {
     $client->addScope(\Google_Service_Sheets::SPREADSHEETS);
 
     $service = new \Google_Service_Sheets($client);
-    $spreadsheetId = '1ViIZra4qli2h67i2bdlqyqKZIV4b1Cy5buNCG9BF3tg';
+    $spreadsheetId = '1PmVLp2XFiRHu9YedVD7mvgmdqKcS6FPkbti96fF1j9w';
     $range = 'Top!A1:Z';
 
     // Очистка данных
@@ -84,3 +84,5 @@ try {
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
+
+// Проверьте, что client_email из cred_top.json добавлен в доступ к Google Таблице как редактор!
