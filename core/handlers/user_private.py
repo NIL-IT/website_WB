@@ -5,7 +5,7 @@ from aiogram.filters import CommandStart, Command
 from aiogram import Router, types, F, Bot
 import requests
 from requests.exceptions import HTTPError
-from aiogram.types import BotCommandScopeDefault
+from aiogram.types import BotCommandScopeDefault, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 import core.utils as utils
 from core.settings import worksheet_user
 from core import keyboards_bot
@@ -17,7 +17,10 @@ from core.text_bot.message_text import start_message, notif_message, remind_mess
 from core.filters_bot.isAdmin import admin_utils
 
 import aiohttp
-from core.settings import BACK_URL
+from core.settings import BACK_URL, MAIN_URL
+from core.database import get_ref_id, add_ref_id
+import sqlite3
+
 
 
 logger = logging.getLogger(__name__)
@@ -96,6 +99,26 @@ async def cmd_start(message: types.Message, bot:Bot):
     ## if await check_subscription(user_id):
     ## Если подписан, показываем меню с кнопками
     ## print(admin_utils(message.from_user.id))
+    
+    text = message.text or ""
+    
+    # Проверка на реферальную ссылку
+    args = text.split(" ", 1)
+    if len(args) == 2 and args[1].startswith("ref"):
+        ref_id = args[1][3:]
+        webapp_url = f"{MAIN_URL}/catalog?refferal={ref_id}"
+
+        markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Открыть WebApp", web_app=WebAppInfo(url=webapp_url))]
+        ])
+        print(webapp_url)
+        await message.answer(
+            "Добро пожаловать! Нажми на кнопку ниже, чтобы открыть WebApp:",
+            reply_markup=markup
+        )
+        return  # не показываем меню, если пользователь пришёл по ссылке
+    
+    
     if admin_utils(message.from_user.id):
          await utils.bot.send_message(
         chat_id=user_id,
@@ -241,9 +264,60 @@ async def get_raiting_table(message: types.Message):
         text="Получаю информацию о вашем рейтинге..."
     )
     
-    API_RAITING = BACK_URL + "/raiting"
+    API_RAITING = BACK_URL + "/rating"
     json = { "id_usertg": message.from_user.id }
     async with aiohttp.ClientSession() as session:
         async with session.post(url=API_RAITING, json=json) as response:
             data = await response.json()
             print(data)
+            success = data.get("success")
+            if not success:
+                pass
+            
+            
+# === РЕФЕРАЛКА === #
+@user_private_router.message(Command("referral"))
+async def get_reff(message: types.Message):
+    """ Создание реферальной ссыслки """
+    
+    ref_id = get_ref_id(user_id=message.from_user.id)
+    if ref_id == -1:
+        await message.answer(
+            text="Произошла ошибка. Попробуйте позже."
+        )
+        return
+    
+    if not ref_id:
+        # Запрос для создания реферальной ссылки
+        API_PAY_HISTORY = BACK_URL + "/referral"
+        json = { "id_usertg": message.from_user.id }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url=API_PAY_HISTORY, json=json) as response:
+                data = await response.json()
+                if not data.get("success"):
+                    await message.answer(
+                        text="Произошла ошибка при создании ссылки. Попробуйте позже."
+                    )
+                    return
+        
+        ref_id = data.get("referral_id")
+        # Сохранение реф. id за пользователем
+        add_ref_id(user_id=message.from_user.id, ref_id=ref_id)
+    else:
+        ref_id = get_ref_id(user_id=message.from_user.id)
+        
+    #webapp_url = f"{BACK_URL}/main?refferal={ref_id}"
+    bot_url = f"https://t.me/wb_cashback_ttest_bot?start=ref" + ref_id
+    
+    # markup = InlineKeyboardMarkup(inline_keyboard=[
+    #     [InlineKeyboardButton(text="Перейти в WebApp", web_app=WebAppInfo(url=webapp_url))]
+    # ])
+
+    #await message.answer("Пригласи друга!\nОтправь ему это сообщение, чтобы он нажал на кнопку:", reply_markup=markup)
+    await message.answer(
+        text=(
+            f"Пригласи друга!\n"
+            f"Нажми по ссылке, чтобы открыть Telegram-Бота:\n\n"
+            f"{bot_url}"
+        )
+    )

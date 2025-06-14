@@ -1,0 +1,31 @@
+name: Deploy Telegram Bot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy Telegram bot files
+        env:
+          HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+          # Устанавливаем sshpass и rsync
+          sudo apt-get update && sudo apt-get install -y sshpass rsync
+
+          # Создаём временную директорию для SSH known_hosts
+          mkdir -p /tmp/ssh
+          ssh-keyscan -H $HOST >> /tmp/ssh/known_hosts
+
+          # Копируем все файлы проекта бота в нужную папку на сервере
+          SSH_CMD="ssh -o UserKnownHostsFile=/tmp/ssh/known_hosts -o StrictHostKeyChecking=yes"
+          sshpass -p "$PASSWORD" rsync -avz --delete -e "$SSH_CMD" ./ root@$HOST:/var/www/WbCashBackBot/

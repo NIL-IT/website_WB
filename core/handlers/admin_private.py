@@ -409,6 +409,7 @@ async def start_delete_manager(message: Message, state: FSMContext):
         async with session.post(url=API_MANAGER_LIST, json={"id_usertg": id_usertg}) as response:
             data = await response.json()
             success = data.get("success")
+            print(data)
             if not success:
                 await message.answer(
                     text="❌ Не удалось получить список менеджеров."
@@ -418,7 +419,7 @@ async def start_delete_manager(message: Message, state: FSMContext):
     managers = data.get("data")
     await message.answer(
         text="Выберите менеджера из списка для удаления:",
-        reply_markup=get_managers_list_kb(managers_list=managers)
+        reply_markup=get_managers_list_kb(managers_list=managers, key="id")
     )
     
     await state.set_state(Admin.get_manager_to_delete)
@@ -434,11 +435,12 @@ async def get_manager_to_delete(callback: CallbackQuery, state: FSMContext):
     API_MANAGER_LIST = BACK_URL + "/delete_manager"
     json = {
         "id_usertg": id_usertg,
-        "manager_id": manager_id
+        "id": manager_id
     }
     async with aiohttp.ClientSession() as session:
         async with session.post(url=API_MANAGER_LIST, json=json) as response:
             data = await response.json()
+            print(data)
             if not data.get("success"):
                 await callback.message.answer(
                     text="❌ Не удалось удалить выбранного менеджера."
@@ -446,7 +448,7 @@ async def get_manager_to_delete(callback: CallbackQuery, state: FSMContext):
                 await callback.answer()
                 return
     
-    await callback.answer(
+    await callback.message.answer(
         text="Менеджер был успешно удален."
     )
     
@@ -533,6 +535,13 @@ async def get_sum(message: Message, state: FSMContext):
         )
         return
     
+    if amount <= 0:
+        await message.answer(
+            text="❌ Сумма пополнения должна быть больше нуля.\n"
+                 "Пожалуйста, введите сумму еще раз."
+        )
+        return
+    
     await message.answer(
         text="🧾 Пожалуйста, отправьте чек."
     )
@@ -576,13 +585,13 @@ async def get_check(message: Message, bot: Bot, state: FSMContext):
         "path_reciept_img": file_path,
         "amount": amount,
         "id_usertg": id_usertg,
-        "admin_username": message.from_user.username
     }
-    # Запрос на получение информации о менеджерах
+    # Запрос на внесении информации о пополнении
     async with aiohttp.ClientSession() as session:
         async with session.post(url=API_PAYMENT, json=json) as response:
             data = await response.json()
     
+    print(data)
     success = data.get("success")
     if not success:
         logging.info(f"Ошибка при получении информации о менеджерах: {response.status}")
@@ -591,20 +600,20 @@ async def get_check(message: Message, bot: Bot, state: FSMContext):
         )
         return
     
-    # Отправка информации менеджеру
-    try:
-        await bot.send_photo(
-            chat_id=manager_id,
-            photo=photo_id,
-            caption="Чек на пополнение баланса"
-        )
-    except Exception as e:
-        await message.answer(
-            text="❌ Не удалось отправить сообщение менеджеру!"
-        )
-        logging.info(f"Не удалось отправить сообщение менеджеру: {e}")
-        await state.clear()
-        return
+    # # Отправка информации менеджеру
+    # try:
+    #     await bot.send_photo(
+    #         chat_id=manager_id,
+    #         photo=photo_id,
+    #         caption="Чек на пополнение баланса"
+    #     )
+    # except Exception as e:
+    #     await message.answer(
+    #         text="❌ Не удалось отправить сообщение менеджеру!"
+    #     )
+    #     logging.info(f"Не удалось отправить сообщение менеджеру: {e}")
+    #     await state.clear()
+    #     return
     
     await message.answer(
         text="✅ Иформация была успешно направлена менеджеру."
@@ -616,7 +625,29 @@ async def get_check(message: Message, bot: Bot, state: FSMContext):
 
 # === ИСТОРИЯ ПОПОЛНЕНИЙ === #
 @admin_private_router.message(is_admin(), Command("payout_history"))
-async def start_payout_history(message: Message, state: FSMContext):
+async def start_payout_history(message: Message):
     """ Получение истории пополенний о всех менеджерах """
     
     # запрос для формирования Excel
+    API_PAY_HISTORY = BACK_URL + "/payout_history/"
+    TEST_API = "https://inhomeka.online:8000/payout_history/"
+    print(f"API: {API_PAY_HISTORY}")
+    print(f"TEST_API: {TEST_API}")
+    id_usertg = int(message.from_user.id)
+    headers = {"Content-Type": "application/json"}
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_PAY_HISTORY, json={"id_usertg": id_usertg}, headers=headers) as response:
+            print(response.status)
+            #print(await response.json())
+            content_disposition = response.headers.get('Content-Disposition')
+            filename = content_disposition.split('filename=')[1].strip('"')
+            file_bytes = await response.read()
+            input_file = BufferedInputFile(file=file_bytes, filename=filename)
+            
+    
+    await message.answer_document(
+        document=input_file,
+        caption="Вот ваш отчёт 📊"
+    )
+            
+            
