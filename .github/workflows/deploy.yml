@@ -19,13 +19,10 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
-          # Устанавливаем sshpass и rsync
           sudo apt-get update && sudo apt-get install -y sshpass rsync
 
-          # Создаём временную директорию для SSH known_hosts
           mkdir -p /tmp/ssh
           ssh-keyscan -H $HOST >> /tmp/ssh/known_hosts
 
-          # Копируем все файлы проекта бота в нужную папку на сервере
-          SSH_CMD="ssh -o UserKnownHostsFile=/tmp/ssh/known_hosts -o StrictHostKeyChecking=yes"
-          sshpass -p "$PASSWORD" rsync -avz --delete -e "$SSH_CMD" ./ root@$HOST:/var/www/WbCashBackBot/
+          RSYNC_SSH="sshpass -p '$PASSWORD' ssh -o UserKnownHostsFile=/tmp/ssh/known_hosts -o StrictHostKeyChecking=yes"
+          sshpass -p "$PASSWORD" rsync -avz --delete -e "$RSYNC_SSH" ./ root@$HOST:/var/www/WbCashBackBot/
