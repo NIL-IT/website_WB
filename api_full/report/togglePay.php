@@ -153,13 +153,47 @@ try {
 
     // Отправка сообщения в Telegram бота, если не отменено
     if ($newPaid) {
-        $stmt = $pdo->prepare('SELECT id_usertg FROM steps WHERE id = :id');
+        $stmt = $pdo->prepare('SELECT id_usertg, id_product FROM steps WHERE id = :id');
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-        if ($user) {
-            $chatId = $user['id_usertg'];
+        $userStep = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userStep) {
+            $chatId = $userStep['id_usertg'];
+            $id_product = $userStep['id_product'];
+
+            // Получаем tg_nick_manager из products
+            $stmt = $pdo->prepare('SELECT tg_nick_manager, modified_payment, market_price, your_price FROM products WHERE id = :id_product');
+            $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
+            $stmt->execute();
+            $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($product && !empty($product['tg_nick_manager'])) {
+                $manager_username = $product['tg_nick_manager'];
+
+                // Получаем manager_id и balance из managers
+                $stmt = $pdo->prepare('SELECT manager_id, balance FROM managers WHERE manager_username = :manager_username');
+                $stmt->bindParam(':manager_username', $manager_username, PDO::PARAM_STR);
+                $stmt->execute();
+                $manager = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($manager) {
+                    $manager_id = $manager['manager_id'];
+                    $balance = $manager['balance'];
+
+                    // Определяем сумму для вычета
+                    $sum = $product['modified_payment'];
+                    if ($sum === null) {
+                        $sum = $product['market_price'] - $product['your_price'];
+                    }
+
+                    // Вычитаем сумму из баланса
+                    $new_balance = $balance - $sum;
+                    $stmt = $pdo->prepare('UPDATE managers SET balance = ? WHERE manager_id = ?');
+                    $stmt->execute([$new_balance, $manager_id]);
+                }
+            }
+
             // Отправляем сообщение с чеком
             sendTelegramMessageWithReceipt($chatId, $imagePath);
             // Отправляем сообщение с приглашением
