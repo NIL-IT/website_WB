@@ -12,7 +12,7 @@ if (!isset($data['id'])) {
 }
 
 $id = $data['id'];
-$username = $data['username'];
+$username = $data['username'] ?? null; // username может быть не передан
 
 try {
     $conn = getDbConnection();
