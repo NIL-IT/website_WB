@@ -584,6 +584,12 @@ function tryGiveReferralScore($pdo, $id_usertg) {
         // Отмечаем, что балл уже начислен
         $stmt = $pdo->prepare("UPDATE users SET score_given = true WHERE id_usertg = ?");
         $stmt->execute([$id_usertg]);
+
+        // Вызов top_updater.php после начисления баллов
+        $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+        if (file_exists($topUpdaterPath)) {
+            include_once $topUpdaterPath;
+        }
     }
 }
 ?>
