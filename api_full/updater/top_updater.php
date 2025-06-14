@@ -34,7 +34,7 @@ function sendTopToGoogleSheet($values) {
 
     $requests = [];
 
-    // Форматирование шапки (первая строка) с жирной черной обводкой
+    // Форматирование шапки (первая строка) с жирной черной обводкой только сверху и снизу
     $requests[] = [
         'repeatCell' => [
             'range' => [
@@ -58,7 +58,7 @@ function sendTopToGoogleSheet($values) {
             'fields' => 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)'
         ]
     ];
-    // Жирная черная обводка для шапки
+    // Жирная черная обводка для шапки только сверху и снизу
     $requests[] = [
         'updateBorders' => [
             'range' => [
@@ -134,7 +134,7 @@ function sendTopToGoogleSheet($values) {
         ];
     }
 
-    // Обычная обводка для всех остальных строк (кроме шапки)
+    // Обычная обводка для всех остальных строк (кроме шапки), без верхней границы первой строки после шапки
     $requests[] = [
         'updateBorders' => [
             'range' => [
@@ -145,8 +145,7 @@ function sendTopToGoogleSheet($values) {
                 'endColumnIndex' => $colCount
             ],
             'top' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+                'style' => 'NONE'
             ],
             'bottom' => [
                 'style' => 'SOLID',
@@ -276,4 +275,5 @@ try {
 
 // Проверьте, что client_email из cred_top.json добавлен в доступ к Google Таблице как редактор!
 
+// Убедитесь, что в Google Таблице есть лист с именем Top
 // Убедитесь, что в Google Таблице есть лист с именем Top
