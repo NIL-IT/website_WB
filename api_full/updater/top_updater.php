@@ -28,14 +28,15 @@ function sendTopToGoogleSheet($values) {
 
     $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
 
-    // Форматирование призовых мест
+    // Форматирование призовых мест (на всю строку, более прозрачно)
     $requests = [];
-    // Золото, серебро, бронза (A2, A3, A4)
+    // Цвета с прозрачностью (alpha=0.2)
     $colors = [
-        2 => ['red' => 1.0, 'green' => 0.84, 'blue' => 0.0],      // Gold
-        3 => ['red' => 0.75, 'green' => 0.75, 'blue' => 0.75],     // Silver
-        4 => ['red' => 0.8, 'green' => 0.5, 'blue' => 0.2],        // Bronze
+        2 => ['red' => 1.0, 'green' => 0.84, 'blue' => 0.0, 'alpha' => 0.2],      // Gold
+        3 => ['red' => 0.75, 'green' => 0.75, 'blue' => 0.75, 'alpha' => 0.2],     // Silver
+        4 => ['red' => 0.8, 'green' => 0.5, 'blue' => 0.2, 'alpha' => 0.2],        // Bronze
     ];
+    $colCount = count($values[0]);
     foreach ($colors as $row => $color) {
         $requests[] = [
             'repeatCell' => [
@@ -44,14 +45,21 @@ function sendTopToGoogleSheet($values) {
                     'startRowIndex' => $row - 1,
                     'endRowIndex' => $row,
                     'startColumnIndex' => 0,
-                    'endColumnIndex' => 1
+                    'endColumnIndex' => $colCount
                 ],
                 'cell' => [
                     'userEnteredFormat' => [
-                        'backgroundColor' => $color
+                        'backgroundColorStyle' => [
+                            'rgbColor' => [
+                                'red' => $color['red'],
+                                'green' => $color['green'],
+                                'blue' => $color['blue'],
+                                'alpha' => $color['alpha']
+                            ]
+                        ]
                     ]
                 ],
-                'fields' => 'userEnteredFormat.backgroundColor'
+                'fields' => 'userEnteredFormat.backgroundColorStyle'
             ]
         ];
     }
