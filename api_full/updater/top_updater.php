@@ -194,7 +194,16 @@ function sendTopToGoogleSheet($values) {
         ]
     ];
 
-    // Увеличить ширину всех колонок, B (index 1) шире
+    // Определяем максимальную длину username для автоширины колонки
+    $maxUsernameLen = mb_strlen($values[0][1]);
+    foreach ($values as $i => $row) {
+        if ($i === 0) continue; // пропускаем шапку
+        $len = isset($row[1]) ? mb_strlen($row[1]) : 0;
+        if ($len > $maxUsernameLen) $maxUsernameLen = $len;
+    }
+
+    // Увеличить ширину всех колонок, B (index 1) шире, если username длинный
+    $usernameColWidth = ($maxUsernameLen > 20) ? min(160 + ($maxUsernameLen - 20) * 12, 600) : 240;
     for ($i = 0; $i < $colCount; $i++) {
         $requests[] = [
             'updateDimensionProperties' => [
@@ -205,7 +214,7 @@ function sendTopToGoogleSheet($values) {
                     'endIndex' => $i + 1
                 ],
                 'properties' => [
-                    'pixelSize' => ($i === 1 ? 240 : 160)
+                    'pixelSize' => ($i === 1 ? $usernameColWidth : 160)
                 ],
                 'fields' => 'pixelSize'
             ]
