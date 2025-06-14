@@ -43,7 +43,7 @@ try {
     $stmt = $pdo->query("SELECT id_usertg FROM referrals");
     $userIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
 
-    $message = "Рейтинг приглашённых пользователей был сброшен! У вас есть возможность занять лучшие позиции в новом рейтинге. Посмотреть свои результаты можно по команде <a href=\"https://t.me/wb_cashback_nsk_bot?start=rating\">/rating</a>";
+    $message = "Рейтинг приглашённых пользователей был сброшен! У вас есть возможность занять лучшие позиции в новом рейтинге. Посмотреть свои результаты можно по команде /rating";
     foreach ($userIds as $chatId) {
         sendTelegramMessage($chatId, $message);
     }
