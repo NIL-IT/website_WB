@@ -22,6 +22,7 @@ const App = () => {
   const [userSteps, setUserSteps] = useState([]);
   const baseURL = 'https://inhomeka.online:8000/';
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false); // Новый флаг
+  const [referralId, setReferralId] = useState(null); // Новый стейт для реферрала
   const API = {
     async getUser(id, username) {
         try {
@@ -38,14 +39,16 @@ const App = () => {
             console.log(err);
         }
     },
-    async createUser(id, username) {
+    async createUser(id, username, referral_id = null) {
       try {
+        const body = { id: id, username: username };
+        if (referral_id) body.referral_id = referral_id;
         const option = {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ id: id, username: username }),
+          body: JSON.stringify(body),
         };
         const res = await fetch(`${baseURL}createUser.php`, option).then(res => res.json());
         return res;
@@ -119,6 +122,11 @@ const App = () => {
     }
 };
   useEffect(() => {
+    // Получение referral из URL (?refferal=...)
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('refferal');
+    if (ref) setReferralId(ref);
+
     localStorage.clear();
     const tg = window.Telegram.WebApp;
     tg.expand(); // Расширяет приложение на весь экран
@@ -127,8 +135,8 @@ const App = () => {
     const fetchData = async () => {
       try {
         const userId = tg.initDataUnsafe.user.id;
-       const username = tg.initDataUnsafe.user.username;
-       // const username = '';
+        const username = tg.initDataUnsafe.user.username;
+        // const username = '';
 
         console.log('User ID:', userId);
         console.log('Username:', username);
@@ -137,7 +145,8 @@ const App = () => {
 
         const response = await API.getUser(userId, username);
         if (!response.success) {
-          const createResponse = await API.createUser(userId, username);
+          // Передаем referralId если есть
+          const createResponse = await API.createUser(userId, username, ref || referralId);
           if (createResponse.success === true) {
             const newUserResponse = await API.getUser(userId, username);
             if (!newUserResponse.validUsername) {
