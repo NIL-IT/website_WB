@@ -22,7 +22,7 @@ try {
     $data = json_decode(file_get_contents('php://input'), true);
     $id_usertg = $data['id_usertg'] ?? null;
     if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
-        echo json_encode(['success' => false, 'message' => 'Нет доступа']);
+        echo json_encode(['success' => false, 'message' => 'Нет доступа',"id_tg"=> $id_usertg]);
         exit;
     }
     
