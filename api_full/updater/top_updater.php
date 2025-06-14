@@ -34,7 +34,44 @@ function sendTopToGoogleSheet($values) {
 
     $requests = [];
 
-    // Форматирование шапки (первая строка) с жирной черной обводкой только сверху и снизу
+    // Обычная обводка для всей таблицы (включая шапку)
+    $requests[] = [
+        'updateBorders' => [
+            'range' => [
+                'sheetId' => 0,
+                'startRowIndex' => 0,
+                'endRowIndex' => $rowCount,
+                'startColumnIndex' => 0,
+                'endColumnIndex' => $colCount
+            ],
+            'top' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'bottom' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'left' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'right' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerHorizontal' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerVertical' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ]
+        ]
+    ];
+
+    // Форматирование шапки (первая строка)
     $requests[] = [
         'repeatCell' => [
             'range' => [
@@ -58,7 +95,7 @@ function sendTopToGoogleSheet($values) {
             'fields' => 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)'
         ]
     ];
-    // Жирная черная обводка для шапки только сверху и снизу
+    // Жирная черная обводка для шапки только сверху и снизу (после обычных)
     $requests[] = [
         'updateBorders' => [
             'range' => [
@@ -133,42 +170,6 @@ function sendTopToGoogleSheet($values) {
             ]
         ];
     }
-
-    // Обычная обводка для всех остальных строк (кроме шапки), без верхней границы первой строки после шапки
-    $requests[] = [
-        'updateBorders' => [
-            'range' => [
-                'sheetId' => 0,
-                'startRowIndex' => 1,
-                'endRowIndex' => $rowCount,
-                'startColumnIndex' => 0,
-                'endColumnIndex' => $colCount
-            ],
-            'top' => [
-                'style' => 'NONE'
-            ],
-            'bottom' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
-            ],
-            'left' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
-            ],
-            'right' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
-            ],
-            'innerHorizontal' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
-            ],
-            'innerVertical' => [
-                'style' => 'SOLID',
-                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
-            ]
-        ]
-    ];
 
     // Центровка и увеличение шрифта для всех остальных строк
     $requests[] = [
