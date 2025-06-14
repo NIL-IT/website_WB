@@ -20,6 +20,8 @@ function isAdmin($id_usertg, $pdo) {
 try {
     $pdo = getDbConnection();
     $data = json_decode(file_get_contents('php://input'), true);
+    if (!$data) $data = $_POST;
+
     $id_usertg = $data['id_usertg'] ?? null;
     if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
         echo json_encode(['success' => false, 'message' => 'Нет доступа',"id_tg"=> $id_usertg]);
