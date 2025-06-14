@@ -17,11 +17,7 @@ function sendTopToGoogleSheet($values) {
     $clearRequest = new \Google_Service_Sheets_ClearValuesRequest();
     $service->spreadsheets_values->clear($spreadsheetId, $range, $clearRequest);
 
-    // Добавление текущей даты в качестве первой строки
-    $date = date('Y-m-d H:i:s');
-    array_unshift($values, ["Дата обновления:", $date]);
-
-    // Добавление новых данных
+    // Добавление новых данных (без даты)
     $range = 'Top!A1';
     $body = new \Google_Service_Sheets_ValueRange([
         'values' => $values
@@ -31,6 +27,42 @@ function sendTopToGoogleSheet($values) {
     ];
 
     $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
+
+    // Форматирование призовых мест
+    $requests = [];
+    // Золото, серебро, бронза (A2, A3, A4)
+    $colors = [
+        2 => ['red' => 1.0, 'green' => 0.84, 'blue' => 0.0],      // Gold
+        3 => ['red' => 0.75, 'green' => 0.75, 'blue' => 0.75],     // Silver
+        4 => ['red' => 0.8, 'green' => 0.5, 'blue' => 0.2],        // Bronze
+    ];
+    foreach ($colors as $row => $color) {
+        $requests[] = [
+            'repeatCell' => [
+                'range' => [
+                    'sheetId' => 0, // Обычно 0, если Top — первый лист. Если нет, используйте sheetId листа Top.
+                    'startRowIndex' => $row - 1,
+                    'endRowIndex' => $row,
+                    'startColumnIndex' => 0,
+                    'endColumnIndex' => 1
+                ],
+                'cell' => [
+                    'userEnteredFormat' => [
+                        'backgroundColor' => $color
+                    ]
+                ],
+                'fields' => 'userEnteredFormat.backgroundColor'
+            ]
+        ];
+    }
+    // Применяем форматирование, если есть что форматировать
+    if (!empty($requests)) {
+        $batchUpdateRequest = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+            'requests' => $requests
+        ]);
+        $service->spreadsheets->batchUpdate($spreadsheetId, $batchUpdateRequest);
+    }
+
     return $result->getUpdatedCells();
 }
 
@@ -61,13 +93,13 @@ try {
     // Формируем таблицу как массив массивов (первая строка — заголовки)
     $table = [["Место", "Username", "Очки", "Приглашённых"]];
     $medals = [
-        1 => "1🥇",
-        2 => "2🥈",
-        3 => "3🥉"
+        1 => "🥇",
+        2 => "🥈",
+        3 => "🥉"
     ];
     $place = 1;
     foreach ($rows as $row) {
-        $place_str = isset($medals[$place]) ? $place . " " . $medals[$place] : (string)$place;
+        $place_str = isset($medals[$place]) ? $medals[$place] : (string)$place;
         $table[] = [
             $place_str,
             $row['username'],
@@ -86,3 +118,5 @@ try {
 }
 
 // Проверьте, что client_email из cred_top.json добавлен в доступ к Google Таблице как редактор!
+
+// Убедитесь, что в Google Таблице есть лист с именем Top
