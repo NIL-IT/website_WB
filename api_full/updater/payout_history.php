@@ -24,7 +24,7 @@ try {
 
     $id_usertg = $data['id_usertg'] ?? null;
     if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
-        echo json_encode(['success' => false, 'message' => 'Нет доступа',"id_tg"=> $id_usertg]);
+        echo json_encode(['success' => false, 'message' => 'Нет доступа']);
         exit;
     }
     
