@@ -549,6 +549,11 @@ elseif ($currentStep === '5') {
     
                 $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle);
                 
+                // Добавить начисление балла пригласившему
+                if (isset($data['id_usertg'])) {
+                    tryGiveReferralScore($pdo, $data['id_usertg']);
+                }
+                
                 echo json_encode(['success' => true, 'message' => 'Fifth and sixth images saved and step updated to final successfully']);
             } else {
                 echo json_encode(['success' => false, 'error' => 'Failed to update step to final for fifth and sixth images']);
@@ -560,5 +565,25 @@ elseif ($currentStep === '5') {
 
 } catch (PDOException $e) {
     echo json_encode(['success' => false, 'error' => 'Database error: ' . $e->getMessage()]);
+}
+
+// Функция для начисления балла пригласившему
+function tryGiveReferralScore($pdo, $id_usertg) {
+    // Получаем inviter_id_usertg для пользователя
+    $stmt = $pdo->prepare("SELECT inviter_id_usertg, score_given FROM users WHERE id_usertg = ?");
+    $stmt->execute([$id_usertg]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && !empty($user['inviter_id_usertg']) && !$user['score_given']) {
+        $inviter_id = $user['inviter_id_usertg'];
+
+        // Обновляем score в referrals для пригласившего
+        $stmt = $pdo->prepare("UPDATE referrals SET score = score + 1 WHERE id_usertg = ?");
+        $stmt->execute([$inviter_id]);
+
+        // Отмечаем, что балл уже начислен
+        $stmt = $pdo->prepare("UPDATE users SET score_given = true WHERE id_usertg = ?");
+        $stmt->execute([$id_usertg]);
+    }
 }
 ?>
