@@ -28,20 +28,48 @@ function sendTopToGoogleSheet($values) {
 
     $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
 
-    // Форматирование призовых мест (на всю строку, более прозрачно)
+    // Форматирование: шапка, призовые места, ширина, шрифт, центровка
+    $colCount = count($values[0]);
+    $rowCount = count($values);
+
     $requests = [];
-    // Цвета с прозрачностью (alpha=0.2)
+
+    // Форматирование шапки (первая строка)
+    $requests[] = [
+        'repeatCell' => [
+            'range' => [
+                'sheetId' => 0,
+                'startRowIndex' => 0,
+                'endRowIndex' => 1,
+                'startColumnIndex' => 0,
+                'endColumnIndex' => $colCount
+            ],
+            'cell' => [
+                'userEnteredFormat' => [
+                    'backgroundColor' => ['red' => 0.9, 'green' => 0.9, 'blue' => 0.7],
+                    'horizontalAlignment' => 'CENTER',
+                    'verticalAlignment' => 'MIDDLE',
+                    'textFormat' => [
+                        'fontSize' => 14,
+                        'bold' => true
+                    ]
+                ]
+            ],
+            'fields' => 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)'
+        ]
+    ];
+
+    // Форматирование призовых мест (на всю строку, более прозрачно, с центровкой)
     $colors = [
         2 => ['red' => 1.0, 'green' => 0.84, 'blue' => 0.0, 'alpha' => 0.2],      // Gold
         3 => ['red' => 0.75, 'green' => 0.75, 'blue' => 0.75, 'alpha' => 0.2],     // Silver
         4 => ['red' => 0.8, 'green' => 0.5, 'blue' => 0.2, 'alpha' => 0.2],        // Bronze
     ];
-    $colCount = count($values[0]);
     foreach ($colors as $row => $color) {
         $requests[] = [
             'repeatCell' => [
                 'range' => [
-                    'sheetId' => 0, // Обычно 0, если Top — первый лист. Если нет, используйте sheetId листа Top.
+                    'sheetId' => 0,
                     'startRowIndex' => $row - 1,
                     'endRowIndex' => $row,
                     'startColumnIndex' => 0,
@@ -56,13 +84,61 @@ function sendTopToGoogleSheet($values) {
                                 'blue' => $color['blue'],
                                 'alpha' => $color['alpha']
                             ]
+                        ],
+                        'horizontalAlignment' => 'CENTER',
+                        'verticalAlignment' => 'MIDDLE',
+                        'textFormat' => [
+                            'fontSize' => 13,
+                            'bold' => true
                         ]
                     ]
                 ],
-                'fields' => 'userEnteredFormat.backgroundColorStyle'
+                'fields' => 'userEnteredFormat(backgroundColorStyle,textFormat,horizontalAlignment,verticalAlignment)'
             ]
         ];
     }
+
+    // Центровка и увеличение шрифта для всех остальных строк
+    $requests[] = [
+        'repeatCell' => [
+            'range' => [
+                'sheetId' => 0,
+                'startRowIndex' => 1,
+                'endRowIndex' => $rowCount,
+                'startColumnIndex' => 0,
+                'endColumnIndex' => $colCount
+            ],
+            'cell' => [
+                'userEnteredFormat' => [
+                    'horizontalAlignment' => 'CENTER',
+                    'verticalAlignment' => 'MIDDLE',
+                    'textFormat' => [
+                        'fontSize' => 13
+                    ]
+                ]
+            ],
+            'fields' => 'userEnteredFormat(textFormat,horizontalAlignment,verticalAlignment)'
+        ]
+    ];
+
+    // Увеличить ширину всех колонок
+    for ($i = 0; $i < $colCount; $i++) {
+        $requests[] = [
+            'updateDimensionProperties' => [
+                'range' => [
+                    'sheetId' => 0,
+                    'dimension' => 'COLUMNS',
+                    'startIndex' => $i,
+                    'endIndex' => $i + 1
+                ],
+                'properties' => [
+                    'pixelSize' => 160
+                ],
+                'fields' => 'pixelSize'
+            ]
+        ];
+    }
+
     // Применяем форматирование, если есть что форматировать
     if (!empty($requests)) {
         $batchUpdateRequest = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
@@ -107,7 +183,7 @@ try {
     ];
     $place = 1;
     foreach ($rows as $row) {
-        $place_str = isset($medals[$place]) ? $medals[$place] : (string)$place;
+        $place_str = isset($medals[$place]) ? $place . $medals[$place] : (string)$place;
         $table[] = [
             $place_str,
             $row['username'],
