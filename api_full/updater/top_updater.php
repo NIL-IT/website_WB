@@ -194,7 +194,7 @@ function sendTopToGoogleSheet($values) {
         ]
     ];
 
-    // Увеличить ширину всех колонок
+    // Увеличить ширину всех колонок, B (index 1) шире
     for ($i = 0; $i < $colCount; $i++) {
         $requests[] = [
             'updateDimensionProperties' => [
@@ -205,7 +205,7 @@ function sendTopToGoogleSheet($values) {
                     'endIndex' => $i + 1
                 ],
                 'properties' => [
-                    'pixelSize' => 160
+                    'pixelSize' => ($i === 1 ? 240 : 160)
                 ],
                 'fields' => 'pixelSize'
             ]
