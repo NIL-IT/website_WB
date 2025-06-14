@@ -152,48 +152,52 @@ try {
     $updateStmt->execute();
 
     // Отправка сообщения в Telegram бота, если не отменено
-    if ($newPaid) {
-        $stmt = $pdo->prepare('SELECT id_usertg, id_product FROM steps WHERE id = :id');
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt = $pdo->prepare('SELECT id_usertg, id_product FROM steps WHERE id = :id');
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $userStep = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($userStep) {
+        $chatId = $userStep['id_usertg'];
+        $id_product = $userStep['id_product'];
+
+        // Получаем tg_nick_manager из products
+        $stmt = $pdo->prepare('SELECT tg_nick_manager, modified_payment, market_price, your_price FROM products WHERE id = :id_product');
+        $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
         $stmt->execute();
-        $userStep = $stmt->fetch(PDO::FETCH_ASSOC);
+        $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($userStep) {
-            $chatId = $userStep['id_usertg'];
-            $id_product = $userStep['id_product'];
+        if ($product && !empty($product['tg_nick_manager'])) {
+            $manager_username = $product['tg_nick_manager'];
 
-            // Получаем tg_nick_manager из products
-            $stmt = $pdo->prepare('SELECT tg_nick_manager, modified_payment, market_price, your_price FROM products WHERE id = :id_product');
-            $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
+            // Получаем manager_id и balance из managers
+            $stmt = $pdo->prepare('SELECT manager_id, balance FROM managers WHERE manager_username = :manager_username');
+            $stmt->bindParam(':manager_username', $manager_username, PDO::PARAM_STR);
             $stmt->execute();
-            $product = $stmt->fetch(PDO::FETCH_ASSOC);
+            $manager = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($product && !empty($product['tg_nick_manager'])) {
-                $manager_username = $product['tg_nick_manager'];
+            if ($manager) {
+                $manager_id = $manager['manager_id'];
+                $balance = $manager['balance'];
 
-                // Получаем manager_id и balance из managers
-                $stmt = $pdo->prepare('SELECT manager_id, balance FROM managers WHERE manager_username = :manager_username');
-                $stmt->bindParam(':manager_username', $manager_username, PDO::PARAM_STR);
-                $stmt->execute();
-                $manager = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                if ($manager) {
-                    $manager_id = $manager['manager_id'];
-                    $balance = $manager['balance'];
-
-                    // Определяем сумму для вычета
-                    $sum = $product['modified_payment'];
-                    if ($sum === null) {
-                        $sum = $product['market_price'] - $product['your_price'];
-                    }
-
-                    // Вычитаем сумму из баланса
-                    $new_balance = $balance - $sum;
-                    $stmt = $pdo->prepare('UPDATE managers SET balance = ? WHERE manager_id = ?');
-                    $stmt->execute([$new_balance, $manager_id]);
+                // Определяем сумму для изменения
+                $sum = $product['modified_payment'];
+                if ($sum === null) {
+                    $sum = $product['market_price'] - $product['your_price'];
                 }
-            }
 
+                // Если оплачено — вычитаем, если отменено — возвращаем
+                if ($newPaid) {
+                    $new_balance = $balance - $sum;
+                } else {
+                    $new_balance = $balance + $sum;
+                }
+                $stmt = $pdo->prepare('UPDATE managers SET balance = ? WHERE manager_id = ?');
+                $stmt->execute([$new_balance, $manager_id]);
+            }
+        }
+
+        if ($newPaid) {
             // Отправляем сообщение с чеком
             sendTelegramMessageWithReceipt($chatId, $imagePath);
             // Отправляем сообщение с приглашением
