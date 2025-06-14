@@ -34,7 +34,7 @@ function sendTopToGoogleSheet($values) {
 
     $requests = [];
 
-    // Форматирование шапки (первая строка)
+    // Форматирование шапки (первая строка) с жирной черной обводкой
     $requests[] = [
         'repeatCell' => [
             'range' => [
@@ -56,6 +56,42 @@ function sendTopToGoogleSheet($values) {
                 ]
             ],
             'fields' => 'userEnteredFormat(backgroundColor,textFormat,horizontalAlignment,verticalAlignment)'
+        ]
+    ];
+    // Жирная черная обводка для шапки
+    $requests[] = [
+        'updateBorders' => [
+            'range' => [
+                'sheetId' => 0,
+                'startRowIndex' => 0,
+                'endRowIndex' => 1,
+                'startColumnIndex' => 0,
+                'endColumnIndex' => $colCount
+            ],
+            'top' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'bottom' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'left' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'right' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerHorizontal' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerVertical' => [
+                'style' => 'SOLID_THICK',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ]
         ]
     ];
 
@@ -97,6 +133,43 @@ function sendTopToGoogleSheet($values) {
             ]
         ];
     }
+
+    // Обычная обводка для всех остальных строк (кроме шапки)
+    $requests[] = [
+        'updateBorders' => [
+            'range' => [
+                'sheetId' => 0,
+                'startRowIndex' => 1,
+                'endRowIndex' => $rowCount,
+                'startColumnIndex' => 0,
+                'endColumnIndex' => $colCount
+            ],
+            'top' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'bottom' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'left' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'right' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerHorizontal' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ],
+            'innerVertical' => [
+                'style' => 'SOLID',
+                'color' => ['red' => 0, 'green' => 0, 'blue' => 0]
+            ]
+        ]
+    ];
 
     // Центровка и увеличение шрифта для всех остальных строк
     $requests[] = [
