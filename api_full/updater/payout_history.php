@@ -18,12 +18,12 @@ function isAdmin($id_usertg, $pdo) {
 
 try {
     // Получаем данные из тела запроса
-    // $input = json_decode(file_get_contents("php://input"), true);
-    // $id_usertg = $input['id_usertg'] ?? null;
-    // if (!$id_usertg || !isAdmin($id_usertg, $pdo = getDbConnection())) {
-    //     echo json_encode(['status' => 'error', 'message' => 'Нет доступа']);
-    //     exit;
-    // }
+    $input = json_decode(file_get_contents("php://input"), true);
+    $id_usertg = $input['id_usertg'] ?? null;
+    if (!$id_usertg || !isAdmin($id_usertg, $pdo = getDbConnection())) {
+        echo json_encode(['status' => 'error', 'message' => 'Нет доступа']);
+        exit;
+    }
     $pdo = getDbConnection();
 
     // Стили
