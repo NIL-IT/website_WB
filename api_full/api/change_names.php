@@ -13,25 +13,29 @@ try {
     $deletedUsers = [];
     foreach ($duplicateUsernames as $username) {
         // Получить всех пользователей с этим username
-        $stmtUsers = $conn->prepare("SELECT id_userTG FROM users WHERE username = :username");
+        $stmtUsers = $conn->prepare("SELECT id_usertg FROM users WHERE username = :username");
         $stmtUsers->bindParam(':username', $username, PDO::PARAM_STR);
         $stmtUsers->execute();
         $users = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($users as $user) {
-            $id_userTG = $user['id_userTG'];
+            $id_usertg = $user['id_usertg'];
+            // Пропустить, если id_usertg пустой или null
+            if (empty($id_usertg)) {
+                continue;
+            }
             // Проверить наличие записей в steps
-            $stmtSteps = $conn->prepare("SELECT 1 FROM steps WHERE id_userTG = :id_userTG LIMIT 1");
-            $stmtSteps->bindParam(':id_userTG', $id_userTG, PDO::PARAM_INT);
+            $stmtSteps = $conn->prepare("SELECT 1 FROM steps WHERE id_usertg = :id_usertg LIMIT 1");
+            $stmtSteps->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
             $stmtSteps->execute();
             $hasSteps = $stmtSteps->fetchColumn();
 
             if (!$hasSteps) {
                 // Удалить пользователя, если нет записей в steps
-                $stmtDelete = $conn->prepare("DELETE FROM users WHERE id_userTG = :id_userTG");
-                $stmtDelete->bindParam(':id_userTG', $id_userTG, PDO::PARAM_INT);
+                $stmtDelete = $conn->prepare("DELETE FROM users WHERE id_usertg = :id_usertg");
+                $stmtDelete->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
                 $stmtDelete->execute();
-                $deletedUsers[] = $id_userTG;
+                $deletedUsers[] = $id_usertg;
             }
             // Если есть записи в steps, пропустить
         }
