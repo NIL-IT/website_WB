@@ -43,6 +43,23 @@ try {
     $stmt->bindParam(':username', $username);
     $stmt->execute();
 
+    // Создание пользователя в таблице referrals с invited=0, если его нет
+    $stmtRef = $conn->prepare("SELECT id FROM referrals WHERE id_usertg = :id");
+    $stmtRef->bindParam(':id', $id);
+    $stmtRef->execute();
+    $rowRef = $stmtRef->fetch(PDO::FETCH_ASSOC);
+    if (!$rowRef) {
+        $insertRef = $conn->prepare("INSERT INTO referrals (id_usertg, invited) VALUES (:id, 0)");
+        $insertRef->bindParam(':id', $id);
+        $insertRef->execute();
+    }
+
+    // Вызов top_updater.php после создания пользователя
+    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+    if (file_exists($topUpdaterPath)) {
+        include_once $topUpdaterPath;
+    }
+
     echo json_encode(["success" => true]);
 } catch (PDOException $e) {
     echo json_encode(["success" => false, "message" => "Insert failed: " . $e->getMessage()]);

@@ -29,17 +29,6 @@ try {
         exit;
     }
 
-    // Проверяем, существует ли пользователь в таблице referrals
-    $stmtRef = $pdo->prepare("SELECT id FROM referrals WHERE id_usertg = ?");
-    $stmtRef->execute([$id_usertg]);
-    $rowRef = $stmtRef->fetch(PDO::FETCH_ASSOC);
-
-    // Если пользователя нет — создаём его
-    if (!$rowRef) {
-        $insertRef = $pdo->prepare("INSERT INTO referrals (id_usertg) VALUES (?)");
-        $insertRef->execute([$id_usertg]);
-    }
-
     $stmt = $pdo->prepare("SELECT referral_id FROM users WHERE id_usertg = ?");
     $stmt->execute([$id_usertg]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,12 +44,6 @@ try {
     $referral_id = generateReferralId($pdo);
     $update = $pdo->prepare("UPDATE users SET referral_id = ? WHERE id_usertg = ?");
     $update->execute([$referral_id, $id_usertg]);
-
-    // Вызов top_updater.php после генерации referral_id
-    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
-    if (file_exists($topUpdaterPath)) {
-        include_once $topUpdaterPath;
-    }
 
     echo json_encode(['success' => true, 'referral_id' => $referral_id]);
 } catch (Exception $e) {
