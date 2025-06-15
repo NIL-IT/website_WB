@@ -12,13 +12,13 @@ try {
     $conn = getDbConnection();
 
     // Удаление существующей записи
-    $deleteStmt = $conn->prepare("DELETE FROM users WHERE id_userTG = :id");
+    $deleteStmt = $conn->prepare("DELETE FROM users WHERE id_usertg = :id");
     $deleteStmt->bindParam(':id', $id);
     $deleteStmt->execute();
 
     $inviter_id_usertg = null;
     if ($referral_id) {
-        // Найти пользователя по id_userTG (а не username)
+        // Найти пользователя по id_usertg (а не username)
         $stmt = $conn->prepare("SELECT id_usertg FROM users WHERE referral_id = :referral_id LIMIT 1");
         $stmt->bindParam(':referral_id', $referral_id);
         $stmt->execute();
@@ -34,10 +34,10 @@ try {
 
     // Вставка новой записи
     if ($inviter_id_usertg) {
-        $stmt = $conn->prepare("INSERT INTO users (id_userTG, username, status, inviter_id_usertg) VALUES (:id, :username, 'user', :inviter_id_usertg)");
+        $stmt = $conn->prepare("INSERT INTO users (id_usertg, username, status, inviter_id_usertg) VALUES (:id, :username, 'user', :inviter_id_usertg)");
         $stmt->bindParam(':inviter_id_usertg', $inviter_id_usertg);
     } else {
-        $stmt = $conn->prepare("INSERT INTO users (id_userTG, username, status) VALUES (:id, :username, 'user')");
+        $stmt = $conn->prepare("INSERT INTO users (id_usertg, username, status) VALUES (:id, :username, 'user')");
     }
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':username', $username);

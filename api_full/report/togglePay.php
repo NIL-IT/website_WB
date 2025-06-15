@@ -28,13 +28,34 @@ function sendTelegramMessageWithReceipt($chatId, $imagePath) {
     sendTelegramRequest($apiUrl, $postFields);
 }
 
-function sendTelegramInvitationMessage($chatId) {
+function sendTelegramInvitationMessage($chatId, $id_usertg) {
     $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
     $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
 
+    // Получаем referral_id через локальный HTTP-запрос к referral.php
+    $referralApiUrl = "https://inhomeka.online:8000/referral.php";
+    $postData = json_encode(['id_usertg' => $id_usertg]);
+    $ch = curl_init($referralApiUrl);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    $referral_id = null;
+    if ($response) {
+        $referralData = json_decode($response, true);
+        if (isset($referralData['success']) && $referralData['success'] && isset($referralData['referral_id'])) {
+            $referral_id = $referralData['referral_id'];
+        }
+    }
+    if (!$referral_id) {
+        $referral_id = "unknown";
+    }
+
     // Второе сообщение
     $message1 = "🎉 Приглашайте в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешлите ему сообщение ниже:";
-    
     $postFields1 = [
         'chat_id' => $chatId,
         'text' => $message1,
@@ -42,11 +63,11 @@ function sendTelegramInvitationMessage($chatId) {
     ];
     sendTelegramRequest($apiUrl, $postFields1);
 
-    // Третье сообщение с гиперссылкой
+    // Третье сообщение с персональной ссылкой
+    $inviteLink = "https://t.me/wb_cashback_nsk_bot?start=ref" . $referral_id;
     $message2 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! 🎁\n\n"
-        . "🔵 Это моя <a href='https://t.me/wb_cashback_nsk_bot'>персональная пригласительная ссылка</a> для тебя.\n"
+        . "🔵 Это моя <a href='$inviteLink'>персональная пригласительная ссылка</a> для тебя.\n"
         . "Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
-
     $postFields2 = [
         'chat_id' => $chatId,
         'text' => $message2,
@@ -206,8 +227,8 @@ try {
         if ($newPaid) {
             // Отправляем сообщение с чеком
             sendTelegramMessageWithReceipt($chatId, $imagePath);
-            // Отправляем сообщение с приглашением
-            sendTelegramInvitationMessage($chatId);
+            // Отправляем сообщение с приглашением (передаем id_usertg)
+            sendTelegramInvitationMessage($chatId, $chatId);
         }
     }
 
