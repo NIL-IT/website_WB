@@ -13,7 +13,7 @@ try {
     $deletedUsers = [];
     foreach ($duplicateUsernames as $username) {
         // Получить всех пользователей с этим username
-        $stmtUsers = $conn->prepare("SELECT id, id_userTG FROM users WHERE username = :username");
+        $stmtUsers = $conn->prepare("SELECT id_userTG FROM users WHERE username = :username");
         $stmtUsers->bindParam(':username', $username, PDO::PARAM_STR);
         $stmtUsers->execute();
         $users = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
@@ -28,10 +28,10 @@ try {
 
             if (!$hasSteps) {
                 // Удалить пользователя, если нет записей в steps
-                $stmtDelete = $conn->prepare("DELETE FROM users WHERE id = :id");
-                $stmtDelete->bindParam(':id', $user['id'], PDO::PARAM_INT);
+                $stmtDelete = $conn->prepare("DELETE FROM users WHERE id_userTG = :id_userTG");
+                $stmtDelete->bindParam(':id_userTG', $id_userTG, PDO::PARAM_INT);
                 $stmtDelete->execute();
-                $deletedUsers[] = $user['id'];
+                $deletedUsers[] = $id_userTG;
             }
             // Если есть записи в steps, пропустить
         }
