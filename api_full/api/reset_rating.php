@@ -39,6 +39,12 @@ try {
     // Сброс score и invited в таблице referrals
     $pdo->exec("UPDATE referrals SET score = 0, invited = 0");
 
+    // Вызов top_updater.php после сброса рейтинга
+    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+    if (file_exists($topUpdaterPath)) {
+        include_once $topUpdaterPath;
+    }
+
     // Получаем всех пользователей из referrals
     $stmt = $pdo->query("SELECT id_usertg FROM referrals");
     $userIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
