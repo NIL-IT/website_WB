@@ -161,11 +161,17 @@ try {
         $chatId = $userStep['id_usertg'];
         $id_product = $userStep['id_product'];
 
-        // Получаем tg_nick_manager из products
-        $stmt = $pdo->prepare('SELECT tg_nick_manager, modified_payment, market_price, your_price FROM products WHERE id = :id_product');
+        // Получаем tg_nick_manager, market_price, your_price из products
+        $stmt = $pdo->prepare('SELECT tg_nick_manager, market_price, your_price FROM products WHERE id = :id_product');
         $stmt->bindParam(':id_product', $id_product, PDO::PARAM_INT);
         $stmt->execute();
         $product = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Получаем modified_payment из steps
+        $stmt = $pdo->prepare('SELECT modified_payment FROM steps WHERE id = :id');
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $stepData = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($product && !empty($product['tg_nick_manager'])) {
             $manager_username = $product['tg_nick_manager'];
@@ -181,7 +187,7 @@ try {
                 $balance = $manager['balance'];
 
                 // Определяем сумму для изменения
-                $sum = $product['modified_payment'];
+                $sum = $stepData['modified_payment'];
                 if ($sum === null) {
                     $sum = $product['market_price'] - $product['your_price'];
                 }
