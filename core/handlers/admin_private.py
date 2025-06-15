@@ -462,7 +462,23 @@ async def reset_rating(message: Message):
     """ Команда для сброса рейтинга """
     
     # Запрос на сброс рейтинга (передать admin_id)
-    
+    API_RESET_RATING = BACK_URL + "/reset_rating"
+    id_usertg = message.from_user.id
+    # Запрос на получение информации о менеджерах
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url=API_RESET_RATING, json={"id_usertg": id_usertg}) as response:
+            data = await response.json()
+            logging.info(f"response reset_raiting: {data}")
+            status = data.get("status")
+            if not status:
+                await message.answer(
+                    text="❌ Не удалось сбросить рейтинг."
+                )
+                return
+            
+            await message.answer(
+                text="✅ Рейтинг пользователей был успешно сброшен!"
+            )
 
 
 # === БАЛАНС МЕНЕДЖЕРОВ === #
@@ -582,7 +598,7 @@ async def get_check(message: Message, bot: Bot, state: FSMContext):
     id_usertg = message.from_user.id
     json = {
         "manager_id": manager_id,
-        "path_reciept_img": file_path,
+        "path_reciept_img": f"uploads/{unique_filename}",
         "amount": amount,
         "id_usertg": id_usertg,
     }
@@ -600,20 +616,20 @@ async def get_check(message: Message, bot: Bot, state: FSMContext):
         )
         return
     
-    # # Отправка информации менеджеру
-    # try:
-    #     await bot.send_photo(
-    #         chat_id=manager_id,
-    #         photo=photo_id,
-    #         caption="Чек на пополнение баланса"
-    #     )
-    # except Exception as e:
-    #     await message.answer(
-    #         text="❌ Не удалось отправить сообщение менеджеру!"
-    #     )
-    #     logging.info(f"Не удалось отправить сообщение менеджеру: {e}")
-    #     await state.clear()
-    #     return
+    # Отправка информации менеджеру
+    try:
+        await bot.send_photo(
+            chat_id=manager_id,
+            photo=photo_id,
+            caption="Чек на пополнение баланса"
+        )
+    except Exception as e:
+        await message.answer(
+            text="❌ Не удалось отправить сообщение менеджеру!"
+        )
+        logging.info(f"Не удалось отправить сообщение менеджеру: {e}")
+        await state.clear()
+        return
     
     await message.answer(
         text="✅ Иформация была успешно направлена менеджеру."
@@ -647,7 +663,7 @@ async def start_payout_history(message: Message):
     
     await message.answer_document(
         document=input_file,
-        caption="Вот ваш отчёт 📊"
+        caption="Отчет о истории пополнений 📊"
     )
             
             

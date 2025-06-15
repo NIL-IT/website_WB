@@ -17,10 +17,10 @@ from core.text_bot.message_text import start_message, notif_message, remind_mess
 from core.filters_bot.isAdmin import admin_utils
 
 import aiohttp
-from core.settings import BACK_URL, MAIN_URL
+from core.settings import BACK_URL, MAIN_URL, RATING_SHEET_URL
 from core.database import get_ref_id, add_ref_id
 import sqlite3
-
+from aiogram.fsm.context import FSMContext
 
 
 logger = logging.getLogger(__name__)
@@ -86,8 +86,9 @@ CHANNEL_ID = "-1002218979236"  # Замените на ID вашего кана�
 ##         await send_check_subscribe_message(user_id)
 
 @user_private_router.message(CommandStart())
-async def cmd_start(message: types.Message, bot:Bot):
+async def cmd_start(message: types.Message, bot:Bot, state: FSMContext):
     user_id = message.from_user.id
+    await state.clear()
     
     ## # Проверяем, является ли пользователь новым
     ## if await utils.is_new_users(user_id=user_id):
@@ -113,7 +114,7 @@ async def cmd_start(message: types.Message, bot:Bot):
         ])
         print(webapp_url)
         await message.answer(
-            "Добро пожаловать! Нажми на кнопку ниже, чтобы открыть WebApp:",
+            "Добро пожаловать!\nНажмите на кнопку ниже, чтобы активировать реферальную ссылку 👇",
             reply_markup=markup
         )
         return  # не показываем меню, если пользователь пришёл по ссылке
@@ -272,7 +273,34 @@ async def get_raiting_table(message: types.Message):
             print(data)
             success = data.get("success")
             if not success:
-                pass
+                if data.get("referral") == False:
+                    await message.answer(
+                        "Вы еще не создали реферальную ссылку, чтобы быть в рейтинге.\n\n"
+                        "Создайте рефереальную ссылку с помощью команды /referral и отправьте ее другу.\n"
+                        "Чем больше вы приглашаете людей, тем больше бонусы!"
+                    )
+                    return
+
+                await message.answer(
+                    "❌ Не удалось получить информацию о рейтинге. Попробуйте позже."
+                )
+                return
+            
+            score = data.get("score")
+            invited = data.get("invited")
+            top = data.get("top")
+            
+            await message.answer(
+                text=f"<b>📊 Информация о вашем рейтинге:</b>\n"
+                     f"✨ Количество баллов: {score}\n"
+                     f"👥 Количество приглашенных пользователей: {invited}\n"
+                     f"🥇 Место в рейтинге: {top}\n\n"
+                     f"Подробную информацию о рейтинге можете посмотреть по кнопке ниже 👇",
+                     parse_mode="HTML",
+                     reply_markup=InlineKeyboardMarkup(
+                         inline_keyboard=[[InlineKeyboardButton(text="Таблица рейтинга", url=f"{RATING_SHEET_URL}")]]
+                     )
+            )
             
             
 # === РЕФЕРАЛКА === #
@@ -307,7 +335,7 @@ async def get_reff(message: types.Message):
         ref_id = get_ref_id(user_id=message.from_user.id)
         
     #webapp_url = f"{BACK_URL}/main?refferal={ref_id}"
-    bot_url = f"https://t.me/wb_cashback_ttest_bot?start=ref" + ref_id
+    bot_url = f"https://t.me/wb_cashback_nsk_bot?start=ref" + ref_id
     
     # markup = InlineKeyboardMarkup(inline_keyboard=[
     #     [InlineKeyboardButton(text="Перейти в WebApp", web_app=WebAppInfo(url=webapp_url))]
@@ -316,8 +344,8 @@ async def get_reff(message: types.Message):
     #await message.answer("Пригласи друга!\nОтправь ему это сообщение, чтобы он нажал на кнопку:", reply_markup=markup)
     await message.answer(
         text=(
-            f"Пригласи друга!\n"
-            f"Нажми по ссылке, чтобы открыть Telegram-Бота:\n\n"
+            f"Пригласи друга, отправив ему это сообщение!\n\n"
+            f"Нажми по ссылке, чтобы открыть Telegram-Бота👇\n"
             f"{bot_url}"
         )
     )

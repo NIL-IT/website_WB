@@ -15,6 +15,13 @@ async def main(dp: utils.create_dp.Dispatcher):
     # logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] - %(name)s'
     #                                                '(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s')
     await utils.bot.delete_webhook(drop_pending_updates=True)
+    await utils.bot.set_my_commands(
+        [
+            types.BotCommand(command="start", description="Запустить бота"),
+            types.BotCommand(command="referral", description="Получить реферальную ссылку"),
+            types.BotCommand(command="rating", description="Информация о рейтинге"),
+        ]
+    )
 
     dp.message.register(quith, Command(commands=['opros'])) #
     dp.callback_query.register(quith_user, Quiz.Q)
