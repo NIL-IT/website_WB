@@ -17,18 +17,35 @@ try {
     $deleteStmt->execute();
 
     $inviter_id_usertg = null;
+    $invited_updated = false;
     if ($referral_id) {
-        // Найти пользователя по id_usertg (а не username)
+        // Найти пользователя по referral_id
         $stmt = $conn->prepare("SELECT id_usertg FROM users WHERE referral_id = :referral_id LIMIT 1");
         $stmt->bindParam(':referral_id', $referral_id);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row && isset($row['id_usertg'])) {
             $inviter_id_usertg = $row['id_usertg'];
-            // Увеличить invited в таблице referrals
-            $updateRef = $conn->prepare("UPDATE referrals SET invited = invited + 1 WHERE id_usertg = :inviter_id");
-            $updateRef->bindParam(':inviter_id', $inviter_id_usertg);
-            $updateRef->execute();
+
+            // Проверить, есть ли запись в referrals для inviter
+            $stmtRefInviter = $conn->prepare("SELECT id FROM referrals WHERE id_usertg = :inviter_id");
+            $stmtRefInviter->bindParam(':inviter_id', $inviter_id_usertg);
+            $stmtRefInviter->execute();
+            $rowRefInviter = $stmtRefInviter->fetch(PDO::FETCH_ASSOC);
+
+            if (!$rowRefInviter) {
+                // Если нет записи — создать с invited=1
+                $insertRefInviter = $conn->prepare("INSERT INTO referrals (id_usertg, invited) VALUES (:inviter_id, 1)");
+                $insertRefInviter->bindParam(':inviter_id', $inviter_id_usertg);
+                $insertRefInviter->execute();
+                $invited_updated = true;
+            } else {
+                // Если есть — увеличить invited
+                $updateRef = $conn->prepare("UPDATE referrals SET invited = invited + 1 WHERE id_usertg = :inviter_id");
+                $updateRef->bindParam(':inviter_id', $inviter_id_usertg);
+                $updateRef->execute();
+                $invited_updated = true;
+            }
         }
     }
 
@@ -43,21 +60,12 @@ try {
     $stmt->bindParam(':username', $username);
     $stmt->execute();
 
-    // Создание пользователя в таблице referrals с invited=0, если его нет
-    $stmtRef = $conn->prepare("SELECT id FROM referrals WHERE id_usertg = :id");
-    $stmtRef->bindParam(':id', $id);
-    $stmtRef->execute();
-    $rowRef = $stmtRef->fetch(PDO::FETCH_ASSOC);
-    if (!$rowRef) {
-        $insertRef = $conn->prepare("INSERT INTO referrals (id_usertg, invited) VALUES (:id, 0)");
-        $insertRef->bindParam(':id', $id);
-        $insertRef->execute();
-    }
-
-    // Вызов top_updater.php после создания пользователя
-    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
-    if (file_exists($topUpdaterPath)) {
-        include_once $topUpdaterPath;
+    // Вызов top_updater.php только если был увеличен invited
+    if ($invited_updated) {
+        $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+        if (file_exists($topUpdaterPath)) {
+            include_once $topUpdaterPath;
+        }
     }
 
     echo json_encode(["success" => true]);
