@@ -69,7 +69,8 @@ try {
             'manager_id' => $manager_id,
             'manager_username' => $manager_username,
             'amount' => $amount,
-            'request' => $request
+            'request' => $request,
+            'balance' => $balance 
         ];
     }
 
