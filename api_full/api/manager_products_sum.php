@@ -21,8 +21,10 @@ try {
         $market_price = floatval($product['market_price']);
         $your_price = floatval($product['your_price']);
 
-        // Получаем все steps для этого товара
-        $stmtSteps = $pdo->prepare("SELECT modified_payment FROM steps WHERE id_product = ?");
+        // Получаем только нужные steps
+        $stmtSteps = $pdo->prepare(
+            "SELECT modified_payment FROM steps WHERE id_product = ? AND step = 'Завершено' AND (status = 1 OR status = 2)"
+        );
         $stmtSteps->execute([$product_id]);
         $steps = $stmtSteps->fetchAll(PDO::FETCH_ASSOC);
 
