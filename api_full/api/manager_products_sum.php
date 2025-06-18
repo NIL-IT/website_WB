@@ -9,7 +9,7 @@ try {
     $manager_username = 'kenariilw';
 
     // Получаем все товары этого менеджера
-    $stmt = $pdo->prepare("SELECT id, market_price, your_price FROM products WHERE manager_username = ?");
+    $stmt = $pdo->prepare("SELECT id, market_price, your_price FROM products WHERE tg_nick_manager = ?");
     $stmt->execute([$manager_username]);
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
