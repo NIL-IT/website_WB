@@ -18,6 +18,7 @@ try {
     $count_status_0 = 0;
     $count_status_1 = 0;
     $count_status_2 = 0;
+    $count_status_3 = 0;
 
     foreach ($products as $product) {
         $product_id = $product['id'];
@@ -26,7 +27,7 @@ try {
 
         // Получаем только нужные steps
         $stmtSteps = $pdo->prepare(
-            "SELECT modified_payment, status FROM steps WHERE id_product = ? AND step = 'Завершено' AND (status = 0 OR status = 1 OR status = 2)"
+            "SELECT modified_payment, status FROM steps WHERE id_product = ? AND step = 'Завершено' AND (status = 0 OR status = 1 OR status = 2 OR status = 3)"
         );
         $stmtSteps->execute([$product_id]);
         $steps = $stmtSteps->fetchAll(PDO::FETCH_ASSOC);
@@ -36,11 +37,15 @@ try {
             if ($step['status'] == 0) $count_status_0++;
             if ($step['status'] == 1) $count_status_1++;
             if ($step['status'] == 2) $count_status_2++;
-            $modified_payment = $step['modified_payment'];
-            if ($modified_payment !== null && $modified_payment !== '') {
-                $total_sum += floatval($modified_payment);
-            } else {
-                $total_sum += ($market_price - $your_price);
+            if ($step['status'] == 3) $count_status_3++;
+            // В сумму не включаем статус 3
+            if ($step['status'] == 0 || $step['status'] == 1 || $step['status'] == 2) {
+                $modified_payment = $step['modified_payment'];
+                if ($modified_payment !== null && $modified_payment !== '') {
+                    $total_sum += floatval($modified_payment);
+                } else {
+                    $total_sum += ($market_price - $your_price);
+                }
             }
         }
     }
@@ -52,7 +57,8 @@ try {
         'count' => $total_count,
         'count_status_0' => $count_status_0,
         'count_status_1' => $count_status_1,
-        'count_status_2' => $count_status_2
+        'count_status_2' => $count_status_2,
+        'count_status_3' => $count_status_3
     ]);
 } catch (Exception $e) {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
