@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 try {
     $pdo = getDbConnection();
 
-    $manager_username = 'kenariilw';
+    $manager_username = 'marina_WB2023';
 
     // Получаем все товары этого менеджера
     $stmt = $pdo->prepare("SELECT id, market_price, your_price FROM products WHERE tg_nick_manager = ?");
