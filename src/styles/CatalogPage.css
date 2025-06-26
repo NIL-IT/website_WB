@@ -84,6 +84,7 @@ info-text {
   gap: 3px;
   justify-content: space-between;
   box-sizing: border-box;
+  margin-bottom: 16px; /* Добавлен отступ снизу для предотвращения наложения */
 }
 
 .popup {
@@ -197,4 +198,20 @@ info-text {
   margin-bottom: 10px;
   margin-top: 10px;
   color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+  /* Гарантируем, что текст не будет сжиматься и не залезет на карточки */
+  flex-basis: 100%;
+  order: -1;
+}
+
+@media (max-width: 600px) {
+  .products-grid {
+    margin-bottom: 32px; /* Увеличенный отступ для мобильных */
+  }
+  .info-text {
+    font-size: 13px;
+    margin-bottom: 14px;
+    margin-top: 8px;
+  }
 }
