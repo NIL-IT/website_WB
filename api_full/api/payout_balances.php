@@ -62,7 +62,7 @@ try {
             }
         }
 
-        $amount = $sum + $balance;
+        $amount = $sum;
 
         $result[] = [
             'id' => $id,
