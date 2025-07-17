@@ -36,7 +36,7 @@ function sendDataToGoogleSheet($values) {
     $service->spreadsheets_values->update($spreadsheetId, 'Product!A1', $body, ['valueInputOption' => 'RAW']);
 
     // Теперь отправляем данные чанками по 100 строк
-    $chunkSize = 100;
+    $chunkSize = 200;
     $totalUpdated = 0;
     $startRow = 3; // после даты и заголовка
 
@@ -57,6 +57,7 @@ function sendDataToGoogleSheet($values) {
         $updatedCells = $result->getUpdates()->getUpdatedCells();
         $totalUpdated += $updatedCells;
         $startRow += count($chunk);
+        sleep(1); // Добавлено: пауза между пакетами для предотвращения превышения лимита
     }
     return $totalUpdated;
 }
