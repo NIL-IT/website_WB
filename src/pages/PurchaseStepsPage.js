@@ -1499,6 +1499,7 @@ const PurchaseStepsPage = ({
                   <p className="red-error">Загрузите изображение</p>
                 )}
               </div>
+                <p>Согласовать отзыв или сообщить о браке менеджеру ⬇️</p>
               <button className="telegram-button" onClick={handleSellerClick}>
                 <svg
                   width="20"
@@ -1514,7 +1515,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Сообщить продавцу о браке
+                Написать менеджеру
               </button>
               <div className="step-footer-container">
                 <div
