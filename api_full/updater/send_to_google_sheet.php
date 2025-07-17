@@ -2,7 +2,7 @@
 require_once 'db.php';
 require __DIR__ . '/vendor/autoload.php';
 
-// Функция для отправки данных в Google Таблицу
+// Функция для отправки данных в Google Таблицу пакетами по 100 строк
 function sendDataToGoogleSheet($values) {
     putenv('GOOGLE_APPLICATION_CREDENTIALS=/var/www/test_bot/updater/cred.json');
     $client = new \Google_Client();
@@ -11,7 +11,7 @@ function sendDataToGoogleSheet($values) {
 
     $service = new \Google_Service_Sheets($client);
     $spreadsheetId = '1ViIZra4qli2h67i2bdlqyqKZIV4b1Cy5buNCG9BF3tg';
-    $range = 'Product!A1:Z'; // Укажите диапазон для очистки
+    $range = 'Product!A1:Z';
 
     // Очистка данных
     $clearRequest = new \Google_Service_Sheets_ClearValuesRequest();
@@ -19,19 +19,46 @@ function sendDataToGoogleSheet($values) {
 
     // Добавление текущей даты в качестве первой строки
     $date = date('Y-m-d H:i:s');
-    array_unshift($values, ["Дата обновления:", $date]);
-
-    // Добавление новых данных
-    $range = 'Product!A1';
-    $body = new \Google_Service_Sheets_ValueRange([
-        'values' => $values
-    ]);
-    $params = [
-        'valueInputOption' => 'RAW'
+    $header = array_shift($values); // заголовок
+    $headerRows = [
+        ["Дата обновления:", $date],
+        $header
     ];
 
-    $result = $service->spreadsheets_values->update($spreadsheetId, $range, $body, $params);
-    return $result->getUpdatedCells();
+    // Сначала отправляем дату и заголовок
+    $body = new \Google_Service_Sheets_ValueRange([
+        'values' => $headerRows
+    ]);
+    $params = [
+        'valueInputOption' => 'RAW',
+        'insertDataOption' => 'INSERT_ROWS'
+    ];
+    $service->spreadsheets_values->update($spreadsheetId, 'Product!A1', $body, ['valueInputOption' => 'RAW']);
+
+    // Теперь отправляем данные чанками по 100 строк
+    $chunkSize = 100;
+    $totalUpdated = 0;
+    $startRow = 3; // после даты и заголовка
+
+    foreach (array_chunk($values, $chunkSize) as $chunk) {
+        $range = "Product!A{$startRow}";
+        $body = new \Google_Service_Sheets_ValueRange([
+            'values' => $chunk
+        ]);
+        $result = $service->spreadsheets_values->append(
+            $spreadsheetId,
+            $range,
+            $body,
+            [
+                'valueInputOption' => 'RAW',
+                'insertDataOption' => 'INSERT_ROWS'
+            ]
+        );
+        $updatedCells = $result->getUpdates()->getUpdatedCells();
+        $totalUpdated += $updatedCells;
+        $startRow += count($chunk);
+    }
+    return $totalUpdated;
 }
 
 try {
@@ -94,7 +121,7 @@ try {
         ];
     }
 
-    // Отправка данных в Google Таблицу
+    // Отправка данных в Google Таблицу пакетами
     $updatedCells = sendDataToGoogleSheet($values);
     echo "$updatedCells cells updated in Google Sheet.\n";
 
