@@ -36,6 +36,12 @@ try {
         exit;
     }
 
+    // Логирование текущих значений перед сбросом
+    $logFile = __DIR__ . '/../logs/referrals_reset_' . date('Ymd_His') . '.log';
+    $stmtLog = $pdo->query("SELECT * FROM referrals");
+    $referralsBefore = $stmtLog->fetchAll(PDO::FETCH_ASSOC);
+    file_put_contents($logFile, json_encode($referralsBefore, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+
     // Сброс score и invited в таблице referrals
     $pdo->exec("UPDATE referrals SET score = 0, invited = 0");
 
