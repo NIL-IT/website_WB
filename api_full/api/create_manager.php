@@ -6,6 +6,9 @@ include 'cors.php';
 $data = json_decode(file_get_contents("php://input"), true);
 $id_usertg = $data['id_usertg'] ?? null;
 $manager_username = $data['manager_username'] ?? null;
+if ($manager_username && strpos($manager_username, '@') === 0) {
+    $manager_username = substr($manager_username, 1);
+}
 
 if (!$id_usertg || !$manager_username) {
     echo json_encode(['success' => false, 'message' => 'Missing parameters']);
@@ -15,7 +18,7 @@ if (!$id_usertg || !$manager_username) {
 try {
     $conn = getDbConnection();
     // Проверка на админа
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id_userTG = :id_usertg AND status = 'admin'");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id_usertg = :id_usertg AND status = 'admin'");
     $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
     $stmt->execute();
     $admin = $stmt->fetch(PDO::FETCH_ASSOC);
