@@ -4,10 +4,12 @@ include 'db.php';
 $logDir = '/var/www/test_bot/logs/';
 $userLogs = glob($logDir . 'referral_reset_user_*.log');
 $tableLogs = glob($logDir . 'referrals_reset_*.log');
+$restoredLogs = glob($logDir . 'restore_changes_*.log');
 
 // Сортировка по времени (новые сверху)
 usort($userLogs, function($a, $b) { return strcmp($b, $a); });
 usort($tableLogs, function($a, $b) { return strcmp($b, $a); });
+usort($restoredLogs, function($a, $b) { return strcmp($b, $a); });
 
 $message = '';
 $diffs = [];
@@ -33,6 +35,43 @@ function getUsername($pdo, $id_usertg) {
     $stmt->execute([$id_usertg]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     return $row && $row['username'] ? $row['username'] : '';
+}
+
+// Получить топ-таблицу (аналогично top_updater.php)
+function getTopTable($pdo) {
+    $stmt = $pdo->prepare("
+        SELECT r.id_usertg, r.score, r.invited, u.username
+        FROM referrals r
+        LEFT JOIN users u ON r.id_usertg = u.id_usertg
+        WHERE r.score > 0
+    ");
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    usort($rows, function($a, $b) {
+        if ($a['score'] != $b['score']) {
+            return $b['score'] - $a['score'];
+        }
+        if ($a['invited'] != $b['invited']) {
+            return $b['invited'] - $a['invited'];
+        }
+        return strcmp(mb_strtolower($a['username']), mb_strtolower($b['username']));
+    });
+
+    $table = [["Место", "Имя пользователя", "Очки", "Приглашённые"]];
+    $medals = [1 => "🥇", 2 => "🥈", 3 => "🥉"];
+    $place = 1;
+    foreach ($rows as $row) {
+        $place_str = isset($medals[$place]) ? $place . $medals[$place] : (string)$place;
+        $table[] = [
+            $place_str,
+            $row['username'],
+            $row['score'],
+            $row['invited']
+        ];
+        $place++;
+    }
+    return $table;
 }
 
 // Первый этап: показать различия
@@ -99,6 +138,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['restore_type'], $_POS
             }
         } else {
             $message = "Некорректный формат лога таблицы.";
+        }
+    // Для restore_changes (теперь можно применить)
+    } elseif ($restoreType === 'restored' && in_array($selectedLog, $restoredLogs)) {
+        $data = json_decode(file_get_contents($selectedLog), true);
+        if (is_array($data)) {
+            $diffs = $data;
+            $showConfirm = true;
+            $message = "Вы можете применить эти восстановленные изменения повторно.";
+        } else {
+            $message = "Некорректный формат лога изменений.";
         }
     } else {
         $message = "Файл не найден или выбран неверный тип восстановления.";
@@ -183,6 +232,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
         } else {
             $message = "Некорректный формат лога таблицы.";
         }
+    } elseif ($restoreType === 'restored' && in_array($selectedLog, $restoredLogs)) {
+        $data = json_decode(file_get_contents($selectedLog), true);
+        if (is_array($data)) {
+            $pdo = getDbConnection();
+            foreach ($data as $row) {
+                if (isset($row['id_usertg']) && isset($row['fields'])) {
+                    $stmt = $pdo->prepare("SELECT * FROM referrals WHERE id_usertg = ?");
+                    $stmt->execute([$row['id_usertg']]);
+                    $current = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $diff = [];
+                    foreach ($row['fields'] as $field => $change) {
+                        if (isset($current[$field]) && $current[$field] != $change['new']) {
+                            $diff[$field] = ['old' => $current[$field], 'new' => $change['new']];
+                        }
+                    }
+                    if ($diff) {
+                        // Применяем только если есть отличия
+                        $fieldsToUpdate = [];
+                        $params = [];
+                        foreach ($diff as $field => $change) {
+                            $fieldsToUpdate[] = "$field = ?";
+                            $params[] = $change['new'];
+                        }
+                        $params[] = $row['id_usertg'];
+                        $sql = "UPDATE referrals SET " . implode(', ', $fieldsToUpdate) . " WHERE id_usertg = ?";
+                        $stmt = $pdo->prepare($sql);
+                        $stmt->execute($params);
+                        $username = getUsername($pdo, $row['id_usertg']);
+                        $changes[] = [
+                            'id_usertg' => $row['id_usertg'],
+                            'username' => $username,
+                            'fields' => $diff
+                        ];
+                    }
+                }
+            }
+            if ($changes) {
+                $message = "Изменения из лога успешно применены.";
+            } else {
+                $message = "Нет изменений для применения.";
+            }
+        } else {
+            $message = "Некорректный формат лога изменений.";
+        }
     } else {
         $message = "Файл не найден или выбран неверный тип восстановления.";
     }
@@ -203,12 +296,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
         table { border-collapse: collapse; margin-top: 1em; }
         th, td { border: 1px solid #ccc; padding: 0.4em 0.8em; }
         .diff-table { margin-bottom: 1em; }
+        .top-table { margin-bottom: 2em; background: #f9f9f9; }
     </style>
     <script>
     function updateLogOptions() {
         var type = document.getElementById('restore_type').value;
         document.getElementById('user_logs').style.display = (type === 'user') ? '' : 'none';
         document.getElementById('table_logs').style.display = (type === 'table') ? '' : 'none';
+        document.getElementById('restored_logs').style.display = (type === 'restored') ? '' : 'none';
     }
     </script>
 </head>
@@ -219,6 +314,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
     <?php endif; ?>
 
     <?php if ($showConfirm && $diffs): ?>
+        <?php
+        // Показываем топ-таблицу перед подтверждением
+        $pdo = getDbConnection();
+        $topTable = getTopTable($pdo);
+        ?>
+        <div>
+            <b>Текущий топ пользователей:</b>
+            <table class="top-table">
+                <?php foreach ($topTable as $i => $row): ?>
+                    <tr>
+                        <?php foreach ($row as $cell): ?>
+                            <td<?= $i === 0 ? ' style="font-weight:bold;background:#f0f0d0;"' : '' ?>><?= htmlspecialchars($cell) ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
         <form method="post">
             <input type="hidden" name="restore_type" value="<?= htmlspecialchars($restoreType) ?>">
             <input type="hidden" name="logfile" value="<?= htmlspecialchars($selectedLog) ?>">
@@ -230,7 +342,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                         <tr>
                             <th colspan="4">
                                 id_usertg: <?= htmlspecialchars($diff['id_usertg']) ?>
-                                <?php if ($diff['username']): ?>
+                                <?php if (!empty($diff['username'])): ?>
                                     | username: <?= htmlspecialchars($diff['username']) ?>
                                 <?php endif; ?>
                             </th>
@@ -253,6 +365,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
             <button type="submit">Подтвердить восстановление</button>
             <button type="button" onclick="window.location.href=window.location.href;">Отмена</button>
         </form>
+    <?php elseif ($restoreType === 'restored' && !empty($diffs)): ?>
+        <div>
+            <b>Восстановленные изменения:</b>
+            <?php foreach ($diffs as $diff): ?>
+                <table class="diff-table">
+                    <tr>
+                        <th colspan="4">
+                            id_usertg: <?= htmlspecialchars($diff['id_usertg']) ?>
+                            <?php if (!empty($diff['username'])): ?>
+                                | username: <?= htmlspecialchars($diff['username']) ?>
+                            <?php endif; ?>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Поле</th>
+                        <th>Было</th>
+                        <th>Станет</th>
+                    </tr>
+                    <?php foreach ($diff['fields'] as $field => $change): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($field) ?></td>
+                        <td><?= htmlspecialchars($change['old']) ?></td>
+                        <td><?= htmlspecialchars($change['new']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </table>
+            <?php endforeach; ?>
+        </div>
     <?php else: ?>
     <form method="post">
         <label for="restore_type">Тип восстановления:</label>
@@ -260,6 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
             <option value="">-- Выберите тип --</option>
             <option value="user" <?= $restoreType === 'user' ? 'selected' : '' ?>>Для одного пользователя</option>
             <option value="table" <?= $restoreType === 'table' ? 'selected' : '' ?>>Для всей таблицы</option>
+            <option value="restored" <?= $restoreType === 'restored' ? 'selected' : '' ?>>Восстановленные изменения</option>
         </select>
         <br><br>
         <div id="user_logs" style="display:<?= $restoreType === 'user' ? '' : 'none' ?>;">
@@ -284,6 +425,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                 <?php endforeach; ?>
             </select>
         </div>
+        <div id="restored_logs" style="display:<?= $restoreType === 'restored' ? '' : 'none' ?>;">
+            <label for="restored_logfile">Выберите лог изменений:</label>
+            <select name="logfile" id="restored_logfile">
+                <option value="">-- Выберите лог --</option>
+                <?php foreach ($restoredLogs as $log): ?>
+                    <option value="<?= htmlspecialchars($log) ?>" <?= $selectedLog === $log ? 'selected' : '' ?>>
+                        <?= basename($log) ?> (<?= formatLogDate($log, 'table') ?>)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <br>
         <button type="submit">Восстановить</button>
     </form>
@@ -292,16 +444,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
         updateLogOptions();
         document.getElementById('restore_type').addEventListener('change', function() {
             var type = this.value;
-            if (type === 'user') {
-                document.getElementById('user_logfile').setAttribute('name', 'logfile');
-                document.getElementById('table_logfile').setAttribute('name', 'logfile_disabled');
-            } else if (type === 'table') {
-                document.getElementById('table_logfile').setAttribute('name', 'logfile');
-                document.getElementById('user_logfile').setAttribute('name', 'logfile_disabled');
-            } else {
-                document.getElementById('user_logfile').setAttribute('name', 'logfile_disabled');
-                document.getElementById('table_logfile').setAttribute('name', 'logfile_disabled');
-            }
+            document.getElementById('user_logfile').setAttribute('name', type === 'user' ? 'logfile' : 'logfile_disabled');
+            document.getElementById('table_logfile').setAttribute('name', type === 'table' ? 'logfile' : 'logfile_disabled');
+            document.getElementById('restored_logfile').setAttribute('name', type === 'restored' ? 'logfile' : 'logfile_disabled');
         });
     </script>
 </body>
