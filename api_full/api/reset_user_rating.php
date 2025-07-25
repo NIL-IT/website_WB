@@ -43,6 +43,9 @@ try {
         exit;
     }
 
+    // Убираем @ из username, если есть
+    $username = ltrim($username, '@');
+
     // Получаем id_usertg по username
     $stmt = $pdo->prepare("SELECT id_usertg FROM users WHERE username = ?");
     $stmt->execute([$username]);
@@ -53,15 +56,26 @@ try {
         exit;
     }
 
-    $id_usertg = $row['id_usertg'];
+    $id_usertg_target = $row['id_usertg'];
+
+    // Логирование сброса рейтинга пользователя
+    $logDir = '/var/www/test_bot/logs/';
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0777, true);
+    }
+    $logFile = $logDir . 'referral_reset_user_' . $username . '_' . date('Ymd_His') . '.log';
+    $stmtLog = $pdo->prepare("SELECT * FROM referrals WHERE id_usertg = ?");
+    $stmtLog->execute([$id_usertg_target]);
+    $referralBefore = $stmtLog->fetch(PDO::FETCH_ASSOC);
+    file_put_contents($logFile, json_encode($referralBefore, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
     // Сброс score и invited для пользователя
     $stmt = $pdo->prepare("UPDATE referrals SET score = 0, invited = 0 WHERE id_usertg = ?");
-    $stmt->execute([$id_usertg]);
+    $stmt->execute([$id_usertg_target]);
 
     // // Можно отправить сообщение пользователю, если нужно:
     // $message = "Ваш рейтинг был сброшен администратором.";
-    // sendTelegramMessage($id_usertg, $message);
+    // sendTelegramMessage($id_usertg_target, $message);
 
     echo json_encode(['status' => true]);
 } catch (Exception $e) {
