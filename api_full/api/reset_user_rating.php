@@ -30,10 +30,10 @@ function isAdmin($id_usertg, $pdo) {
 try {
     $pdo = getDbConnection();
     $data = json_decode(file_get_contents('php://input'), true);
-    $id_admin = $data['id_admin'] ?? null;
+    $id_usertg = $data['id_usertg'] ?? null;
     $username = $data['username'] ?? null;
 
-    if (!$id_admin || !isAdmin($id_admin, $pdo)) {
+    if (!$id_admin || !isAdmin($id_usertg, $pdo)) {
         echo json_encode(['status' => false, 'message' => 'Нет доступа']);
         exit;
     }
