@@ -27,6 +27,14 @@ function formatLogDate($filename, $type) {
     return '';
 }
 
+// Получить username по id_usertg
+function getUsername($pdo, $id_usertg) {
+    $stmt = $pdo->prepare("SELECT username FROM users WHERE id_usertg = ?");
+    $stmt->execute([$id_usertg]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row && $row['username'] ? $row['username'] : '';
+}
+
 // Первый этап: показать различия
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['restore_type'], $_POST['logfile']) && !isset($_POST['confirm_restore'])) {
     $restoreType = $_POST['restore_type'];
@@ -46,8 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['restore_type'], $_POS
                 }
             }
             if ($diff) {
+                $username = getUsername($pdo, $data['id_usertg']);
                 $diffs[] = [
                     'id_usertg' => $data['id_usertg'],
+                    'username' => $username,
                     'fields' => $diff
                 ];
                 $showConfirm = true;
@@ -73,8 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['restore_type'], $_POS
                         }
                     }
                     if ($diff) {
+                        $username = getUsername($pdo, $row['id_usertg']);
                         $diffs[] = [
                             'id_usertg' => $row['id_usertg'],
+                            'username' => $username,
                             'fields' => $diff
                         ];
                     }
@@ -119,8 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                     $data['invited'] ?? 0,
                     $data['id_usertg']
                 ]);
+                $username = getUsername($pdo, $data['id_usertg']);
                 $changes[] = [
                     'id_usertg' => $data['id_usertg'],
+                    'username' => $username,
                     'fields' => $diff
                 ];
                 $message = "Данные успешно восстановлены для пользователя id_usertg: " . htmlspecialchars($data['id_usertg']);
@@ -152,8 +166,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                             $row['invited'] ?? 0,
                             $row['id_usertg']
                         ]);
+                        $username = getUsername($pdo, $row['id_usertg']);
                         $changes[] = [
                             'id_usertg' => $row['id_usertg'],
+                            'username' => $username,
                             'fields' => $diff
                         ];
                     }
@@ -212,7 +228,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                 <?php foreach ($diffs as $diff): ?>
                     <table class="diff-table">
                         <tr>
-                            <th colspan="3">id_usertg: <?= htmlspecialchars($diff['id_usertg']) ?></th>
+                            <th colspan="4">
+                                id_usertg: <?= htmlspecialchars($diff['id_usertg']) ?>
+                                <?php if ($diff['username']): ?>
+                                    | username: <?= htmlspecialchars($diff['username']) ?>
+                                <?php endif; ?>
+                            </th>
                         </tr>
                         <tr>
                             <th>Поле</th>
