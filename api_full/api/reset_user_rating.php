@@ -73,6 +73,12 @@ try {
     $stmt = $pdo->prepare("UPDATE referrals SET score = 0, invited = 0 WHERE id_usertg = ?");
     $stmt->execute([$id_usertg_target]);
 
+    // Вызов top_updater.php после сброса рейтинга
+    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+    if (file_exists($topUpdaterPath)) {
+        include_once $topUpdaterPath;
+    }
+
     // // Можно отправить сообщение пользователю, если нужно:
     // $message = "Ваш рейтинг был сброшен администратором.";
     // sendTelegramMessage($id_usertg_target, $message);

@@ -283,6 +283,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
     if ($changes) {
         file_put_contents($logChangeFile, json_encode($changes, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
     }
+
+    // Вызов top_updater.php после восстановления рейтинга
+    $topUpdaterPath = dirname(__DIR__) . '/updater/top_updater.php';
+    if (file_exists($topUpdaterPath)) {
+        include_once $topUpdaterPath;
+    }
 }
 ?>
 <!DOCTYPE html>
