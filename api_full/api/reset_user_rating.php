@@ -33,7 +33,7 @@ try {
     $id_usertg = $data['id_usertg'] ?? null;
     $username = $data['username'] ?? null;
 
-    if (!$id_admin || !isAdmin($id_usertg, $pdo)) {
+    if (!$id_usertg || !isAdmin($id_usertg, $pdo)) {
         echo json_encode(['status' => false, 'message' => 'Нет доступа']);
         exit;
     }
