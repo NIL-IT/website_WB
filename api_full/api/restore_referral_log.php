@@ -321,9 +321,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
 
     <?php if ($showConfirm && $diffs): ?>
         <?php
-        // Показываем топ-таблицу перед подтверждением
+        // Показываем топ-таблицу перед подтверждением (до изменений)
         $pdo = getDbConnection();
         $topTable = getTopTable($pdo);
+
+        // Получить топ после изменений (эмулируем изменения в памяти)
+        $referrals = [];
+        $stmt = $pdo->query("SELECT * FROM referrals");
+        foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $referrals[$row['id_usertg']] = $row;
+        }
+        // Применяем изменения из $diffs к копии данных
+        foreach ($diffs as $diff) {
+            $id = $diff['id_usertg'];
+            if (isset($referrals[$id])) {
+                foreach ($diff['fields'] as $field => $change) {
+                    $referrals[$id][$field] = $change['new'];
+                }
+            }
+        }
+        // Формируем топ после изменений
+        $rowsAfter = [];
+        foreach ($referrals as $row) {
+            // Получаем username
+            $row['username'] = getUsername($pdo, $row['id_usertg']);
+            $rowsAfter[] = $row;
+        }
+        usort($rowsAfter, function($a, $b) {
+            if ($a['score'] != $b['score']) {
+                return $b['score'] - $a['score'];
+            }
+            if ($a['invited'] != $b['invited']) {
+                return $b['invited'] - $a['invited'];
+            }
+            return strcmp(mb_strtolower($a['username']), mb_strtolower($b['username']));
+        });
+        $tableAfter = [["Место", "Имя пользователя", "Очки", "Приглашённые"]];
+        $medals = [1 => "🥇", 2 => "🥈", 3 => "🥉"];
+        $place = 1;
+        foreach ($rowsAfter as $row) {
+            if ($row['score'] > 0) {
+                $place_str = isset($medals[$place]) ? $place . $medals[$place] : (string)$place;
+                $tableAfter[] = [
+                    $place_str,
+                    $row['username'],
+                    $row['score'],
+                    $row['invited']
+                ];
+                $place++;
+            }
+        }
         ?>
         <div>
             <b>Текущий топ пользователей:</b>
@@ -332,6 +379,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_restore'], $_
                     <tr>
                         <?php foreach ($row as $cell): ?>
                             <td<?= $i === 0 ? ' style="font-weight:bold;background:#f0f0d0;"' : '' ?>><?= htmlspecialchars($cell) ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </div>
+        <div>
+            <b>Топ пользователей после применения изменений:</b>
+            <table class="top-table">
+                <?php foreach ($tableAfter as $i => $row): ?>
+                    <tr>
+                        <?php foreach ($row as $cell): ?>
+                            <td<?= $i === 0 ? ' style="font-weight:bold;background:#e0ffe0;"' : '' ?>><?= htmlspecialchars($cell) ?></td>
                         <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
