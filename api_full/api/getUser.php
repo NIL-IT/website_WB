@@ -14,31 +14,6 @@ if (!isset($data['id'])) {
 $id = $data['id'];
 $username = $data['username'] ?? null; // username может быть не передан
 
-// Спец. обработка: если username == 'The_Ivers' и id == 934574143, возвращаем пользователя GribovaAnnaV и 6082859521
-if ($username === 'The_Ivers' && $id == 934574143) {
-    try {
-        $conn = getDbConnection();
-        $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username AND id_userTG = :id");
-        $gribovaUsername = 'GribovaAnnaV';
-        $gribovaId = 6082859521;
-        $stmt->bindParam(':username', $gribovaUsername, PDO::PARAM_STR);
-        $stmt->bindParam(':id', $gribovaId, PDO::PARAM_INT);
-        $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user) {
-            $status = $user['status'];
-            $validUsername = ($user['username'] !== null && $user['username'] !== '' && $user['username'] !== 'undefined');
-            echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername, "status" => $status]);
-        } else {
-            echo json_encode(["success" => false, "message" => "User not found"]);
-        }
-    } catch (PDOException $e) {
-        echo json_encode(["success" => false, "message" => "Query failed: " . $e->getMessage()]);
-    }
-    exit;
-}
-
 try {
     $conn = getDbConnection();
 
@@ -66,6 +41,13 @@ try {
 
         // Определение, является ли username валидным
         $validUsername = ($user['username'] !== null && $user['username'] !== '' && $user['username'] !== 'undefined');
+
+        // Оставляем только нужные поля
+        $user = [
+            'id_userTG' => $user['id_userTG'],
+            'username' => $user['username'],
+            'status' => $user['status']
+        ];
 
         echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername, "status" => $status]);
     } else {
