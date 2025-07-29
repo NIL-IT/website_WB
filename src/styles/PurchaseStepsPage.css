@@ -163,14 +163,14 @@
 
 .purchase-step-keywords {
   flex-grow: 1;
-  overflow-x: auto; 
-  white-space: nowrap; 
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .arrow {
   cursor: pointer;
-  font-size: 24px; 
-  user-select: none; 
+  font-size: 24px;
+  user-select: none;
 }
 
 .text-ul {
@@ -339,9 +339,9 @@
   color: #fff;
   border-radius: 8px;
   font-family: "Helvetica Neue Cyr";
-font-size: 18px;
-font-weight: 600;
-cursor: pointer;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .button-help {
@@ -362,12 +362,28 @@ cursor: pointer;
   .purchase-step-page {
     height: 93vh;
   }
-
 }
 
 @media (min-width: 768px) {
   .purchase-step-page {
     height: 92vh;
   }
+}
 
+@media (max-width: 600px) {
+  .mobile-video-instruction {
+    display: block;
+    margin-bottom: 18px;
+  }
+}
+
+@media (min-width: 601px) {
+  .mobile-video-instruction {
+    display: none;
+  }
+}
+
+.video-instruction-link {
+  font-family: "Helvetica Neue Cyr", Arial, sans-serif;
+  /* Цвет и оформление уже заданы inline, но можно добавить fallback */
 }
