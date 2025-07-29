@@ -49,7 +49,7 @@ try {
             'status' => $user['status']
         ];
 
-        echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername, "status" => $status]);
+        echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername]);
     } else {
         echo json_encode(["success" => false, "message" => "User not found"]);
     }
