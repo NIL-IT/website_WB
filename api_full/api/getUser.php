@@ -17,8 +17,8 @@ $username = $data['username'] ?? null; // username может быть не пе
 try {
     $conn = getDbConnection();
 
-    // Проверка существования пользователя по id_userTG
-    $stmt = $conn->prepare("SELECT * FROM users WHERE id_userTG = :id");
+    // Проверка существования пользователя по id_usertg
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id_usertg = :id");
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -28,7 +28,7 @@ try {
         if ($username !== null && $username !== '' && $username !== 'undefined') {
             if ($user['username'] !== $username) {
                 // Обновление username
-                $updateStmt = $conn->prepare("UPDATE users SET username = :username WHERE id_userTG = :id");
+                $updateStmt = $conn->prepare("UPDATE users SET username = :username WHERE id_usertg = :id");
                 $updateStmt->bindParam(':username', $username, PDO::PARAM_STR);
                 $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
                 $updateStmt->execute();
@@ -44,7 +44,7 @@ try {
 
         // Оставляем только нужные поля
         $user = [
-            'id_userTG' => $user['id_userTG'],
+            'id_usertg' => $user['id_usertg'],
             'username' => $user['username'],
             'status' => $user['status']
         ];
