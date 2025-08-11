@@ -8,7 +8,7 @@ try {
     $pdo = getDbConnection();
 
     // Запрос к таблице steps
-    $stmt = $pdo->prepare('SELECT id, cardholder, bankname AS bank, phone, cardnumber, id_product, status, completed_at FROM steps WHERE status IN (1, 2)');
+    $stmt = $pdo->prepare('SELECT id, cardholder, bankname AS bank, phone, cardnumber, id_product, status, completed_at, updated_at FROM steps WHERE status IN (1, 2)');
     $stmt->execute();
     $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -35,7 +35,8 @@ try {
                 'url' => $url,
                 'product_name' => $product['name'],
                 'tg_nick_manager' => !empty($product['tg_nick_manager']) ? $product['tg_nick_manager'] : 'Не указан',
-                'completed_at' => $app['completed_at']
+                'completed_at' => $app['completed_at'],
+                'updated_at' => $app['updated_at']
             ];
         }
     }

@@ -79,10 +79,28 @@ function renderApplications(sortBy = 'status', order = 'desc') {
     });
 
     sortedApplications.forEach((app, index) => {
+        // Проверка на "просроченность"
+        let showWarning = false;
+        if (app.updated_at) {
+            const updatedDate = new Date(app.updated_at);
+            const now = new Date();
+            const threeMonthsLater = new Date(updatedDate);
+            threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
+            if (threeMonthsLater < now) {
+                showWarning = true;
+            }
+        }
+
+        const warningHtml = showWarning
+            ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!">&#10071;</span>`
+            : '';
+
         const appDiv = document.createElement('div');
         appDiv.className = `application`;
         appDiv.innerHTML = `
-            <div class="cardholder ${getStatusClass(app.status)}">${app.cardholder}</div>
+            <div class="cardholder ${getStatusClass(app.status)}">
+                ${warningHtml}${app.cardholder}
+            </div>
             <div class="application-content">
                 <p><strong>Банк:</strong> <span class="black">${app.bank}</span></p>
                 <p><strong>Телефон:</strong> <span class="black">${app.phone}</span></p>
