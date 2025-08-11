@@ -413,7 +413,7 @@ const PurchaseStepsPage = ({
 
         // Извлекаем только цифры из телефона для проверки
         const phoneDigits = formData.phone.replace(/\D/g, "");
-        const isPhoneValid = phoneDigits.length === 10;
+        const isPhoneValid = phoneDigits.length === 11;
 
         const newErrors = {
           cardNumber: !formData.cardNumber || !isCardNumberValid,
