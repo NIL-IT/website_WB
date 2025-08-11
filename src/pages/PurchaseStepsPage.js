@@ -410,7 +410,10 @@ const PurchaseStepsPage = ({
 
         // Проверка длины полей
         const isCardNumberValid = /^\d{16}$/.test(formData.cardNumber);
-        const isPhoneValid = /^\d{10,11}$/.test(formData.phone);
+
+        // Извлекаем только цифры из телефона для проверки
+        const phoneDigits = formData.phone.replace(/\D/g, "");
+        const isPhoneValid = phoneDigits.length === 10;
 
         const newErrors = {
           cardNumber: !formData.cardNumber || !isCardNumberValid,
@@ -425,7 +428,7 @@ const PurchaseStepsPage = ({
             alert("Введите корректный номер карты (16 цифр).");
           }
           if (!isPhoneValid) {
-            alert("Введите корректный номер телефона (10–11 цифр).");
+            alert("Введите корректный номер телефона (10 цифр после +7).");
           }
           return;
         }
@@ -436,7 +439,8 @@ const PurchaseStepsPage = ({
           formDataToSend.append("cardNumber", formData.cardNumber);
           formDataToSend.append("bankName", formData.bankName);
           formDataToSend.append("cardHolder", formData.cardHolder);
-          formDataToSend.append("phone", formData.phone);
+          // Отправляем телефон в формате +7XXXXXXXXXX
+          formDataToSend.append("phone", "+7" + phoneDigits);
 
           const response = await fetch(`${baseURL}updateStep.php`, {
             method: "POST",
