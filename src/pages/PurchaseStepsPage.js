@@ -439,8 +439,14 @@ const PurchaseStepsPage = ({
           formDataToSend.append("cardNumber", formData.cardNumber);
           formDataToSend.append("bankName", formData.bankName);
           formDataToSend.append("cardHolder", formData.cardHolder);
-          // Отправляем телефон в формате +7XXXXXXXXXX
-          formDataToSend.append("phone", "+7" + phoneDigits);
+          // Исправлено: не добавляем лишнюю 7
+          let phoneToSend = formData.phone;
+          if (!phoneToSend.startsWith("+7")) {
+            phoneToSend = "+7" + phoneDigits;
+          } else {
+            phoneToSend = "+7" + phoneDigits;
+          }
+          formDataToSend.append("phone", phoneToSend);
 
           const response = await fetch(`${baseURL}updateStep.php`, {
             method: "POST",
@@ -1382,7 +1388,7 @@ const PurchaseStepsPage = ({
               </div>
             </div>
           </div>
-        );
+               );
       case 7:
         return (
           <div className="purchase-step-page">
