@@ -607,7 +607,7 @@ const PurchaseStepsPage = ({
                 товара.
               </p>
               <p className="purchase-step-text">
-                Товар следует выкупить и оформить на него отзыв до {
+                Товар следует выкупить и оформить отзыв до {
                   (() => {
                     const now = new Date();
                     now.setMonth(now.getMonth() + 3);
