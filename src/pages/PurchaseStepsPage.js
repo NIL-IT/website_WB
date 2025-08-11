@@ -615,7 +615,7 @@ const PurchaseStepsPage = ({
                     const day = String(now.getDate()).padStart(2, '0');
                     const month = String(now.getMonth() + 1).padStart(2, '0');
                     const year = now.getFullYear();
-                    return `${day}.${month}.${year} 00:00 по МСК`;
+                    return `${day}.${month}.${year} 00:00 по МСК.`;
                   })()
                 } 
               </p>
