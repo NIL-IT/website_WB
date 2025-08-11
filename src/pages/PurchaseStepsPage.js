@@ -13,7 +13,33 @@ const PurchaseStepsPage = ({
   const baseURL = "https://inhomeka.online:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
   const [showPopup, setShowPopup] = useState(false);
-
+  const allBankNames = [
+    "Сбербанк",
+    "Тинькофф Банк",
+    "Альфа-Банк",
+    "ВТБ",
+    "Озон Банк",
+    "РНКБ",
+    "Совкомбанк",
+    "Газпромбанк",
+    "Райффайзенбанк",
+    "Россельхозбанк",
+    "МТС Банк",
+    "ЮMoney",
+    "Банк Санкт-Петербург",
+    "Уралсиб",
+    "Ак Барс Банк",
+    "Беларусбанк",
+    "МКБ (Московский кредитный банк)",
+    "ОТП Банк",
+    "Почта Банк",
+    "Центр-инвест",
+    "Новикомбанк",
+    "Ренессанс Кредит",
+    "Банк Россия",
+    "Хлынов",
+    "Азиатско-Тихоокеанский Банк"
+  ];
   const handleSellerClick = () => {
     if (userStep && userStep.tg_nick) {
       window.open(
@@ -350,17 +376,31 @@ const PurchaseStepsPage = ({
       }
       case 5: {
         if (!checked) {
-          alert("Пожалуйста, подтвердите правильность ввода данных. ");
+          alert("Пожалуйста, подтвердите правильность ввода данных.");
           return;
         }
+
+        // Проверка длины полей
+        const isCardNumberValid = /^\d{16}$/.test(formData.cardNumber);
+        const isPhoneValid = /^\d{10,11}$/.test(formData.phone);
+
         const newErrors = {
-          cardNumber: !formData.cardNumber,
+          cardNumber: !formData.cardNumber || !isCardNumberValid,
           bankName: !formData.bankName,
           cardHolder: !formData.cardHolder,
-          phone: !formData.phone,
+          phone: !formData.phone || !isPhoneValid,
         };
         setErrors(newErrors);
-        if (Object.values(newErrors).some(Boolean)) return;
+
+        if (Object.values(newErrors).some(Boolean)) {
+          if (!isCardNumberValid) {
+            alert("Введите корректный номер карты (16 цифр).");
+          }
+          if (!isPhoneValid) {
+            alert("Введите корректный номер телефона (10–11 цифр).");
+          }
+          return;
+        }
 
         try {
           const formDataToSend = new FormData();
@@ -1124,7 +1164,7 @@ const PurchaseStepsPage = ({
                   <p className="red-error">Заполните поле</p>
                 )}
               </div>
-              <div className="article-input">
+               <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                   Название банка
                 </p>
@@ -1134,8 +1174,14 @@ const PurchaseStepsPage = ({
                   value={formData.bankName}
                   onChange={handleInputChange}
                   placeholder="Введите название банка"
+                  list="bankNames"
                 />
-                {errors.bankName && <p className="red-error">Заполните поле</p>}
+                <datalist id="bankNames">
+                  {allBankNames.map((name, idx) => (
+                    <option key={idx} value={name} />
+                  ))}
+                </datalist>
+                {errors.bankName && <p className="red-error">Заполните поле или выберите из списка</p>}
               </div>
               <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
