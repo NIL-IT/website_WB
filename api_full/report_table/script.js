@@ -95,10 +95,12 @@ function renderApplications(sortBy = 'status', order = 'desc') {
             ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!">&#10071;</span>`
             : '';
 
+        const cardholderClass = `${getStatusClass(app.status)}${showWarning ? ' expire-header' : ''}`;
+
         const appDiv = document.createElement('div');
         appDiv.className = `application`;
         appDiv.innerHTML = `
-            <div class="cardholder ${getStatusClass(app.status)}">
+            <div class="cardholder ${cardholderClass}">
                 ${warningHtml}${app.cardholder}
             </div>
             <div class="application-content">
