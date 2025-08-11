@@ -442,9 +442,9 @@ const PurchaseStepsPage = ({
           // Исправлено: не добавляем лишнюю 7
           let phoneToSend = formData.phone;
           if (!phoneToSend.startsWith("+7")) {
-            phoneToSend = "+7" + phoneDigits;
+            phoneToSend = "+" + phoneDigits;
           } else {
-            phoneToSend = "+7" + phoneDigits;
+            phoneToSend = "+" + phoneDigits;
           }
           formDataToSend.append("phone", phoneToSend);
 
