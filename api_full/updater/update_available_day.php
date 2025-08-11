@@ -119,7 +119,7 @@ try {
   
     $threeMonthsAgo = $currentDate->sub(new DateInterval('P3M'))->format('Y-m-d');
 
-    $stepStmt = $pdo->prepare("SELECT id, id_product, updated_at, image1, image2, image3, image4, image5, image6 FROM steps");
+    $stepStmt = $pdo->prepare("SELECT id, id_product, updated_at, image1, image2, image3, image4, image5, image6, status, step, receipt_image FROM steps");
     $stepStmt->execute();
     $steps = $stepStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -127,31 +127,38 @@ try {
         $stepId = $step['id'];
         $id_product = $step['id_product'];
         $updated_at = new DateTime($step['updated_at'], new DateTimeZone('Europe/Moscow'));
-    
+
+        // Новый функционал: если шагу более 3 месяцев, оставлять только status=1,2 или status=0 и step="Завершено"
         if ($updated_at < new DateTime($threeMonthsAgo, new DateTimeZone('Europe/Moscow'))) {
-            // Delete images
-            for ($i = 1; $i <= 6; $i++) {
-                $imagePath = $step["image$i"];
-                if ($imagePath) {
-                    $fullImagePath = '/var/www/test_bot/api/' . $imagePath;
-                    if (file_exists($fullImagePath)) {
-                        unlink($fullImagePath);
+            $status = intval($step['status']);
+            $stepName = $step['step'];
+
+            $keep = ($status === 1 || $status === 2) || ($status === 0 && $stepName === 'Завершено');
+            if (!$keep) {
+                // Удаляем изображения
+                for ($i = 1; $i <= 6; $i++) {
+                    $imagePath = $step["image$i"];
+                    if ($imagePath) {
+                        $fullImagePath = '/var/www/test_bot/api/' . $imagePath;
+                        if (file_exists($fullImagePath)) {
+                            unlink($fullImagePath);
+                        }
                     }
                 }
-            }
-    
-            // Delete receipt_image
-            if (!empty($step['receipt_image'])) {
-                $receiptImagePath = '/var/www/test_bot/api/' . $step['receipt_image'];
-                if (file_exists($receiptImagePath)) {
-                    unlink($receiptImagePath);
+
+                // Удаляем receipt_image
+                if (!empty($step['receipt_image'])) {
+                    $receiptImagePath = '/var/www/test_bot/api/' . $step['receipt_image'];
+                    if (file_exists($receiptImagePath)) {
+                        unlink($receiptImagePath);
+                    }
                 }
+
+                // Удаляем сам шаг
+                $deleteStepStmt = $pdo->prepare("DELETE FROM steps WHERE id = :id");
+                $deleteStepStmt->bindParam(':id', $stepId, PDO::PARAM_INT);
+                $deleteStepStmt->execute();
             }
-    
-            // Delete the step
-            $deleteStepStmt = $pdo->prepare("DELETE FROM steps WHERE id = :id");
-            $deleteStepStmt->bindParam(':id', $stepId, PDO::PARAM_INT);
-            $deleteStepStmt->execute();
         }
     }
 

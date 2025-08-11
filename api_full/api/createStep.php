@@ -12,7 +12,7 @@ try {
 
     // Проверка наличия необходимых данных
     if (!isset($data['id_usertg'], $data['id_product'])) {
-        echo json_encode(['success' => false, 'error' => 'Invalid input']);
+        echo json_encode(['success' => false, 'error' => 'Неверные входные данные.']);
         exit;
     }
 
@@ -27,11 +27,11 @@ try {
     if ($stmt->execute()) {
         // Получение ID последней вставленной записи
         $stepsId = $pdo->lastInsertId();
-        echo json_encode(['success' => true, 'message' => 'Step created successfully', 'stepsId' => $stepsId]);
+        echo json_encode(['success' => true, 'message' => 'Шаг успешно создан', 'stepsId' => $stepsId]);
     } else {
-        echo json_encode(['success' => false, 'error' => 'Failed to create step']);
+        echo json_encode(['success' => false, 'error' => 'Не удалось создать шаг.']);
     }
 } catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'message' => 'Ошибка базы данных: ' . $e->getMessage()]);
 }
 ?>

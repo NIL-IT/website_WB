@@ -5,27 +5,28 @@ require_once 'db.php'; // Подключение к базе данных
 
 function sendTelegramMessageWithReceipt($chatId, $imagePath) {
     $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendPhoto";
 
-    $reportUrl = "https://inhomeka.online:8000/$imagePath";
-    $message = "❤️ Спасибо за участие! Ваш чек по кнопке ниже";
-
-    $replyMarkup = json_encode([
-        'inline_keyboard' => [
-            [
-                ['text' => 'Посмотреть чек', 'web_app' => ['url' => $reportUrl]]
-            ]
-        ]
-    ]);
+    // Абсолютный путь к файлу для отправки через curl
+    $fullImagePath = '/var/www/test_bot/api/' . $imagePath;
+    $caption = "❤️ Спасибо за участие! Ваш чек ниже";
 
     $postFields = [
         'chat_id' => $chatId,
-        'text' => $message,
+        'caption' => $caption,
         'parse_mode' => 'HTML',
-        'reply_markup' => $replyMarkup
+        'photo' => new CURLFile($fullImagePath)
     ];
 
-    sendTelegramRequest($apiUrl, $postFields);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    return $response;
 }
 
 function sendTelegramInvitationMessage($chatId, $id_usertg) {
