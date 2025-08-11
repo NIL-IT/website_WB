@@ -203,14 +203,42 @@ const PurchaseStepsPage = ({
     }
   };
 
+  // Функция для форматирования номера карты
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, '').slice(0, 16);
+    return digits.replace(/(.{4})/g, '$1 ').trim();
+  };
+
+  // Функция для форматирования телефона
+  const formatPhone = (value) => {
+    const digits = value.replace(/\D/g, '').replace(/^7/, '').slice(0, 10);
+    let formatted = '+7';
+    if (digits.length > 0) {
+      formatted += '(' + digits.slice(0, 3);
+    }
+    if (digits.length >= 4) {
+      formatted += ')' + digits.slice(3, 6);
+    }
+    if (digits.length >= 7) {
+      formatted += '-' + digits.slice(6, 8);
+    }
+    if (digits.length >= 9) {
+      formatted += '-' + digits.slice(8, 10);
+    }
+    return formatted;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
-      let phoneValue = value.replace(/\D/g, ""); // Удаление всех символов, кроме цифр
+      let phoneValue = value.replace(/\D/g, "");
       if (phoneValue.startsWith("7")) {
         phoneValue = phoneValue.slice(1);
       }
       setFormData({ ...formData, [name]: "+7" + phoneValue.slice(0, 10) });
+    } else if (name === "cardNumber") {
+      const digits = value.replace(/\D/g, "").slice(0, 16);
+      setFormData({ ...formData, [name]: digits });
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -965,15 +993,17 @@ const PurchaseStepsPage = ({
                 INHOMEKA – мы предлагаем готовые дизайнерские решения для дома в
                 виде комплектов, чтобы упростить выбор стильных товаров
               </p>
-              <button
-                className="purchase-step-button"
-                onClick={handleStepSubmit}
-                disabled={userStep.availableday === 0}
-              >
-                {userStep.availableday === 0
-                  ? "Товар сегодня недоступен"
-                  : "Продолжить"}
-              </button>
+              <div className="step-footer-container">
+                <button
+                  className="purchase-step-button"
+                  onClick={handleStepSubmit}
+                  disabled={userStep.availableday === 0}
+                >
+                  {userStep.availableday === 0
+                    ? "Товар сегодня недоступен"
+                    : "Продолжить"}
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -1153,18 +1183,20 @@ const PurchaseStepsPage = ({
                   Номер карты
                 </p>
                 <input
-                  type="number"
+                  type="text"
                   name="cardNumber"
-                  value={formData.cardNumber}
+                  value={formatCardNumber(formData.cardNumber)}
                   onChange={handleInputChange}
-                  placeholder="Введите номер карты"
-                  onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
+                  placeholder="0000 0000 0000 0000"
+                  maxLength={19} // 16 цифр + 3 пробела
+                  inputMode="numeric"
+                  onWheel={(e) => e.target.blur()}
                 />
                 {errors.cardNumber && (
                   <p className="red-error">Заполните поле</p>
                 )}
               </div>
-               <div className="article-input">
+              <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                   Название банка
                 </p>
@@ -1205,9 +1237,11 @@ const PurchaseStepsPage = ({
                 <input
                   type="tel"
                   name="phone"
-                  value={formData.phone}
+                  value={formatPhone(formData.phone)}
                   onChange={handleInputChange}
-                  placeholder="Введите номер телефона или СБП"
+                  placeholder="+7(XXX)XXX-XX-XX"
+                  maxLength={16}
+                  inputMode="numeric"
                 />
                 {errors.phone && <p className="red-error">Заполните поле</p>}
               </div>
