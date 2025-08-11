@@ -607,6 +607,19 @@ const PurchaseStepsPage = ({
                 товара.
               </p>
               <p className="purchase-step-text">
+                Товар следует выкупить до {
+                  (() => {
+                    const now = new Date();
+                    now.setMonth(now.getMonth() + 3);
+                    now.setHours(0, 0, 0, 0);
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const year = now.getFullYear();
+                    return `${day}.${month}.${year} 00:00 по МСК`;
+                  })()
+                } 
+              </p>
+              <p className="purchase-step-text">
                 Платим фиксированный процент от цены при оплате ВБ кошельком или
                 ОЗОН картой (по центральному региону).
               </p>
