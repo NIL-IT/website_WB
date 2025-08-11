@@ -77,6 +77,23 @@ body {
     z-index: 2;
 }
 
+.expire-warning:hover::after {
+    content: "Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!";
+    position: absolute;
+    right: 30px;
+    top: -8px;
+    background: #fff0f0;
+    color: #d00;
+    border: 1px solid #d00;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: pre-line;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
 .application-content {
     display: flex;
     flex-wrap: wrap;
