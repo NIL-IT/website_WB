@@ -266,14 +266,15 @@ try {
     $place = 1;
     foreach ($rows as $row) {
         $place_str = isset($medals[$place]) ? $place . $medals[$place] : (string)$place;
-        $table[] = [
+        $table[] = array_values([
             $place_str,
             $row['username'],
             $row['score'],
             $row['invited']
-        ];
+        ]);
         $place++;
     }
+
 
     // Отправка в Google Таблицу
     $updatedCells = sendTopToGoogleSheet($table);
