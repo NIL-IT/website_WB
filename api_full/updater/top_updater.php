@@ -265,10 +265,11 @@ try {
     ];
     $place = 1;
     foreach ($rows as $row) {
+        $username = !empty($row['username']) ? $row['username'] : $row['id_usertg'];
         $place_str = isset($medals[$place]) ? $place . $medals[$place] : (string)$place;
         $table[] = array_values([
             $place_str,
-            $row['username'],
+            $username,
             $row['score'],
             $row['invited']
         ]);
