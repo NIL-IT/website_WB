@@ -111,6 +111,7 @@ body {
     content: "Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!";
     position: absolute;
     top: 24px;
+    right: 50%;
     transform: translateX(-50%);
     background: #fff0f0;
     color: #d00;
