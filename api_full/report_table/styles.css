@@ -43,7 +43,7 @@ body {
 
 .cardholder.expire-header {
     position: relative;
-    overflow: hidden;
+    overflow: visible; /* чтобы пузырёк мог выходить за пределы */
 }
 
 .cardholder.expire-header::before {
@@ -69,12 +69,42 @@ body {
     color: red;
     font-size: 22px;
     position: absolute;
-    right: 18px;
+    left: 18px;
     top: 2px;
     margin: 0;
     vertical-align: middle;
     cursor: pointer;
     z-index: 2;
+    display: flex;
+    align-items: center;
+}
+
+.expire-warning .circle {
+    width: 28px;
+    height: 28px;
+    background: red;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: blink-circle 1.2s infinite;
+    margin-right: 4px;
+}
+
+.expire-warning .icon {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    animation: blink-icon 1.2s infinite;
+}
+
+@keyframes blink-circle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+@keyframes blink-icon {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .expire-warning:hover::after {
@@ -96,6 +126,7 @@ body {
     min-width: 320px;
     max-width: 90vw;
     text-align: center;
+    pointer-events: none;
 }
 
 .application-content {

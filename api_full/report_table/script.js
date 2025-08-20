@@ -92,7 +92,9 @@ function renderApplications(sortBy = 'status', order = 'desc') {
         }
 
         const warningHtml = showWarning
-            ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!">&#10071;</span>`
+            ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности (более 3 месяцев), оплатите его в первую очередь!">
+                    <span class="circle"><span class="icon">&#10071;</span></span>
+                </span>`
             : '';
 
         const cardholderClass = `${getStatusClass(app.status)}${showWarning ? ' expire-header' : ''}`;
