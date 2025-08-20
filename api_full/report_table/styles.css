@@ -22,7 +22,7 @@ body {
     border-radius: 8px;
     margin-bottom: 30px;
     background-color: #fff;
-    overflow: hidden;
+    overflow: visible; /* исправлено, чтобы пузырёк не обрезался */
 }
 
 .cardholder.in-progress {
@@ -87,7 +87,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: blink-circle 1.2s infinite;
+    animation: blink-circle 2.2s infinite; /* медленнее */
     margin-right: 4px;
 }
 
@@ -95,7 +95,7 @@ body {
     color: #fff;
     font-size: 18px;
     font-weight: bold;
-    animation: blink-icon 1.2s infinite;
+    animation: blink-icon 2.2s infinite; /* медленнее */
 }
 
 @keyframes blink-circle {
@@ -109,9 +109,9 @@ body {
 
 .expire-warning:hover::after {
     content: "Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!";
-    position: absolute;
+    position: fixed;
     left: 50%;
-    top: -38px;
+    top: 24px;
     transform: translateX(-50%);
     background: #fff0f0;
     color: #d00;
@@ -121,12 +121,14 @@ body {
     font-size: 13px;
     font-weight: 500;
     white-space: pre-line;
-    z-index: 10;
+    z-index: 10000;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     min-width: 320px;
     max-width: 90vw;
     text-align: center;
     pointer-events: none;
+    /* Если слишком близко к верху экрана, сдвигайте вниз */
+    /* Можно добавить медиазапросы или JS для более сложных случаев */
 }
 
 .application-content {
