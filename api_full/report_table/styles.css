@@ -109,7 +109,7 @@ body {
 
 .expire-warning:hover::after {
     content: "Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!";
-    position: fixed;
+    position: absolute;
     left: 50%;
     top: 24px;
     transform: translateX(-50%);
