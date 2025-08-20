@@ -80,8 +80,9 @@ body {
 .expire-warning:hover::after {
     content: "Данный товар подлежит удалению из-за срока давности, оплатите его в первую очередь!";
     position: absolute;
-    right: 30px;
-    top: -8px;
+    left: 50%;
+    top: -38px;
+    transform: translateX(-50%);
     background: #fff0f0;
     color: #d00;
     border: 1px solid #d00;
@@ -92,6 +93,9 @@ body {
     white-space: pre-line;
     z-index: 10;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-width: 320px;
+    max-width: 90vw;
+    text-align: center;
 }
 
 .application-content {
