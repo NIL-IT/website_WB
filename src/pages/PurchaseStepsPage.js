@@ -548,7 +548,7 @@ const PurchaseStepsPage = ({
             body: formDataToSend,
           });
           const result = await response.json();
-          if (result.success) {   
+          if (result.success) {
             setShowPopup(true);
             await new Promise((resolve) => setTimeout(resolve, 3000));
             await handleStepSuccess();
