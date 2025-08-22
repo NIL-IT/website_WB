@@ -53,7 +53,7 @@ const PurchaseStepsPage = ({
   };
 
   const Popup = ({ message, onClose }) => (
-    <div className="catalog-popup-overlay">
+    <div className="catalog-popup-overlay" onClick={onClose}>
       <div className="catalog-popup">
         <svg
           width="42"
@@ -1388,7 +1388,7 @@ const PurchaseStepsPage = ({
               </div>
             </div>
           </div>
-               );
+        );
       case 7:
         return (
           <div className="purchase-step-page">
@@ -1485,12 +1485,6 @@ const PurchaseStepsPage = ({
       case 8:
         return (
           <div className="purchase-step-page">
-            {showPopup && (
-              <Popup
-                message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3-10 рабочих дней"
-                onClose={closePopup}
-              />
-            )}
             <div className="purchase-step-header">
               <p className="title-class-step">Шаг 8: Отчет об отзыве</p>
             </div>
@@ -1584,9 +1578,7 @@ const PurchaseStepsPage = ({
                   className="upload-feedback-step4"
                   onClick={() => setChecked(!checked)}
                 >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
+                  <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
                     {checked && (
                       <svg viewBox="0 0 13 13">
                         <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
@@ -1740,7 +1732,17 @@ const PurchaseStepsPage = ({
     }
   };
 
-  return renderStepContent();
+  return (
+    <>
+      {showPopup && (
+        <Popup
+          message="Спасибо за покупку! Ожидайте поступление кешбека в течение 3-10 рабочих дней"
+          onClose={closePopup}
+        />
+      )}
+      {renderStepContent()}
+    </>
+  );
 };
 
 export default PurchaseStepsPage;
