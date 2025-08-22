@@ -552,6 +552,7 @@ const PurchaseStepsPage = ({
             setShowPopup(true);
             await new Promise((resolve) => setTimeout(resolve, 3000));
             await handleStepSuccess();
+            setShowPopup(false);
             localStorage.clear();
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
