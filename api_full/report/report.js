@@ -24,6 +24,10 @@ document.addEventListener("DOMContentLoaded", function () {
           <p class="purchase-step-text">Выгода: ${data.benefit} руб.</p>
           <p class="purchase-step-text">Комментарий: ${data.data.comment || 'Комментарий отсутствует'}</p>
         `;
+        // Добавляем разделительную линию после комментария
+        const commentSeparator = document.createElement("hr");
+        commentSeparator.className = "top-section-separator";
+        userInfoDiv.appendChild(commentSeparator);
         
         const screenshotsDiv = document.getElementById("screenshots");
 
@@ -68,7 +72,9 @@ document.addEventListener("DOMContentLoaded", function () {
           // Изначально все изображения развёрнуты
           screenshotWrapper.appendChild(captionDiv);
           screenshotWrapper.appendChild(img);
-          screenshotWrapper.innerHTML += `<hr class="screenshot-separator" />`;
+          const separator = document.createElement("hr");
+          separator.className = "screenshot-separator";
+          screenshotWrapper.appendChild(separator);
           screenshotsDiv.appendChild(screenshotWrapper);
         }); 
 
@@ -95,7 +101,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         receiptImageDiv.appendChild(receiptCaption);
         if (receiptImg) receiptImageDiv.appendChild(receiptImg);
-        receiptImageDiv.innerHTML += `<hr class="screenshot-separator" />`;
+        const receiptSeparator = document.createElement("hr");
+        receiptSeparator.className = "screenshot-separator";
+        receiptImageDiv.appendChild(receiptSeparator);
         screenshotsDiv.appendChild(receiptImageDiv);
 
         // Установка текста и стилей для кнопки verifyBtn
