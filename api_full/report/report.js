@@ -26,6 +26,16 @@ document.addEventListener("DOMContentLoaded", function () {
         `;
         
         const screenshotsDiv = document.getElementById("screenshots");
+
+        // Вставляем визуальное отделение и заголовок для блока скриншотов
+        const screenshotsHeader = document.createElement("div");
+        screenshotsHeader.style.textAlign = "center";
+        screenshotsHeader.style.fontSize = "22px";
+        screenshotsHeader.style.fontWeight = "bold";
+        screenshotsHeader.style.marginBottom = "18px";
+        screenshotsHeader.textContent = "Документальные подтверждения:";
+        screenshotsDiv.appendChild(screenshotsHeader);
+
         const screenshots = [
           { url: data.data.image1, caption: "Скриншот товара в конкурентной выдаче" },
           { url: data.data.image2, caption: "Скриншот корзины" },
@@ -39,11 +49,26 @@ document.addEventListener("DOMContentLoaded", function () {
         screenshots.forEach((screenshot, index) => {
           const screenshotWrapper = document.createElement("div");
           screenshotWrapper.className = "screenshot-wrapper";
-          screenshotWrapper.innerHTML = `
-            <div class="screenshot-caption">${screenshot.caption}</div>
-            <img src="${screenshot.url}" alt="Шаг ${index + 1}" class="product-image-detail" />
-            <hr class="screenshot-separator" />
-          `;
+
+          // Создаём подпись и изображение
+          const captionDiv = document.createElement("div");
+          captionDiv.className = "screenshot-caption";
+          captionDiv.textContent = screenshot.caption;
+
+          const img = document.createElement("img");
+          img.src = screenshot.url;
+          img.alt = `Шаг ${index + 1}`;
+          img.className = "product-image-detail";
+
+          // Добавляем обработчик для сворачивания/разворачивания
+          captionDiv.addEventListener("click", function () {
+            img.classList.toggle("collapsed-image");
+          });
+
+          // Изначально все изображения развёрнуты
+          screenshotWrapper.appendChild(captionDiv);
+          screenshotWrapper.appendChild(img);
+          screenshotWrapper.innerHTML += `<hr class="screenshot-separator" />`;
           screenshotsDiv.appendChild(screenshotWrapper);
         }); 
 
@@ -51,18 +76,26 @@ document.addEventListener("DOMContentLoaded", function () {
         const receiptImageDiv = document.createElement("div");
         receiptImageDiv.className = "screenshot-wrapper";
         receiptImageDiv.style.marginBottom = "20px";
+
+        const receiptCaption = document.createElement("div");
+        receiptCaption.className = "screenshot-caption";
+        receiptCaption.textContent = data.data.receipt_image ? "Изображение чека:" : "Чек не приложен";
+
+        let receiptImg = null;
         if (data.data.receipt_image) {
-          receiptImageDiv.innerHTML = `
-            <div class="screenshot-caption">Изображение чека:</div>
-            <img src="${data.data.receipt_image}" alt="Чек" class="product-image-detail" />
-            <hr class="screenshot-separator" />
-          `;
-        } else {
-          receiptImageDiv.innerHTML = `
-            <div class="screenshot-caption">Чек не приложен</div>
-            <hr class="screenshot-separator" />
-          `;
+          receiptImg = document.createElement("img");
+          receiptImg.src = data.data.receipt_image;
+          receiptImg.alt = "Чек";
+          receiptImg.className = "product-image-detail";
+          // Обработчик для сворачивания
+          receiptCaption.addEventListener("click", function () {
+            receiptImg.classList.toggle("collapsed-image");
+          });
         }
+
+        receiptImageDiv.appendChild(receiptCaption);
+        if (receiptImg) receiptImageDiv.appendChild(receiptImg);
+        receiptImageDiv.innerHTML += `<hr class="screenshot-separator" />`;
         screenshotsDiv.appendChild(receiptImageDiv);
 
         // Установка текста и стилей для кнопки verifyBtn

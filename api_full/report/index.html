@@ -70,6 +70,12 @@
     .back-btn:hover {
       color: #007BFF;
     }
+    .top-section-separator {
+      width: 100%;
+      border: none;
+      border-top: 3px solid #bdbdbd;
+      margin: 32px 0 24px 0;
+    }
     .screenshot-wrapper {
       display: flex;
       flex-direction: column;
@@ -77,6 +83,7 @@
       margin-bottom: 32px;
       padding-bottom: 16px;
       position: relative;
+      transition: background 0.2s;
     }
     .screenshot-caption {
       text-align: center;
@@ -84,12 +91,22 @@
       font-weight: 500;
       margin-bottom: 10px;
       width: 100%;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .screenshot-caption:hover {
+      color: #007BFF;
+      text-decoration: underline;
     }
     .screenshot-separator {
       width: 80%;
       margin-top: 18px;
       border: none;
       border-top: 2px solid #e0e0e0;
+    }
+    .collapsed-image {
+      display: none !important;
     }
   </style>
 </head>
@@ -107,6 +124,7 @@
       <input type="number" id="modifiedPayment" placeholder="Изменённая выплата" min="0" step="1"><br><br>
       <button id="saveCommentBtn" class="btn">Сохранить</button>
     </div>
+    <hr class="top-section-separator">
     <div class="purchase-step-content" style="padding-bottom: 8vh;">
       <div id="user-info"></div>
       <div id="screenshots"></div>
