@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
         screenshotsHeader.style.fontSize = "22px";
         screenshotsHeader.style.fontWeight = "bold";
         screenshotsHeader.style.marginBottom = "18px";
-        screenshotsHeader.textContent = "Документальные подтверждения:";
+        screenshotsHeader.textContent = "Скриншоты:";
         screenshotsDiv.appendChild(screenshotsHeader);
 
         const screenshots = [
@@ -54,10 +54,23 @@ document.addEventListener("DOMContentLoaded", function () {
           const screenshotWrapper = document.createElement("div");
           screenshotWrapper.className = "screenshot-wrapper";
 
-          // Создаём подпись и изображение
+          // Создаём подпись, стрелку и изображение
           const captionDiv = document.createElement("div");
           captionDiv.className = "screenshot-caption";
-          captionDiv.textContent = screenshot.caption;
+          captionDiv.style.display = "flex";
+          captionDiv.style.alignItems = "center";
+          captionDiv.style.justifyContent = "center";
+          captionDiv.style.gap = "8px";
+
+          // Стрелка
+          const arrow = document.createElement("span");
+          arrow.className = "screenshot-arrow";
+          arrow.textContent = "▲"; // вверх
+
+          captionDiv.appendChild(arrow);
+          const captionText = document.createElement("span");
+          captionText.textContent = screenshot.caption;
+          captionDiv.appendChild(captionText);
 
           const img = document.createElement("img");
           img.src = screenshot.url;
@@ -67,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Добавляем обработчик для сворачивания/разворачивания
           captionDiv.addEventListener("click", function () {
             img.classList.toggle("collapsed-image");
+            arrow.textContent = img.classList.contains("collapsed-image") ? "▼" : "▲";
           });
 
           // Изначально все изображения развёрнуты
@@ -85,7 +99,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const receiptCaption = document.createElement("div");
         receiptCaption.className = "screenshot-caption";
-        receiptCaption.textContent = data.data.receipt_image ? "Изображение чека:" : "Чек не приложен";
+        receiptCaption.style.display = "flex";
+        receiptCaption.style.alignItems = "center";
+        receiptCaption.style.justifyContent = "center";
+        receiptCaption.style.gap = "8px";
+
+        const receiptArrow = document.createElement("span");
+        receiptArrow.className = "screenshot-arrow";
+        receiptArrow.textContent = "▲";
+
+        receiptCaption.appendChild(receiptArrow);
+        const receiptCaptionText = document.createElement("span");
+        receiptCaptionText.textContent = data.data.receipt_image ? "Изображение чека:" : "Чек не приложен";
+        receiptCaption.appendChild(receiptCaptionText);
 
         let receiptImg = null;
         if (data.data.receipt_image) {
@@ -96,7 +122,11 @@ document.addEventListener("DOMContentLoaded", function () {
           // Обработчик для сворачивания
           receiptCaption.addEventListener("click", function () {
             receiptImg.classList.toggle("collapsed-image");
+            receiptArrow.textContent = receiptImg.classList.contains("collapsed-image") ? "▼" : "▲";
           });
+        } else {
+          // Если чека нет, стрелка не нужна
+          receiptArrow.style.display = "none";
         }
 
         receiptImageDiv.appendChild(receiptCaption);
