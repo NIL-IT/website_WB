@@ -108,6 +108,38 @@
     .collapsed-image {
       display: none !important;
     }
+    .styled-textarea, textarea#comment {
+      width: 100%;
+      min-height: 60px;
+      padding: 10px 14px;
+      border: 1.5px solid #bdbdbd;
+      border-radius: 8px;
+      font-size: 16px;
+      resize: vertical;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .styled-textarea:focus, textarea#comment:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 0 2px #007bff22;
+    }
+    .styled-input, input#modifiedPayment {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #bdbdbd;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .styled-input:focus, input#modifiedPayment:focus {
+      border-color: #007BFF;
+      box-shadow: 0 0 0 2px #007bff22;
+    }
   </style>
 </head>
 <body>
@@ -120,8 +152,8 @@
       <button id="verifyBtn" class="btn"></button><br><br>
       <button id="payBtn" class="btn"></button><br><br>
       <input type="file" id="receiptUpload"><br><br>
-      <textarea id="comment" placeholder="Введите комментарий"></textarea><br><br>
-      <input type="number" id="modifiedPayment" placeholder="Изменённая выплата" min="0" step="1"><br><br>
+      <textarea id="comment" class="styled-textarea" placeholder="Введите комментарий"></textarea><br><br>
+      <input type="number" id="modifiedPayment" class="styled-input" placeholder="Изменённая выплата" min="0" step="1"><br><br>
       <button id="saveCommentBtn" class="btn">Сохранить</button>
     </div>
     <hr class="top-section-separator">
