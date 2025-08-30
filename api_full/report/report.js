@@ -37,26 +37,30 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
 
         screenshots.forEach((screenshot, index) => {
-          const screenshotDiv = document.createElement("div");
-          screenshotDiv.style.marginBottom = "20px";
-          screenshotDiv.innerHTML = `
-            <p class="purchase-step-text">${screenshot.caption}</p>
+          const screenshotWrapper = document.createElement("div");
+          screenshotWrapper.className = "screenshot-wrapper";
+          screenshotWrapper.innerHTML = `
+            <div class="screenshot-caption">${screenshot.caption}</div>
             <img src="${screenshot.url}" alt="Шаг ${index + 1}" class="product-image-detail" />
+            <hr class="screenshot-separator" />
           `;
-          screenshotsDiv.appendChild(screenshotDiv);
+          screenshotsDiv.appendChild(screenshotWrapper);
         }); 
 
         // Добавление изображения receipt_image чека
         const receiptImageDiv = document.createElement("div");
+        receiptImageDiv.className = "screenshot-wrapper";
         receiptImageDiv.style.marginBottom = "20px";
         if (data.data.receipt_image) {
           receiptImageDiv.innerHTML = `
-            <p class="purchase-step-text">Изображение чека:</p>
+            <div class="screenshot-caption">Изображение чека:</div>
             <img src="${data.data.receipt_image}" alt="Чек" class="product-image-detail" />
+            <hr class="screenshot-separator" />
           `;
         } else {
           receiptImageDiv.innerHTML = `
-            <p class="purchase-step-text">Чек не приложен</p>
+            <div class="screenshot-caption">Чек не приложен</div>
+            <hr class="screenshot-separator" />
           `;
         }
         screenshotsDiv.appendChild(receiptImageDiv);
