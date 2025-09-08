@@ -69,6 +69,7 @@ try {
     $stmt = $pdo->prepare("
     SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid, s.receipt_image, s.modified_payment, s.receipt_timestamp,
         u1.username AS step_username, 
+        s.phone AS phone,
         p.tg_nick, p.name AS product_name, p.image_path AS product_image_path, p.article, p.expire, p.market_price, p.your_price,
         u2.id_usertg AS product_user_id, u2.username AS product_username
     FROM steps s
@@ -80,7 +81,7 @@ try {
     $stepsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Подготовка данных для отправки в Google Таблицу
-    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт", "Подтверждён товар?", "Оплачен товар?", "Скрин товара в конкурентной выдаче", "Скрин корзины", "Скрин подписки", "Скрин заказа", "Скриншот о доставке", "Скриншот отзыва", "Фотография с разрезанным штрих-кодом на фоне товара", "Чек", "Время фиксирования чека"]];
+    $values = [["# Отчёта", "ID покупателя", "Username покупателя", "Телефон покупателя", "ID продавца", "Username продавца", "Название товара", "Артикул товара", "Выгода покупателя", "Товар в выдаче?", "Путь до изображения товара", "Номер шага", "Дата перехода на 1 шаг", "Ссылка на отчёт", "Подтверждён товар?", "Оплачен товар?", "Скрин товара в конкурентной выдаче", "Скрин корзины", "Скрин подписки", "Скрин заказа", "Скриншот о доставке", "Скриншот отзыва", "Фотография с разрезанным штрих-кодом на фоне товара", "Чек", "Время фиксирования чека"]];
 
     foreach ($stepsData as $row) {
         $updatedAt = !empty($row['updated_at']) ? $row['updated_at'] : 'Шаг не пройден';
@@ -98,6 +99,7 @@ try {
             (string)$row['step_id'], 
             (string)$row['step_user_id'], 
             (string)$row['step_username'], 
+            (string)(isset($row['phone']) ? $row['phone'] : ''), // Телефон покупателя
             (string)$row['product_user_id'], 
             (string)$row['product_username'],
             (string)$row['product_name'],
