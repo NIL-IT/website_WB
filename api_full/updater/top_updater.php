@@ -285,7 +285,3 @@ try {
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 
-// Проверьте, что client_email из cred_top.json добавлен в доступ к Google Таблице как редактор!
-
-// Убедитесь, что в Google Таблице есть лист с именем Top
-// Убедитесь, что в Google Таблице есть лист с именем Top
