@@ -13,32 +13,9 @@ function sendDataToGoogleSheet($values) {
     $spreadsheetId = '1ViIZra4qli2h67i2bdlqyqKZIV4b1Cy5buNCG9BF3tg';
     $range = 'Product!A1:Z';
 
-    // Очистка всех строк в таблице Product
-    $sheetInfo = $service->spreadsheets->get($spreadsheetId);
-    $sheets = $sheetInfo->getSheets();
-    foreach ($sheets as $sheet) {
-        $properties = $sheet->getProperties();
-        if ($properties->getTitle() === 'Product') {
-            $rowCount = $properties->getGridProperties()->getRowCount();
-            if ($rowCount > 0) {
-                $deleteRequest = new Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
-                    'requests' => [
-                        [
-                            'deleteDimension' => [
-                                'range' => [
-                                    'sheetId' => $properties->getSheetId(),
-                                    'dimension' => 'ROWS',
-                                    'startIndex' => 0,
-                                    'endIndex' => $rowCount
-                                ]
-                            ]
-                        ]
-                    ]
-                ]);
-                $service->spreadsheets->batchUpdate($spreadsheetId, $deleteRequest);
-            }
-        }
-    }
+    // Очистка данных (оставляем только clear, удаление строк убираем)
+    $clearRequest = new \Google_Service_Sheets_ClearValuesRequest();
+    $service->spreadsheets_values->clear($spreadsheetId, $range, $clearRequest);
 
     // Добавление текущей даты в качестве первой строки
     $date = date('Y-m-d H:i:s');
@@ -82,6 +59,34 @@ function sendDataToGoogleSheet($values) {
         $startRow += count($chunk);
         sleep(1); // Добавлено: пауза между пакетами для предотвращения превышения лимита
     }
+
+    // Удаление всех строк после 100-й (чтобы убрать пустые)
+    $sheetInfo = $service->spreadsheets->get($spreadsheetId);
+    $sheets = $sheetInfo->getSheets();
+    foreach ($sheets as $sheet) {
+        $properties = $sheet->getProperties();
+        if ($properties->getTitle() === 'Product') {
+            $rowCount = $properties->getGridProperties()->getRowCount();
+            if ($rowCount > 100) {
+                $deleteRequest = new \Google_Service_Sheets_BatchUpdateSpreadsheetRequest([
+                    'requests' => [
+                        [
+                            'deleteDimension' => [
+                                'range' => [
+                                    'sheetId' => $properties->getSheetId(),
+                                    'dimension' => 'ROWS',
+                                    'startIndex' => 100,
+                                    'endIndex' => $rowCount
+                                ]
+                            ]
+                        ]
+                    ]
+                ]);
+                $service->spreadsheets->batchUpdate($spreadsheetId, $deleteRequest);
+            }
+        }
+    }
+
     return $totalUpdated;
 }
 
