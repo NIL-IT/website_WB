@@ -225,8 +225,79 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+        // --- Блок для редактирования ФИО ---
+        const fioBlock = document.createElement("div");
+        fioBlock.style.display = "flex";
+        fioBlock.style.gap = "10px";
+        fioBlock.style.marginBottom = "16px";
+        fioBlock.style.alignItems = "center";
+
+        // Разделяем ФИО на части
+        const fioOriginal = data.data.cardholder ? data.data.cardholder.trim().split(/\s+/) : [];
+        const [surname, name, patronymic] = [fioOriginal[0] || '', fioOriginal[1] || '', fioOriginal[2] || ''];
+        const fioVariants = fioOriginal;
+
+        function createFioInput(value, placeholder, variants) {
+          const wrapper = document.createElement('div');
+          wrapper.style.display = 'flex';
+          wrapper.style.flexDirection = 'column';
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.value = value;
+          input.placeholder = placeholder;
+          input.style.width = '120px';
+          input.style.marginBottom = '2px';
+          // datalist для выбора из вариантов
+          const datalist = document.createElement('datalist');
+          datalist.id = 'list_' + placeholder;
+          variants.forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v;
+            datalist.appendChild(opt);
+          });
+          input.setAttribute('list', datalist.id);
+          wrapper.appendChild(input);
+          wrapper.appendChild(datalist);
+          return {wrapper, input};
+        }
+
+        const surnameField = createFioInput(surname, 'Фамилия', fioVariants);
+        const nameField = createFioInput(name, 'Имя', fioVariants);
+        const patronymicField = createFioInput(patronymic, 'Отчество', fioVariants);
+
+        fioBlock.appendChild(surnameField.wrapper);
+        fioBlock.appendChild(nameField.wrapper);
+        fioBlock.appendChild(patronymicField.wrapper);
+
+        const confirmFioBtn = document.createElement('button');
+        confirmFioBtn.textContent = 'Подтвердить ФИО';
+        confirmFioBtn.className = 'btn btn-gray';
+        fioBlock.appendChild(confirmFioBtn);
+
+        userInfoDiv.prepend(fioBlock);
+
+        let fioConfirmed = false;
+        let fioValue = data.data.cardholder;
+        confirmFioBtn.addEventListener('click', function() {
+          fioValue = [surnameField.input.value.trim(), nameField.input.value.trim(), patronymicField.input.value.trim()].filter(Boolean).join(' ');
+          if (!surnameField.input.value.trim() || !nameField.input.value.trim()) {
+            alert('Поля Фамилия и Имя обязательны!');
+            return;
+          }
+          fioConfirmed = true;
+          confirmFioBtn.textContent = 'ФИО подтверждено';
+          confirmFioBtn.classList.remove('btn-gray');
+          confirmFioBtn.classList.add('btn-green');
+          verifyBtn.disabled = false;
+        });
+        verifyBtn.disabled = true;
+
         // Добавление логики для кнопки verifyBtn
         verifyBtn.addEventListener("click", function () {
+          if (!fioConfirmed) {
+            alert('Сначала подтвердите ФИО!');
+            return;
+          }
           const isCommentFilled = !!commentField.value.trim();
           const isModifiedPaymentFilled = !!modifiedPaymentField.value.trim();
           const isModifiedPaymentValid = Number.isInteger(Number(modifiedPaymentField.value)) && Number(modifiedPaymentField.value) >= 0;
@@ -249,7 +320,8 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify({
               id: id,
               comment: commentField.value,
-              modified_payment: modifiedPaymentField.value // Отправка изменённой выплаты
+              modified_payment: modifiedPaymentField.value, // Отправка изменённой выплаты
+              cardholder: fioValue // Новое ФИО
             }),
           })
             .then((response) => response.json())

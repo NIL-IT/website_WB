@@ -13,7 +13,7 @@ function sendDataToGoogleSheet($values) {
     $spreadsheetId = '1ViIZra4qli2h67i2bdlqyqKZIV4b1Cy5buNCG9BF3tg';
     $range = 'Product!A1:Z';
 
-    // Удаление всех строк после 100-й (чтобы убрать пустые) ДО вставки новых данных
+    // Удаление всех строк после 4-й (чтобы убрать пустые) ДО вставки новых данных
     $sheetInfo = $service->spreadsheets->get($spreadsheetId);
     $sheets = $sheetInfo->getSheets();
     foreach ($sheets as $sheet) {
