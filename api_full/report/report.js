@@ -225,6 +225,87 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+        // --- Блок для выбора и подтверждения банка ---
+        const bankList = [
+          "Сбербанк","Тинькофф Банк","Альфа Банк","ВТБ","Райффайзен Банк","ТОЧКА (ФК ОТКРЫТИЕ)","Газпромбанк","Норвик Банк","Банк Кремлевский","Томскпромстройбанк","Банк Заречье","МЕЖДУНАРОДНЫЙ ФИНАНСОВЫЙ КЛУБ","Северный Народный Банк","Центр-инвест","ВЛАДБИЗНЕСБАНК","КБ Хлынов","НОКССБАНК","ГТ банк","Банк Объединенный капитал","Банк РЕСО Кредит","Земский банк","Кредит Урал Банк","Нацинвестпромбанк","СДМ-Банк","ТАТСОЦБАНК","РУСНАРБАНК","КБ Стройлесбанк","НС Банк","Датабанк","КБЭР Банк Казани","Трансстройбанк","Кузнецкбизнесбанк","ИШБАНК","Алмазэргиэнбанк","РосДорБанк","Дальневосточный банк","Банк ДОМ.РФ","Форштадт","СКБ Примсоцбанк","Банк ПСКБ","ЭЛПЛАТ","БАНК СНГБ","Банк Екатеринбург","АБ РОССИЯ","ЧЕЛЯБИНВЕСТБАНК","Углеметбанк","БыстроБанк","КБ Модульбанк","КБ РостФинанс","Банк ФК Открытие","МЕТКОМБАНК","Банк Русский Стандарт","Банк Акцепт","Совкомбанк","НБД-Банк","Росбанк","КБ ЭНЕРГОТРАНСБАНК","МТС-Банк","Почта Банк","АИКБ Енисейский объединенный банк","ЮМани","УРАЛПРОМБАНК","Россельхозбанк","МБ Банк","МКБ (Московский кредитный банк)","КОШЕЛЕВ-БАНК","Тимер Банк","Банк Санкт-Петербург","Банк АВАНГАРД","Кредит Европа Банк (Россия)","СИНКО-БАНК","Банк Аверс","Банк Венец","УБРиР","Тольяттихимбанк","ЮниКредит Банк","Урал ФД","ГЕНБАНК","Банк ИТУРУП","ТРАНСКАПИТАЛБАНК","Энергобанк","Банк ФИНАМ","КБ ЛОКО-Банк","ЮГ-Инвестбанк","Экспобанк","Газэнергобанк","Банк Снежинский","Банк СКС","Абсолют Банк","Металлинвестбанк","Банк ЗЕНИТ","СИБСОЦБАНК","Банк ВБРР","Банк Развитие-Столица","МОРСКОЙ БАНК","Банк Интеза","МОСКОМБАНК","Первый Инвестиционный Банк","Банк Левобережный","Таврический Банк","Джей энд Ти Банк (АО)","Банк АЛЕКСАНДРОВСКИЙ","ФОРА-БАНК","ВУЗ-банк","Банк Агророс","СОЦИУМ БАНК","Новобанк","АКИБАНК","Прио-Внешторгбанк","ЧЕЛИНДБАНК","Банк БКФ","Эс-Би-Ай Банк","Солид Банк","АКБ Держава","Алеф-Банк","ГАРАНТ-ИНВЕСТ БАНК","Реалист Банк","КБ АГРОПРОМКРЕДИТ","НИКО-БАНК","ГОРБАНК","МСП Банк","Банк Синара","БАНК ОРЕНБУРГ","Банк Национальный стандарт","ИК Банк","КБ АРЕСБАНК","Ак Барс Банк","Хакасский муниципальный банк","ВНЕШФИНБАНК","Банк Саратов","Банк Раунд","РНКБ Банк","РН БАНК","Промсвязьбанк","Автоградбанк","АКБ СЛАВИЯ","Банк СОЮЗ","Ситибанк","Сетелем Банк","НОВИКОМБАНК","Автоторгбанк","Кубаньторгбанк","Новый век","Банк МБА МОСКВА","ББР Банк","ОТП Банк","Тойота Банк","БАНК УРАЛСИБ","Хоум Кредит Банк","КБ Долинск","Ренессанс Кредит","Хайс","СМП Банк","Алтайкапиталбанк","Русьуниверсалбанк","ЮНИСТРИМ БАНК","БКС Банк","Кубань Кредит","АКБ Тендер Банк","КБ Крокус Банк","БАНК СГБ","КБ Пойдём","МОСОБЛБАНК","Банк Приморье","УКБ Белгородсоцбанк","МС Банк Рус","Азиатско Тихоокеанский Банк","КБ Москоммерцбанк","Банк ЦентроКредит","НК Банк","ИС Банк","ПроБанк","Банк ИПБ","КБ Солидарность","АКБ Ланта Банк","Инбанк","Банк Финсервис","БАНК МОСКВА СИТИ","Точка Банк","Банк Вологжанин","Банк СИАБ","Банк БЖФ","Банк Уралфинанс","банк Элита","Яндекс Банк","ГУТА-БАНК","АКБ ЕВРОФИНАНС МОСНАРБАНК","Озон Банк (Ozon)"
+        ];
+        const bankFieldBlock = document.createElement('div');
+        bankFieldBlock.style.display = 'flex';
+        bankFieldBlock.style.alignItems = 'center';
+        bankFieldBlock.style.gap = '10px';
+        bankFieldBlock.style.marginBottom = '12px';
+        // label
+        const bankLabel = document.createElement('label');
+        bankLabel.textContent = 'Банк:';
+        bankLabel.style.fontWeight = 'bold';
+        bankLabel.style.fontSize = '16px';
+        bankFieldBlock.appendChild(bankLabel);
+        // select
+        let bankSelect = null;
+        let confirmBankBtn = null;
+        let selectedBank = data.data.bankname;
+        let bankConfirmed = false;
+        if (bankList.includes(data.data.bankname)) {
+          bankSelect = document.createElement('select');
+          bankSelect.style.height = '32px';
+          bankSelect.style.fontSize = '15px';
+          bankSelect.style.minWidth = '220px';
+          bankList.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            if (b === data.data.bankname) opt.selected = true;
+            bankSelect.appendChild(opt);
+          });
+          bankFieldBlock.appendChild(bankSelect);
+          confirmBankBtn = document.createElement('button');
+          confirmBankBtn.textContent = 'Подтвердить банк';
+          confirmBankBtn.className = 'btn btn-gray';
+          confirmBankBtn.style.height = '32px';
+          confirmBankBtn.style.marginLeft = '8px';
+          bankFieldBlock.appendChild(confirmBankBtn);
+        }
+        // Замки для verifyBtn
+        let fioConfirmed = false;
+        let fioValue = data.data.cardholder;
+        let bankLock = null;
+        let fioLock = null;
+        // Добавляем замки к verifyBtn
+        setTimeout(() => {
+          fioLock = document.createElement('span');
+          fioLock.className = 'disabled-icon fio-lock';
+          fioLock.textContent = '🔒';
+          bankLock = document.createElement('span');
+          bankLock.className = 'disabled-icon bank-lock';
+          bankLock.textContent = '🔒';
+          if (!document.querySelector('.fio-lock')) verifyBtn.appendChild(fioLock);
+          if (!document.querySelector('.bank-lock')) verifyBtn.appendChild(bankLock);
+        }, 0);
+        // Подтверждение банка
+        if (confirmBankBtn) {
+          confirmBankBtn.addEventListener('click', function() {
+            bankConfirmed = true;
+            selectedBank = bankSelect.value;
+            confirmBankBtn.textContent = 'Банк подтвержден';
+            confirmBankBtn.classList.remove('btn-gray');
+            confirmBankBtn.classList.add('btn-green');
+            if (bankLock) bankLock.remove();
+            verifyBtn.disabled = !(fioConfirmed && bankConfirmed);
+          });
+          bankSelect.addEventListener('change', function() {
+            bankConfirmed = false;
+            confirmBankBtn.textContent = 'Подтвердить банк';
+            confirmBankBtn.classList.remove('btn-green');
+            confirmBankBtn.classList.add('btn-gray');
+            if (!document.querySelector('.bank-lock') && bankLock) verifyBtn.appendChild(bankLock);
+            verifyBtn.disabled = true;
+          });
+        } else {
+          bankConfirmed = true;
+        }
+        // Вставляем блок выбора банка перед userInfoDiv
+        userInfoDiv.prepend(bankFieldBlock);
+
         // --- Блок для редактирования ФИО ---
         const fioBlock = document.createElement("div");
         fioBlock.style.display = "flex";
@@ -308,8 +389,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         userInfoDiv.prepend(fioBlock);
 
-        let fioConfirmed = false;
-        let fioValue = data.data.cardholder;
         confirmFioBtn.addEventListener('click', function() {
           fioValue = [surnameField.input.value.trim(), nameField.input.value.trim(), patronymicField.input.value.trim()].filter(Boolean).join(' ');
           if (!surnameField.input.value.trim() || !nameField.input.value.trim()) {
@@ -320,7 +399,8 @@ document.addEventListener("DOMContentLoaded", function () {
           confirmFioBtn.textContent = 'ФИО подтверждено';
           confirmFioBtn.classList.remove('btn-gray');
           confirmFioBtn.classList.add('btn-green');
-          verifyBtn.disabled = false;
+          if (fioLock) fioLock.remove();
+          verifyBtn.disabled = !(fioConfirmed && bankConfirmed);
         });
         verifyBtn.disabled = true;
 
@@ -328,6 +408,10 @@ document.addEventListener("DOMContentLoaded", function () {
         verifyBtn.addEventListener("click", function () {
           if (!fioConfirmed) {
             alert('Сначала подтвердите ФИО!');
+            return;
+          }
+          if (!bankConfirmed) {
+            alert('Сначала подтвердите банк!');
             return;
           }
           const isCommentFilled = !!commentField.value.trim();
@@ -353,7 +437,8 @@ document.addEventListener("DOMContentLoaded", function () {
               id: id,
               comment: commentField.value,
               modified_payment: modifiedPaymentField.value, // Отправка изменённой выплаты
-              cardholder: fioValue // Новое ФИО
+              cardholder: fioValue, // Новое ФИО
+              bankname: selectedBank // Новый банк
             }),
           })
             .then((response) => response.json())

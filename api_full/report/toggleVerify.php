@@ -47,6 +47,7 @@ try {
     $comment = isset($data['comment']) ? $data['comment'] : null;
     $modifiedPayment = isset($data['modified_payment']) && $data['modified_payment'] !== "" ? $data['modified_payment'] : null;
     $cardholder = isset($data['cardholder']) ? $data['cardholder'] : null;
+    $bankname = isset($data['bankname']) ? $data['bankname'] : null;
 
     // Получение текущего значения verified и status из таблицы steps
     $stmt = $pdo->prepare('SELECT verified, status, id_usertg FROM steps WHERE id = :id');
@@ -60,14 +61,15 @@ try {
     // Инвертирование значения verified
     $newVerified = !$currentVerified;
 
-    // Обновление значения verified, status, comment, modified_payment и cardholder в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = 1, cardholder = :cardholder WHERE id = :id');
+    // Обновление значения verified, status, comment, modified_payment, cardholder и bankname в таблице steps
+    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = 1, cardholder = :cardholder, bankname = :bankname WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
     $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
     $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_NULL | PDO::PARAM_STR);
     $updateStmt->bindParam(':cardholder', $cardholder, PDO::PARAM_STR);
+    $updateStmt->bindParam(':bankname', $bankname, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
     $updateStmt->execute();
 
