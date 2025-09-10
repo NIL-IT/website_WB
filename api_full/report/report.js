@@ -228,9 +228,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // --- Блок для редактирования ФИО ---
         const fioBlock = document.createElement("div");
         fioBlock.style.display = "flex";
-        fioBlock.style.gap = "10px";
+        fioBlock.style.gap = "16px";
         fioBlock.style.marginBottom = "16px";
-        fioBlock.style.alignItems = "center";
+        fioBlock.style.alignItems = "flex-end";
+        fioBlock.style.justifyContent = "flex-start";
 
         // Разделяем ФИО на части
         const fioOriginal = data.data.cardholder ? data.data.cardholder.trim().split(/\s+/) : [];
@@ -242,11 +243,14 @@ document.addEventListener("DOMContentLoaded", function () {
           wrapper.style.display = 'flex';
           wrapper.style.flexDirection = 'column';
           wrapper.style.alignItems = 'center';
-          // Подпись сверху
+          wrapper.style.minWidth = '140px';
+          // Подпись сверху внутри ячейки
           const label = document.createElement('label');
           label.textContent = placeholder;
           label.style.fontSize = '14px';
-          label.style.marginBottom = '2px';
+          label.style.marginBottom = '4px';
+          label.style.fontWeight = 'bold';
+          label.style.textAlign = 'center';
           wrapper.appendChild(label);
           const input = document.createElement('input');
           input.type = 'text';
@@ -254,17 +258,17 @@ document.addEventListener("DOMContentLoaded", function () {
           input.placeholder = placeholder;
           input.style.width = '120px';
           input.style.marginBottom = isPatronymic ? '0px' : '2px';
+          input.style.textAlign = 'center';
           // datalist для выбора из вариантов (всегда все части ФИО)
           const datalist = document.createElement('datalist');
           datalist.id = 'list_' + placeholder;
-          ['Фамилия', 'Имя', 'Отчество'].forEach((_, idx) => {
-            variants.forEach(v => {
-              if (v) {
-                const opt = document.createElement('option');
-                opt.value = v;
-                datalist.appendChild(opt);
-              }
-            });
+          // Всегда показываем все части ФИО
+          variants.forEach(v => {
+            if (v) {
+              const opt = document.createElement('option');
+              opt.value = v;
+              datalist.appendChild(opt);
+            }
           });
           input.setAttribute('list', datalist.id);
           wrapper.appendChild(input);
@@ -276,6 +280,7 @@ document.addEventListener("DOMContentLoaded", function () {
             sub.style.fontSize = '12px';
             sub.style.color = '#888';
             sub.style.marginTop = '2px';
+            sub.style.textAlign = 'center';
             wrapper.appendChild(sub);
           }
           return {wrapper, input};
@@ -292,6 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const confirmFioBtn = document.createElement('button');
         confirmFioBtn.textContent = 'Подтвердить ФИО';
         confirmFioBtn.className = 'btn btn-gray';
+        confirmFioBtn.style.height = '40px';
+        confirmFioBtn.style.marginBottom = '0px';
         fioBlock.appendChild(confirmFioBtn);
 
         userInfoDiv.prepend(fioBlock);
