@@ -246,12 +246,28 @@ document.addEventListener("DOMContentLoaded", function () {
           wrapper.style.minWidth = '140px';
           // Подпись сверху внутри ячейки
           const label = document.createElement('label');
-          label.textContent = placeholder;
           label.style.fontSize = '14px';
           label.style.marginBottom = '4px';
           label.style.fontWeight = 'bold';
           label.style.textAlign = 'center';
-          wrapper.appendChild(label);
+          if (isPatronymic) {
+            const labelWrap = document.createElement('div');
+            labelWrap.style.display = 'flex';
+            labelWrap.style.alignItems = 'center';
+            labelWrap.style.justifyContent = 'center';
+            labelWrap.style.gap = '4px';
+            const sub = document.createElement('span');
+            sub.textContent = '(если есть)';
+            sub.style.fontSize = '12px';
+            sub.style.color = '#888';
+            label.textContent = placeholder;
+            labelWrap.appendChild(label);
+            labelWrap.appendChild(sub);
+            wrapper.appendChild(labelWrap);
+          } else {
+            label.textContent = placeholder;
+            wrapper.appendChild(label);
+          }
           const input = document.createElement('input');
           input.type = 'text';
           input.value = value;
@@ -262,7 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
           // datalist для выбора из вариантов (всегда все части ФИО)
           const datalist = document.createElement('datalist');
           datalist.id = 'list_' + placeholder;
-          // Всегда показываем все части ФИО
           variants.forEach(v => {
             if (v) {
               const opt = document.createElement('option');
@@ -273,16 +288,6 @@ document.addEventListener("DOMContentLoaded", function () {
           input.setAttribute('list', datalist.id);
           wrapper.appendChild(input);
           wrapper.appendChild(datalist);
-          // Подпись под отчеством
-          if (isPatronymic) {
-            const sub = document.createElement('div');
-            sub.textContent = '(если есть)';
-            sub.style.fontSize = '12px';
-            sub.style.color = '#888';
-            sub.style.marginTop = '2px';
-            sub.style.textAlign = 'center';
-            wrapper.appendChild(sub);
-          }
           return {wrapper, input};
         }
 
