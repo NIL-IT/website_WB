@@ -237,33 +237,53 @@ document.addEventListener("DOMContentLoaded", function () {
         const [surname, name, patronymic] = [fioOriginal[0] || '', fioOriginal[1] || '', fioOriginal[2] || ''];
         const fioVariants = fioOriginal;
 
-        function createFioInput(value, placeholder, variants) {
+        function createFioInput(value, placeholder, variants, isPatronymic = false) {
           const wrapper = document.createElement('div');
           wrapper.style.display = 'flex';
           wrapper.style.flexDirection = 'column';
+          wrapper.style.alignItems = 'center';
+          // Подпись сверху
+          const label = document.createElement('label');
+          label.textContent = placeholder;
+          label.style.fontSize = '14px';
+          label.style.marginBottom = '2px';
+          wrapper.appendChild(label);
           const input = document.createElement('input');
           input.type = 'text';
           input.value = value;
           input.placeholder = placeholder;
           input.style.width = '120px';
-          input.style.marginBottom = '2px';
-          // datalist для выбора из вариантов
+          input.style.marginBottom = isPatronymic ? '0px' : '2px';
+          // datalist для выбора из вариантов (всегда все части ФИО)
           const datalist = document.createElement('datalist');
           datalist.id = 'list_' + placeholder;
-          variants.forEach(v => {
-            const opt = document.createElement('option');
-            opt.value = v;
-            datalist.appendChild(opt);
+          ['Фамилия', 'Имя', 'Отчество'].forEach((_, idx) => {
+            variants.forEach(v => {
+              if (v) {
+                const opt = document.createElement('option');
+                opt.value = v;
+                datalist.appendChild(opt);
+              }
+            });
           });
           input.setAttribute('list', datalist.id);
           wrapper.appendChild(input);
           wrapper.appendChild(datalist);
+          // Подпись под отчеством
+          if (isPatronymic) {
+            const sub = document.createElement('div');
+            sub.textContent = '(если есть)';
+            sub.style.fontSize = '12px';
+            sub.style.color = '#888';
+            sub.style.marginTop = '2px';
+            wrapper.appendChild(sub);
+          }
           return {wrapper, input};
         }
 
         const surnameField = createFioInput(surname, 'Фамилия', fioVariants);
         const nameField = createFioInput(name, 'Имя', fioVariants);
-        const patronymicField = createFioInput(patronymic, 'Отчество', fioVariants);
+        const patronymicField = createFioInput(patronymic, 'Отчество', fioVariants, true);
 
         fioBlock.appendChild(surnameField.wrapper);
         fioBlock.appendChild(nameField.wrapper);
