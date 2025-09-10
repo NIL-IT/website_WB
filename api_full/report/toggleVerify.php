@@ -60,14 +60,16 @@ try {
 
     // Инвертирование значения verified
     $newVerified = !$currentVerified;
+    $newInExcel = $newVerified ? true : false;
 
     // Обновление значения verified, status, comment, modified_payment, cardholder и bankname в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = true, cardholder = :cardholder, bankname = :bankname WHERE id = :id');
+    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = :in_excel, cardholder = :cardholder, bankname = :bankname WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
     $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
     $updateStmt->bindParam(':comment', $comment, PDO::PARAM_STR);
     $updateStmt->bindParam(':modified_payment', $modifiedPayment, PDO::PARAM_NULL | PDO::PARAM_STR);
+    $updateStmt->bindParam(':in_excel', $newInExcel, PDO::PARAM_BOOL);
     $updateStmt->bindParam(':cardholder', $cardholder, PDO::PARAM_STR);
     $updateStmt->bindParam(':bankname', $bankname, PDO::PARAM_STR);
     $updateStmt->bindParam(':id', $id, PDO::PARAM_INT);
