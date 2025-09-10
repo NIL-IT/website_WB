@@ -62,7 +62,7 @@ try {
     $newVerified = !$currentVerified;
 
     // Обновление значения verified, status, comment, modified_payment, cardholder и bankname в таблице steps
-    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = 1, cardholder = :cardholder, bankname = :bankname WHERE id = :id');
+    $updateStmt = $pdo->prepare('UPDATE steps SET verified = :verified, status = :status, comment = :comment, modified_payment = :modified_payment, in_excel = true, cardholder = :cardholder, bankname = :bankname WHERE id = :id');
     $updateStmt->bindParam(':verified', $newVerified, PDO::PARAM_BOOL);
     $newStatus = ($currentStatus == 0) ? 1 : $currentStatus;
     $updateStmt->bindParam(':status', $newStatus, PDO::PARAM_INT);
