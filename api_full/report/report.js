@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
           input.placeholder = placeholder;
           input.style.width = '120px';
           input.style.marginBottom = isPatronymic ? '0px' : '2px';
-          input.style.textAlign = 'center';
+          input.style.textAlign = 'left'; // Исправлено с center на left для корректного выравнивания с datalist
           // datalist для выбора из вариантов (всегда все части ФИО)
           const datalist = document.createElement('datalist');
           datalist.id = 'list_' + placeholder;
