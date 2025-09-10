@@ -247,13 +247,11 @@ document.addEventListener("DOMContentLoaded", function () {
         bankSelect.style.height = '32px';
         bankSelect.style.fontSize = '15px';
         bankSelect.style.minWidth = '220px';
-        let confirmBankBtn = document.createElement('button');
-        confirmBankBtn.textContent = 'Подтвердить банк';
-        confirmBankBtn.className = 'btn btn-gray';
-        confirmBankBtn.style.height = '32px';
-        confirmBankBtn.style.marginLeft = '8px';
-        let selectedBank = data.data.bankname;
-        let bankConfirmed = false;
+        // пустой option
+        const emptyOpt = document.createElement('option');
+        emptyOpt.value = '';
+        emptyOpt.textContent = '';
+        bankSelect.appendChild(emptyOpt);
         let found = false;
         bankList.forEach(b => {
           const opt = document.createElement('option');
@@ -266,12 +264,50 @@ document.addEventListener("DOMContentLoaded", function () {
           bankSelect.appendChild(opt);
         });
         if (!found) {
-          bankSelect.selectedIndex = -1;
+          bankSelect.selectedIndex = 0;
         }
+        let confirmBankBtn = document.createElement('button');
+        confirmBankBtn.textContent = 'Подтвердить банк';
+        confirmBankBtn.className = 'btn btn-gray';
+        confirmBankBtn.style.height = '32px';
+        confirmBankBtn.style.marginLeft = '8px';
+        confirmBankBtn.disabled = !bankSelect.value;
+        let selectedBank = data.data.bankname;
+        let bankConfirmed = false;
+        bankSelect.addEventListener('change', function() {
+          confirmBankBtn.disabled = !bankSelect.value;
+        });
         bankFieldBlock.appendChild(bankSelect);
         bankFieldBlock.appendChild(confirmBankBtn);
-        // Вставляем блок выбора банка перед userInfoDiv
         userInfoDiv.prepend(bankFieldBlock);
+        // --- замки для verifyBtn ---
+        let fioLock = document.createElement('span');
+        fioLock.className = 'disabled-icon fio-lock';
+        fioLock.textContent = '🔒';
+        let bankLock = document.createElement('span');
+        bankLock.className = 'disabled-icon bank-lock';
+        bankLock.textContent = '🔒';
+        if (!document.querySelector('.fio-lock')) verifyBtn.appendChild(fioLock);
+        if (!document.querySelector('.bank-lock')) verifyBtn.appendChild(bankLock);
+        // --- подтверждение банка ---
+        confirmBankBtn.addEventListener('click', function() {
+          if (!bankSelect.value) return;
+          bankConfirmed = true;
+          selectedBank = bankSelect.value;
+          confirmBankBtn.textContent = 'Банк подтвержден';
+          confirmBankBtn.classList.remove('btn-gray');
+          confirmBankBtn.classList.add('btn-green');
+          if (bankLock) bankLock.remove();
+          verifyBtn.disabled = !(fioConfirmed && bankConfirmed);
+        });
+        bankSelect.addEventListener('change', function() {
+          bankConfirmed = false;
+          confirmBankBtn.textContent = 'Подтвердить банк';
+          confirmBankBtn.classList.remove('btn-green');
+          confirmBankBtn.classList.add('btn-gray');
+          if (!document.querySelector('.bank-lock') && bankLock) verifyBtn.appendChild(bankLock);
+          verifyBtn.disabled = true;
+        });
 
         // --- Блок для редактирования ФИО ---
         const fioBlock = document.createElement("div");
