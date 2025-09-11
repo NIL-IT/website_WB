@@ -16,16 +16,21 @@ try {
 
     // Стили для заголовков
     $headerStyle = [
-        'font' => ['bold' => true],
+        'font' => ['bold' => true, 'size' => 13],
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]],
         'fill' => ['fillType' => Fill::FILL_SOLID, 'startColor' => ['argb' => 'FFD9D9D9']]
     ];
 
     $contentStyle = [
+        'font' => ['size' => 12],
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
     ];
+    // Цвета для отдельных ячеек
+    $sumColor = 'FFFFEBEE'; // еле красный
+    $sbpColor = 'FFFFF9C4'; // еле желтый
+    $grayColor = 'FFF5F5F5'; // еле серый
 
     // Заголовки
     $headers = [
@@ -39,7 +44,7 @@ try {
         'H1' => 'Сумма',
         'I1' => 'Номер карты',
         'J1' => 'Номер телефона для СБП',
-        'K1' => 'ID банка для СБП',
+        'K1' => 'Номер банка для СБП',
         'L1' => 'Статус',
         'M1' => 'Дата',
     ];
@@ -92,14 +97,14 @@ try {
         $cardnumber = isset($row['cardnumber']) ? (string)$row['cardnumber'] : '';
         // Телефон для СБП
         $sbp_phone = $phone;
-        // ID банка для СБП
+        // ID банка для СБП (как строка)
         $id_bank = '';
         if (!empty($row['bankname'])) {
             $stmtBank = $pdo->prepare("SELECT id_bank FROM banks WHERE bankname = ?");
             $stmtBank->execute([$row['bankname']]);
             $bank = $stmtBank->fetch(PDO::FETCH_ASSOC);
             if ($bank) {
-                $id_bank = $bank['id_bank'];
+                $id_bank = (string)$bank['id_bank'];
             }
         }
         // Статус
@@ -117,10 +122,19 @@ try {
         $sheet->setCellValue('H'.$rowIndex, $sum);
         $sheet->setCellValueExplicit('I'.$rowIndex, $cardnumber, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         $sheet->setCellValue('J'.$rowIndex, $sbp_phone);
-        $sheet->setCellValue('K'.$rowIndex, $id_bank);
+        $sheet->setCellValueExplicit('K'.$rowIndex, $id_bank, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         $sheet->setCellValue('L'.$rowIndex, $status_col);
         $sheet->setCellValue('M'.$rowIndex, $date);
         $sheet->getStyle('A'.$rowIndex.':M'.$rowIndex)->applyFromArray($contentStyle);
+        // Цвет для суммы
+        $sheet->getStyle('H'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sumColor);
+        // Цвет для телефона для СБП и id банка для СБП
+        $sheet->getStyle('J'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sbpColor);
+        $sheet->getStyle('K'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sbpColor);
+        // Цвет для правового статуса и ИНН
+        $sheet->getStyle('D'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
+        $sheet->getStyle('E'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
+
         // Отправка сообщения в Telegram
         if (!empty($row['id_usertg'])) {
             $chatId = $row['id_usertg'];
