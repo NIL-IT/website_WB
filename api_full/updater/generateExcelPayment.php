@@ -26,6 +26,7 @@ try {
         'font' => ['size' => 12],
         'alignment' => ['horizontal' => Alignment::HORIZONTAL_LEFT],
         'borders' => ['allBorders' => ['borderStyle' => Border::BORDER_THIN]]
+        // fill убран, чтобы не перекрывать индивидуальные цвета
     ];
     // Цвета для отдельных ячеек
     $sumColor = 'FFFFEBEE'; // еле красный
