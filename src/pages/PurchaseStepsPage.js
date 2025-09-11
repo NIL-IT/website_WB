@@ -14,32 +14,8 @@ const PurchaseStepsPage = ({
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
   const [showPopup, setShowPopup] = useState(false);
   const allBankNames = [
-    "Сбербанк",
-    "Тинькофф Банк",
-    "Альфа-Банк",
-    "ВТБ",
-    "Озон Банк",
-    "РНКБ",
-    "Совкомбанк",
-    "Газпромбанк",
-    "Райффайзенбанк",
-    "Россельхозбанк",
-    "МТС Банк",
-    "ЮMoney",
-    "Банк Санкт-Петербург",
-    "Уралсиб",
-    "Ак Барс Банк",
-    "Беларусбанк",
-    "МКБ (Московский кредитный банк)",
-    "ОТП Банк",
-    "Почта Банк",
-    "Центр-инвест",
-    "Новикомбанк",
-    "Ренессанс Кредит",
-    "Банк Россия",
-    "Хлынов",
-    "Азиатско-Тихоокеанский Банк"
-  ];
+          "Сбербанк","Тинькофф Банк","Альфа Банк","ВТБ","Райффайзен Банк","ТОЧКА (ФК ОТКРЫТИЕ)","Газпромбанк","Норвик Банк","Банк Кремлевский","Томскпромстройбанк","Банк Заречье","МЕЖДУНАРОДНЫЙ ФИНАНСОВЫЙ КЛУБ","Северный Народный Банк","Центр-инвест","ВЛАДБИЗНЕСБАНК","КБ Хлынов","НОКССБАНК","ГТ банк","Банк Объединенный капитал","Банк РЕСО Кредит","Земский банк","Кредит Урал Банк","Нацинвестпромбанк","СДМ-Банк","ТАТСОЦБАНК","РУСНАРБАНК","КБ Стройлесбанк","НС Банк","Датабанк","КБЭР Банк Казани","Трансстройбанк","Кузнецкбизнесбанк","ИШБАНК","Алмазэргиэнбанк","РосДорБанк","Дальневосточный банк","Банк ДОМ.РФ","Форштадт","СКБ Примсоцбанк","Банк ПСКБ","ЭЛПЛАТ","БАНК СНГБ","Банк Екатеринбург","АБ РОССИЯ","ЧЕЛЯБИНВЕСТБАНК","Углеметбанк","БыстроБанк","КБ Модульбанк","КБ РостФинанс","Банк ФК Открытие","МЕТКОМБАНК","Банк Русский Стандарт","Банк Акцепт","Совкомбанк","НБД-Банк","Росбанк","КБ ЭНЕРГОТРАНСБАНК","МТС-Банк","Почта Банк","АИКБ Енисейский объединенный банк","ЮМани","УРАЛПРОМБАНК","Россельхозбанк","МБ Банк","МКБ (Московский кредитный банк)","КОШЕЛЕВ-БАНК","Тимер Банк","Банк Санкт-Петербург","Банк АВАНГАРД","Кредит Европа Банк (Россия)","СИНКО-БАНК","Банк Аверс","Банк Венец","УБРиР","Тольяттихимбанк","ЮниКредит Банк","Урал ФД","ГЕНБАНК","Банк ИТУРУП","ТРАНСКАПИТАЛБАНК","Энергобанк","Банк ФИНАМ","КБ ЛОКО-Банк","ЮГ-Инвестбанк","Экспобанк","Газэнергобанк","Банк Снежинский","Банк СКС","Абсолют Банк","Металлинвестбанк","Банк ЗЕНИТ","СИБСОЦБАНК","Банк ВБРР","Банк Развитие-Столица","МОРСКОЙ БАНК","Банк Интеза","МОСКОМБАНК","Первый Инвестиционный Банк","Банк Левобережный","Таврический Банк","Джей энд Ти Банк (АО)","Банк АЛЕКСАНДРОВСКИЙ","ФОРА-БАНК","ВУЗ-банк","Банк Агророс","СОЦИУМ БАНК","Новобанк","АКИБАНК","Прио-Внешторгбанк","ЧЕЛИНДБАНК","Банк БКФ","Эс-Би-Ай Банк","Солид Банк","АКБ Держава","Алеф-Банк","ГАРАНТ-ИНВЕСТ БАНК","Реалист Банк","КБ АГРОПРОМКРЕДИТ","НИКО-БАНК","ГОРБАНК","МСП Банк","Банк Синара","БАНК ОРЕНБУРГ","Банк Национальный стандарт","ИК Банк","КБ АРЕСБАНК","Ак Барс Банк","Хакасский муниципальный банк","ВНЕШФИНБАНК","Банк Саратов","Банк Раунд","РНКБ Банк","РН БАНК","Промсвязьбанк","Автоградбанк","АКБ СЛАВИЯ","Банк СОЮЗ","Ситибанк","Сетелем Банк","НОВИКОМБАНК","Автоторгбанк","Кубаньторгбанк","Новый век","Банк МБА МОСКВА","ББР Банк","ОТП Банк","Тойота Банк","БАНК УРАЛСИБ","Хоум Кредит Банк","КБ Долинск","Ренессанс Кредит","Хайс","СМП Банк","Алтайкапиталбанк","Русьуниверсалбанк","ЮНИСТРИМ БАНК","БКС Банк","Кубань Кредит","АКБ Тендер Банк","КБ Крокус Банк","БАНК СГБ","КБ Пойдём","МОСОБЛБАНК","Банк Приморье","УКБ Белгородсоцбанк","МС Банк Рус","Азиатско Тихоокеанский Банк","КБ Москоммерцбанк","Банк ЦентроКредит","НК Банк","ИС Банк","ПроБанк","Банк ИПБ","КБ Солидарность","АКБ Ланта Банк","Инбанк","Банк Финсервис","БАНК МОСКВА СИТИ","Точка Банк","Банк Вологжанин","Банк СИАБ","Банк БЖФ","Банк Уралфинанс","банк Элита","Яндекс Банк","ГУТА-БАНК","АКБ ЕВРОФИНАНС МОСНАРБАНК","Озон Банк (Ozon)"
+        ];
   const handleSellerClick = () => {
     if (userStep && userStep.tg_nick) {
       window.open(
@@ -407,22 +383,17 @@ const PurchaseStepsPage = ({
           alert("Пожалуйста, подтвердите правильность ввода данных.");
           return;
         }
-
-        // Проверка длины полей
         const isCardNumberValid = /^\d{16}$/.test(formData.cardNumber);
-
-        // Извлекаем только цифры из телефона для проверки
         const phoneDigits = formData.phone.replace(/\D/g, "");
         const isPhoneValid = phoneDigits.length === 11;
-
         const newErrors = {
           cardNumber: !formData.cardNumber || !isCardNumberValid,
           bankName: !formData.bankName,
-          cardHolder: !formData.cardHolder,
+          lastName: !formData.lastName,
+          firstName: !formData.firstName,
           phone: !formData.phone || !isPhoneValid,
         };
         setErrors(newErrors);
-
         if (Object.values(newErrors).some(Boolean)) {
           if (!isCardNumberValid) {
             alert("Введите корректный номер карты (16 цифр).");
@@ -430,16 +401,20 @@ const PurchaseStepsPage = ({
           if (!isPhoneValid) {
             alert("Введите корректный номер телефона (10 цифр после +7).");
           }
+          if (!formData.lastName || !formData.firstName) {
+            alert("Заполните фамилию и имя.");
+          }
           return;
         }
-
         try {
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
           formDataToSend.append("cardNumber", formData.cardNumber);
           formDataToSend.append("bankName", formData.bankName);
-          formDataToSend.append("cardHolder", formData.cardHolder);
-          // Исправлено: не добавляем лишнюю 7
+          // Собираем ФИО
+          let fio = formData.lastName + " " + formData.firstName;
+          if (formData.middleName) fio += " " + formData.middleName;
+          formDataToSend.append("cardHolder", fio);
           let phoneToSend = formData.phone;
           if (!phoneToSend.startsWith("+7")) {
             phoneToSend = "+" + phoneDigits;
@@ -447,7 +422,6 @@ const PurchaseStepsPage = ({
             phoneToSend = "+" + phoneDigits;
           }
           formDataToSend.append("phone", phoneToSend);
-
           const response = await fetch(`${baseURL}updateStep.php`, {
             method: "POST",
             body: formDataToSend,
@@ -1185,7 +1159,7 @@ const PurchaseStepsPage = ({
                 <ul className="purchase-step-text text-ul">
                   <li>Номер карты;</li>
                   <li>Название банка;</li>
-                  <li>ФИО владельца карты;</li>
+                  <li>Фамилия, имя, отчество владельца карты;</li>
                   <li>Телефон СБП для перевода.</li>
                 </ul>
               </p>
@@ -1199,7 +1173,7 @@ const PurchaseStepsPage = ({
                   value={formatCardNumber(formData.cardNumber)}
                   onChange={handleInputChange}
                   placeholder="0000 0000 0000 0000"
-                  maxLength={19} // 16 цифр + 3 пробела
+                  maxLength={19}
                   inputMode="numeric"
                   onWheel={(e) => e.target.blur()}
                 />
@@ -1211,35 +1185,60 @@ const PurchaseStepsPage = ({
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
                   Название банка
                 </p>
-                <input
-                  type="text"
+                <select
                   name="bankName"
                   value={formData.bankName}
                   onChange={handleInputChange}
-                  placeholder="Введите название банка"
-                  list="bankNames"
-                />
-                <datalist id="bankNames">
+                  style={{ width: "100%", borderRadius: 8, backgroundColor: "rgba(188, 122, 255, 1)", color: "white", fontSize: 15, fontWeight: 400, padding: 12, marginTop: "1.5vh", boxSizing: "border-box", cursor: "pointer" }}
+                >
+                  <option value="">Выберите банк</option>
                   {allBankNames.map((name, idx) => (
-                    <option key={idx} value={name} />
+                    <option key={idx} value={name}>{name}</option>
                   ))}
-                </datalist>
-                {errors.bankName && <p className="red-error">Заполните поле или выберите из списка</p>}
+                </select>
+                {errors.bankName && <p className="red-error">Выберите банк</p>}
               </div>
               <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
-                  ФИО владельца карты
+                  Фамилия владельца карты
                 </p>
                 <input
                   type="text"
-                  name="cardHolder"
-                  value={formData.cardHolder}
+                  name="lastName"
+                  value={formData.lastName}
                   onChange={handleInputChange}
-                  placeholder="Введите ФИО владельца карты"
+                  placeholder="Введите фамилию"
                 />
-                {errors.cardHolder && (
-                  <p className="red-error">Заполните поле</p>
+                {errors.lastName && (
+                  <p className="red-error">Заполните фамилию</p>
                 )}
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Имя владельца карты
+                </p>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  placeholder="Введите имя"
+                />
+                {errors.firstName && (
+                  <p className="red-error">Заполните имя</p>
+                )}
+              </div>
+              <div className="article-input">
+                <p className="purchase-step-text" style={{ marginBottom: 0 }}>
+                  Отчество владельца карты (если есть)
+                </p>
+                <input
+                  type="text"
+                  name="middleName"
+                  value={formData.middleName}
+                  onChange={handleInputChange}
+                  placeholder="Введите отчество (если есть)"
+                />
               </div>
               <div className="article-input">
                 <p className="purchase-step-text" style={{ marginBottom: 0 }}>
