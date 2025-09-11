@@ -55,6 +55,13 @@ try {
     }
 
     $sheet->getStyle('A1:M1')->applyFromArray($headerStyle);
+    // Цвета для шапки
+    $sheet->getStyle('H1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sumColor); // сумма
+    $sheet->getStyle('J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sbpColor); // телефон для СБП
+    $sheet->getStyle('K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sbpColor); // id банка для СБП
+    $sheet->getStyle('D1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor); // правовой статус
+    $sheet->getStyle('E1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor); // ИНН
+
     $sheet->getRowDimension('1')->setRowHeight(20);
 
     // Получение данных из steps, где in_excel = true
