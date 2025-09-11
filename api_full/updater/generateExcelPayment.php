@@ -69,26 +69,27 @@ try {
         $inn = '';
         // Телефон
         $phone = $row['phone'] ?? '';
-        // Товар (оставим пустым, если не требуется)
+        // Товар (название)
         $productName = '';
-        // Сумма
-        $sum = '';
-        if (!empty($row['modified_payment'])) {
-            $sum = $row['modified_payment'];
-        } else {
-            // Получить id_product, затем market_price и your_price
-            $id_product = $row['id_product'] ?? null;
-            if ($id_product) {
-                $stmtProd = $pdo->prepare("SELECT market_price, your_price FROM products WHERE id = ?");
-                $stmtProd->execute([$id_product]);
-                $prod = $stmtProd->fetch(PDO::FETCH_ASSOC);
-                if ($prod) {
+        $id_product = $row['id_product'] ?? null;
+        if ($id_product) {
+            $stmtProd = $pdo->prepare("SELECT market_price, your_price, name FROM products WHERE id = ?");
+            $stmtProd->execute([$id_product]);
+            $prod = $stmtProd->fetch(PDO::FETCH_ASSOC);
+            if ($prod) {
+                $productName = $prod['name'] ?? '';
+                if (empty($row['modified_payment'])) {
                     $sum = $prod['market_price'] - $prod['your_price'];
                 }
             }
         }
-        // Номер карты
-        $cardnumber = $row['cardnumber'] ?? '';
+        // Сумма
+        $sum = '';
+        if (!empty($row['modified_payment'])) {
+            $sum = $row['modified_payment'];
+        } 
+        // Номер карты (как строка)
+        $cardnumber = isset($row['cardnumber']) ? (string)$row['cardnumber'] : '';
         // Телефон для СБП
         $sbp_phone = $phone;
         // ID банка для СБП
@@ -114,7 +115,7 @@ try {
         $sheet->setCellValue('F'.$rowIndex, $phone);
         $sheet->setCellValue('G'.$rowIndex, $productName);
         $sheet->setCellValue('H'.$rowIndex, $sum);
-        $sheet->setCellValue('I'.$rowIndex, $cardnumber);
+        $sheet->setCellValueExplicit('I'.$rowIndex, $cardnumber, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         $sheet->setCellValue('J'.$rowIndex, $sbp_phone);
         $sheet->setCellValue('K'.$rowIndex, $id_bank);
         $sheet->setCellValue('L'.$rowIndex, $status_col);
@@ -126,7 +127,7 @@ try {
             $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
             $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
             // Первое сообщение
-            $message1 = "❤️ Спасибо за участие! Ваш заказ был отправлен на отправку";
+            $message1 = "❤️ Спасибо за участие! Ваш заказ был отправлен на оплату!";
             $postFields1 = [
                 'chat_id' => $chatId,
                 'text' => $message1,
