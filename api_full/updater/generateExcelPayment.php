@@ -92,13 +92,13 @@ try {
         // Телефон для СБП
         $sbp_phone = $phone;
         // ID банка для СБП
-        $bank_id = '';
+        $id_bank = '';
         if (!empty($row['bankname'])) {
-            $stmtBank = $pdo->prepare("SELECT bank_id FROM banks WHERE bankname = ?");
+            $stmtBank = $pdo->prepare("SELECT id_bank FROM banks WHERE bankname = ?");
             $stmtBank->execute([$row['bankname']]);
             $bank = $stmtBank->fetch(PDO::FETCH_ASSOC);
             if ($bank) {
-                $bank_id = $bank['bank_id'];
+                $id_bank = $bank['id_bank'];
             }
         }
         // Статус
@@ -116,7 +116,7 @@ try {
         $sheet->setCellValue('H'.$rowIndex, $sum);
         $sheet->setCellValue('I'.$rowIndex, $cardnumber);
         $sheet->setCellValue('J'.$rowIndex, $sbp_phone);
-        $sheet->setCellValue('K'.$rowIndex, $bank_id);
+        $sheet->setCellValue('K'.$rowIndex, $id_bank);
         $sheet->setCellValue('L'.$rowIndex, $status_col);
         $sheet->setCellValue('M'.$rowIndex, $date);
         $sheet->getStyle('A'.$rowIndex.':M'.$rowIndex)->applyFromArray($contentStyle);
