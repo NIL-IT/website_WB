@@ -120,7 +120,14 @@ try {
             }
         }
         // Статус
-        $status_col = $row['status'] ?? '';
+        $status_col = '';
+        if (isset($row['status'])) {
+            if ($row['status'] == 1 || $row['status'] == 2) {
+                $status_col = 'подтверждён/не оплачен';
+            } else {
+                $status_col = $row['status'];
+            }
+        }
         // Дата
         $date = $row['completed_at'] ?? '';
 
