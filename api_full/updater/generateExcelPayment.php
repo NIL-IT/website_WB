@@ -1,5 +1,6 @@
 <?php
 require 'vendor/autoload.php';
+include 'db.php';
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -195,8 +196,8 @@ try {
         }
         $rowIndex++;
     }
-    // // После экспорта обновить in_excel = false
-    // $pdo->query("UPDATE steps SET in_excel = false WHERE in_excel = true");
+    // После экспорта обновить in_excel = false
+    $pdo->query("UPDATE steps SET in_excel = false WHERE in_excel = true");
 
     // Автоматическая ширина столбцов
     foreach (range('A', 'M') as $col) {
