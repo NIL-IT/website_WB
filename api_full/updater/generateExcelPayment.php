@@ -97,14 +97,10 @@ try {
                 $productName = $prod['name'] ?? '';
                 if (empty($row['modified_payment'])) {
                     $sum = $prod['market_price'] - $prod['your_price'];
-                }
+                } else {
+                    $sum = $row['modified_payment'];}
             }
         }
-        // Сумма
-        $sum = '';
-        if (!empty($row['modified_payment'])) {
-            $sum = $row['modified_payment'];
-        } 
         // Номер карты (как строка)
         $cardnumber = isset($row['cardnumber']) ? (string)$row['cardnumber'] : '';
         // Телефон для СБП
