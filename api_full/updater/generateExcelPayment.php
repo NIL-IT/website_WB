@@ -226,8 +226,8 @@ try {
         }
         $rowIndex++;
     }
-    // После экспорта обновить in_excel = false
-    $pdo->query("UPDATE steps SET in_excel = false WHERE in_excel = true");
+    // После экспорта обновить in_excel = false и status = 3
+    $pdo->query("UPDATE steps SET in_excel = false, status = 3 WHERE in_excel = true");
 
     // Автоматическая ширина столбцов
     foreach (range('A', 'M') as $col) {
@@ -235,7 +235,7 @@ try {
     }
 
     // Сохранение файла
-    $filename = "Report.xlsx";
+    $filename = "Excel_Payment(" . date('Y-m-d') . ").xlsx";
     $temp_file = sys_get_temp_dir() . '/' . $filename;
 
     $writer = new Xlsx($spreadsheet);
