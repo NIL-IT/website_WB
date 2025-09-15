@@ -2,11 +2,11 @@
 require 'vendor/autoload.php';
 include 'db.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
-    exit;
-}
+// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+//     http_response_code(405);
+//     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
+//     exit;
+// }
 
 $pdo = getDbConnection();
 
@@ -26,17 +26,15 @@ if (empty($stepIds)) {
 
 // Меняем статус только для этих id
 $inQuery = implode(',', array_fill(0, count($stepIds), '?'));
-$stmtUpdate = $pdo->prepare("UPDATE steps SET in_excel = false, status = 3 WHERE id IN ($inQuery)");
-$stmtUpdate->execute($stepIds);
 
 // Получаем эти строки для отправки сообщений
 $stmt = $pdo->prepare("SELECT * FROM steps WHERE id IN ($inQuery)");
 $stmt->execute($stepIds);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Отправка сообщений в Telegram
+// Отправка сообщений в Telegram только если status != 3
 foreach ($rows as $row) {
-    if (!empty($row['id_usertg'])) {
+    if (!empty($row['id_usertg']) && (int)$row['status'] !== 3) {
         $chatId = $row['id_usertg'];
         $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
@@ -109,5 +107,9 @@ foreach ($rows as $row) {
         curl_close($ch3);
     }
 }
+
+// Теперь меняем статус только для этих id
+$stmtUpdate = $pdo->prepare("UPDATE steps SET in_excel = false, status = 3 WHERE id IN ($inQuery)");
+$stmtUpdate->execute($stepIds);
 
 echo json_encode(['success' => true]);
