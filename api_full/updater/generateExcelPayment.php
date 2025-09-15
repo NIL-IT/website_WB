@@ -9,6 +9,48 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 try {
+    $pdo = getDbConnection();
+
+    // Получаем последнюю запись excel_steps_count
+    $stmtLast = $pdo->query("SELECT * FROM excel_steps_count ORDER BY created_at DESC LIMIT 1");
+    $lastRow = $stmtLast->fetch(PDO::FETCH_ASSOC);
+
+    $needNewExcel = true;
+    $stepIds = [];
+    $newExcelStepsCount = 0;
+
+    if ($lastRow && isset($lastRow['pay'])) {
+        if ($lastRow['pay'] === 'f' || $lastRow['pay'] === false || $lastRow['pay'] === 0) {
+            // pay = false, используем старый массив step_ids
+            $needNewExcel = false;
+            $stepIds = json_decode($lastRow['step_ids'], true);
+            if (!is_array($stepIds)) $stepIds = [];
+        }
+    }
+
+    if ($needNewExcel) {
+        // pay = true или нет записей, формируем новый массив id steps
+        $stmt = $pdo->query("SELECT * FROM steps WHERE in_excel = true");
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stepIds = array_column($rows, 'id');
+        $newExcelStepsCount = count(array_unique($stepIds));
+        $stepIdsJson = json_encode(array_values($stepIds), JSON_UNESCAPED_UNICODE);
+
+        // Вставляем новую строку excel_steps_count с pay = false
+        $stmtSave = $pdo->prepare("INSERT INTO excel_steps_count (created_at, steps_count, step_ids, pay) VALUES (NOW(), ?, ?, false)");
+        $stmtSave->execute([$newExcelStepsCount, $stepIdsJson]);
+    }
+
+    // Получаем данные steps по массиву id
+    if (!empty($stepIds)) {
+        $inQuery = implode(',', array_fill(0, count($stepIds), '?'));
+        $stmtSteps = $pdo->prepare("SELECT * FROM steps WHERE id IN ($inQuery)");
+        $stmtSteps->execute($stepIds);
+        $rows = $stmtSteps->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        $rows = [];
+    }
+
     // Создаём Excel
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -68,20 +110,6 @@ try {
 
     $sheet->getRowDimension('1')->setRowHeight(20);
 
-    // Получение данных из steps, где in_excel = true
-    $pdo = getDbConnection();
-    $stmt = $pdo->query("SELECT * FROM steps WHERE in_excel = true");
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    // Массив id steps
-    $uniqueStepIds = array_column($rows, 'id');
-    $uniqueStepsCount = count(array_unique($uniqueStepIds));
-    $stepIdsJson = json_encode(array_values($uniqueStepIds), JSON_UNESCAPED_UNICODE);
-
-    // Сохраняем это значение в БД (теперь с step_ids)
-    $stmtSave = $pdo->prepare("INSERT INTO excel_steps_count (created_at, steps_count, step_ids) VALUES (NOW(), ?, ?)");
-    $stmtSave->execute([$uniqueStepsCount, $stepIdsJson]);
-
     $rowIndex = 2;
     foreach ($rows as $row) {
         // ФИО
@@ -97,6 +125,7 @@ try {
         $phone = $row['phone'] ?? '';
         // Товар (название)
         $productName = '';
+        $sum = '';
         $id_product = $row['id_product'] ?? null;
         if ($id_product) {
             $stmtProd = $pdo->prepare("SELECT market_price, your_price, name FROM products WHERE id = ?");
@@ -173,6 +202,13 @@ try {
 
     $writer = new Xlsx($spreadsheet);
     $writer->save($temp_file);
+
+    // Если был создан новый excel (pay = true), то обновляем in_excel = false для этих steps
+    if ($needNewExcel && !empty($stepIds)) {
+        $inQuery = implode(',', array_fill(0, count($stepIds), '?'));
+        $stmtUpdate = $pdo->prepare("UPDATE steps SET in_excel = false WHERE id IN ($inQuery)");
+        $stmtUpdate->execute($stepIds);
+    }
 
     // Отдаём на скачивание
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
