@@ -74,6 +74,7 @@ try {
     $sumColor = 'FFFFEBEE'; // еле красный
     $sbpColor = 'FFFFF9C4'; // еле желтый
     $grayColor = 'FFF5F5F5'; // еле серый
+    $greenColor = 'FFB9F6CA'; // светло-зелёный для оплаченных
 
     // Заголовки
     $headers = [
@@ -155,9 +156,13 @@ try {
         }
         // Статус
         $status_col = '';
+        $status_cell_color = null;
         if (isset($row['status'])) {
             if ($row['status'] == 1 || $row['status'] == 2) {
                 $status_col = 'подтверждён/не оплачен';
+            } elseif ($row['status'] == 3) {
+                $status_col = 'подтверждён/оплачен';
+                $status_cell_color = $greenColor;
             } else {
                 $status_col = $row['status'];
             }
@@ -187,6 +192,10 @@ try {
         // Цвет для правового статуса и ИНН
         $sheet->getStyle('D'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
         $sheet->getStyle('E'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
+        // Выделение зелёным если оплачен
+        if ($status_cell_color) {
+            $sheet->getStyle('L'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($status_cell_color);
+        }
 
         $rowIndex++;
     }
