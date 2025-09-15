@@ -193,8 +193,8 @@ try {
         $sheet->getStyle('D'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
         $sheet->getStyle('E'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
         // Выделение зелёным если оплачен
-        if ($status_cell_color) {
-            $sheet->getStyle('L'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($status_cell_color);
+        if ($status_cell_color || (isset($row['status']) && $row['status'] == 3)) {
+            $sheet->getStyle('A'.$rowIndex.':M'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($greenColor);
         }
 
         $rowIndex++;
