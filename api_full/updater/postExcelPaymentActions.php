@@ -2,11 +2,31 @@
 require 'vendor/autoload.php';
 include 'db.php';
 
-// if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-//     http_response_code(405);
-//     echo json_encode(['status' => 'error', 'message' => 'Method not allowed']);
-//     exit;
-// }
+// --- Функция получения/создания referral_id (локально, не через require referral.php) ---
+function getOrCreateReferralId($pdo, $id_usertg) {
+    $stmt = $pdo->prepare("SELECT referral_id FROM users WHERE id_usertg = ?");
+    $stmt->execute([$id_usertg]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $referral_id = $row['referral_id'] ?? null;
+    if ($referral_id) {
+        return $referral_id;
+    }
+    // Генерируем и сохраняем новый referral_id
+    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    $length = 6;
+    do {
+        $referral_id = '';
+        for ($i = 0; $i < $length; $i++) {
+            $referral_id .= $characters[random_int(0, strlen($characters) - 1)];
+        }
+        $stmtCheck = $pdo->prepare("SELECT COUNT(*) FROM users WHERE referral_id = ?");
+        $stmtCheck->execute([$referral_id]);
+        $exists = $stmtCheck->fetchColumn() > 0;
+    } while ($exists);
+    $update = $pdo->prepare("UPDATE users SET referral_id = ? WHERE id_usertg = ?");
+    $update->execute([$referral_id, $id_usertg]);
+    return $referral_id;
+}
 
 $pdo = getDbConnection();
 
@@ -24,15 +44,13 @@ if (empty($stepIds)) {
     exit;
 }
 
-// // Меняем статус только для этих id
-// $inQuery = implode(',', array_fill(0, count($stepIds), '?'));
+$inQuery = implode(',', array_fill(0, count($stepIds), '?'));
 
-// // Получаем эти строки для отправки сообщений
-// $stmt = $pdo->prepare("SELECT * FROM steps WHERE id IN ($inQuery)");
-// $stmt->execute($stepIds);
-// $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Получаем эти строки для отправки сообщений
+$stmt = $pdo->prepare("SELECT * FROM steps WHERE id IN ($inQuery)");
+$stmt->execute($stepIds);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// // Отправка сообщений в Telegram только если status != 3
 // foreach ($rows as $row) {
 //     if (!empty($row['id_usertg']) && (int)$row['status'] !== 3) {
 //         $chatId = $row['id_usertg'];
@@ -68,23 +86,10 @@ if (empty($stepIds)) {
 //         curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, false);
 //         curl_exec($ch2);
 //         curl_close($ch2);
-//         // Третье сообщение с персональной ссылкой
-//         $referralApiUrl = "https://inhomeka.online:8000/referral.php";
-//         $postData = json_encode(['id_usertg' => $chatId]);
-//         $ch = curl_init($referralApiUrl);
-//         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//         curl_setopt($ch, CURLOPT_POST, true);
-//         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-//         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
-//         $response = curl_exec($ch);
-//         curl_close($ch);
-//         $referral_id = null;
-//         if ($response) {
-//             $referralData = json_decode($response, true);
-//             if (isset($referralData['success']) && $referralData['success'] && isset($referralData['referral_id'])) {
-//                 $referral_id = $referralData['referral_id'];
-//             }
-//         }
+
+//         // Получение referral_id через локальную функцию
+//         $referral_id = getOrCreateReferralId($pdo, $chatId);
+
 //         if (!$referral_id) {
 //             $referral_id = "unknown";
 //         }
