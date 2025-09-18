@@ -11,8 +11,8 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 try {
     $pdo = getDbConnection();
 
-    // Получаем последнюю запись excel_steps_count
-    $stmtLast = $pdo->query("SELECT * FROM excel_steps_count ORDER BY created_at DESC LIMIT 1");
+    // Получаем последнюю запись excel_steps_count по id
+    $stmtLast = $pdo->query("SELECT * FROM excel_steps_count ORDER BY id DESC LIMIT 1");
     $lastRow = $stmtLast->fetch(PDO::FETCH_ASSOC);
 
     $needNewExcel = true;
@@ -91,13 +91,14 @@ try {
         'K1' => 'Номер банка для СБП',
         'L1' => 'Статус',
         'M1' => 'Дата',
+        'N1' => 'Ник менеджера'
     ];
 
     foreach ($headers as $cell => $text) {
         $sheet->setCellValue($cell, $text);
     }
 
-    $sheet->getStyle('A1:M1')->applyFromArray($headerStyle);
+    $sheet->getStyle('A1:N1')->applyFromArray($headerStyle);
     // Цвета для шапки только для нужных колонок, остальные явно белые
     $sheet->getStyle('H1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sumColor); // сумма
     $sheet->getStyle('J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sbpColor); // телефон для СБП
@@ -105,7 +106,7 @@ try {
     $sheet->getStyle('D1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor); // правовой статус
     $sheet->getStyle('E1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor); // ИНН
     // Все остальные явно белые
-    foreach(['A','B','C','F','G','I','L','M'] as $col) {
+    foreach(['A','B','C','F','G','I','L','M','N'] as $col) {
         $sheet->getStyle($col.'1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFFFFFF');
     }
 
@@ -126,18 +127,21 @@ try {
         $phone = $row['phone'] ?? '';
         // Товар (название)
         $productName = '';
+        $tg_nick_manager = '';
         $sum = '';
         $id_product = $row['id_product'] ?? null;
         if ($id_product) {
-            $stmtProd = $pdo->prepare("SELECT market_price, your_price, name FROM products WHERE id = ?");
+            $stmtProd = $pdo->prepare("SELECT market_price, your_price, name, tg_nick_manager FROM products WHERE id = ?");
             $stmtProd->execute([$id_product]);
             $prod = $stmtProd->fetch(PDO::FETCH_ASSOC);
             if ($prod) {
                 $productName = $prod['name'] ?? '';
+                $tg_nick_manager = $prod['tg_nick_manager'] ?? '';
                 if (empty($row['modified_payment'])) {
                     $sum = $prod['market_price'] - $prod['your_price'];
                 } else {
-                    $sum = $row['modified_payment'];}
+                    $sum = $row['modified_payment'];
+                }
             }
         }
         // Номер карты (как строка)
@@ -183,7 +187,8 @@ try {
         $sheet->setCellValueExplicit('K'.$rowIndex, $id_bank, \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
         $sheet->setCellValue('L'.$rowIndex, $status_col);
         $sheet->setCellValue('M'.$rowIndex, $date);
-        $sheet->getStyle('A'.$rowIndex.':M'.$rowIndex)->applyFromArray($contentStyle);
+        $sheet->setCellValue('N'.$rowIndex, $tg_nick_manager);
+        $sheet->getStyle('A'.$rowIndex.':N'.$rowIndex)->applyFromArray($contentStyle);
         // Цвет для суммы
         $sheet->getStyle('H'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($sumColor);
         // Цвет для телефона для СБП и id банка для СБП
@@ -194,14 +199,13 @@ try {
         $sheet->getStyle('E'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($grayColor);
         // Выделение зелёным если оплачен
         if ($status_cell_color || (isset($row['status']) && $row['status'] == 3)) {
-            $sheet->getStyle('A'.$rowIndex.':M'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($greenColor);
+            $sheet->getStyle('A'.$rowIndex.':N'.$rowIndex)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($greenColor);
         }
-
         $rowIndex++;
     }
 
     // Автоматическая ширина столбцов
-    foreach (range('A', 'M') as $col) {
+    foreach (range('A', 'N') as $col) {
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
 
