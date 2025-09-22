@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function loadDefaultReports() {
+    showZeroLoading(false);
     fetch("fetchApplications.php")
         .then((response) => response.json())
         .then((data) => {
@@ -18,13 +19,16 @@ function loadDefaultReports() {
             } else {
                 console.error("Ошибка при получении данных:", data.error);
             }
+            showZeroLoading(false);
         })
         .catch((error) => {
             console.error("Ошибка при получении данных:", error);
+            showZeroLoading(false);
         });
 }
 
 function loadZeroReports() {
+    showZeroLoading(true);
     fetch("fetchZeroReports.php")
         .then((response) => response.json())
         .then((data) => {
@@ -35,9 +39,11 @@ function loadZeroReports() {
             } else {
                 console.error("Ошибка при получении нулевых отчётов:", data.error);
             }
+            showZeroLoading(false);
         })
         .catch((error) => {
             console.error("Ошибка при получении нулевых отчётов:", error);
+            showZeroLoading(false);
         });
 }
 
@@ -190,7 +196,7 @@ function renderApplications(sortBy = 'status', order = 'desc') {
 
 function getStatusText(status) {
     switch (status) {
-        case 0: return 'Не попало';
+        case 0: return 'Не подтверждено';
         case 1: return 'Ждет оплаты';
         case 2: return 'В работе';
         case 3: return 'Завершено';
@@ -360,3 +366,8 @@ function showManagerSuggestions(input) {
 document.getElementById('manager-filter').addEventListener('focus', function () {
     showManagerSuggestions(this.value);
 });
+
+function showZeroLoading(show) {
+    const spinner = document.getElementById('zero-loading');
+    if (spinner) spinner.style.display = show ? 'inline-block' : 'none';
+}
