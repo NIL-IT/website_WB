@@ -35,7 +35,9 @@ function loadZeroReports() {
             if (data.success) {
                 zeroReportsData = data.data;
                 applicationsData = [...zeroReportsData];
-                renderApplications('zero');
+                // Стартовая сортировка по completed_at (asc) и активируем кнопку
+                sortByCompletedAt('asc');
+                setActiveButton('completed_at', 'asc');
             } else {
                 console.error("Ошибка при получении нулевых отчётов:", data.error);
             }
