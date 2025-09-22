@@ -8,6 +8,14 @@
 </head>
 <body>
     <div class="container">
+        <!-- Новый переключатель -->
+        <div class="zero-toggle-container">
+            <label class="switch">
+                <input type="checkbox" id="zero-toggle" onchange="toggleZeroReports()">
+                <span class="slider"></span>
+            </label>
+            <span class="zero-toggle-label">Нулевые отчёты</span>
+        </div>
         <div class="sort-buttons">
             <button onclick="toggleSortMenu()">Сортировать</button>
             <div id="sort-menu" class="sort-menu" style="display: none;">
@@ -36,6 +44,18 @@
         function toggleSortMenu() {
             const sortMenu = document.getElementById('sort-menu');
             sortMenu.style.display = sortMenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleZeroReports() {
+            const zeroToggle = document.getElementById('zero-toggle');
+            // Логика для обработки нулевых отчетов
+            if (zeroToggle.checked) {
+                console.log('Показать нулевые отчёты');
+                // Здесь должна быть ваша логика для отображения нулевых отчетов
+            } else {
+                console.log('Скрыть нулевые отчёты');
+                // Здесь должна быть ваша логика для скрытия нулевых отчетов
+            }
         }
     </script>
 </body>

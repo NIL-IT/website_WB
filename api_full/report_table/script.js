@@ -1,6 +1,10 @@
 let originalData = []; // Сохраняем изначальные данные
+let zeroReportsData = []; // Данные для нулевых отчётов
+let isZeroReportsMode = false; // Флаг режима
 
 document.addEventListener("DOMContentLoaded", function () {
+    loadDefaultReports();
+
     fetch("fetchApplications.php")
         .then((response) => response.json())
         .then((data) => {
@@ -19,6 +23,55 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("Ошибка при получении данных:", error);
         });
 });
+
+function loadDefaultReports() {
+    fetch("fetchApplications.php")
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                applicationsData = data.data;
+                originalData = [...applicationsData];
+                sortByCompletedAt('asc');
+                setActiveButton('completed_at', 'asc');
+            } else {
+                console.error("Ошибка при получении данных:", data.error);
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при получении данных:", error);
+        });
+}
+
+function loadZeroReports() {
+    fetch("fetchZeroReports.php")
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                zeroReportsData = data.data;
+                applicationsData = [...zeroReportsData];
+                renderApplications('zero');
+            } else {
+                console.error("Ошибка при получении нулевых отчётов:", data.error);
+            }
+        })
+        .catch((error) => {
+            console.error("Ошибка при получении нулевых отчётов:", error);
+        });
+}
+
+// Обработчик переключателя
+function toggleZeroReports() {
+    const toggle = document.getElementById('zero-toggle');
+    isZeroReportsMode = toggle.checked;
+    if (isZeroReportsMode) {
+        applicationsData = [];
+        originalData = [];
+        loadZeroReports();
+    } else {
+        zeroReportsData = [];
+        loadDefaultReports();
+    }
+}
 
 document.addEventListener('click', function (event) {
     const suggestionsContainer = document.getElementById('manager-suggestions');
@@ -40,33 +93,37 @@ function renderApplications(sortBy = 'status', order = 'desc') {
     applicationsContainer.innerHTML = '';
 
     let sortedApplications;
-    switch (sortBy) {
-        case 'status':
-            sortedApplications = applicationsData.sort((a, b) => a.status - b.status);
-            break;
-        case 'cardholder':
-            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
-            break;
-        case 'profit':
-            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? parseFloat(a.profit) - parseFloat(b.profit) : parseFloat(b.profit) - parseFloat(a.profit));
-            break;
-        case 'product_name':
-            sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
-            break;
-        case 'completed_at':
-            sortedApplications = applicationsData.sort((a, b) => {
-                const dateA = a.completed_at ? new Date(a.completed_at) : null;
-                const dateB = b.completed_at ? new Date(b.completed_at) : null;
+    if (isZeroReportsMode) {
+        sortedApplications = [...applicationsData];
+    } else {
+        switch (sortBy) {
+            case 'status':
+                sortedApplications = applicationsData.sort((a, b) => a.status - b.status);
+                break;
+            case 'cardholder':
+                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
+                break;
+            case 'profit':
+                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? parseFloat(a.profit) - parseFloat(b.profit) : parseFloat(b.profit) - parseFloat(a.profit));
+                break;
+            case 'product_name':
+                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
+                break;
+            case 'completed_at':
+                sortedApplications = applicationsData.sort((a, b) => {
+                    const dateA = a.completed_at ? new Date(a.completed_at) : null;
+                    const dateB = b.completed_at ? new Date(b.completed_at) : null;
 
-                if (dateA === null && dateB === null) return 0;
-                if (dateA === null) return order === 'asc' ? -1 : 1;
-                if (dateB === null) return order === 'asc' ? 1 : -1;
+                    if (dateA === null && dateB === null) return 0;
+                    if (dateA === null) return order === 'asc' ? -1 : 1;
+                    if (dateB === null) return order === 'asc' ? 1 : -1;
 
-                return order === 'asc' ? dateA - dateB : dateB - dateA;
-            });
-            break;
-        default:
-            sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+                    return order === 'asc' ? dateA - dateB : dateB - dateA;
+                });
+                break;
+            default:
+                sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
+        }
     }
 
     // Ensure status 2 is above status 1
@@ -97,7 +154,18 @@ function renderApplications(sortBy = 'status', order = 'desc') {
                 </span>`
             : '';
 
-        const cardholderClass = `${getStatusClass(app.status)}${showWarning ? ' expire-header' : ''}`;
+        // Для нулевых отчётов - синий цвет и оранжевая кнопка
+        let isZeroReport = isZeroReportsMode;
+        const cardholderClass = isZeroReport
+            ? 'zero-report'
+            : `${getStatusClass(app.status)}${showWarning ? ' expire-header' : ''}`;
+
+        let buttonHtml;
+        if (isZeroReport) {
+            buttonHtml = `<button class="button zero-action" onclick="handleZeroButtonClick(${index})">Перейти к отчёту</button>`;
+        } else {
+            buttonHtml = `<button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>`;
+        }
 
         const appDiv = document.createElement('div');
         appDiv.className = `application`;
@@ -117,7 +185,7 @@ function renderApplications(sortBy = 'status', order = 'desc') {
             </div>
             <div class="status-container">
                 <span class="status ${getStatusClass(app.status)}">${getStatusText(app.status)}</span>
-                <button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>
+                ${buttonHtml}
             </div>
         `;
         applicationsContainer.appendChild(appDiv);
@@ -166,6 +234,8 @@ function getButtonClass(status) {
 }
 
 function handleButtonClick(index) {
+    if (isZeroReportsMode) return; // Не обрабатываем в режиме нулевых отчётов
+
     const app = applicationsData[index];
 
     if (app.status === 1) {
@@ -194,20 +264,18 @@ function handleButtonClick(index) {
     }
 }
 
+// Обработчик кнопки для нулевых отчётов
+function handleZeroButtonClick(index) {
+    const app = applicationsData[index];
+    window.location.href = app.url;
+}
+
 function refreshApplications() {
-    fetch("fetchApplications.php")
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.success) {
-                applicationsData = data.data;
-                renderApplications();
-            } else {
-                console.error("Ошибка при получении данных:", data.error);
-            }
-        })
-        .catch((error) => {
-            console.error("Ошибка при получении данных:", error);
-        });
+    if (isZeroReportsMode) {
+        loadZeroReports();
+    } else {
+        loadDefaultReports();
+    }
 }
 
 // New functions for sorting
