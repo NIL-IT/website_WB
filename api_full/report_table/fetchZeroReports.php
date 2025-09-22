@@ -6,7 +6,8 @@ require_once 'db.php';
 try {
     $pdo = getDbConnection();
 
-    $stmt = $pdo->prepare('SELECT id, cardholder, bankname AS bank, phone, cardnumber, id_product, status, completed_at, updated_at FROM steps WHERE status = 0');
+    // Добавлено условие step = "Завершено"
+    $stmt = $pdo->prepare('SELECT id, cardholder, bankname AS bank, phone, cardnumber, id_product, status, completed_at, updated_at FROM steps WHERE status = 0 AND step = "Завершено"');
     $stmt->execute();
     $applications = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
