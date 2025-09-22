@@ -112,6 +112,34 @@ foreach ($rows as $row) {
         curl_setopt($ch3, CURLOPT_SSL_VERIFYPEER, false);
         curl_exec($ch3);
         curl_close($ch3);
+
+        // --- ОПЛАТА МЕНЕДЖЕРА ---
+        // Получаем tg_nick_manager, market_price, your_price из products
+        $id_product = $row['id_product'];
+        $stmtProduct = $pdo->prepare("SELECT tg_nick_manager, market_price, your_price FROM products WHERE id = ?");
+        $stmtProduct->execute([$id_product]);
+        $product = $stmtProduct->fetch(PDO::FETCH_ASSOC);
+
+        // Получаем modified_payment из steps
+        $modified_payment = $row['modified_payment'];
+
+        if ($product && !empty($product['tg_nick_manager'])) {
+            $manager_username = $product['tg_nick_manager'];
+            $stmtManager = $pdo->prepare("SELECT manager_id, balance FROM managers WHERE manager_username = ?");
+            $stmtManager->execute([$manager_username]);
+            $manager = $stmtManager->fetch(PDO::FETCH_ASSOC);
+
+            if ($manager) {
+                $manager_id = $manager['manager_id'];
+                $balance = $manager['balance'];
+                // Определяем сумму для изменения
+                $sum = $modified_payment !== null ? $modified_payment : ($product['market_price'] - $product['your_price']);
+                // Отнимаем сумму с баланса
+                $new_balance = $balance - $sum;
+                $stmtUpdateManager = $pdo->prepare("UPDATE managers SET balance = ? WHERE manager_id = ?");
+                $stmtUpdateManager->execute([$new_balance, $manager_id]);
+            }
+        }
     }
 }
 

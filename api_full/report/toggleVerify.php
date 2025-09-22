@@ -18,6 +18,18 @@ function sendTelegramMessageWithComment($chatId, $comment) {
     sendTelegramRequest($apiUrl, $postFields);
 }
 
+function sendAdminNotification($message) {
+    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+    $adminChatId = 934574143;
+    $postFields = [
+        'chat_id' => $adminChatId,
+        'text' => $message,
+        'parse_mode' => 'HTML'
+    ];
+    sendTelegramRequest($apiUrl, $postFields);
+}
+
 function sendTelegramRequest($url, $fields) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -78,6 +90,11 @@ try {
     // Отправка комментария пользователю в бота
     if ($comment && $chatId) {
         sendTelegramMessageWithComment($chatId, $comment);
+    }
+
+    // Отправка уведомления админу, если verified меняется с true на false
+    if ($currentVerified && !$newVerified) {
+        sendAdminNotification("Внимание! verified был снят для отчёта ID: $id");
     }
 
     echo json_encode(['success' => true, 'verified' => $newVerified]);

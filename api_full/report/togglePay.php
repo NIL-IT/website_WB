@@ -89,6 +89,25 @@ function sendTelegramRequest($url, $fields) {
     return $response;
 }
 
+function sendAdminNotification($message) {
+    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
+    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+    $adminChatId = 934574143;
+    $postFields = [
+        'chat_id' => $adminChatId,
+        'text' => $message,
+        'parse_mode' => 'HTML'
+    ];
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_exec($ch);
+    curl_close($ch);
+}
+
 
 try {
     // Получение соединения с базой данных
@@ -231,6 +250,11 @@ try {
             // Отправляем сообщение с приглашением (передаем id_usertg)
             sendTelegramInvitationMessage($chatId, $chatId);
         }
+    }
+
+    // Отправка уведомления админу, если paid становится false
+    if ($currentPaid && !$newPaid) {
+        sendAdminNotification("Внимание! paid был снят для отчёта ID: $id");
     }
 
     echo json_encode(['success' => true, 'paid' => $newPaid]);
