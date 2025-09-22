@@ -278,6 +278,9 @@ body {
 .filter-container {
     position: relative;
     margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
 #manager-filter {
@@ -316,6 +319,12 @@ body {
     align-items: center;
     gap: 10px;
     margin: 20px;
+}
+
+.zero-toggle-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .switch {

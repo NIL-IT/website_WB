@@ -8,14 +8,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Новый переключатель -->
-        <div class="zero-toggle-container">
-            <label class="switch">
-                <input type="checkbox" id="zero-toggle" onchange="toggleZeroReports()">
-                <span class="slider"></span>
-            </label>
-            <span class="zero-toggle-label">Нулевые отчёты</span>
-        </div>
         <div class="sort-buttons">
             <button onclick="toggleSortMenu()">Сортировать</button>
             <div id="sort-menu" class="sort-menu" style="display: none;">
@@ -33,6 +25,13 @@
         <div class="filter-container">
             <input type="text" id="manager-filter" oninput="filterByManager()" placeholder="Фильтр по менеджеру">
             <div id="manager-suggestions" class="suggestions"></div>
+            <div class="zero-toggle-inline">
+                <label class="switch">
+                    <input type="checkbox" id="zero-toggle" onchange="toggleZeroReports()">
+                    <span class="slider"></span>
+                </label>
+                <span class="zero-toggle-label">Нулевые отчёты</span>
+            </div>
         </div>
         <div id="applications"></div>
         <div class="footer">
