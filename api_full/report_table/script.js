@@ -81,37 +81,34 @@ function renderApplications(sortBy = 'status', order = 'desc') {
     applicationsContainer.innerHTML = '';
 
     let sortedApplications;
-    if (isZeroReportsMode) {
-        sortedApplications = [...applicationsData];
-    } else {
-        switch (sortBy) {
-            case 'status':
-                sortedApplications = applicationsData.sort((a, b) => a.status - b.status);
-                break;
-            case 'cardholder':
-                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
-                break;
-            case 'profit':
-                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? parseFloat(a.profit) - parseFloat(b.profit) : parseFloat(b.profit) - parseFloat(a.profit));
-                break;
-            case 'product_name':
-                sortedApplications = applicationsData.sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
-                break;
-            case 'completed_at':
-                sortedApplications = applicationsData.sort((a, b) => {
-                    const dateA = a.completed_at ? new Date(a.completed_at) : null;
-                    const dateB = b.completed_at ? new Date(b.completed_at) : null;
+    // Сортировка работает для всех режимов
+    switch (sortBy) {
+        case 'status':
+            sortedApplications = applicationsData.slice().sort((a, b) => a.status - b.status);
+            break;
+        case 'cardholder':
+            sortedApplications = applicationsData.slice().sort((a, b) => order === 'asc' ? a.cardholder.localeCompare(b.cardholder) : b.cardholder.localeCompare(a.cardholder));
+            break;
+        case 'profit':
+            sortedApplications = applicationsData.slice().sort((a, b) => order === 'asc' ? parseFloat(a.profit) - parseFloat(b.profit) : parseFloat(b.profit) - parseFloat(a.profit));
+            break;
+        case 'product_name':
+            sortedApplications = applicationsData.slice().sort((a, b) => order === 'asc' ? a.product_name.localeCompare(b.product_name) : b.product_name.localeCompare(a.product_name));
+            break;
+        case 'completed_at':
+            sortedApplications = applicationsData.slice().sort((a, b) => {
+                const dateA = a.completed_at ? new Date(a.completed_at) : null;
+                const dateB = b.completed_at ? new Date(b.completed_at) : null;
 
-                    if (dateA === null && dateB === null) return 0;
-                    if (dateA === null) return order === 'asc' ? -1 : 1;
-                    if (dateB === null) return order === 'asc' ? 1 : -1;
+                if (dateA === null && dateB === null) return 0;
+                if (dateA === null) return order === 'asc' ? -1 : 1;
+                if (dateB === null) return order === 'asc' ? 1 : -1;
 
-                    return order === 'asc' ? dateA - dateB : dateB - dateA;
-                });
-                break;
-            default:
-                sortedApplications = applicationsData.sort((a, b) => b.status - a.status);
-        }
+                return order === 'asc' ? dateA - dateB : dateB - dateA;
+            });
+            break;
+        default:
+            sortedApplications = applicationsData.slice().sort((a, b) => b.status - a.status);
     }
 
     // Ensure status 2 is above status 1
