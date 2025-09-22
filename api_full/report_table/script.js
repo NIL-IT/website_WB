@@ -325,4 +325,38 @@ function sortByDefault() {
 function filterByManager() {
     const managerInput = document.getElementById('manager-filter').value.toLowerCase();
     const filteredApplications = originalData.filter(app => app.tg_nick_manager.toLowerCase().includes(managerInput));
-    applicationsData = filtered
+    applicationsData = filteredApplications;
+    renderApplications();
+    showManagerSuggestions(managerInput);
+}
+
+// Function to show manager suggestions
+function showManagerSuggestions(input) {
+    const suggestionsContainer = document.getElementById('manager-suggestions');
+    suggestionsContainer.innerHTML = '';
+
+    const suggestions = originalData
+        .map(app => app.tg_nick_manager)
+        .filter((value, index, self) => self.indexOf(value) === index) // Уникальные значения
+        .filter(nick => input.length === 0 || nick.toLowerCase().includes(input))
+        .slice(0, 5); // Ограничиваем количество предложений
+
+    suggestions.forEach(suggestion => {
+        const suggestionDiv = document.createElement('div');
+        suggestionDiv.className = 'suggestion';
+        suggestionDiv.innerText = suggestion;
+        suggestionDiv.onclick = () => {
+            document.getElementById('manager-filter').value = suggestion;
+            suggestionsContainer.style.display = 'none'; // Скрываем предложения
+            filterByManager();
+        };
+        suggestionsContainer.appendChild(suggestionDiv);
+    });
+
+    suggestionsContainer.style.display = 'block'; // Показываем предложения
+}
+
+// Show suggestions on input focus
+document.getElementById('manager-filter').addEventListener('focus', function () {
+    showManagerSuggestions(this.value);
+});
