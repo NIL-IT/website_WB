@@ -16,6 +16,7 @@ function loadDefaultReports() {
                 originalData = [...applicationsData];
                 sortByCompletedAt('asc');
                 setActiveButton('completed_at', 'asc');
+                showManagerCount(applicationsData.length);
             } else {
                 console.error("Ошибка при получении данных:", data.error);
             }
@@ -38,6 +39,7 @@ function loadZeroReports() {
                 // Стартовая сортировка по completed_at (asc) и активируем кнопку
                 sortByCompletedAt('asc');
                 setActiveButton('completed_at', 'asc');
+                showManagerCount(applicationsData.length);
             } else {
                 console.error("Ошибка при получении нулевых отчётов:", data.error);
             }
@@ -329,18 +331,21 @@ function sortByDefault() {
 // Function for filtering by manager
 function filterByManager() {
     const managerInput = document.getElementById('manager-filter').value.toLowerCase();
-    const filteredApplications = originalData.filter(app => app.tg_nick_manager.toLowerCase().includes(managerInput));
+    // Выбираем источник данных в зависимости от режима
+    const sourceData = isZeroReportsMode ? zeroReportsData : originalData;
+    const filteredApplications = sourceData.filter(app => app.tg_nick_manager.toLowerCase().includes(managerInput));
     applicationsData = filteredApplications;
     renderApplications();
-    showManagerSuggestions(managerInput);
+    showManagerSuggestions(managerInput, sourceData);
+    showManagerCount(filteredApplications.length);
 }
 
 // Function to show manager suggestions
-function showManagerSuggestions(input) {
+function showManagerSuggestions(input, sourceData) {
     const suggestionsContainer = document.getElementById('manager-suggestions');
     suggestionsContainer.innerHTML = '';
 
-    const suggestions = originalData
+    const suggestions = (sourceData || (isZeroReportsMode ? zeroReportsData : originalData))
         .map(app => app.tg_nick_manager)
         .filter((value, index, self) => self.indexOf(value) === index) // Уникальные значения
         .filter(nick => input.length === 0 || nick.toLowerCase().includes(input))
@@ -361,9 +366,18 @@ function showManagerSuggestions(input) {
     suggestionsContainer.style.display = 'block'; // Показываем предложения
 }
 
+// Показывать количество найденных отчётов
+function showManagerCount(count) {
+    const countElem = document.getElementById('manager-count');
+    if (countElem) {
+        countElem.textContent = `Найдено отчётов: ${count}`;
+    }
+}
+
 // Show suggestions on input focus
 document.getElementById('manager-filter').addEventListener('focus', function () {
-    showManagerSuggestions(this.value);
+    // Передаем источник данных для подсказок
+    showManagerSuggestions(this.value, isZeroReportsMode ? zeroReportsData : originalData);
 });
 
 function showZeroLoading(show) {
