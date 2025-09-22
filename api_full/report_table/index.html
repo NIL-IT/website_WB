@@ -22,9 +22,11 @@
                 <button onclick="sortByCompletedAt('desc')">Сначала новые</button>
             </div>
         </div>
-        <div class="filter-container">
-            <input type="text" id="manager-filter" oninput="filterByManager()" placeholder="Фильтр по менеджеру">
-            <div id="manager-suggestions" class="suggestions"></div>
+        <div class="filter-row">
+            <div class="filter-container">
+                <input type="text" id="manager-filter" oninput="filterByManager()" placeholder="Фильтр по менеджеру">
+                <div id="manager-suggestions" class="suggestions"></div>
+            </div>
             <div class="zero-toggle-inline">
                 <label class="switch">
                     <input type="checkbox" id="zero-toggle" onchange="toggleZeroReports()">
