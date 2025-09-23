@@ -144,7 +144,7 @@ foreach ($rows as $row) {
 }
 
 // Теперь меняем статус только для этих id
-$stmtUpdate = $pdo->prepare("UPDATE steps SET in_excel = false, status = 3 WHERE id IN ($inQuery)");
+$stmtUpdate = $pdo->prepare("UPDATE steps SET in_excel = false, status = 3, paid	= true WHERE id IN ($inQuery)");
 $stmtUpdate->execute($stepIds);
 
 // После всех операций обновляем pay на true для этой строки excel_steps_count
