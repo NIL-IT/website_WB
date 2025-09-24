@@ -42,7 +42,15 @@ if ($lastRow && !empty($lastRow['step_ids'])) {
 }
 
 if (empty($stepIds)) {
-    echo json_encode(['success' => false, 'message' => 'Нет id для обновления']);
+    // Если нет id для обновления, просто обновляем pay = true для последней строки
+    if ($lastRow && !empty($lastRow['id'])) {
+        $excelCountId = $lastRow['id'];
+        $stmtPay = $pdo->prepare("UPDATE excel_steps_count SET pay = true WHERE id = ?");
+        $stmtPay->execute([$excelCountId]);
+        echo json_encode(['success' => true, 'message' => 'pay обновлено без id']);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Нет id для обновления']);
+    }
     exit;
 }
 

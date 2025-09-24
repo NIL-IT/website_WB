@@ -34,6 +34,14 @@ try {
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stepIds = array_column($rows, 'id');
         $newExcelStepsCount = count(array_unique($stepIds));
+        // Если нет данных для формирования Excel, ничего не создаём и возвращаем ошибку
+        if (empty($stepIds)) {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Нет данных для формирования Excel-файла'
+            ]);
+            exit;
+        }
         $stepIdsJson = json_encode(array_values($stepIds), JSON_UNESCAPED_UNICODE);
 
         // Вставляем новую строку excel_steps_count с pay = false
