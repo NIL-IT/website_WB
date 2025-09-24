@@ -151,9 +151,9 @@ function renderApplications(sortBy = 'status', order = 'desc') {
 
         let buttonHtml;
         if (isZeroReport) {
-            buttonHtml = `<button class="button zero-action" onclick="handleZeroButtonClick(${index})">Перейти к отчёту</button>`;
+            buttonHtml = `<button class="button zero-action" onclick="handleZeroButtonClick('${app.id}')">Перейти к отчёту</button>`;
         } else {
-            buttonHtml = `<button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick(${index})">${getButtonText(app.status)}</button>`;
+            buttonHtml = `<button class="button ${getButtonClass(app.status)}" onclick="handleButtonClick('${app.id}')">${getButtonText(app.status)}</button>`;
         }
 
         const appDiv = document.createElement('div');
@@ -222,10 +222,11 @@ function getButtonClass(status) {
     return status === 1 ? 'start' : status === 2 ? 'complete' : '';
 }
 
-function handleButtonClick(index) {
+function handleButtonClick(appId) {
     if (isZeroReportsMode) return; // Не обрабатываем в режиме нулевых отчётов
 
-    const app = applicationsData[index];
+    const app = applicationsData.find(a => String(a.id) === String(appId));
+    if (!app) return;
 
     if (app.status === 1) {
         fetch("updateStatus.php", {
@@ -254,9 +255,11 @@ function handleButtonClick(index) {
 }
 
 // Обработчик кнопки для нулевых отчётов
-function handleZeroButtonClick(index) {
-    const app = applicationsData[index];
-    window.location.href = app.url;
+function handleZeroButtonClick(appId) {
+    const app = applicationsData.find(a => String(a.id) === String(appId));
+    if (app) {
+        window.location.href = app.url;
+    }
 }
 
 function refreshApplications() {
