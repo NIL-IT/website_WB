@@ -134,6 +134,27 @@
   z-index: 1000;
 }
 
+.purchase-step-button:disabled {
+  background-color: rgba(105, 13, 201, 0.4);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: not-allowed;
+}
+
+.terms-checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #000;
+}
+
+.terms-checkbox-container input {
+  width: 18px;
+  height: 18px;
+  accent-color: rgba(105, 13, 201, 1);
+}
+
 .purchase-step-keywords {
   display: flex;
   overflow-x: auto;
