@@ -2,83 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
-import { Document, Page, pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
-
-const OfferModal = ({ onClose }) => {
-  const [numPages, setNumPages] = useState(null);
-
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
-
-  return (
-    <div
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: "rgba(0,0,0,0.6)",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
-      onClick={onClose}
-    >
-      <div
+const OfferModal = ({ onClose }) => (
+  <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <h2>Оферта</h2>
+      <iframe
+        src="/offer.pdf"
+        width="100%"
+        height="100%"        
         style={{
-          background: "#fff",
-          borderRadius: "12px",
-          padding: "20px",
-          width: "90%",
-          maxWidth: "800px",
-          maxHeight: "90vh",
-          overflowY: "auto",
+          border: "none",
+          minHeight: "80vh",
+          overflow: "scroll",
         }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <h2>Оферта</h2>
-
-        <div style={{ height: "80vh", overflowY: "auto" }}>
-          <Document
-            file="/offer.pdf"
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page
-                key={`page_${index + 1}`}
-                pageNumber={index + 1}
-                width={750} // или "100%" для адаптивного размера
-              />
-            ))}
-          </Document>
-        </div>
-
-        <div style={{ textAlign: "right", marginTop: "15px" }}>
-          <button
-            onClick={onClose}
-            style={{
-              padding: "8px 16px",
-              border: "none",
-              background: "#4caf50",
-              color: "white",
-              fontWeight: 500,
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-          >
-            Закрыть
-          </button>
-        </div>
+        title="Оферта"
+      ></iframe>
+      <div className="modal-actions">
+        <button className="modal-btn" onClick={onClose}>
+          Закрыть
+        </button>
       </div>
     </div>
-  );
-};
-
+  </div>
+);
 
 const PurchaseStepsPage = ({
   userSteps,
