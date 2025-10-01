@@ -3,41 +3,25 @@ import { useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
 
-const OfferModal = ({ onClose }) => {
-  const [loading, setLoading] = useState(true);
-
-  return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>Оферта</h2>
-
-        {loading && (
-          <div style={{ textAlign: "center", padding: "20px" }}>
-            <span>Загрузка...</span>
-          </div>
-        )}
-
-        <iframe
-          src="/offer.pdf"
-          width="100%"
-          height="500px"
-          style={{ border: "none", display: loading ? "none" : "block",
-             width: "100%", 
-            height: "80vh",    
-            overflow: "auto",   
-          }}
-          title="Оферта"
-          onLoad={() => setLoading(false)}
-        ></iframe>
-        <div className="modal-actions">
-          <button className="modal-btn" onClick={onClose}>
-            Закрыть
-          </button>
-        </div>
+const OfferModal = ({ onClose }) => (
+  <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <h2>Оферта</h2>
+      <iframe
+        src="/offer.pdf"
+        width="100%"
+        height="500px"
+        style={{ border: "none" }}
+        title="Оферта"
+      ></iframe>
+      <div className="modal-actions">
+        <button className="modal-btn" onClick={onClose}>
+          Закрыть
+        </button>
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 const PurchaseStepsPage = ({
   userSteps,
