@@ -21,7 +21,11 @@ const OfferModal = ({ onClose }) => {
           src="/offer.pdf"
           width="100%"
           height="500px"
-          style={{ border: "none", display: loading ? "none" : "block" }}
+          style={{ border: "none", display: loading ? "none" : "block",
+             width: "100%", 
+            height: "80vh",    
+            overflow: "auto",   
+          }}
           title="Оферта"
           onLoad={() => setLoading(false)}
         ></iframe>
