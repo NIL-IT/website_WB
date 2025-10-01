@@ -3,6 +3,26 @@ import { useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
 
+const OfferModal = ({ onClose }) => (
+  <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <h2>Оферта</h2>
+      <iframe
+        src="/offer.pdf"
+        width="100%"
+        height="500px"
+        style={{ border: "none" }}
+        title="Оферта"
+      ></iframe>
+      <div className="modal-actions">
+        <button className="modal-btn" onClick={onClose}>
+          Закрыть
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
 const PurchaseStepsPage = ({
   userSteps,
   fetchUserSteps,
@@ -108,6 +128,7 @@ const PurchaseStepsPage = ({
   });
 
   const [checked, setChecked] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const [errors, setErrors] = useState({
     cardNumber: false,
     bankName: false,
@@ -584,6 +605,7 @@ const PurchaseStepsPage = ({
   };
 
   const renderStepContent = () => {
+    
     switch (step) {
       case 0:
         return (
@@ -677,10 +699,37 @@ const PurchaseStepsPage = ({
                 ОЗОН картой (по центральному региону).
               </p>
               <div className="step-footer-container">
+                <div className="upload-feedback-step4">
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                    onClick={() => setChecked(!checked)}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div
+                    className="upload-feedback-text"
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      setShowOfferModal(true);
+                    }}
+                  >
+                    Я принимаю условия оферты
+                  </div>
+                </div>
+
+                  {showOfferModal && (
+                    <OfferModal
+                      onClose={() => setShowOfferModal(false)}
+                    />
+                  )}
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
