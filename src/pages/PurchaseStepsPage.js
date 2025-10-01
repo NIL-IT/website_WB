@@ -10,8 +10,12 @@ const OfferModal = ({ onClose }) => (
       <iframe
         src="/offer.pdf"
         width="100%"
-        height="500px"
-        style={{ border: "none" }}
+        height="100%"        
+        style={{
+          border: "none",
+          minHeight: "80vh",
+          overflow: "scroll",
+        }}
         title="Оферта"
       ></iframe>
       <div className="modal-actions">
