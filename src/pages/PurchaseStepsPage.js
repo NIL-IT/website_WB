@@ -8,7 +8,7 @@ const OfferModal = ({ onClose }) => (
     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
       <h2>Оферта</h2>
       <iframe
-        src="/offer.pdf"
+        src="/offer.html"
         width="100%"
         height="100%"        
         style={{
