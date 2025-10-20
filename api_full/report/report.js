@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                user_id: data.user.id // id пользователя из ответа
+                id_usertg: data.user.id_usertg // используем id_usertg (поле есть в users)
               }),
             })
               .then((resp) => resp.json())

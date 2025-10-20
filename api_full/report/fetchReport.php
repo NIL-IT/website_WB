@@ -40,8 +40,8 @@ try {
             $your_price = $product['your_price'];
             $benefit = $market_price - $your_price;
 
-            // Запрос к таблице users — получаем больше полей (id, id_usertg, confirmation_image, confirmation)
-            $stmt = $pdo->prepare('SELECT id, id_usertg, confirmation_image, confirmation FROM users WHERE username = :tg_nick');
+            // Запрос к таблице users — получаем id_usertg, username, confirmation_image, confirmation
+            $stmt = $pdo->prepare('SELECT id_usertg, username, confirmation_image, confirmation FROM users WHERE username = :tg_nick');
             $stmt->bindParam(':tg_nick', $tg_nick, PDO::PARAM_STR);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -70,7 +70,7 @@ try {
                 'benefit' => $benefit,
                 'comment' => $step['comment'],
                 'modified_payment' => $step['modified_payment'],
-                'user' => $user // добавляем объект пользователя в ответ
+                'user' => $user // добавляем объект пользователя в ответ (включает id_usertg и username)
             ];
 
             echo json_encode($response);
