@@ -40,11 +40,14 @@ try {
             $your_price = $product['your_price'];
             $benefit = $market_price - $your_price;
 
-            // Запрос к таблице users — получаем id_usertg, username, confirmation_image, confirmation
-            $stmt = $pdo->prepare('SELECT id_usertg, username, confirmation_image, confirmation FROM users WHERE username = :tg_nick');
-            $stmt->bindParam(':tg_nick', $tg_nick, PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            // Получаем id_usertg из steps и ищем пользователя по нему.
+            $id_usertg = isset($step['id_usertg']) ? $step['id_usertg'] : null;
+            if ($id_usertg) {
+                $stmt = $pdo->prepare('SELECT id_usertg, username, confirmation_image, confirmation FROM users WHERE id_usertg = :id_usertg LIMIT 1');
+                $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_STR);
+                $stmt->execute();
+                $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            }
 
             // Добавление префикса к URL изображениям шагов
             for ($i = 1; $i <= 7; $i++) {
