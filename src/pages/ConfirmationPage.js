@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../styles/ProfilePage.css";
+import "../styles/ConfirmationPage.css";
+// Импортируем изображения из src/assets — они будут включены в билд
+import photoStep1 from '../assets/photo_confirmation_1.jpg';
+import photoStep2 from '../assets/photo_confirmation_2.jpg';
 
 const ConfirmationPage = ({ userInfo }) => {
   const navigate = useNavigate();
@@ -85,7 +88,7 @@ const ConfirmationPage = ({ userInfo }) => {
           <div>
             <p style={{margin:0, fontWeight:600}}>Шаг 1</p>
             <img
-              src="/assets/photo_confirmation_1.jpg"
+              src={photoStep1}
               alt="Инструкция шаг 1"
               style={{width:'100%', maxWidth:420, borderRadius:8, marginTop:8, background:'#f0f0f0'}}
             />
@@ -94,7 +97,7 @@ const ConfirmationPage = ({ userInfo }) => {
           <div>
             <p style={{margin:0, fontWeight:600}}>Шаг 2</p>
             <img
-              src="/assets/photo_confirmation_2.jpg"
+              src={photoStep2}
               alt="Инструкция шаг 2"
               style={{width:'100%', maxWidth:420, borderRadius:8, marginTop:8, background:'#f0f0f0'}}
             />
@@ -105,7 +108,7 @@ const ConfirmationPage = ({ userInfo }) => {
         {/* Поле для загрузки скриншота и кнопка отправки */}
         <div style={{marginTop:12}}>
           <p style={{marginBottom:6}}>Прикрепите скриншот подтверждения WB</p>
-          <label className="upload-label" htmlFor="confirmation-upload" style={{display:'inline-block', width:'auto'}}>
+          <label className="upload-label" htmlFor="confirmation-upload" style={{display:'inline-block', width:'auto', cursor:'pointer'}}>
             {filePreview ? 'Скриншот выбран' : 'Выберите скриншот'}
           </label>
           <input
@@ -114,7 +117,7 @@ const ConfirmationPage = ({ userInfo }) => {
             accept="image/*"
             className="upload-input"
             onChange={handleFileChange}
-            style={{display:'block', marginTop:8}}
+            style={{display:'none'}} /* скрываем нативный input — используем label */
           />
           {filePreview && (
             <div style={{marginTop:12}}>
