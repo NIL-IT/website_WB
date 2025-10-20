@@ -143,7 +143,7 @@ const ConfirmationPage = ({ userInfo }) => {
           />
           {filePreview && (
             <div className="preview-wrapper">
-              <p style={{margin:0, marginBottom:8}}>Превью загруженного скрина:</p>
+              <p style={{margin:0, marginBottom:8}}>Превью загруженного скриншота:</p>
               <img src={filePreview} alt="preview" style={{width:'100%', maxWidth:420, borderRadius:8}} />
             </div>
           )}
