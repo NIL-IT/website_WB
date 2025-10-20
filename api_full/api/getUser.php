@@ -39,14 +39,18 @@ try {
         // Получение статуса пользователя
         $status = $user['status'];
 
+        // Получение поля confirmation (если есть) с безопасным значением по умолчанию
+        $confirmation = isset($user['confirmation']) ? $user['confirmation'] : false;
+
         // Определение, является ли username валидным
         $validUsername = ($user['username'] !== null && $user['username'] !== '' && $user['username'] !== 'undefined');
 
-        // Оставляем только нужные поля
+        // Оставляем только нужные поля, добавляем confirmation
         $user = [
             'id_usertg' => $user['id_usertg'],
             'username' => $user['username'],
-            'status' => $user['status']
+            'status' => $user['status'],
+            'confirmation' => $confirmation
         ];
 
         echo json_encode(["success" => true, "data" => $user, "validUsername" => $validUsername]);
