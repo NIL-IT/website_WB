@@ -50,7 +50,7 @@ try {
 
     // Сохраняем путь в БД и ставим confirmation = true (1)
     $pdo = getDbConnection();
-    $stmt = $pdo->prepare("UPDATE users SET confirmation = 1, confirmation_image = :img WHERE id_usertg = :id_usertg");
+    $stmt = $pdo->prepare("UPDATE users SET confirmation = true, confirmation_image = :img WHERE id_usertg = :id_usertg");
     $stmt->bindParam(':img', $imagePathPublic, PDO::PARAM_STR);
     $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_INT);
 
