@@ -5,7 +5,7 @@ import "../styles/ConfirmationPage.css";
 import photoStep1 from '../assets/photo_confirmation_1.jpg';
 import photoStep2 from '../assets/photo_confirmation_2.jpg';
 
-const ConfirmationPage = ({ userInfo }) => {
+const ConfirmationPage = ({ userInfo, fetchUserSteps }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const baseURL = "https://inhomeka.online:8000/";
@@ -49,13 +49,23 @@ const ConfirmationPage = ({ userInfo }) => {
       });
       const json = await res.json();
       if (json.success) {
-        setMessage('Отправлено. Ожидайте подтверждения. Выполняется переход...');
+        setMessage('Отправлено. Ожидайте подтверждения. Обновляем данные и выполняем переход...');
+        // обновляем данные шагов / пользователя из App.js
+        try {
+          if (typeof fetchUserSteps === 'function') {
+            await fetchUserSteps(userInfo.id_usertg);
+          }
+        } catch (e) {
+          console.error('Ошибка при обновлении шагов:', e);
+        }
         // краткая пауза, затем переход обратно на источник (если передан) или перезагрузка
         setTimeout(() => {
           if (location && location.state && location.state.from) {
             navigate(location.state.from);
           } else {
-            window.location.reload();
+            // если не указан from — вернёмся на профиль и обновим страницу
+            navigate('/profile');
+            setTimeout(() => window.location.reload(), 600);
           }
         }, 1200);
       } else {
