@@ -28,7 +28,91 @@ document.addEventListener("DOMContentLoaded", function () {
         const commentSeparator = document.createElement("hr");
         commentSeparator.className = "top-section-separator";
         userInfoDiv.appendChild(commentSeparator);
-        
+
+        // --- Новое: отображение скриншота профиля WB из users.confirmation_image ---
+        const profileWrapper = document.createElement("div");
+        profileWrapper.className = "screenshot-wrapper";
+        profileWrapper.style.marginBottom = "20px";
+
+        const profileCaption = document.createElement("div");
+        profileCaption.className = "screenshot-caption";
+        profileCaption.style.display = "flex";
+        profileCaption.style.alignItems = "center";
+        profileCaption.style.justifyContent = "center";
+        profileCaption.style.gap = "8px";
+
+        const profileArrow = document.createElement("span");
+        profileArrow.className = "screenshot-arrow";
+        profileArrow.textContent = "▲";
+
+        profileCaption.appendChild(profileArrow);
+        const profileCaptionText = document.createElement("span");
+        profileCaptionText.textContent = data.user && data.user.confirmation_image ? "Профиль WB:" : "Профиль WB не приложен";
+        profileCaption.appendChild(profileCaptionText);
+
+        let profileImg = null;
+        // Показываем изображение и кнопку только если есть confirmation_image
+        if (data.user && data.user.confirmation_image) {
+          profileImg = document.createElement("img");
+          profileImg.src = data.user.confirmation_image;
+          profileImg.alt = "Профиль WB";
+          profileImg.className = "product-image-detail";
+          // Обработчик для сворачивания
+          profileCaption.addEventListener("click", function () {
+            profileImg.classList.toggle("collapsed-image");
+            profileArrow.textContent = profileImg.classList.contains("collapsed-image") ? "▼" : "▲";
+          });
+        } else {
+          // Если нет изображения, стрелку скрываем
+          profileArrow.style.display = "none";
+        }
+
+        profileWrapper.appendChild(profileCaption);
+        if (profileImg) profileWrapper.appendChild(profileImg);
+
+        // Кнопка "Профиль не соответствует скришоту"
+        if (data.user && data.user.confirmation_image) {
+          const mismatchBtn = document.createElement("button");
+          mismatchBtn.className = "btn btn-gray";
+          mismatchBtn.style.marginTop = "8px";
+          mismatchBtn.textContent = "Профиль не соответствует скришоту";
+          mismatchBtn.addEventListener("click", function () {
+            if (!confirm("Удалить изображение профиля WB и отметить подтверждение как ложное?")) return;
+            mismatchBtn.disabled = true;
+            fetch("removeConfirmation.php", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                user_id: data.user.id // id пользователя из ответа
+              }),
+            })
+              .then((resp) => resp.json())
+              .then((res) => {
+                if (res.success) {
+                  // Обновим страницу, чтобы отразить изменения
+                  location.reload();
+                } else {
+                  alert("Ошибка при удалении профиля: " + (res.error || 'unknown'));
+                  mismatchBtn.disabled = false;
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+                alert("Ошибка при соединении с сервером");
+                mismatchBtn.disabled = false;
+              });
+          });
+          profileWrapper.appendChild(mismatchBtn);
+        }
+
+        const profileSeparator = document.createElement("hr");
+        profileSeparator.className = "screenshot-separator";
+        profileWrapper.appendChild(profileSeparator);
+        userInfoDiv.appendChild(profileWrapper);
+        // --- Конец блока профиля WB ---
+
         const screenshotsDiv = document.getElementById("screenshots");
 
         // Вставляем визуальное отделение и заголовок для блока скриншотов

@@ -40,22 +40,27 @@ try {
             $your_price = $product['your_price'];
             $benefit = $market_price - $your_price;
 
-            // Запрос к таблице users
-            $stmt = $pdo->prepare('SELECT id_usertg FROM users WHERE username = :tg_nick');
+            // Запрос к таблице users — получаем больше полей (id, id_usertg, confirmation_image, confirmation)
+            $stmt = $pdo->prepare('SELECT id, id_usertg, confirmation_image, confirmation FROM users WHERE username = :tg_nick');
             $stmt->bindParam(':tg_nick', $tg_nick, PDO::PARAM_STR);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Добавление префикса к URL изображениям
+            // Добавление префикса к URL изображениям шагов
             for ($i = 1; $i <= 7; $i++) {
                 if (!empty($step["image$i"])) {
-                    $step["image$i"] = 'https://inhomeka.online:8000/' . $step["image$i"];
+                    $step["image$i"] = 'https://inhomeka.online:8000/' . ltrim($step["image$i"], '/');
                 }
             }
 
             // Добавление префикса к URL для receipt_image
             if (!empty($step['receipt_image'])) {
-                $step['receipt_image'] = 'https://inhomeka.online:8000/' . $step['receipt_image'];
+                $step['receipt_image'] = 'https://inhomeka.online:8000/' . ltrim($step['receipt_image'], '/');
+            }
+
+            // Добавление префикса для confirmation_image пользователя, если есть
+            if ($user && !empty($user['confirmation_image'])) {
+                $user['confirmation_image'] = 'https://inhomeka.online:8000/' . ltrim($user['confirmation_image'], '/');
             }
 
             // Добавление значения выгоды и комментария в ответ
@@ -63,8 +68,9 @@ try {
                 'success' => true,
                 'data' => $step,
                 'benefit' => $benefit,
-                'comment' => $step['comment'], // Убедитесь, что комментарий включен
-                'modified_payment' => $step['modified_payment'] // Добавьте изменённую выплату
+                'comment' => $step['comment'],
+                'modified_payment' => $step['modified_payment'],
+                'user' => $user // добавляем объект пользователя в ответ
             ];
 
             echo json_encode($response);
