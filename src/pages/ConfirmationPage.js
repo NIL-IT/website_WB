@@ -79,6 +79,11 @@ const ConfirmationPage = ({ userInfo }) => {
       </div>
 
       <div className="confirmation-container" style={{background:'#fff', padding:20, borderRadius:8}}>
+        {userInfo && userInfo.confirmation && (
+          <p style={{fontWeight:700, fontSize:16, marginTop:0, marginBottom:12}}>
+            Ваш аккаунт подтверждён
+          </p>
+        )}
         <p style={{marginTop:0, marginBottom:12}}>
           Для использования сервиса нужно подтвердить ваш аккаунт WB. Для этого следуйте инструкции на изображениях.
         </p>
@@ -94,7 +99,7 @@ const ConfirmationPage = ({ userInfo }) => {
           <div className="step-box">
             <p className="step-title" style={{margin:0, fontWeight:600}}>Шаг 2</p>
             <img src={photoStep2} alt="Инструкция шаг 2" className="step-image" />
-            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Сделайте скрин данной страницы и загрузите его ниже.</p>
+            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Сделайте скриншот данной страницы и загрузите его ниже.</p>
           </div>
         </div>
 
@@ -105,7 +110,7 @@ const ConfirmationPage = ({ userInfo }) => {
 
         {/* Отдельно оформленная секция загрузки */}
         <div className="confirmation-upload-section">
-          <p style={{marginBottom:6}}>Прикрепите скриншот подтверждения WB</p>
+          <p style={{marginBottom:6}}>Прикрепите скриншот для подтверждения аккаунта</p>
           <label className="upload-label" htmlFor="confirmation-upload" style={{display:'inline-block', cursor:'pointer'}}>
             {filePreview ? 'Скриншот выбран' : 'Выберите скриншот'}
           </label>
