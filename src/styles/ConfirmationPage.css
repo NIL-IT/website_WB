@@ -42,47 +42,81 @@
 .confirmation-steps {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 12px;
 }
 
-.confirmation-steps img {
+/* Блок шага */
+.step-box {
+  border: 1px solid #e6e6e6;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fafafa;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.step-box .step-image {
   width: 100%;
   max-width: 420px;
   border-radius: 8px;
-  background: #f6f6f6;
-  display: block;
+  margin-top: 8px;
 }
 
-/* Секция загрузки */
-.upload-label {
-  font-size: 15px;
-  font-weight: 500;
-  border-radius: 10px;
-  background-color: rgba(188, 122, 255, 1);
-  color: white;
-  padding: 12px 16px;
-  display: inline-block;
-  cursor: pointer;
-  box-sizing: border-box;
+/* Разделитель между шагами */
+.step-separator {
+  height: 1px;
+  background: #e9e9e9;
+  margin: 6px 0;
+  border-radius: 2px;
 }
 
-.upload-input {
-  display: none;
+/* Подсказка под шагами */
+.steps-hint {
+  font-size: 14px;
+  color: #444;
+  margin-bottom: 12px;
 }
 
-.preview-wrapper {
+/* Секция загрузки - визуально отделена */
+.confirmation-upload-section {
+  border-top: 1px solid #eee;
+  padding-top: 14px;
   margin-top: 12px;
 }
 
-.preview-wrapper img {
-  width: 100%;
-  max-width: 420px;
-  border-radius: 8px;
-  display: block;
+/* Меньшие кнопки, чтобы не вылазили */
+.small-button {
+  min-width: 96px;
+  max-width: 140px;
+  padding: 8px 10px;
+  font-size: 14px;
 }
 
-/* Кнопки */
+/* Локальная корректировка кнопок для этой страницы */
+.confirmation-page .purchase-step-button {
+  padding: 10px 12px;
+  font-size: 14px;
+  width: auto;
+  min-width: 96px;
+}
+
+.confirmation-page .telegram-button {
+  padding: 10px 12px;
+  font-size: 14px;
+  width: auto;
+  min-width: 96px;
+}
+
+/* Убедимся, что экраны поменьше корректно отображают кнопки */
+@media (max-width: 420px) {
+  .confirmation-page .purchase-step-button,
+  .confirmation-page .telegram-button {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+}
+
+/* Стили для новых элементов */
 .actions-row {
   display: flex;
   gap: 10px;

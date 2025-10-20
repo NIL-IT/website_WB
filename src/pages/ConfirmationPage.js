@@ -78,37 +78,35 @@ const ConfirmationPage = ({ userInfo }) => {
         </div>
       </div>
 
-      <div style={{background:'#fff', padding:20, borderRadius:8}}>
+      <div className="confirmation-container" style={{background:'#fff', padding:20, borderRadius:8}}>
         <p style={{marginTop:0, marginBottom:12}}>
           Для использования сервиса нужно подтвердить ваш аккаунт WB. Для этого следуйте инструкции на изображениях.
         </p>
 
-        {/* Инструкционные скриншоты (замените пути на реальные файлы/ресурсы при необходимости) */}
-        <div style={{display:'flex', flexDirection:'column', gap:12, marginBottom:12}}>
-          <div>
-            <p style={{margin:0, fontWeight:600}}>Шаг 1</p>
-            <img
-              src={photoStep1}
-              alt="Инструкция шаг 1"
-              style={{width:'100%', maxWidth:420, borderRadius:8, marginTop:8, background:'#f0f0f0'}}
-            />
-            <p style={{marginTop:6, marginBottom:0, color:'#666'}}>Откройте настройки аккаунта WB и нажмите на "Данные и настройки".</p>
+        {/* Инструкционные скриншоты — отдельные блоки с разделителем */}
+        <div className="confirmation-steps" style={{marginBottom:12}}>
+          <div className="step-box">
+            <p className="step-title" style={{margin:0, fontWeight:600}}>Шаг 1</p>
+            <img src={photoStep1} alt="Инструкция шаг 1" className="step-image" />
+            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Откройте настройки аккаунта WB и нажмите на "Данные и настройки".</p>
           </div>
-          <div>
-            <p style={{margin:0, fontWeight:600}}>Шаг 2</p>
-            <img
-              src={photoStep2}
-              alt="Инструкция шаг 2"
-              style={{width:'100%', maxWidth:420, borderRadius:8, marginTop:8, background:'#f0f0f0'}}
-            />
-            <p style={{marginTop:6, marginBottom:0, color:'#666'}}>Сделайте скрин данной страницы и загрузите его ниже.</p>
+          <div className="step-separator" aria-hidden="true"></div>
+          <div className="step-box">
+            <p className="step-title" style={{margin:0, fontWeight:600}}>Шаг 2</p>
+            <img src={photoStep2} alt="Инструкция шаг 2" className="step-image" />
+            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Сделайте скрин данной страницы и загрузите его ниже.</p>
           </div>
         </div>
 
-        {/* Поле для загрузки скриншота и кнопка отправки */}
-        <div style={{marginTop:12}}>
+        {/* Подсказка под шагами */}
+        <p className="steps-hint" style={{color:'#444', marginBottom:12}}>
+          Снимите весь вид экрана с видимыми разделами, чтобы было видно подтверждение аккаунта (дату/статус). На скрине не должно быть обрезанных участков.
+        </p>
+
+        {/* Отдельно оформленная секция загрузки */}
+        <div className="confirmation-upload-section">
           <p style={{marginBottom:6}}>Прикрепите скриншот подтверждения WB</p>
-          <label className="upload-label" htmlFor="confirmation-upload" style={{display:'inline-block', width:'auto', cursor:'pointer'}}>
+          <label className="upload-label" htmlFor="confirmation-upload" style={{display:'inline-block', cursor:'pointer'}}>
             {filePreview ? 'Скриншот выбран' : 'Выберите скриншот'}
           </label>
           <input
@@ -117,34 +115,31 @@ const ConfirmationPage = ({ userInfo }) => {
             accept="image/*"
             className="upload-input"
             onChange={handleFileChange}
-            style={{display:'none'}} /* скрываем нативный input — используем label */
           />
           {filePreview && (
-            <div style={{marginTop:12}}>
+            <div className="preview-wrapper">
               <p style={{margin:0, marginBottom:8}}>Превью загруженного скрина:</p>
               <img src={filePreview} alt="preview" style={{width:'100%', maxWidth:420, borderRadius:8}} />
             </div>
           )}
 
-          <div style={{display:'flex', gap:10, marginTop:16}}>
+          <div className="actions-row">
             <button
-              className="purchase-step-button"
+              className="purchase-step-button small-button"
               onClick={handleSubmit}
               disabled={isUploading}
-              style={{width:160}}
             >
-              {isUploading ? 'Отправка...' : 'Отправить скриншот'}
+              {isUploading ? 'Отпр...' : 'Отправить'}
             </button>
             <button
-              className="telegram-button"
+              className="telegram-button small-button"
               onClick={() => navigate('/profile')}
-              style={{width:120, background:'#ddd', color:'#000'}}
             >
               Назад
             </button>
           </div>
 
-          {message && <p style={{marginTop:12, color: message.includes('Ошибка') ? 'red' : 'green'}}>{message}</p>}
+          {message && <p className="confirmation-message" style={{color: message.includes('Ошибка') ? 'red' : 'green'}}>{message}</p>}
         </div>
       </div>
     </div>
