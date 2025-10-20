@@ -314,8 +314,8 @@ const PurchaseStepsPage = ({
           const result = await response.json();
           if (result.success) {
             // если пользователь не подтверждён — редиректим на /confirmation и не продолжаем
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки изображения:" + result.error);
           }
@@ -339,8 +339,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -375,8 +375,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -405,8 +405,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -435,8 +435,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -495,8 +495,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -526,7 +526,7 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
+                        if (redirectIfNotConfirmed()) return;
             fetchProducts();
             await handleStepSuccess();
           } else {
@@ -557,8 +557,8 @@ const PurchaseStepsPage = ({
           });
           const result = await response.json();
           if (result.success) {
-            if (redirectIfNotConfirmed()) return;
             await handleStepSuccess();
+            if (redirectIfNotConfirmed()) return;
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
