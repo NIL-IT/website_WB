@@ -15,6 +15,9 @@
   right: 0; 
   margin: 0; 
   z-index: 1000;
+  /* обеспечиваем запас снизу на телефонах с "home bar" */
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  overflow: hidden; /* предотвращаем вылазание содержимого */
 }
 
 .sidebar a {
@@ -25,11 +28,18 @@
   flex: 1;
   height: 100%;
   transition: background-color 0.3s ease;
+  box-sizing: border-box;
+  overflow: hidden; /* скрываем выступающие части иконок */
+  padding: 6px 8px; /* небольшой внутренний отступ */
 }
 
 .sidebar svg {
-  width: 5vw; 
-  height: auto;
+  /* фиксированные размеры, стабильные на всех экранах */
+  width: 28px;
+  height: 28px;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
 }
 
 .sidebar .active svg path:not([stroke]) {
@@ -41,22 +51,22 @@
 }
 
 @media (min-width: 600px) {
-  
   .sidebar svg {
-    width: 4vw; 
+    width: 26px;
+    height: 26px;
   }
 }
 
 @media (min-width: 768px) {
-  
   .sidebar svg {
-    width: 3vw; 
+    width: 24px;
+    height: 24px;
   }
 }
 
 @media (max-width: 320px) {
-  
   .sidebar svg {
-    width: 6vw; 
+    width: 30px;
+    height: 30px;
   }
 }
