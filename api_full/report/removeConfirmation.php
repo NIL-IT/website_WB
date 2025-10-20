@@ -39,7 +39,7 @@ try {
     }
 
     // Обновляем запись пользователя: убираем confirmation_image и ставим confirmation = 0 по id_usertg
-    $stmt = $pdo->prepare('UPDATE users SET confirmation_image = NULL, confirmation = 0 WHERE id_usertg = :id_usertg');
+    $stmt = $pdo->prepare('UPDATE users SET confirmation_image = NULL, confirmation = false WHERE id_usertg = :id_usertg');
     $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_STR);
     $stmt->execute();
 
