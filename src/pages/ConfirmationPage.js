@@ -65,8 +65,8 @@ const ConfirmationPage = ({ userInfo }) => {
   };
 
   return (
-    <div className="profile-page" style={{padding:20}}>
-      <div className="profile-header" style={{marginBottom:20}}>
+    <div className="confirmation-page" style={{padding:20}}>
+      <div className="confirmation-header" style={{marginBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:12}}>
           <h2 style={{margin:0}}>Подтверждение аккаунта</h2>
           <span style={{
