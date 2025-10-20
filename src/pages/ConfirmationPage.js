@@ -94,9 +94,15 @@ const ConfirmationPage = ({ userInfo }) => {
 
       <div className="confirmation-container" style={{background:'#fff', padding:20, borderRadius:8}}>
         {userInfo && userInfo.confirmation && (
-          <p style={{fontWeight:700, fontSize:16, marginTop:0, marginBottom:12}}>
-            Ваш аккаунт подтверждён
-          </p>
+          <div className="confirmed-box">
+            <div className="confirmed-content">
+              <svg className="confirmed-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="12" fill="#04B800"/>
+                <path d="M7.5 12.5l2.5 2.5L16.5 9" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+              </svg>
+              <span className="confirmed-text">Ваш аккаунт подтверждён</span>
+            </div>
+          </div>
         )}
         <p style={{marginTop:0, marginBottom:12}}>
           Для использования сервиса нужно подтвердить ваш аккаунт WB. Для этого следуйте инструкции на изображениях.
