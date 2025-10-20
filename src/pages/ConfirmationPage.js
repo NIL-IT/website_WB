@@ -113,7 +113,7 @@ const ConfirmationPage = ({ userInfo }) => {
           <div className="step-box">
             <p className="step-title" style={{margin:0, fontWeight:600}}>Шаг 1</p>
             <img src={photoStep1} alt="Инструкция шаг 1" className="step-image" />
-            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Откройте настройки аккаунта WB и нажмите на "Данные и настройки".</p>
+            <p className="step-desc" style={{marginTop:6, marginBottom:0, color:'#666'}}>Откройте профиль аккаунта WB и нажмите на "Данные и настройки".</p>
           </div>
           <div className="step-separator" aria-hidden="true"></div>
           <div className="step-box">
