@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar';
 import BackButton from './components/BackButton';
 import './index.css';
 import logo from './assets/logo.png'; // Убедитесь, что путь к изображению правильный
+import ConfirmationPage from './pages/ConfirmationPage';
 
 const App = () => {
   const [products, setProducts] = useState([]);
@@ -231,6 +232,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage userInfo={userInfo} />} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete}/>} />
+            <Route path="/confirmation" element={<ConfirmationPage userInfo={userInfo} />} />
             <Route path="/report/:id" element={<ReportPage userInfo={userInfo} />} />
           </Routes>
         </div>

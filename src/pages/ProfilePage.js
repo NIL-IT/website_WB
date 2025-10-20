@@ -283,6 +283,37 @@ const ProfilePage = ({userInfo}) => {
             </svg>
           </div>
         )}
+        <div className="profile-item" onClick={() => navigate('/confirmation')}>
+          <div className="item-text" style={{display:'flex', flexDirection:'column'}}>
+            <div style={{display:'flex', alignItems:'center', gap:8}}>
+              <span className="item-title">Подтверждение</span>
+              {/* Индикатор статуса подтверждения */}
+              <span
+                style={{
+                  width: 12,
+                  height: 12,
+                  borderRadius: 12,
+                  display: 'inline-block',
+                  backgroundColor: userInfo && userInfo.confirmation ? '#04B800' : '#FF3B30'
+                }}
+                title={userInfo && userInfo.confirmation ? 'Подтверждён' : 'Не подтверждён'}
+              />
+            </div>
+            <span className="item-subtitle">Статус подтверждения аккаунта</span>
+          </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   );

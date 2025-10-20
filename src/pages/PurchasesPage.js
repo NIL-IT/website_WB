@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/PurchasesPage.css";
 
-const PurchasesPage = ({ userSteps }) => {
+const PurchasesPage = ({ userSteps, userInfo }) => {
   const [loadedImages, setLoadedImages] = useState({});
 
   const handleImageLoad = (userStepId) => {
@@ -23,6 +23,11 @@ const PurchasesPage = ({ userSteps }) => {
   const navigate = useNavigate();
 
   const handleProductClick = (userStepId) => {
+    // Если пользователь не подтверждён — переадресуем на страницу подтверждения
+    if (userInfo && !userInfo.confirmation) {
+      navigate('/confirmation');
+      return;
+    }
     console.log(userStepId);
     navigate(`/purchase-steps/${userStepId}`);
   };
