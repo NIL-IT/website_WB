@@ -25,7 +25,7 @@ const PurchasesPage = ({ userSteps, userInfo }) => {
   const handleProductClick = (userStepId) => {
     // Если пользователь не подтверждён — переадресуем на страницу подтверждения
     if (userInfo && !userInfo.confirmation) {
-      navigate('/confirmation');
+      navigate('/confirmation', { state: { from: `/purchase-steps/${userStepId}` } });
       return;
     }
     console.log(userStepId);

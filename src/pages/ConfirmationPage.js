@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import "../styles/ConfirmationPage.css";
 // Импортируем изображения из src/assets — они будут включены в билд
 import photoStep1 from '../assets/photo_confirmation_1.jpg';
@@ -7,6 +7,7 @@ import photoStep2 from '../assets/photo_confirmation_2.jpg';
 
 const ConfirmationPage = ({ userInfo }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const baseURL = "https://inhomeka.online:8000/";
   const [filePreview, setFilePreview] = useState(null);
   const [fileDataUrl, setFileDataUrl] = useState(null);
@@ -48,11 +49,15 @@ const ConfirmationPage = ({ userInfo }) => {
       });
       const json = await res.json();
       if (json.success) {
-        setMessage('Отправлено. Ожидайте подтверждения. Страница будет обновлена.');
-        // краткая пауза, затем перезагрузка для обновления userInfo
+        setMessage('Отправлено. Ожидайте подтверждения. Выполняется переход...');
+        // краткая пауза, затем переход обратно на источник (если передан) или перезагрузка
         setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+          if (location && location.state && location.state.from) {
+            navigate(location.state.from);
+          } else {
+            window.location.reload();
+          }
+        }, 1200);
       } else {
         setMessage(json.error || 'Ошибка на сервере при отправке.');
       }
