@@ -3,6 +3,52 @@ import { useParams } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "../styles/PurchaseStepsPage.css";
 
+const OfferModal = ({ onClose }) => {
+  const [loading, setLoading] = useState(true);
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>Оферта</h2>
+        {loading && (
+          <div
+            style={{
+              minHeight: "80vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "16px",
+              color: "#555",
+            }}
+          >
+            Загрузка...
+          </div>
+        )}
+
+        <iframe
+          src="/offer.html"
+          width="100%"
+          height="100%"
+          style={{
+            border: "none",
+            minHeight: "80vh",
+            overflow: "scroll",
+            display: loading ? "none" : "block", 
+          }}
+          title="Оферта"
+          onLoad={() => setLoading(false)}
+        ></iframe>
+
+        <div className="modal-actions">
+          <button className="modal-btn" onClick={onClose}>
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const PurchaseStepsPage = ({
   userSteps,
   fetchUserSteps,
@@ -108,6 +154,7 @@ const PurchaseStepsPage = ({
   });
 
   const [checked, setChecked] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
   const [errors, setErrors] = useState({
     cardNumber: false,
     bankName: false,
@@ -584,6 +631,7 @@ const PurchaseStepsPage = ({
   };
 
   const renderStepContent = () => {
+    
     switch (step) {
       case 0:
         return (
@@ -591,7 +639,7 @@ const PurchaseStepsPage = ({
             <div className="purchase-step-header">
               <p className="title-class-step">Условия сделки</p>
               <p className="purchase-step-subtitle">
-                Срок выплаты кэшбэка в течении 3-10 дней после завершения отчета
+                Срок выплаты кэшбэка в течении 3-5 рабочих дней после завершения отчета
               </p>
             </div>
             <div className="purchase-step-content">
@@ -635,32 +683,7 @@ const PurchaseStepsPage = ({
                 </a>
               </div>
               <p className="purchase-step-text">
-                На каждом шаге оформления выкупа вам будут даваться задания,
-                такие как:
-                <br /> 1. Найдите товар по инструкции;
-                <br /> 2. Добавьте товар и бренд в избранное;
-                <br /> 3. Подписаться на одну из социальных сетей бренда на
-                выбор;
-                <br />
-                3. Купите товар - 1 шт;
-                <br />
-                4. Предоставьте видео разрезания штрих-кода;
-                <br />
-                5. Оставьте отзыв по ТЗ.
-                <br />
-                Необходимо четко следовать инструкции и прикреплять
-                соответствующие скриншоты, где это требуется.
-              </p>
-              <p className="purchase-step-text">
-                Цена в магазине: {userStep.marketprice} ₽<br />
-                Цена для вас: {userStep.yourprice} ₽
-              </p>
-              <p className="purchase-step-text">
-                С одного аккаунта маркетплэйса можно выкупить только 1 единицу
-                товара.
-              </p>
-              <p className="purchase-step-text">
-                Товар следует выкупить и оформить отзыв до {
+                Товар следует выкупить до {
                   (() => {
                     const now = new Date();
                     now.setMonth(now.getMonth() + 3);
@@ -677,10 +700,46 @@ const PurchaseStepsPage = ({
                 ОЗОН картой (по центральному региону).
               </p>
               <div className="step-footer-container">
+                <div className="upload-feedback-step4">
+                  <div
+                    className={`upload-checkbox ${checked ? "checked" : ""}`}
+                    onClick={() => setChecked(!checked)}
+                  >
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div
+                    className="upload-feedback-text"
+                    onClick={(e) => {
+                      e.stopPropagation(); 
+                      setShowOfferModal(true);
+                    }}
+                  >
+                    Я принимаю{" "}
+                    <span
+                      style={{
+                        color: "blue",
+                        textDecoration: "underline",
+                        cursor: "pointer"
+                      }}
+                    >
+                      условия оферты
+                    </span>
+                  </div>
+                </div>
+
+                  {showOfferModal && (
+                    <OfferModal
+                      onClose={() => setShowOfferModal(false)}
+                    />
+                  )}
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
