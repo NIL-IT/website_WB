@@ -143,6 +143,35 @@
   border: none;
 }
 
+/* Уникальная кнопка отправки для страницы подтверждения */
+.confirmation-send-button {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background-color: rgba(105, 13, 201, 1);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 96px;
+  box-sizing: border-box;
+  z-index: 2;
+}
+
+.confirmation-page .confirmation-send-button[disabled] {
+  background-color: grey;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+@media (max-width: 420px) {
+  .confirmation-send-button {
+    font-size: 13px;
+    padding: 8px 10px;
+    min-width: 84px;
+  }
+}
+
 /* Сообщения */
 .confirmation-message {
   margin-top: 12px;

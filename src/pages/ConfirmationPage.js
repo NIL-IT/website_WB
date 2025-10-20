@@ -125,7 +125,7 @@ const ConfirmationPage = ({ userInfo }) => {
 
           <div className="actions-row">
             <button
-              className="purchase-step-button small-button"
+              className="confirmation-send-button"
               onClick={handleSubmit}
               disabled={isUploading}
             >
