@@ -5,7 +5,7 @@ import "../styles/ConfirmationPage.css";
 import photoStep1 from '../assets/photo_confirmation_1.jpg';
 import photoStep2 from '../assets/photo_confirmation_2.jpg';
 
-const ConfirmationPage = ({ userInfo, fetchUserSteps }) => {
+const ConfirmationPage = ({ userInfo }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const baseURL = "https://inhomeka.online:8000/";
@@ -49,25 +49,24 @@ const ConfirmationPage = ({ userInfo, fetchUserSteps }) => {
       });
       const json = await res.json();
       if (json.success) {
-        setMessage('Отправлено. Ожидайте подтверждения. Обновляем данные и выполняем переход...');
-        // обновляем данные шагов / пользователя из App.js
+        // простая установка флага подтверждения локально (без вызова внешних функций)
         try {
-          if (typeof fetchUserSteps === 'function') {
-            await fetchUserSteps(userInfo.id_usertg);
+          if (userInfo) {
+            userInfo.confirmation = true; // mutate prop (простое поведение по требованию)
           }
         } catch (e) {
-          console.error('Ошибка при обновлении шагов:', e);
+          console.error('Ошибка при установке флага подтверждения:', e);
         }
+        setMessage('Отправлено. Ваш аккаунт помечен как подтверждён. Выполняется переход...');
         // краткая пауза, затем переход обратно на источник (если передан) или перезагрузка
         setTimeout(() => {
           if (location && location.state && location.state.from) {
             navigate(location.state.from);
           } else {
-            // если не указан from — вернёмся на профиль и обновим страницу
             navigate('/profile');
             setTimeout(() => window.location.reload(), 600);
           }
-        }, 1200);
+        }, 1000);
       } else {
         setMessage(json.error || 'Ошибка на сервере при отправке.');
       }

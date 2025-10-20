@@ -232,7 +232,7 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage userInfo={userInfo} />} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete}/>} />
-            <Route path="/confirmation" element={<ConfirmationPage userInfo={userInfo} fetchUserSteps={fetchUserSteps} />} />
+            <Route path="/confirmation" element={<ConfirmationPage userInfo={userInfo} />} />
             <Route path="/report/:id" element={<ReportPage userInfo={userInfo} />} />
           </Routes>
         </div>
