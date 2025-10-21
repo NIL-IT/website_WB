@@ -119,3 +119,10 @@
   font-size: 18px;
   font-weight: 400;
 }
+
+/* Иконки рядом с заголовками */
+.item-title svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}

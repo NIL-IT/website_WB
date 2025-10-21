@@ -146,85 +146,78 @@ const ProfilePage = ({userInfo}) => {
       </div>
       <div className="profile-content">
         <div className="profile-item" onClick={() => navigate('/purchases')}>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 6H4v14a1 1 0 0 0 1 1h14v-2H6V6z" fill="black"/>
-              <path d="M7 6l1-3h8l1 3" stroke="black" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M9 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm6 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" fill="black"/>
-            </svg>
-          </div>
           <div className="item-text">
-             <span className="item-title">Мои покупки</span>
-             <span className="item-subtitle">Список всех ваших покупок</span>
-           </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
+            <span className="item-title">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 4h-2l-1 2h2l3.6 7.59L9.25 16.04A1 1 0 0 0 9 17h10v-2H10.42l.58-1.17L19 6H7z" fill="black"/>
+                <circle cx="10" cy="19" r="1.2" fill="black"/><circle cx="17" cy="19" r="1.2" fill="black"/>
+              </svg>
+              Мои покупки
+            </span>
+            <span className="item-subtitle">Список всех ваших покупок</span>
+          </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
         {/* {userInfo && userInfo.status === 'admin' && ( */}
           <div className="profile-item" onClick={() => navigate('/add-product')}>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 5v14M5 12h14" stroke="black" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
           <div className="item-text">
-           <span className="item-title">Разместить товар</span>
-           <span className="item-subtitle">Для продавцов</span>
-           </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
+            <span className="item-title">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5v14M5 12h14" stroke="black" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Разместить товар
+            </span>
+            <span className="item-subtitle">Для продавцов</span>
+          </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
        {/* )} */}
         <div className="profile-item" onClick={() => navigate('/catalog')}>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="black"/>
-            </svg>
-          </div>
           <div className="item-text">
-             <span className="item-title">Каталог</span>
-             <span className="item-subtitle">Все актуальные товары</span>
-           </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
-        <div className="profile-item" onClick={() => {window.open(`https://t.me/razdadim5`, "_blank", "noopener,noreferrer");} }>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2a10 10 0 0 0-7.07 17.07L3 21l1.93-1.93A10 10 0 1 0 12 2z" fill="black"/>
-              <path d="M12 7v6l4 2" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <span className="item-title">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z" fill="black"/>
+              </svg>
+              Каталог
+            </span>
+            <span className="item-subtitle">Все актуальные товары</span>
           </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+        <div className="profile-item" onClick={() => {window.open(`https://t.me/razdadim5`, "_blank", "noopener,noreferrer");} }>
           <div className="item-text">
             <span className="item-title">
               <svg
@@ -243,55 +236,47 @@ const ProfilePage = ({userInfo}) => {
               </svg>
               Поддержка
             </span>
-             <span className="item-subtitle">
-               Оперативно ответим на все Ваши вопросы
-             </span>
-           </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
-        <div className="profile-item" onClick={() => {window.open(` https://inhomeka.ru/main?utm_source=tg&utm_medium=club&utm_campaign=profile`, "_blank", "noopener,noreferrer");} }>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2l2.09 6.26L20 9.27l-5 3.64L16.18 20 12 16.9 7.82 20 9 12.91 4 9.27l5.91-.99L12 2z" fill="black"/>
-            </svg>
+            <span className="item-subtitle">
+              Оперативно ответим на все Ваши вопросы
+            </span>
           </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+        <div className="profile-item" onClick={() => {window.open(` https://inhomeka.ru/main?utm_source=tg&utm_medium=club&utm_campaign=profile`, "_blank", "noopener,noreferrer");} }>
           <div className="item-text">
             <span className="item-title">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2l2.09 6.26L20 9.27l-5 3.64L16.18 20 12 16.9 7.82 20 9 12.91 4 9.27l5.91-.99L12 2z" fill="black"/>
+              </svg>
               О бренде INHOMEKA
             </span>
           </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
-         {userInfo && userInfo.status === 'admin' && (
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
+        {userInfo && userInfo.status === 'admin' && (
           <div className="profile-item" onClick={() => navigate('/catalog-moderate')}>
-            <div className="item-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 1L3 5v6c0 5 3.58 9.74 9 11 5.42-1.26 9-6 9-11V5l-9-4z" fill="black"/>
-                <path d="M9.5 11.5l1.75 1.75L14.5 9" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
             <div className="item-text">
               <span className="item-title">
                 <svg width="18" height="18" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -299,34 +284,34 @@ const ProfilePage = ({userInfo}) => {
                 </svg>
                 Модерация
               </span>
-               <span className="item-subtitle">
-                 Данная вкладка доступна только модераторам
-               </span>
-             </div>
-             <svg
-               width="6"
-               height="12"
-               viewBox="0 0 6 12"
-               fill="none"
-               xmlns="http://www.w3.org/2000/svg"
-             >
-               <path
-                 d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-                 fill="black"
-               />
-             </svg>
-           </div>
-         )}
-        <div className="profile-item" onClick={() => navigate('/confirmation')}>
-          <div className="item-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2l8 4v6c0 6-4.5 9.5-8 10-3.5-.5-8-4-8-10V6l8-4z" fill="black"/>
-              <path d="M9.5 12.5l1.7 1.7L15 10" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <span className="item-subtitle">
+                Данная вкладка доступна только модераторам
+              </span>
+            </div>
+            <svg
+              width="6"
+              height="12"
+              viewBox="0 0 6 12"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+                fill="black"
+              />
             </svg>
           </div>
+        )}
+        <div className="profile-item" onClick={() => navigate('/confirmation')}>
           <div className="item-text" style={{display:'flex', flexDirection:'column'}}>
-             <div style={{display:'flex', alignItems:'center', gap:8}}>
-               <span className="item-title">Подтверждение</span>
+            <div style={{display:'flex', alignItems:'center', gap:8}}>
+              <span className="item-title">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2l8 4v6c0 6-4.5 9.5-8 10-3.5-.5-8-4-8-10V6l8-4z" fill="black"/>
+                  <path d="M9.5 12.5l1.7 1.7L15 10" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Подтверждение
+              </span>
                {/* Индикатор статуса подтверждения */}
                <span
                  style={{
@@ -341,19 +326,19 @@ const ProfilePage = ({userInfo}) => {
              </div>
              <span className="item-subtitle">Статус подтверждения аккаунта</span>
            </div>
-           <svg
-             width="6"
-             height="12"
-             viewBox="0 0 6 12"
-             fill="none"
-             xmlns="http://www.w3.org/2000/svg"
-           >
-             <path
-               d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
-               fill="black"
-             />
-           </svg>
-         </div>
+          <svg
+            width="6"
+            height="12"
+            viewBox="0 0 6 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.247666 11.4965C0.573851 11.8369 1.10275 11.8369 1.42893 11.4965L5.51127 7.23166C6.16312 6.55075 6.16287 5.44731 5.51077 4.76665L1.42592 0.503553C1.09974 0.163122 0.570844 0.163122 0.244651 0.503553C-0.0815504 0.843992 -0.0815504 1.39594 0.244651 1.73638L3.74081 5.38515C4.06707 5.72556 4.06707 6.27755 3.74081 6.61796L0.247666 10.2636C-0.0785353 10.6041 -0.0785353 11.156 0.247666 11.4965Z"
+              fill="black"
+            />
+          </svg>
+        </div>
       </div>
     </div>
   );
