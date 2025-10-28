@@ -222,13 +222,34 @@ const App = () => {
   }
 
   if (isBlocked) {
-    // Экран при блокировке — блокируем дальнейшую работу приложения
+    // Экран при блокировке — делаем его фиксированным и явно видимым
     return (
-      <div className="app-container">
-        <div className="flex justify-center items-center w-full h-full min-h-screen content">
-          <div style={{textAlign: 'center', padding: 20}}>
-            <h2>Доступ заблокирован</h2>
-            <p>Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.</p>
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#ffffff',
+          zIndex: 9999,
+          padding: 20,
+        }}
+        role="alert"
+        aria-live="assertive"
+      >
+        <div style={{ textAlign: 'center', maxWidth: 720, color: '#111' }}>
+          <h2 style={{ fontSize: 22, marginBottom: 12 }}>Доступ заблокирован</h2>
+          <p style={{ marginBottom: 16 }}>
+            Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.
+          </p>
+          <div>
+            <a
+              href="mailto:support@example.com"
+              style={{ color: '#0b5fff', textDecoration: 'underline' }}
+            >
+              Связаться со службой поддержки
+            </a>
           </div>
         </div>
       </div>
