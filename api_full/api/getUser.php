@@ -23,6 +23,12 @@ try {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    // Если пользователь найден и поле blocked = true — возвращаем success => false без данных
+    if ($user && !empty($user['blocked'])) {
+        echo json_encode(["success" => false]);
+        exit;
+    }
+
     if ($user) {
         // Проверка корректности и обновление username
         if ($username !== null && $username !== '' && $username !== 'undefined') {
