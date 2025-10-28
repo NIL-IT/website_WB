@@ -25,7 +25,7 @@ try {
 
     // Если пользователь найден и поле blocked = true — возвращаем success => false без данных
     if ($user && !empty($user['blocked'])) {
-        echo json_encode(["success" => false]);
+        echo json_encode(["success" => false, "blocked"=> true]);
         exit;
     }
 
