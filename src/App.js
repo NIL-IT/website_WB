@@ -14,6 +14,7 @@ import './index.css';
 import logo from './assets/logo.png'; // Убедитесь, что путь к изображению правильный
 import ConfirmationPage from './pages/ConfirmationPage';
 
+
 const App = () => {
   const [products, setProducts] = useState([]);
   const categories = ['Женщинам', 'Мужчинам', 'Обувь', 'Детям', 'Дом', 'Новый год', 'Красота', 'Аксессуары', 'Электроника', 'Игрушки', 'Мебель', 'Товары для взрослых', 'Бытовая техника', 'Зоотовары', 'Спорт', 'Автотовары', 'Ювелирные изделия', 'Для ремонта', 'Сад и дача', 'Здоровье', 'Канцтовары'];
@@ -24,6 +25,7 @@ const App = () => {
   const baseURL = 'https://inhomeka.online:8000/';
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false); // Новый флаг
   const [referralId, setReferralId] = useState(null); // Новый стейт для реферрала
+  const [isBlocked, setIsBlocked] = useState(false); // Блокировка пользователя
   const API = {
     async getUser(id, username) {
         try {
