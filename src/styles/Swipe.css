@@ -1,0 +1,142 @@
+/* Заменяем глобальные правила на правила, действующие только внутри .wb-swipe */
+.wb-swipe {
+  --wb-sidebar-height: 72px; /* при необходимости подправьте под реальную высоту нижнего меню */
+}
+
+/* route-wrapper / wb-route-wrapper (только внутри wb-swipe) */
+.wb-swipe .route-wrapper,
+.wb-swipe .wb-route-wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+
+/* dual-wrapper / wb-dual-wrapper */
+.wb-swipe .dual-wrapper,
+.wb-swipe .wb-dual-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  min-height: 100%;
+}
+
+/* route-pane / wb-route-pane */
+.wb-swipe .route-pane,
+.wb-swipe .wb-route-pane {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  will-change: transform, opacity;
+  overflow: hidden; /* защищаем анимируемую панель от лишнего прокручивания */
+  touch-action: none; /* избегаем конфликтов браузерных жестов внутри панели */
+}
+
+/* from / wb-from */
+.wb-swipe .route-pane.from,
+.wb-swipe .wb-route-pane.wb-from {
+  z-index: 1;
+  pointer-events: none;
+  visibility: visible;
+}
+
+/* to / wb-to */
+.wb-swipe .route-pane.to,
+.wb-swipe .wb-route-pane.wb-to {
+  z-index: 2;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.wb-swipe .route-pane img,
+.wb-swipe .wb-route-pane img {
+  position: relative;
+  display: block;
+}
+
+/* Slide out left */
+.wb-swipe .route-pane.from.slide-out-left,
+.wb-swipe .wb-route-pane.wb-from.wb-slide-out-left {
+  animation: wb-outToLeft 420ms ease forwards;
+}
+
+/* Slide in from right */
+.wb-swipe .route-pane.to.slide-in-from-right,
+.wb-swipe .wb-route-pane.wb-to.wb-slide-in-from-right {
+  transform: translateX(100%);
+  animation: wb-inFromRight 420ms ease forwards;
+}
+
+/* Slide out right */
+.wb-swipe .route-pane.from.slide-out-right,
+.wb-swipe .wb-route-pane.wb-from.wb-slide-out-right {
+  animation: wb-outToRight 420ms ease forwards;
+}
+
+/* Slide in from left */
+.wb-swipe .route-pane.to.slide-in-from-left,
+.wb-swipe .wb-route-pane.wb-to.wb-slide-in-from-left {
+  transform: translateX(-100%);
+  animation: wb-inFromLeft 420ms ease forwards;
+}
+
+/* Анимации (общие имена ключевых кадров используются для обеих групп) */
+@keyframes wb-inFromRight {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0%); }
+}
+@keyframes wb-outToLeft {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+@keyframes wb-inFromLeft {
+  0% { transform: translateX(-100%); opacity: 0.9; }
+  100% { transform: translateX(0%); opacity: 1; }
+}
+@keyframes wb-outToRight {
+  0% { transform: translateX(0%); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0.95; }
+}
+
+/* Оптимизация рендеринга только внутри wb-swipe */
+.wb-swipe .route-pane, .wb-swipe .content, .wb-swipe .wb-route-pane, .wb-swipe .wb-content {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.wb-swipe .route-pane img {
+  backface-visibility: visible !important;
+  -webkit-backface-visibility: visible !important;
+}
+
+/* swiping / wb-swiping */
+.wb-swipe .content.swiping img,
+.wb-swipe .wb-content.wb-swiping img,
+.wb-swipe .content.swiping .purchase-image,
+.wb-swipe .wb-content.wb-swiping .purchase-image,
+.wb-swipe .content.swiping .product-card img,
+.wb-swipe .wb-content.wb-swiping .product-card img,
+.wb-swipe .content.swiping .products-grid img,
+.wb-swipe .wb-content.wb-swiping .products-grid img {
+  filter: blur(6px) saturate(0.9);
+  opacity: 0.55;
+  transform: translateZ(0);
+  will-change: transform, opacity, filter;
+  transition: filter 220ms ease, opacity 220ms ease;
+}
+
+/* skeletons */
+.wb-swipe .content.swiping .purchase-skeleton,
+.wb-swipe .wb-content.wb-swiping .purchase-skeleton,
+.wb-swipe .content.swiping .img-skeleton,
+.wb-swipe .wb-content.wb-swiping .img-skeleton {
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+/* Примечание: правила, которые изменяли глобальный layout (.app-container, .content в глобуме, общий img и т.п.)
+   удалены: теперь Swipe.css отвечает только за анимацию и визуальные эффекты внутри .wb-swipe */

@@ -145,6 +145,13 @@ const App = () => {
         let valid = true; // Объявляем переменную valid здесь
 
         const response = await API.getUser(userId, username);
+         // Если сервер явно сообщает о блокировке — останавливаем дальнейшую инициализацию
+        if (response && response.success === false && response.blocked === true) {
+          setIsBlocked(true);
+          setIsLoading(false);
+          return; // Прерываем fetchData — не делаем других запросов
+        }
+
         if (!response.success) {
           // Передаем referralId если есть
           const createResponse = await API.createUser(userId, username, ref || referralId);
@@ -212,6 +219,20 @@ const App = () => {
     );
   }
 
+  if (isBlocked) {
+    // Экран при блокировке — блокируем дальнейшую работу приложения
+    return (
+      <div className="app-container">
+        <div className="flex justify-center items-center w-full h-full min-h-screen content">
+          <div style={{textAlign: 'center', padding: 20}}>
+            <h2>Доступ заблокирован</h2>
+            <p>Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
   };
