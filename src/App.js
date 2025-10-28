@@ -204,44 +204,45 @@ const App = () => {
   return () => clearTimeout(timer); // Очищаем таймер при размонтировании компонента
   }, []);
 
-  if (isLoading || !isUserInfoLoaded) { // Учитываем новый флаг
-    return (
-      <div className="flex justify-center items-center w-full h-full min-h-screen">
-        {showLogo ? (
-          <img
-            src={logo}
-            alt="Loading Logo"
-            className="fade-out max-w-full max-h-full object-contain"
-            style={{ width: "100vw", height: "100vh" }}
-          />
-        ) : (
-          <span className="loader"></span>
-        )}
-      </div>
-    );
-  }
-
   if (isBlocked) {
-    // Экран при блокировке — использует CSS-классы из index.css
-    return (
-      <div className="blocked-overlay" role="alert" aria-live="assertive">
-        <div className="blocked-overlay__box">
-          <h2>Доступ заблокирован</h2>
-          <p>
-            Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.
-          </p>
-          <div>
-            <a
-              href="mailto:support@example.com"
-              className="blocked-overlay__link"
-            >
-              Связаться со службой поддержки
-            </a>
-          </div>
+  // Экран при блокировке
+  return (
+    <div className="blocked-overlay" role="alert" aria-live="assertive">
+      <div className="blocked-overlay__box">
+        <h2>Доступ заблокирован</h2>
+        <p>
+          Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.
+        </p>
+        <div>
+          <a
+            href="https://t.me/razdadim5"
+            className="blocked-overlay__link"
+          >
+            Связаться со службой поддержки
+          </a>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+// После этого проверяем загрузку
+if (isLoading || !isUserInfoLoaded) {
+  return (
+    <div className="flex justify-center items-center w-full h-full min-h-screen">
+      {showLogo ? (
+        <img
+          src={logo}
+          alt="Loading Logo"
+          className="fade-out max-w-full max-h-full object-contain"
+          style={{ width: "100vw", height: "100vh" }}
+        />
+      ) : (
+        <span className="loader"></span>
+      )}
+    </div>
+  );
+}
   
   const handleStepComplete = (step, formData) => {
     // Логика для обработки завершения шага
