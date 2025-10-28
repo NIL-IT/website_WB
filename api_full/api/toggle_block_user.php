@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../updater/db.php'; // скорректируйте путь при необходимости
+require 'cors.php';
+require 'db.php';
 
 // Обработка AJAX-запросов
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
