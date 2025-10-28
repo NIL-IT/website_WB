@@ -16,7 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             echo json_encode(['success' => false, 'message' => 'Empty username']);
             exit;
         }
-        $stmt = $conn->prepare('SELECT id, id_usertg, username, blocked FROM users WHERE username = :username LIMIT 1');
+        // используем id_usertg как единственный идентификатор; вернём его также в поле id для совместимости с фронтендом
+        $stmt = $conn->prepare('SELECT id_usertg AS id, id_usertg, username, blocked FROM users WHERE username = :username LIMIT 1');
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,17 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     }
 
     if ($action === 'toggle') {
-        $id = $_POST['id'] ?? null; // ожидаем внутренний id из таблицы users
+        $id = $_POST['id'] ?? null; // теперь ожидаем id_usertg
         $username = isset($_POST['username']) ? ltrim(trim((string)$_POST['username']), '@') : null;
 
-        // Найдём пользователя по id или username
+        // Найдём пользователя по id_usertg или по username (если указан username)
         if ($id) {
-            $stmt = $conn->prepare('SELECT id, blocked FROM users WHERE id = :id LIMIT 1');
-            $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+            $stmt = $conn->prepare('SELECT id_usertg, blocked FROM users WHERE id_usertg = :id_usertg LIMIT 1');
+            // id_usertg может быть числовым, но биндим как строку для безопасности
+            $stmt->bindParam(':id_usertg', $id, PDO::PARAM_STR);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
         } elseif ($username) {
-            $stmt = $conn->prepare('SELECT id, blocked FROM users WHERE username = :username LIMIT 1');
+            $stmt = $conn->prepare('SELECT id_usertg, blocked FROM users WHERE username = :username LIMIT 1');
             $stmt->bindParam(':username', $username, PDO::PARAM_STR);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -55,9 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         }
 
         $newBlocked = empty($user['blocked']) ? 1 : 0;
-        $update = $conn->prepare('UPDATE users SET blocked = :blocked WHERE id = :id');
+        // обновляем по id_usertg, т.к. internal id отсутствует
+        $update = $conn->prepare('UPDATE users SET blocked = :blocked WHERE id_usertg = :id_usertg');
         $update->bindParam(':blocked', $newBlocked, PDO::PARAM_INT);
-        $update->bindParam(':id', $user['id'], PDO::PARAM_INT);
+        $update->bindParam(':id_usertg', $user['id_usertg'], PDO::PARAM_STR);
         $ok = $update->execute();
 
         if ($ok) {
