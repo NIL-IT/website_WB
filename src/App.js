@@ -222,31 +222,18 @@ const App = () => {
   }
 
   if (isBlocked) {
-    // Экран при блокировке — делаем его фиксированным и явно видимым
+    // Экран при блокировке — использует CSS-классы из index.css
     return (
-      <div
-        style={{
-          position: 'fixed',
-          inset: 0,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#ffffff',
-          zIndex: 9999,
-          padding: 20,
-        }}
-        role="alert"
-        aria-live="assertive"
-      >
-        <div style={{ textAlign: 'center', maxWidth: 720, color: '#111' }}>
-          <h2 style={{ fontSize: 22, marginBottom: 12 }}>Доступ заблокирован</h2>
-          <p style={{ marginBottom: 16 }}>
+      <div className="blocked-overlay" role="alert" aria-live="assertive">
+        <div className="blocked-overlay__box">
+          <h2>Доступ заблокирован</h2>
+          <p>
             Ваш аккаунт заблокирован. Для уточнения обратитесь в службу поддержки.
           </p>
           <div>
             <a
               href="mailto:support@example.com"
-              style={{ color: '#0b5fff', textDecoration: 'underline' }}
+              className="blocked-overlay__link"
             >
               Связаться со службой поддержки
             </a>
