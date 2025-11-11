@@ -117,7 +117,9 @@ try {
 
     echo "Steps with step between '0' and '6' removed for expired products.\n";
   
-    $threeMonthsAgo = $currentDate->sub(new DateInterval('P3M'))->format('Y-m-d');
+    // вычисляем границы времени: 3 месяца и 3 года назад (не мутируя $currentDate)
+    $threeMonthsAgoDate = (clone $currentDate)->sub(new DateInterval('P3M'));
+    $threeYearsAgoDate = (clone $currentDate)->sub(new DateInterval('P3Y'));
 
     $stepStmt = $pdo->prepare("SELECT id, id_product, updated_at, image1, image2, image3, image4, image5, image6, status, step, receipt_image FROM steps");
     $stepStmt->execute();
@@ -128,12 +130,23 @@ try {
         $id_product = $step['id_product'];
         $updated_at = new DateTime($step['updated_at'], new DateTimeZone('Europe/Moscow'));
 
-        // Новый функционал: если шагу более 3 месяцев, оставлять только status=1,2 или status=0 и step="Завершено"
-        if ($updated_at < new DateTime($threeMonthsAgo, new DateTimeZone('Europe/Moscow'))) {
+        // Новый функционал:
+        //  - если шаг старше 3 месяцев, по умолчанию его удаляем,
+        //    кроме случаев когда нужно сохранить:
+        //    * status = 1 или status = 2
+        //    * status = 0 и step = "Завершено"
+        //    * status = 3 и step = "Завершено" — в этом случае сохраняем до 3 лет (удаляем только если старше 3 лет)
+        if ($updated_at < $threeMonthsAgoDate) {
             $status = intval($step['status']);
-            $stepName = $step['step'];
+            $stepName = (string)($step['step'] ?? '');
+            $stepNameLower = mb_strtolower($stepName, 'UTF-8');
+            $isZaversheno = $stepNameLower === mb_strtolower('Завершено', 'UTF-8');
 
-            $keep = ($status === 1 || $status === 2) || ($status === 0 && $stepName === 'Завершено');
+            $keep = ($status === 1 || $status === 2)
+                    || ($status === 0 && $isZaversheno)
+                    // сохраняем статус=3 и "Завершено" до тех пор, пока шаг не старше 3 лет
+                    || ($status === 3 && $isZaversheno && $updated_at >= $threeYearsAgoDate);
+
             if (!$keep) {
                 // Удаляем изображения
                 for ($i = 1; $i <= 6; $i++) {

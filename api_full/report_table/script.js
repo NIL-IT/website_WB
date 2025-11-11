@@ -130,15 +130,16 @@ function renderApplications(sortBy = 'status', order = 'desc') {
         if (app.updated_at) {
             const updatedDate = new Date(app.updated_at);
             const now = new Date();
-            const threeMonthsLater = new Date(updatedDate);
-            threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3);
-            if (threeMonthsLater < now) {
+            // Проверяем срок в 3 года (более 3 лет — помечаем)
+            const threeYearsLater = new Date(updatedDate);
+            threeYearsLater.setFullYear(threeYearsLater.getFullYear() + 3);
+            if (threeYearsLater < now) {
                 showWarning = true;
             }
         }
 
         const warningHtml = showWarning
-            ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности (более 3 месяцев), оплатите его в первую очередь!">
+            ? `<span class="expire-warning" title="Данный товар подлежит удалению из-за срока давности (более 3 лет), оплатите его в первую очередь!">
                     <span class="circle"><span class="icon">&#10071;</span></span>
                 </span>`
             : '';

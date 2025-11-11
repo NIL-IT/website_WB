@@ -92,7 +92,9 @@ function sendDataToGoogleSheet($values) {
 try {
     $pdo = getDbConnection();
 
-    // Получение данных из steps и соответствующих данных из users и products
+    // Вычисляем дату 3 месяца назад в формате YYYY-MM-DD
+    $minDate = date('Y-m-d', strtotime('-3 months'));
+
     $stmt = $pdo->prepare("
     SELECT s.id AS step_id, s.id_product, s.id_usertg AS step_user_id, s.step, s.image1, s.image2, s.image3, s.image4, s.image5, s.image6, s.image7, s.updated_at, s.verified, s.paid, s.receipt_image, s.modified_payment, s.receipt_timestamp,
         u1.username AS step_username, 
@@ -103,8 +105,9 @@ try {
     LEFT JOIN users u1 ON s.id_usertg = u1.id_usertg
     LEFT JOIN products p ON s.id_product = p.id
     LEFT JOIN users u2 ON p.tg_nick = u2.username
+    WHERE s.updated_at IS NOT NULL AND DATE(s.updated_at) >= :min_date
 ");
-    $stmt->execute();
+    $stmt->execute([':min_date' => $minDate]);
     $stepsData = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Подготовка данных для отправки в Google Таблицу
