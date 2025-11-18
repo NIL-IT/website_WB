@@ -219,36 +219,49 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
           <div className="detail-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Доступные дни</h3>
             {(() => {
-              // Получаем список дней из product.availabledays
-              const days = Object.keys(product.availabledays);
-              // Получаем текущую дату
+              const days = Object.keys(product.availabledays).sort();
               const today = new Date();
-              // Форматируем даты в виде YYYY-MM-DD
-              const formatDate = (date) => date.toISOString().slice(0, 10);
-              const todayStr = formatDate(today);
-              const tomorrowStr = formatDate(new Date(today.getTime() + 24 * 60 * 60 * 1000));
-              const afterTomorrowStr = formatDate(new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000));
+              const formatDate = (date) => {
+                const d = new Date(date);
+                const day = String(d.getDate()).padStart(2, '0');
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                return `${day}:${month}`;
+              };
+              const todayStr = today.toISOString().slice(0, 10);
+              const tomorrowStr = new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+              const afterTomorrowStr = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
-              // Маппинг дат на текст
               const dayLabels = {
                 [todayStr]: 'Сегодня',
                 [tomorrowStr]: 'Завтра',
                 [afterTomorrowStr]: 'Послезавтра',
               };
 
-              // Фильтруем дни: показываем только те, где доступно > 0, кроме текущего дня (его показываем всегда)
-              return days
-                .filter(day =>
-                  day === todayStr || product.availabledays[day] > 0
-                )
-                .map(day => (
+              // Фильтруем дни: только сегодня и после, и только если доступно > 0, кроме сегодня
+              const filteredDays = days.filter(day => day >= todayStr && (day === todayStr || product.availabledays[day] > 0));
+
+              // Находим последний день, когда товар доступен (>0)
+              let lastAvailableDay = null;
+              for (let i = filteredDays.length - 1; i >= 0; i--) {
+                const day = filteredDays[i];
+                if (product.availabledays[day] > 0) {
+                  lastAvailableDay = day;
+                  break;
+                }
+              }
+
+              return filteredDays.map(day => {
+                const label = dayLabels[day] ? `${dayLabels[day]} (${formatDate(day)})` : `${day} (${formatDate(day)})`;
+                return (
                   <div key={day} className="detail-popup-item">
                     <span>
-                      {dayLabels[day] ? dayLabels[day] : day}
+                      {label}
+                      {day === lastAvailableDay && product.availabledays[day] > 0 ? ' — последний день' : ''}
                     </span>
                     <span>{product.availabledays[day]}</span>
                   </div>
-                ));
+                );
+              });
             })()}
           </div>
         </div>
