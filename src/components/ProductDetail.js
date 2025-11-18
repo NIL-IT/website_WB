@@ -257,7 +257,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                       dateStr = '(до 00:00 по МСК)';
                     } else {
                       const d = new Date(day);
-                      dateStr = `(${String(d.getDate()).padStart(2, '0')}:${String(d.getMonth() + 1).padStart(2, '0')})`;
+                      dateStr = `(${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')})`;
                     }
                     return (
                       <tr key={day}>
