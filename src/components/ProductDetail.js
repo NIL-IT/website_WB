@@ -218,12 +218,38 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         <div className="detail-popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="detail-popup" onClick={(e) => e.stopPropagation()}>
             <h3>Доступные дни</h3>
-            {Object.keys(product.availabledays).map((day) => (
-              <div key={day} className="detail-popup-item">
-                <span>{day}:</span>
-                <span>{product.availabledays[day]}</span>
-              </div>
-            ))}
+            {(() => {
+              // Получаем список дней из product.availabledays
+              const days = Object.keys(product.availabledays);
+              // Получаем текущую дату
+              const today = new Date();
+              // Форматируем даты в виде YYYY-MM-DD
+              const formatDate = (date) => date.toISOString().slice(0, 10);
+              const todayStr = formatDate(today);
+              const tomorrowStr = formatDate(new Date(today.getTime() + 24 * 60 * 60 * 1000));
+              const afterTomorrowStr = formatDate(new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000));
+
+              // Маппинг дат на текст
+              const dayLabels = {
+                [todayStr]: 'Сегодня',
+                [tomorrowStr]: 'Завтра',
+                [afterTomorrowStr]: 'Послезавтра',
+              };
+
+              // Фильтруем дни: показываем только те, где доступно > 0, кроме текущего дня (его показываем всегда)
+              return days
+                .filter(day =>
+                  day === todayStr || product.availabledays[day] > 0
+                )
+                .map(day => (
+                  <div key={day} className="detail-popup-item">
+                    <span>
+                      {dayLabels[day] ? dayLabels[day] : day}
+                    </span>
+                    <span>{product.availabledays[day]}</span>
+                  </div>
+                ));
+            })()}
           </div>
         </div>
       )}
