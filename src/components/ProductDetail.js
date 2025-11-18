@@ -254,9 +254,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                     let label = dayLabels[day] ? dayLabels[day] : day;
                     let dateStr = '';
                     if (day === todayStr) {
-                      const hours = String(today.getHours()).padStart(2, '0');
-                      const minutes = String(today.getMinutes()).padStart(2, '0');
-                      dateStr = `(${hours}:${minutes})`;
+                      dateStr = '(до 00:00 по МСК)';
                     } else {
                       const d = new Date(day);
                       dateStr = `(${String(d.getDate()).padStart(2, '0')}:${String(d.getMonth() + 1).padStart(2, '0')})`;
@@ -267,7 +265,6 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                           {label} {dateStr}
                           {day === lastAvailableDay && product.availabledays[day] > 0 && (
                             <span title="Последний день" style={{ marginLeft: '6px', verticalAlign: 'middle' }}>
-                              {/* Значок: круглый оранжевый с восклицательным знаком по центру */}
                               <svg width="18" height="18" viewBox="0 0 18 18" style={{verticalAlign: 'middle'}} fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="9" cy="9" r="9" fill="#FFA500"/>
                                 <text x="9" y="11" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial">!</text>
