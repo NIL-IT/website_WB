@@ -267,10 +267,10 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                           {label} {dateStr}
                           {day === lastAvailableDay && product.availabledays[day] > 0 && (
                             <span title="Последний день" style={{ marginLeft: '6px', verticalAlign: 'middle' }}>
-                              {/* Значок: круглый оранжевый с восклицательным знаком */}
+                              {/* Значок: круглый оранжевый с восклицательным знаком по центру */}
                               <svg width="18" height="18" viewBox="0 0 18 18" style={{verticalAlign: 'middle'}} fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="9" cy="9" r="9" fill="#FFA500"/>
-                                <text x="9" y="13" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial" dominantBaseline="middle">!</text>
+                                <text x="9" y="11" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial">!</text>
                               </svg>
                             </span>
                           )}
@@ -286,7 +286,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
               <span style={{ marginRight: '6px', verticalAlign: 'middle' }}>
                 <svg width="18" height="18" viewBox="0 0 18 18" style={{verticalAlign: 'middle'}} fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="9" cy="9" r="9" fill="#FFA500"/>
-                  <text x="9" y="13" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial" dominantBaseline="middle">!</text>
+                  <text x="9" y="11" textAnchor="middle" dominantBaseline="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial">!</text>
                 </svg>
               </span>
               — последний день
