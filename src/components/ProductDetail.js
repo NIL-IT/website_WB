@@ -264,7 +264,9 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                           {label}
                           {day === lastAvailableDay && product.availabledays[day] > 0 ? ' — последний день' : ''}
                         </td>
-                        <td>{product.availabledays[day]}</td>
+                        <td>
+                          {product.availabledays[day]}
+                        </td>
                       </tr>
                     );
                   });
