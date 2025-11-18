@@ -277,7 +277,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                       label += ` ${dateStr}`;
                     }
                     return (
-                      <tr key={day} className="detail-popup-item">
+                      <tr key={day}>
                         <td>{label}</td>
                         <td>{product.availabledays[day]}</td>
                       </tr>
