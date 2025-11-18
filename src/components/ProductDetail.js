@@ -229,14 +229,6 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                 {(() => {
                   const days = Object.keys(product.availabledays).sort();
                   const today = new Date();
-                  const formatDate = (date) => {
-                    const d = new Date(date);
-                    const day = String(d.getDate()).padStart(2, '0');
-                    const month = String(d.getMonth() + 1).padStart(2, '0');
-                    const hours = String(d.getHours()).padStart(2, '0');
-                    const minutes = String(d.getMinutes()).padStart(2, '0');
-                    return `${day}:${month}${date === today.toISOString().slice(0, 10) ? ` (${hours}:${minutes})` : ''}`;
-                  };
                   const todayStr = today.toISOString().slice(0, 10);
                   const tomorrowStr = new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
                   const afterTomorrowStr = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -262,23 +254,27 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                     let label = dayLabels[day] ? dayLabels[day] : day;
                     let dateStr = '';
                     if (day === todayStr) {
-                      // Для сегодня показываем время
                       const hours = String(today.getHours()).padStart(2, '0');
                       const minutes = String(today.getMinutes()).padStart(2, '0');
                       dateStr = `(${hours}:${minutes})`;
                     } else {
-                      // Для остальных только день:месяц
                       const d = new Date(day);
                       dateStr = `(${String(d.getDate()).padStart(2, '0')}:${String(d.getMonth() + 1).padStart(2, '0')})`;
                     }
-                    if (day === lastAvailableDay && product.availabledays[day] > 0) {
-                      label += ` ${dateStr} — последний день`;
-                    } else {
-                      label += ` ${dateStr}`;
-                    }
                     return (
                       <tr key={day}>
-                        <td>{label}</td>
+                        <td>
+                          {label} {dateStr}
+                          {day === lastAvailableDay && product.availabledays[day] > 0 && (
+                            <span title="Последний день" style={{ marginLeft: '6px', verticalAlign: 'middle' }}>
+                              {/* Значок: круглый оранжевый с восклицательным знаком */}
+                              <svg width="18" height="18" viewBox="0 0 18 18" style={{verticalAlign: 'middle'}} fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="9" cy="9" r="9" fill="#FFA500"/>
+                                <text x="9" y="13" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial" dominantBaseline="middle">!</text>
+                              </svg>
+                            </span>
+                          )}
+                        </td>
                         <td>{product.availabledays[day]}</td>
                       </tr>
                     );
@@ -286,6 +282,15 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                 })()}
               </tbody>
             </table>
+            <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+              <span style={{ marginRight: '6px', verticalAlign: 'middle' }}>
+                <svg width="18" height="18" viewBox="0 0 18 18" style={{verticalAlign: 'middle'}} fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="9" cy="9" r="9" fill="#FFA500"/>
+                  <text x="9" y="13" textAnchor="middle" fontSize="12" fill="#fff" fontWeight="bold" fontFamily="Arial" dominantBaseline="middle">!</text>
+                </svg>
+              </span>
+              — последний день
+            </div>
           </div>
         </div>
       )}
