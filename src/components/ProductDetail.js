@@ -255,9 +255,14 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                     let dateStr = '';
                     if (day === todayStr) {
                       dateStr = '(до 00:00 по МСК)';
-                    } else {
+                    } else if (day === tomorrowStr || day === afterTomorrowStr) {
                       const d = new Date(day);
                       dateStr = `(${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')})`;
+                    } else if (!dayLabels[day]) {
+                      // Форматировать как DD.MM.YYYY без скобок и времени
+                      const d = new Date(day);
+                      label = `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`;
+                      dateStr = '';
                     }
                     return (
                       <tr key={day}>
