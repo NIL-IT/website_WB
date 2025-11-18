@@ -233,7 +233,9 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                     const d = new Date(date);
                     const day = String(d.getDate()).padStart(2, '0');
                     const month = String(d.getMonth() + 1).padStart(2, '0');
-                    return `${day}:${month}`;
+                    const hours = String(d.getHours()).padStart(2, '0');
+                    const minutes = String(d.getMinutes()).padStart(2, '0');
+                    return `${day}:${month}${date === today.toISOString().slice(0, 10) ? ` (${hours}:${minutes})` : ''}`;
                   };
                   const todayStr = today.toISOString().slice(0, 10);
                   const tomorrowStr = new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
@@ -257,16 +259,27 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                   }
 
                   return filteredDays.map(day => {
-                    const label = dayLabels[day] ? `${dayLabels[day]} (${formatDate(day)})` : `${day} (${formatDate(day)})`;
+                    let label = dayLabels[day] ? dayLabels[day] : day;
+                    let dateStr = '';
+                    if (day === todayStr) {
+                      // Для сегодня показываем время
+                      const hours = String(today.getHours()).padStart(2, '0');
+                      const minutes = String(today.getMinutes()).padStart(2, '0');
+                      dateStr = `(${hours}:${minutes})`;
+                    } else {
+                      // Для остальных только день:месяц
+                      const d = new Date(day);
+                      dateStr = `(${String(d.getDate()).padStart(2, '0')}:${String(d.getMonth() + 1).padStart(2, '0')})`;
+                    }
+                    if (day === lastAvailableDay && product.availabledays[day] > 0) {
+                      label += ` ${dateStr} — последний день`;
+                    } else {
+                      label += ` ${dateStr}`;
+                    }
                     return (
                       <tr key={day} className="detail-popup-item">
-                        <td>
-                          {label}
-                          {day === lastAvailableDay && product.availabledays[day] > 0 ? ' — последний день' : ''}
-                        </td>
-                        <td>
-                          {product.availabledays[day]}
-                        </td>
+                        <td>{label}</td>
+                        <td>{product.availabledays[day]}</td>
                       </tr>
                     );
                   });
