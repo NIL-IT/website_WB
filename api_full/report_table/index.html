@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report Table</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="container">
@@ -42,6 +43,31 @@
             <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
         </div>
     </div>
+    <script>
+        // Получаем id пользователя из Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        let id_usertg = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+
+        // Проверяем статус пользователя через PHP
+        if (id_usertg) {
+            fetch('checkAdmin.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id_usertg })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Доступ запрещён</h2>';
+                }
+            })
+            .catch(() => {
+                document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Ошибка проверки доступа</h2>';
+            });
+        } else {
+            document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Telegram WebApp не обнаружен</h2>';
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
