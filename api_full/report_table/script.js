@@ -2,12 +2,47 @@ let originalData = [];
 let zeroReportsData = [];
 let isZeroReportsMode = false;
 
-// Получаем id пользователя из глобальной переменной, которую установили в index.html
-let id_usertg = window.id_usertg;
+// Получаем id пользователя из Telegram WebApp
+let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+let id_usertg = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
 
-// Запуск загрузки только после подтверждения админа
-document.addEventListener("adminReady", function () {
-    loadDefaultReports();
+// Проверка доступа через checkAdmin.php
+function showAccessError(msg) {
+    document.getElementById('main-content').style.display = 'none';
+    const errDiv = document.getElementById('access-error');
+    if (errDiv) {
+        errDiv.innerHTML = msg;
+        errDiv.style.display = 'block';
+    }
+}
+
+function checkAdminAndStart() {
+    if (!id_usertg) {
+        showAccessError('Telegram WebApp не обнаружен');
+        return;
+    }
+    fetch('checkAdmin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_usertg })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            showAccessError('Доступ запрещён');
+        } else {
+            // Только если админ, запускаем загрузку данных
+            loadDefaultReports();
+        }
+    })
+    .catch(() => {
+        showAccessError('Ошибка проверки доступа');
+    });
+}
+
+// Запуск проверки при загрузке страницы
+document.addEventListener("DOMContentLoaded", function () {
+    checkAdminAndStart();
 });
 
 function loadDefaultReports() {

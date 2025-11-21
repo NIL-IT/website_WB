@@ -44,44 +44,6 @@
             <button class="refresh-button" onclick="refreshApplications()">Обновить</button>
         </div>
     </div>
-    <script>
-        let tg = window.Telegram.WebApp;
-        let id_usertg = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
-
-        function showAccessError(msg) {
-            document.getElementById('main-content').style.display = 'none';
-            const errDiv = document.getElementById('access-error');
-            errDiv.innerHTML = msg;
-            errDiv.style.display = 'block';
-        }
-
-        // Проверяем статус пользователя через PHP
-        window.isAdmin = false;
-        window.id_usertg = id_usertg;
-
-        if (id_usertg) {
-            fetch('checkAdmin.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id_usertg })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    showAccessError('Доступ запрещён');
-                } else {
-                    window.isAdmin = true;
-                    // Теперь можно запускать загрузку данных
-                    document.dispatchEvent(new Event('adminReady'));
-                }
-            })
-            .catch(() => {
-                showAccessError('Ошибка проверки доступа');
-            });
-        } else {
-            showAccessError('Telegram WebApp не обнаружен');
-        }
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
