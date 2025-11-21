@@ -3,8 +3,8 @@ let zeroReportsData = [];
 let isZeroReportsMode = false;
 
 // Получаем id пользователя из Telegram WebApp
-let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-let id_usertg = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+let telegramWebApp = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+let id_usertg = telegramWebApp && telegramWebApp.initDataUnsafe && telegramWebApp.initDataUnsafe.user ? telegramWebApp.initDataUnsafe.user.id : null;
 
 // Проверка доступа через checkAdmin.php
 function showAccessError(msg) {
