@@ -6,9 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
     loadDefaultReports();
 });
 
+// Получаем id пользователя из Telegram WebApp
+let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+let id_usertg = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+
 function loadDefaultReports() {
     showZeroLoading(false);
-    fetch("fetchApplications.php")
+    fetch("fetchApplications.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_usertg })
+    })
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
@@ -30,7 +38,11 @@ function loadDefaultReports() {
 
 function loadZeroReports() {
     showZeroLoading(true);
-    fetch("fetchZeroReports.php")
+    fetch("fetchZeroReports.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_usertg })
+    })
         .then((response) => response.json())
         .then((data) => {
             if (data.success) {
@@ -236,7 +248,8 @@ function handleButtonClick(appId) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                id: app.id
+                id: app.id,
+                id_usertg // добавляем id пользователя
             }),
         })
         .then((response) => response.json())

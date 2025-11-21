@@ -3,9 +3,27 @@ header('Content-Type: application/json');
 include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
 
+// Получение id_usertg из запроса
+$data = json_decode(file_get_contents('php://input'), true);
+$id_usertg = isset($data['id_usertg']) ? $data['id_usertg'] : null;
+
+if (!$id_usertg) {
+    echo json_encode(['success' => false, 'error' => 'Нет id пользователя']);
+    exit;
+}
+
+// Проверка статуса пользователя
 try {
-    // Получение соединения с базой данных
     $pdo = getDbConnection();
+    $stmt = $pdo->prepare('SELECT status FROM users WHERE id_usertg = :id_usertg');
+    $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user || $user['status'] !== 'admin') {
+        echo json_encode(['success' => false, 'error' => 'Нет прав администратора']);
+        exit;
+    }
 
     // Запрос к таблице steps
     $stmt = $pdo->prepare('SELECT id, cardholder, bankname AS bank, phone, cardnumber, id_product, status, completed_at, updated_at FROM steps WHERE status IN (1, 2)');

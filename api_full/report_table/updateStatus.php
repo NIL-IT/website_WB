@@ -10,13 +10,25 @@ try {
     // Получение данных из запроса
     $data = json_decode(file_get_contents('php://input'), true);
 
-    // Проверка наличия ID
-    if (!isset($data['id'])) {
+    // Проверка наличия ID и id_usertg
+    if (!isset($data['id']) || !isset($data['id_usertg'])) {
         echo json_encode(['success' => false, 'error' => 'Invalid input']);
         exit;
     }
 
     $id = $data['id'];
+    $id_usertg = $data['id_usertg'];
+
+    // Проверка статуса пользователя
+    $stmt = $pdo->prepare('SELECT status FROM users WHERE id_usertg = :id_usertg');
+    $stmt->bindParam(':id_usertg', $id_usertg, PDO::PARAM_STR);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$user || $user['status'] !== 'admin') {
+        echo json_encode(['success' => false, 'error' => 'Нет прав администратора']);
+        exit;
+    }
 
     // Обновление статуса
     $stmt = $pdo->prepare('UPDATE steps SET status = 2 WHERE id = :id AND status = 1');
