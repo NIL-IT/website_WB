@@ -7,6 +7,12 @@ $data = json_decode(file_get_contents('php://input'), true);
 $id_usertg = isset($data['id_usertg']) ? $data['id_usertg'] : (isset($_GET['id_usertg']) ? $_GET['id_usertg'] : null);
 if (!$id_usertg) $id_usertg = 'unknown';
 
+// Получение IP-адреса пользователя
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+
+// Получение информации о браузере/устройстве
+$user_agent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
+
 // Проверка статуса пользователя
 $access = false;
 $status_text = '';
@@ -38,6 +44,6 @@ if (!is_dir($log_dir)) {
     mkdir($log_dir, 0777, true);
 }
 $log_file = $log_dir . '/' . date('Y-m-d') . '.txt';
-$log_line = date('Y-m-d H:i:s') . " | id: $id_usertg | $status_text" . PHP_EOL;
+$log_line = date('Y-m-d H:i:s') . " | id: $id_usertg | ip: $ip | agent: $user_agent | $status_text" . PHP_EOL;
 file_put_contents($log_file, $log_line, FILE_APPEND);
 ?>
