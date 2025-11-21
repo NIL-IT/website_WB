@@ -2,14 +2,10 @@
 header('Content-Type: application/json');
 require_once 'db.php';
 
-// Получение id пользователя из запроса (или из GET для браузера)
+// Получение id пользователя из запроса (POST или GET)
 $data = json_decode(file_get_contents('php://input'), true);
 $id_usertg = isset($data['id_usertg']) ? $data['id_usertg'] : (isset($_GET['id_usertg']) ? $_GET['id_usertg'] : null);
-
-// Если нет id, то ставим "unknown"
-if (!$id_usertg) {
-    $id_usertg = 'unknown';
-}
+if (!$id_usertg) $id_usertg = 'unknown';
 
 // Проверка статуса пользователя
 $access = false;

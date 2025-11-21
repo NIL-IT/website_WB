@@ -8,7 +8,8 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div id="access-error" style="display:none; color:red; text-align:center; margin-top:40px; font-size:22px;"></div>
+    <div class="container" id="main-content">
         <div class="sort-buttons">
             <button onclick="toggleSortMenu()">Сортировать</button>
             <div id="sort-menu" class="sort-menu" style="display: none;">
@@ -44,11 +45,20 @@
         </div>
     </div>
     <script>
-        // Получаем id пользователя из Telegram WebApp
         let tg = window.Telegram.WebApp;
         let id_usertg = tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
 
+        function showAccessError(msg) {
+            document.getElementById('main-content').style.display = 'none';
+            const errDiv = document.getElementById('access-error');
+            errDiv.innerHTML = msg;
+            errDiv.style.display = 'block';
+        }
+
         // Проверяем статус пользователя через PHP
+        window.isAdmin = false;
+        window.id_usertg = id_usertg;
+
         if (id_usertg) {
             fetch('checkAdmin.php', {
                 method: 'POST',
@@ -58,14 +68,18 @@
             .then(response => response.json())
             .then(data => {
                 if (!data.success) {
-                    document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Доступ запрещён</h2>';
+                    showAccessError('Доступ запрещён');
+                } else {
+                    window.isAdmin = true;
+                    // Теперь можно запускать загрузку данных
+                    document.dispatchEvent(new Event('adminReady'));
                 }
             })
             .catch(() => {
-                document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Ошибка проверки доступа</h2>';
+                showAccessError('Ошибка проверки доступа');
             });
         } else {
-            document.body.innerHTML = '<h2 style="color:red;text-align:center;margin-top:40px;">Telegram WebApp не обнаружен</h2>';
+            showAccessError('Telegram WebApp не обнаружен');
         }
     </script>
     <script src="script.js"></script>

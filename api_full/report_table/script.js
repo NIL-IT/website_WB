@@ -1,14 +1,14 @@
-let originalData = []; // Сохраняем изначальные данные
-let zeroReportsData = []; // Данные для нулевых отчётов
-let isZeroReportsMode = false; // Флаг режима
+let originalData = [];
+let zeroReportsData = [];
+let isZeroReportsMode = false;
 
-document.addEventListener("DOMContentLoaded", function () {
+// Получаем id пользователя из глобальной переменной, которую установили в index.html
+let id_usertg = window.id_usertg;
+
+// Запуск загрузки только после подтверждения админа
+document.addEventListener("adminReady", function () {
     loadDefaultReports();
 });
-
-// Получаем id пользователя из Telegram WebApp
-let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-let id_usertg = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
 
 function loadDefaultReports() {
     showZeroLoading(false);

@@ -12,7 +12,6 @@ if (!$id_usertg) {
     exit;
 }
 
-// Проверка статуса пользователя
 try {
     $pdo = getDbConnection();
     $stmt = $pdo->prepare('SELECT status FROM users WHERE id_usertg = :id_usertg');
