@@ -17,12 +17,12 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("report-title").textContent = `Отчет для транзакции №${id}`;
         const userInfoDiv = document.getElementById("user-info");
         userInfoDiv.innerHTML = `
-          <p class="purchase-step-text">ФИО держателя карты: ${data.data.cardholder}</p>
-          <p class="purchase-step-text">Банк: ${data.data.bankname}</p>
-          <p class="purchase-step-text">Номер: ${data.data.phone}</p>
-          <p class="purchase-step-text">Номер карты: ${data.data.cardnumber}</p>
-          <p class="purchase-step-text">Выгода: ${data.benefit} руб.</p>
-          <p class="purchase-step-text">Комментарий: ${data.data.comment || 'Комментарий отсутствует'}</p>
+          <p class="purchase-step-text">ФИО держателя карты: ${(data.data.cardholder === null || data.data.cardholder === '') ? 'Данные отсутствуют' : data.data.cardholder}</p>
+          <p class="purchase-step-text">Банк: ${(data.data.bankname === null || data.data.bankname === '') ? 'Данные отсутствуют' : data.data.bankname}</p>
+          <p class="purchase-step-text">Номер: ${(data.data.phone === null || data.data.phone === '') ? 'Данные отсутствуют' : data.data.phone}</p>
+          <p class="purchase-step-text">Номер карты: ${(data.data.cardnumber === null || data.data.cardnumber === '') ? 'Данные отсутствуют' : data.data.cardnumber}</p>
+          <p class="purchase-step-text">Выгода: ${(data.benefit === null || data.benefit === '') ? 'Данные отсутствуют' : data.benefit + ' руб.'}</p>
+          <p class="purchase-step-text">Комментарий: ${(data.data.comment === null || data.data.comment === undefined || data.data.comment === '') ? 'Данные отсутствуют' : data.data.comment}</p>
         `;
         // Добавляем разделительную линию после комментария
         const commentSeparator = document.createElement("hr");
@@ -48,15 +48,23 @@ document.addEventListener("DOMContentLoaded", function () {
         profileCaption.appendChild(profileArrow);
         const profileCaptionText = document.createElement("span");
         profileCaptionText.textContent = data.user && data.user.confirmation_image ? "Профиль WB:" : "Профиль WB не приложен";
+          if (data.user && (data.user.confirmation_image === null || data.user.confirmation_image === '')) profileCaptionText.textContent = "Данные отсутствуют";
         profileCaption.appendChild(profileCaptionText);
 
         let profileImg = null;
         // Показываем изображение и кнопку только если есть confirmation_image
         if (data.user && data.user.confirmation_image) {
-          profileImg = document.createElement("img");
-          profileImg.src = data.user.confirmation_image;
-          profileImg.alt = "Профиль WB";
-          profileImg.className = "product-image-detail";
+          if (data.user.confirmation_image === null || data.user.confirmation_image === '') {
+            const noImg = document.createElement('div');
+            noImg.textContent = 'Данные отсутствуют';
+            noImg.style.color = '#888';
+            profileWrapper.appendChild(noImg);
+          } else {
+            profileImg = document.createElement("img");
+            profileImg.src = data.user.confirmation_image;
+            profileImg.alt = "Профиль WB";
+            profileImg.className = "product-image-detail";
+          }
           // Обработчик для сворачивания
           profileCaption.addEventListener("click", function () {
             profileImg.classList.toggle("collapsed-image");
@@ -156,20 +164,23 @@ document.addEventListener("DOMContentLoaded", function () {
           captionText.textContent = screenshot.caption;
           captionDiv.appendChild(captionText);
 
-          const img = document.createElement("img");
-          img.src = screenshot.url;
-          img.alt = `Шаг ${index + 1}`;
-          img.className = "product-image-detail";
-
-          // Добавляем обработчик для сворачивания/разворачивания
-          captionDiv.addEventListener("click", function () {
-            img.classList.toggle("collapsed-image");
-            arrow.textContent = img.classList.contains("collapsed-image") ? "▼" : "▲";
-          });
-
-          // Изначально все изображения развёрнуты
           screenshotWrapper.appendChild(captionDiv);
-          screenshotWrapper.appendChild(img);
+          if (screenshot.url === null || screenshot.url === '') {
+            const noImg = document.createElement('div');
+            noImg.textContent = 'Данные отсутствуют';
+            noImg.style.color = '#888';
+            screenshotWrapper.appendChild(noImg);
+          } else {
+            const img = document.createElement("img");
+            img.src = screenshot.url;
+            img.alt = `Шаг ${index + 1}`;
+            img.className = "product-image-detail";
+            captionDiv.addEventListener("click", function () {
+              img.classList.toggle("collapsed-image");
+              arrow.textContent = img.classList.contains("collapsed-image") ? "▼" : "▲";
+            });
+            screenshotWrapper.appendChild(img);
+          }
           const separator = document.createElement("hr");
           separator.className = "screenshot-separator";
           screenshotWrapper.appendChild(separator);
@@ -198,7 +209,13 @@ document.addEventListener("DOMContentLoaded", function () {
         receiptCaption.appendChild(receiptCaptionText);
 
         let receiptImg = null;
-        if (data.data.receipt_image) {
+        if (data.data.receipt_image === null || data.data.receipt_image === '') {
+          receiptArrow.style.display = "none";
+          const noImg = document.createElement('div');
+          noImg.textContent = 'Данные отсутствуют';
+          noImg.style.color = '#888';
+          receiptImageDiv.appendChild(noImg);
+        } else {
           receiptImg = document.createElement("img");
           receiptImg.src = data.data.receipt_image;
           receiptImg.alt = "Чек";
@@ -208,13 +225,9 @@ document.addEventListener("DOMContentLoaded", function () {
             receiptImg.classList.toggle("collapsed-image");
             receiptArrow.textContent = receiptImg.classList.contains("collapsed-image") ? "▼" : "▲";
           });
-        } else {
-          // Если чека нет, стрелка не нужна
-          receiptArrow.style.display = "none";
+          receiptImageDiv.appendChild(receiptImg);
         }
-
         receiptImageDiv.appendChild(receiptCaption);
-        if (receiptImg) receiptImageDiv.appendChild(receiptImg);
         const receiptSeparator = document.createElement("hr");
         receiptSeparator.className = "screenshot-separator";
         receiptImageDiv.appendChild(receiptSeparator);
