@@ -48,17 +48,13 @@ document.addEventListener("DOMContentLoaded", function () {
         profileCaption.appendChild(profileArrow);
         const profileCaptionText = document.createElement("span");
         profileCaptionText.textContent = data.user && data.user.confirmation_image ? "Профиль WB:" : "Профиль WB не приложен";
-          if (data.user && (data.user.confirmation_image === null || data.user.confirmation_image === '')) profileCaptionText.textContent = "Данные отсутствуют";
         profileCaption.appendChild(profileCaptionText);
 
         let profileImg = null;
         // Показываем изображение и кнопку только если есть confirmation_image
         if (data.user && data.user.confirmation_image) {
           if (data.user.confirmation_image === null || data.user.confirmation_image === '') {
-            const noImg = document.createElement('div');
-            noImg.textContent = 'Данные отсутствуют';
-            noImg.style.color = '#888';
-            profileWrapper.appendChild(noImg);
+            // ничего не добавляем, только подпись 'Профиль WB не приложен' выше
           } else {
             profileImg = document.createElement("img");
             profileImg.src = data.user.confirmation_image;
@@ -211,10 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let receiptImg = null;
         if (data.data.receipt_image === null || data.data.receipt_image === '') {
           receiptArrow.style.display = "none";
-          const noImg = document.createElement('div');
-          noImg.textContent = 'Данные отсутствуют';
-          noImg.style.color = '#888';
-          receiptImageDiv.appendChild(noImg);
+          // ничего не добавляем, только подпись 'Чек не приложен' выше
         } else {
           receiptImg = document.createElement("img");
           receiptImg.src = data.data.receipt_image;
