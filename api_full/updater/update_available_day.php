@@ -109,7 +109,33 @@ try {
     foreach ($expiredProducts as $product) {
         $productId = $product['id'];
 
-        // Delete steps with step between '0' and '5' for expired products
+        // Получаем шаги с step от 1 до 5 для удаления изображений
+        $selectStepsStmt = $pdo->prepare("SELECT image1, image2, image3, image4, image5, image6, image7, receipt_image FROM steps WHERE id_product = :id_product AND step IN ('1', '2', '3', '4', '5')");
+        $selectStepsStmt->bindParam(':id_product', $productId, PDO::PARAM_INT);
+        $selectStepsStmt->execute();
+        $stepsToDelete = $selectStepsStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($stepsToDelete as $step) {
+            // Удаляем изображения image1..image7
+            for ($i = 1; $i <= 7; $i++) {
+                $imagePath = $step["image$i"];
+                if ($imagePath) {
+                    $fullImagePath = '/var/www/test_bot/api/' . $imagePath;
+                    if (file_exists($fullImagePath)) {
+                        unlink($fullImagePath);
+                    }
+                }
+            }
+            // Удаляем receipt_image
+            if (!empty($step['receipt_image'])) {
+                $receiptImagePath = '/var/www/test_bot/api/' . $step['receipt_image'];
+                if (file_exists($receiptImagePath)) {
+                    unlink($receiptImagePath);
+                }
+            }
+        }
+
+        // Удаляем шаги с step от 1 до 5 для истёкших продуктов
         $deleteExpiredStepsStmt = $pdo->prepare("DELETE FROM steps WHERE id_product = :id_product AND step IN ('1', '2', '3', '4', '5')");
         $deleteExpiredStepsStmt->bindParam(':id_product', $productId, PDO::PARAM_INT);
         $deleteExpiredStepsStmt->execute();
@@ -121,7 +147,7 @@ try {
     $threeMonthsAgoDate = (clone $currentDate)->sub(new DateInterval('P3M'));
     $threeYearsAgoDate = (clone $currentDate)->sub(new DateInterval('P3Y'));
 
-    $stepStmt = $pdo->prepare("SELECT id, id_product, updated_at, image1, image2, image3, image4, image5, image6, status, step, receipt_image FROM steps");
+    $stepStmt = $pdo->prepare("SELECT id, id_product, updated_at, image1, image2, image3, image4, image5, image6, image7, status, step, receipt_image FROM steps");
     $stepStmt->execute();
     $steps = $stepStmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -139,7 +165,7 @@ try {
         if ($updated_at < $threeMonthsAgoDate) {
             $status = intval($step['status']);
             $stepName = (string)($step['step'] ?? '');
-            $stepNameLower = mb_strtolower($stepName, 'UTF-8');
+            $stepNameLower = mb_strtolower(trim($stepName), 'UTF-8');
             $isZaversheno = $stepNameLower === mb_strtolower('Завершено', 'UTF-8');
 
             $keep = ($status === 1 || $status === 2)
@@ -149,7 +175,7 @@ try {
 
             if (!$keep) {
                 // Удаляем изображения
-                for ($i = 1; $i <= 6; $i++) {
+                for ($i = 1; $i <= 7; $i++) {
                     $imagePath = $step["image$i"];
                     if ($imagePath) {
                         $fullImagePath = '/var/www/test_bot/api/' . $imagePath;

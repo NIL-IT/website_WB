@@ -515,6 +515,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
           }
         
+          verifyBtn.classList.add('loading');
+          verifyBtn.disabled = true;
           fetch("toggleVerify.php", {
             method: "POST",
             headers: {
@@ -530,6 +532,8 @@ document.addEventListener("DOMContentLoaded", function () {
           })
             .then((response) => response.json())
             .then((data) => {
+              verifyBtn.classList.remove('loading');
+              verifyBtn.disabled = false;
               if (data.success) {
                 if (data.verified) {
                   verifyBtn.textContent = "Отменить верификацию товара";
@@ -553,6 +557,8 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             })
             .catch((error) => {
+              verifyBtn.classList.remove('loading');
+              verifyBtn.disabled = false;
               console.error("Ошибка при выполнении запроса для verifyBtn:", error);
             });
         });
@@ -565,6 +571,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         
           payBtn.classList.add("loading");
+          payBtn.disabled = true;
           const file = receiptUpload.files[0];
           const reader = new FileReader();
         
@@ -599,6 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then((response) => response.json())
                 .then((data) => {
                   payBtn.classList.remove("loading");
+                  payBtn.disabled = false;
                   if (data.success) {
                     if (data.paid) {
                       payBtn.textContent = "Отменить оплату";
@@ -615,6 +623,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .catch((error) => {
                   payBtn.classList.remove("loading");
+                  payBtn.disabled = false;
                   console.error("Ошибка при выполнении запроса для payBtn:", error);
                 });
             };
