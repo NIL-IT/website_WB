@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { updateStep } from "../api/steps";
 import "../styles/PurchaseStepsPage.css";
 
 const OfferModal = ({ onClose }) => {
@@ -57,22 +58,46 @@ const PurchaseStepsPage = ({
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const baseURL = "https://inhomeka.online:8000/";
   const userStep = userSteps.find((userStep) => userStep.id.toString() === id);
   const [showPopup, setShowPopup] = useState(false);
   const allBankNames = [
           "Сбербанк","Тинькофф Банк","Альфа Банк","ВТБ","Райффайзен Банк","ТОЧКА (ФК ОТКРЫТИЕ)","Газпромбанк","Норвик Банк","Банк Кремлевский","Томскпромстройбанк","Банк Заречье","МЕЖДУНАРОДНЫЙ ФИНАНСОВЫЙ КЛУБ","Северный Народный Банк","Центр-инвест","ВЛАДБИЗНЕСБАНК","КБ Хлынов","НОКССБАНК","ГТ банк","Банк Объединенный капитал","Банк РЕСО Кредит","Земский банк","Кредит Урал Банк","Нацинвестпромбанк","СДМ-Банк","ТАТСОЦБАНК","РУСНАРБАНК","КБ Стройлесбанк","НС Банк","Датабанк","КБЭР Банк Казани","Трансстройбанк","Кузнецкбизнесбанк","ИШБАНК","Алмазэргиэнбанк","РосДорБанк","Дальневосточный банк","Банк ДОМ.РФ","Форштадт","СКБ Примсоцбанк","Банк ПСКБ","ЭЛПЛАТ","БАНК СНГБ","Банк Екатеринбург","АБ РОССИЯ","ЧЕЛЯБИНВЕСТБАНК","Углеметбанк","БыстроБанк","КБ Модульбанк","КБ РостФинанс","Банк ФК Открытие","МЕТКОМБАНК","Банк Русский Стандарт","Банк Акцепт","Совкомбанк","НБД-Банк","Росбанк","КБ ЭНЕРГОТРАНСБАНК","МТС-Банк","Почта Банк","АИКБ Енисейский объединенный банк","ЮМани","УРАЛПРОМБАНК","Россельхозбанк","МБ Банк","МКБ (Московский кредитный банк)","КОШЕЛЕВ-БАНК","Тимер Банк","Банк Санкт-Петербург","Банк АВАНГАРД","Кредит Европа Банк (Россия)","СИНКО-БАНК","Банк Аверс","Банк Венец","УБРиР","Тольяттихимбанк","ЮниКредит Банк","Урал ФД","ГЕНБАНК","Банк ИТУРУП","ТРАНСКАПИТАЛБАНК","Энергобанк","Банк ФИНАМ","КБ ЛОКО-Банк","ЮГ-Инвестбанк","Экспобанк","Газэнергобанк","Банк Снежинский","Банк СКС","Абсолют Банк","Металлинвестбанк","Банк ЗЕНИТ","СИБСОЦБАНК","Банк ВБРР","Банк Развитие-Столица","МОРСКОЙ БАНК","Банк Интеза","МОСКОМБАНК","Первый Инвестиционный Банк","Банк Левобережный","Таврический Банк","Джей энд Ти Банк (АО)","Банк АЛЕКСАНДРОВСКИЙ","ФОРА-БАНК","ВУЗ-банк","Банк Агророс","СОЦИУМ БАНК","Новобанк","АКИБАНК","Прио-Внешторгбанк","ЧЕЛИНДБАНК","Банк БКФ","Эс-Би-Ай Банк","Солид Банк","АКБ Держава","Алеф-Банк","ГАРАНТ-ИНВЕСТ БАНК","Реалист Банк","КБ АГРОПРОМКРЕДИТ","НИКО-БАНК","ГОРБАНК","МСП Банк","Банк Синара","БАНК ОРЕНБУРГ","Банк Национальный стандарт","ИК Банк","КБ АРЕСБАНК","Ак Барс Банк","Хакасский муниципальный банк","ВНЕШФИНБАНК","Банк Саратов","Банк Раунд","РНКБ Банк","РН БАНК","Промсвязьбанк","Автоградбанк","АКБ СЛАВИЯ","Банк СОЮЗ","Ситибанк","Сетелем Банк","НОВИКОМБАНК","Автоторгбанк","Кубаньторгбанк","Новый век","Банк МБА МОСКВА","ББР Банк","ОТП Банк","Тойота Банк","БАНК УРАЛСИБ","Хоум Кредит Банк","КБ Долинск","Ренессанс Кредит","Хайс","СМП Банк","Алтайкапиталбанк","Русьуниверсалбанк","ЮНИСТРИМ БАНК","БКС Банк","Кубань Кредит","АКБ Тендер Банк","КБ Крокус Банк","БАНК СГБ","КБ Пойдём","МОСОБЛБАНК","Банк Приморье","УКБ Белгородсоцбанк","МС Банк Рус","Азиатско Тихоокеанский Банк","КБ Москоммерцбанк","Банк ЦентроКредит","НК Банк","ИС Банк","ПроБанк","Банк ИПБ","КБ Солидарность","АКБ Ланта Банк","Инбанк","Банк Финсервис","БАНК МОСКВА СИТИ","Точка Банк","Банк Вологжанин","Банк СИАБ","Банк БЖФ","Банк Уралфинанс","банк Элита","Яндекс Банк","ГУТА-БАНК","АКБ ЕВРОФИНАНС МОСНАРБАНК","Озон Банк (Ozon)"
         ];
   const handleSellerClick = () => {
-    if (userStep && userStep.tg_nick) {
-      window.open(
-        `https://t.me/${userStep.tg_nick}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    } else {
-      console.error("Telegram nickname not found or userStep is undefined");
+    if (userStep?.tg_nick) {
+      window.open(`https://t.me/${userStep.tg_nick}`, "_blank", "noopener,noreferrer");
+      return;
     }
+
+    navigate("/support", {
+      state: {
+        topic: "operation",
+        title: `Вопрос по операции #${userStep?.id || id}`,
+        description: "Нужна помощь по текущему шагу операции.",
+        orderId: userStep?.id || id,
+        productName: userStep?.name,
+        stepLabel:
+          userStep && userStep.step !== "Завершено"
+            ? `Шаг ${userStep.step}`
+            : "Завершённая операция",
+      },
+    });
+  };
+
+  const openSupportCenter = (title, description) => {
+    navigate("/support", {
+      state: {
+        topic: "operation",
+        title,
+        description,
+        orderId: userStep?.id || id,
+        productName: userStep?.name,
+        stepLabel:
+          userStep && userStep.step !== "Завершено"
+            ? `Шаг ${userStep.step}`
+            : "Завершённая операция",
+      },
+    });
   };
 
   const Popup = ({ message, onClose }) => (
@@ -190,22 +215,6 @@ const PurchaseStepsPage = ({
     setChecked(false);
   }, [step, userStep]);
 
-  useEffect(() => {
-    if (userStep) {
-      const savedFormData = localStorage.getItem(`formData_${userStep.id}`);
-      const savedChecked = localStorage.getItem(`checked_${userStep.id}`);
-      if (savedFormData) setFormData(JSON.parse(savedFormData));
-      if (savedChecked) setChecked(JSON.parse(savedChecked));
-    }
-  }, [userStep]);
-
-  useEffect(() => {
-    if (userStep) {
-      localStorage.setItem(`formData_${userStep.id}`, JSON.stringify(formData));
-      localStorage.setItem(`checked_${userStep.id}`, JSON.stringify(checked));
-    }
-  }, [formData, checked, userStep]);
-
   const handleFileUpload = async (event, imageField) => {
     const file = event.target.files[0];
     if (file) {
@@ -252,6 +261,24 @@ const PurchaseStepsPage = ({
     return formatted;
   };
 
+  const maskCardNumber = (value) => {
+    if (!value) {
+      return "**** **** **** ****";
+    }
+
+    const digits = String(value).replace(/\D/g, "");
+    return `**** **** **** ${digits.slice(-4)}`;
+  };
+
+  const maskPhone = (value) => {
+    if (!value) {
+      return "Не указано";
+    }
+
+    const digits = String(value).replace(/\D/g, "");
+    return `+* *** *** ${digits.slice(-2)}`;
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     if (name === "phone") {
@@ -296,9 +323,18 @@ const PurchaseStepsPage = ({
   };
 
   const handleStepSubmit = async () => {
-    const clearAndAlert = (msg) => {
+  const clearStepDraft = () => {
+    if (!userStep) {
+      return;
+    }
+
+    localStorage.removeItem(`formData_${userStep.id}`);
+    localStorage.removeItem(`checked_${userStep.id}`);
+  };
+
+  const clearAndAlert = (msg) => {
+      clearStepDraft();
       alert(msg);
-      localStorage.clear();
     };
 
     switch (step) {
@@ -307,11 +343,7 @@ const PurchaseStepsPage = ({
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             // если пользователь не подтверждён — редиректим на /confirmation и не продолжаем
             await handleStepSuccess();
@@ -333,11 +365,7 @@ const PurchaseStepsPage = ({
           const formDataToSend = new FormData();
           formDataToSend.append("id", userStep.id);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -369,11 +397,7 @@ const PurchaseStepsPage = ({
           formDataToSend.append("id", userStep.id);
           formDataToSend.append("image1", formData.image1);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -399,11 +423,7 @@ const PurchaseStepsPage = ({
           formDataToSend.append("id", userStep.id);
           formDataToSend.append("image2", formData.image2);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -429,11 +449,7 @@ const PurchaseStepsPage = ({
           formDataToSend.append("id", userStep.id);
           formDataToSend.append("image3", formData.image3);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -489,11 +505,7 @@ const PurchaseStepsPage = ({
             phoneToSend = "+" + phoneDigits;
           }
           formDataToSend.append("phone", phoneToSend);
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -520,11 +532,7 @@ const PurchaseStepsPage = ({
           formDataToSend.append("image4", formData.image4);
           formDataToSend.append("id_usertg", userInfo.id_usertg);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
                         if (redirectIfNotConfirmed()) return;
             fetchProducts();
@@ -551,11 +559,7 @@ const PurchaseStepsPage = ({
           formDataToSend.append("id", userStep.id);
           formDataToSend.append("image5", formData.image5);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             await handleStepSuccess();
             if (redirectIfNotConfirmed()) return;
@@ -587,17 +591,13 @@ const PurchaseStepsPage = ({
           formDataToSend.append("image7", formData.image7);
           formDataToSend.append("id_usertg", userInfo.id_usertg);
 
-          const response = await fetch(`${baseURL}updateStep.php`, {
-            method: "POST",
-            body: formDataToSend,
-          });
-          const result = await response.json();
+          const result = await updateStep(formDataToSend);
           if (result.success) {
             setShowPopup(true);
             await new Promise((resolve) => setTimeout(resolve, 3000));
             await handleStepSuccess();
             setShowPopup(false);
-            localStorage.clear();
+            clearStepDraft();
           } else {
             clearAndAlert("Ошибка загрузки данных: " + result.error);
           }
@@ -823,7 +823,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <div className="step-footer-container">
                 <div
@@ -960,7 +960,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <p className="purchase-step-subtitle-12px-400">
                 INHOMEKA – комплекты для ванной комнаты, собранные дизайнерами
@@ -1051,7 +1051,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <p
                 className="purchase-step-subtitle-12px-400"
@@ -1144,19 +1144,18 @@ const PurchaseStepsPage = ({
                     <g />
                   </svg>
                 </a>
-                <a
-                  href="https://t.me/inhomeka"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
+                  className="telegram-button"
+                  onClick={() =>
+                    openSupportCenter(
+                      "Нужна помощь по подписке на площадки",
+                      "Не получается пройти шаг с подпиской на площадки бренда."
+                    )
+                  }
                 >
-                  <svg
-                    style={{ height: "50px", width: "auto" }}
-                    viewBox="-21 -51 682.66669 682"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path d="m640-1.667969-640 272.039063 167.777344 66.585937 59.726562 224.507813 109.976563-106.558594 178.917969 123.570312zm-403.78125 367.402344-6.457031 58.535156-24.800781-93.234375 435.039062-332.703125zm0 0" />
-                  </svg>
-                </a>
+                  Центр поддержки
+                </button>
               </div>
               <div className="upload-section" style={{ marginTop: "20px" }}>
                 <p className="upload-title">Загрузите скрин подписки</p>
@@ -1208,7 +1207,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <button
                 className="purchase-step-button"
@@ -1350,7 +1349,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <div className="step-footer-container">
                 <div
@@ -1438,7 +1437,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>
               <div className="step-footer-container">
                 <div
@@ -1486,7 +1485,7 @@ const PurchaseStepsPage = ({
                   получения и статус "Доставлено".
                 </li>
                 <li>
-                  Зайдите снова в бот и в нижнем меню выберите иконку корзины.
+                  Зайдите снова в приложение и в нижнем меню выберите раздел операций.
                   Там вы найдете оформленный заказ и вернетесь на этот шаг для
                   загрузки скриншота.
                 </li>
@@ -1534,7 +1533,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Сообщить продавцу о браке
+                Сообщить о проблеме
               </button>
               <div className="step-footer-container">
                 <div
@@ -1651,7 +1650,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать менеджеру
+                Связаться в Telegram
               </button>
               <div className="step-footer-container">
                 <div
@@ -1682,7 +1681,7 @@ const PurchaseStepsPage = ({
         return (
           <div className="purchase-step-page">
             <div className="purchase-step-header">
-              <p className="title-class-step">Сделка № {userStep.id}</p>
+              <p className="title-class-step">Операция № {userStep.id}</p>
             </div>
             <div className="purchase-step-content">
               <div key={userStep.id} className="purchase-item">
@@ -1747,7 +1746,7 @@ const PurchaseStepsPage = ({
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Вопрос по операции
               </button>
               <p
                 className="font-16px-600"
@@ -1765,9 +1764,9 @@ const PurchaseStepsPage = ({
                 className="font-16px-400"
                 style={{ marginTop: "6px", marginBottom: 0 }}
               >
-                {userStep.bankname} {userStep.phone}
+                {userStep.bankname} {maskPhone(userStep.phone)}
                 <br />
-                Номер карты: {userStep.cardnumber}
+                Номер карты: {maskCardNumber(userStep.cardnumber)}
               </p>
               <p
                 className="font-16px-600"
@@ -1791,10 +1790,9 @@ const PurchaseStepsPage = ({
                 className="button-help"
                 style={{ marginTop: "10px", marginBottom: 0 }}
                 onClick={() => {
-                  window.open(
-                    "https://t.me/razdadim5",
-                    "_blank",
-                    "noopener,noreferrer"
+                  openSupportCenter(
+                    "Нужна помощь по завершённой операции",
+                    "Есть вопрос по статусу, начислению или условиям завершённой операции."
                   );
                 }}
               >

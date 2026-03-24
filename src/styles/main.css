@@ -1,9 +1,9 @@
 .app-container {
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 100%;
   position: relative;
-  background-color: #fff;
+  background: #f8fafc;
   height: 100vh; /* Используем относительные единицы измерения для высоты */
 }
 

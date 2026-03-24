@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ProductCard from "../components/ProductCard";
-import { TelegramWebAppContainer } from "@telegram-web-app/core";
 import "../styles/CatalogPage.css";
 
 const CatalogPage = ({ products, categories }) => {
@@ -44,7 +43,7 @@ const CatalogPage = ({ products, categories }) => {
   return (
     <div className="catalog-page">
       <div className={`catalog-content ${showPopup ? "blur-background" : ""}`}>
-<div className="title-class">Каталог</div>
+<div className="title-class">Предложения</div>
         <div className="search-container">
           <div className="search-bar-wrapper">
             <svg
@@ -91,7 +90,7 @@ const CatalogPage = ({ products, categories }) => {
         </div>
 
         <div className="products-grid">
-        <div className="info-text"><p>Чтобы подробнее узнать о продавце и своём статусе - нажмите на иконку человека внизу справа</p><p></p> <p><b> Новые товары в каталоге появляются каждый день! Заходите утром, чтобы успеть выкупить понравившийся товар</b></p></div>
+        <div className="info-text"><p>Подробности по операциям, верификации и поддержке доступны в профиле и центре поддержки.</p><p></p> <p><b>Новые предложения появляются ежедневно. Проверяйте ленту утром, чтобы успеть взять подходящее задание.</b></p></div>
           {filteredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

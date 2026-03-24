@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, NavLink} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CatalogPage from './pages/CatalogPage';
 import CatalogPageModerate from './pages/CatalogPageModerate';
 import AddProductPage from './pages/AddProductPage';
+import HomePage from './pages/HomePage';
 import PurchasesPage from './pages/PurchasesPage';
 import ProfilePage from './pages/ProfilePage';
 import ReportPage from './pages/ReportPage';
+import SupportPage from './pages/SupportPage';
 import ProductDetail from './components/ProductDetail';
 import PurchaseStepsPage from './pages/PurchaseStepsPage';
 import Sidebar from './components/Sidebar';
+import AppHeader from './components/AppHeader';
 import BackButton from './components/BackButton';
-import './index.css';
+import InstallPrompt from './components/InstallPrompt';
+import { getProducts } from './api/products';
+import { getUserSteps } from './api/steps';
+import { createUser, getUser } from './api/users';
+import { getPlatformContext, initializePlatform } from './platform';
 import logo from './assets/logo.png'; // Убедитесь, что путь к изображению правильный
 import ConfirmationPage from './pages/ConfirmationPage';
 
@@ -22,82 +29,12 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showLogo, setShowLogo] = useState(true); // Добавлено состояние для отображения логотипа
   const [userSteps, setUserSteps] = useState([]);
-  const baseURL = 'https://inhomeka.online:8000/';
   const [isUserInfoLoaded, setIsUserInfoLoaded] = useState(false); // Новый флаг
-  const [referralId, setReferralId] = useState(null); // Новый стейт для реферрала
   const [isBlocked, setIsBlocked] = useState(false); // Блокировка пользователя
-  const API = {
-    async getUser(id, username) {
-        try {
-            const option = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: id, username: username })
-            };
-            const res = await fetch(`${baseURL}getUser.php`, option).then(res => res.json());
-            return res;
-        } catch (err) {
-            console.log(err);
-        }
-    },
-    async createUser(id, username, referral_id = null) {
-      try {
-        const body = { id: id, username: username };
-        if (referral_id) body.referral_id = referral_id;
-        const option = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
-        };
-        const res = await fetch(`${baseURL}createUser.php`, option).then(res => res.json());
-        return res;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getProducts() {
-      try {
-        const option = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        const res = await fetch(`${baseURL}getProducts.php`, option).then(res => res.json());
-        return res;
-      } catch (err) {
-        console.log(err);
-      }
-    },
-    async getUserSteps(id_usertg) {
-      try {
-          const option = {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ id_usertg: id_usertg }),
-          };
-          const res = await fetch(`${baseURL}getSteps.php`, option);
-          if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          const data = await res.json();
-          return data;
-      } catch (err) {
-          console.error("Error:", err);
-          return { success: false, message: err.message };
-      }
-  },
-  };
 
   const fetchProducts = async () => {
     try {
-      const response = await API.getProducts();
+      const response = await getProducts();
       if (response.success) {
         setProducts(response.data); 
       } else {
@@ -110,7 +47,7 @@ const App = () => {
 
   const fetchUserSteps = async (id_usertg) => {
     try {
-        const response = await API.getUserSteps(id_usertg);
+        const response = await getUserSteps(id_usertg);
         console.log('API Response:', response);
         if (response.success) {
             setUserSteps(response.data);
@@ -125,28 +62,21 @@ const App = () => {
     }
 };
   useEffect(() => {
-    // Получение referral из URL (?refferal=...)
     const params = new URLSearchParams(window.location.search);
-    const ref = params.get('refferal');
-    if (ref) setReferralId(ref);
-
-    localStorage.clear();
-    const tg = window.Telegram.WebApp;
-    tg.expand(); // Расширяет приложение на весь экран
-
+    const referralCode = params.get('refferal');
 
     const fetchData = async () => {
       try {
-        const userId = tg.initDataUnsafe.user.id;
-        const username = tg.initDataUnsafe.user.username;
-        // const username = '';
+        initializePlatform();
+        const platformContext = getPlatformContext();
+        const userId = platformContext.user.id;
+        const username = platformContext.user.username;
+        const isTelegramUser = platformContext.type === 'telegram';
 
         console.log('User ID:', userId);
         console.log('Username:', username);
 
-        let valid = true; // Объявляем переменную valid здесь
-
-        const response = await API.getUser(userId, username);
+        const response = await getUser(userId, username);
          // Если сервер явно сообщает о блокировке — останавливаем дальнейшую инициализацию
         if (response && response.success === false && response.blocked === true) {
           setIsBlocked(true);
@@ -155,34 +85,26 @@ const App = () => {
         }
 
         if (!response.success) {
-          // Передаем referralId если есть
-          const createResponse = await API.createUser(userId, username, ref || referralId);
+          const createResponse = await createUser(userId, username, referralCode);
           if (createResponse.success === true) {
-            const newUserResponse = await API.getUser(userId, username);
-            if (!newUserResponse.validUsername) {
+            const newUserResponse = await getUser(userId, username);
+            if (isTelegramUser && !newUserResponse.validUsername) {
               alert('Ваше имя пользователя не было распознано. Введите его в аккаунте тг. Либо введите его сверху на странице профиля в приложении. Вводите без @ в начале.');
-              valid = false; // Обновляем значение valid
             }
             setUserInfo(newUserResponse.data);
           }
         } else {
-          if (!response.validUsername) {
+          if (isTelegramUser && !response.validUsername) {
             alert('Ваше имя пользователя не было распознано. Введите его в аккаунте тг. Либо введите его сверху на странице профиля в приложении. Вводите без @ в начале.');
-            valid = false; // Обновляем значение valid
           }
           setUserInfo(response.data);
         }
 
         setIsUserInfoLoaded(true); // Устанавливаем флаг после загрузки данных пользователя
 
-        const stepsResponse = await API.getUserSteps(userId);
+        const stepsResponse = await getUserSteps(userId);
         if (stepsResponse.success) {
-          console.log('User Steps:', stepsResponse.data);
           setUserSteps(stepsResponse.data);
-
-          if (!valid) {
-
-          }
         } else {
           console.error('Failed to fetch user steps:', stepsResponse.error);
         }
@@ -252,15 +174,18 @@ if (isLoading || !isUserInfoLoaded) {
     <Router>
       <div className="app-container">
         <BackButton />
-        <Sidebar userInfo={userInfo} />
+        <InstallPrompt />
+        <AppHeader userInfo={userInfo} userSteps={userSteps} />
+        <Sidebar />
         <div className="content">
           <Routes>
-            <Route exact path="/" element={<CatalogPage products={products} categories={categories} />} />
+            <Route exact path="/" element={<HomePage userInfo={userInfo} userSteps={userSteps} products={products} />} />
             <Route path="/catalog" element={<CatalogPage products={products} categories={categories} />} />
             <Route path="/catalog-moderate" element={<CatalogPageModerate products={products} categories={categories} />} />
             <Route path="/add-product" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} products={products} setProducts={setProducts} categories={categories} />} />
             <Route path="/publishWithChanges" element={<AddProductPage userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchases" element={<PurchasesPage userSteps={userSteps} userInfo={userInfo} />} />
+            <Route path="/support" element={<SupportPage />} />
             <Route path="/profile" element={<ProfilePage userInfo={userInfo} />} />
             <Route path="/product/:id" element={<ProductDetail userSteps={userSteps} fetchUserSteps={fetchUserSteps} products={products} userInfo={userInfo} fetchProducts={fetchProducts} />} />
             <Route path="/purchase-steps/:id" element={<PurchaseStepsPage fetchProducts={fetchProducts} userInfo={userInfo} userSteps={userSteps} fetchUserSteps={fetchUserSteps} onStepComplete={handleStepComplete}/>} />

@@ -5,47 +5,85 @@ p {
 .container {
   display: flex;
   flex-wrap: wrap;
-  gap: 1vw;
+  gap: 10px;
   justify-content: space-between;
 }
 
 .product-card {
-  aspect-ratio: 135 / 220;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 22px;
   text-align: left;
   cursor: pointer;
-  width: calc(50% - 3px);
-  margin-bottom: 3px;
+  width: calc(50% - 5px);
+  margin-bottom: 10px;
   box-sizing: border-box;
   position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
 }
 
-.product-image {
+.product-card__media {
+  position: relative;
+  aspect-ratio: 1 / 1.08;
+}
+
+.product-image-category {
   width: 100%;
-  height: 80%;
-  flex-grow: 1;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
   display: block;
+}
+
+.product-card__badge-row {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.product-card__badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 700;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.product-card__badge--ok {
+  background: rgba(15, 23, 42, 0.72);
+  color: #f8fafc;
+}
+
+.product-card__badge--warning {
+  background: rgba(239, 68, 68, 0.88);
+  color: #fff;
 }
 
 .catalog-skeleton {
   background-color: #e0e0e0;
   width: 100%;
-  height: 80%;
-  flex-grow: 1;
-  border-radius: 8px;
+  height: 100%;
   animation: skeleton-loading 1.5s infinite;
 }
 
 .exclamation-mark {
   position: absolute;
-  top: 30%;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Центрирование по вертикали и горизонтали */
-  font-size: 200px; /* Размер восклицательного знака */
-  color: red; /* Цвет восклицательного знака */
-  z-index: 1009; /*  Устанавливаем z-index для того, чтобы восклицательный знак был поверх */
+  transform: translate(-50%, -50%);
+  font-size: 92px;
+  color: rgba(239, 68, 68, 0.55);
+  z-index: 2;
 }
 
 @keyframes skeleton-loading {
@@ -61,42 +99,37 @@ p {
 }
 
 .product-info {
-  padding: 5px;
-  padding-top: 8px;
+  padding: 14px;
   display: flex;
-  gap: 5px;
-  height: 100px;
+  gap: 10px;
   flex-direction: column;
 }
 
 .product-description {
+  color: #0f172a;
   font-family: "Helvetica Neue Cyr";
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
-  color: rgba(0, 0, 0, 1);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  line-height: 1;
-}
-
-.color-text {
-  color: rgba(196, 46, 181, 1);
+  line-height: 1.3;
 }
 
 .product-price {
   display: flex;
-  gap: 5px;
+  gap: 8px;
   align-items: end;
+  flex-wrap: wrap;
 }
 
 .product-old-price {
-  font-family: "Helvetica Neue Cyr";
-  font-size: 15px;
+  color: #94a3b8;
+  font-family: "Inter";
+  font-size: 13px;
   font-weight: 700;
-  color: rgba(113, 113, 113, 1);
   text-decoration: line-through;
   white-space: nowrap;
   overflow: hidden;
@@ -105,26 +138,43 @@ p {
 }
 
 .product-new-price {
+  color: #0f172a;
   font-family: "Helvetica Neue Cyr";
-  font-size: 21px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 21px;
-  color: rgba(196, 46, 181, 1);
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: inline-block;
 }
 
-.product-image-category {
-  width: 100%;
-  height: 80%;
-  flex-grow: 1;
-  border-radius: 8px;
-  display: block;
+.product-stats {
+  display: grid;
+  gap: 10px;
 }
 
-.add-flex-container{
+.product-stats span {
+  display: block;
+  margin-bottom: 6px;
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.product-stats strong {
+  display: block;
+  color: #0f172a;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.add-flex-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -134,5 +184,11 @@ p {
 .flex-text {
   flex-grow: 1;
   margin-right: 20px;
-  width: calc(100% - 79px); /* 79px - это ширина кнопки (19px padding, 8px border-radius) */
+  width: calc(100% - 79px);
+}
+
+@media (min-width: 900px) {
+  .product-card {
+    width: calc(33.333% - 8px);
+  }
 }

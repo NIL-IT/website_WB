@@ -1,19 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getTelegramWebApp } from "../platform/telegram";
 
 const BackButton = () => {
-  const goBack = () => {
-    window.history.back();
-  };
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isTelegramContext = Boolean(getTelegramWebApp()?.initDataUnsafe?.user?.id);
+
+  const goBack = useCallback(() => {
+    navigate(-1);
+  }, [navigate]);
+
   useEffect(() => {
-    window.Telegram.WebApp.BackButton.onClick(goBack);
-    window.Telegram.WebApp.BackButton.show();
+    const webApp = getTelegramWebApp();
+    const backButton = webApp?.BackButton;
+
+    if (!backButton) {
+      return undefined;
+    }
+
+    backButton.onClick(goBack);
+    backButton.show();
 
     return () => {
-      window.Telegram.WebApp.BackButton.hide();
-      window.Telegram.WebApp.BackButton.offClick(goBack);
+      backButton.hide();
+      backButton.offClick(goBack);
     };
-  }, []);
-  return <></>;
+  }, [goBack]);
+
+  const hideBrowserBackButton = ["/", "/catalog"].includes(location.pathname);
+
+  if (isTelegramContext || hideBrowserBackButton) {
+    return null;
+  }
+
+  return (
+    <button className="browser-back-button" onClick={goBack} type="button">
+      Назад
+    </button>
+  );
 };
 
 export default BackButton;

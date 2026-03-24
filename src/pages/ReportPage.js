@@ -1,28 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
+import { getTransactionReport } from "../api/steps";
 
 const ReportPage = ({userInfo}) => {
   const { id } = useParams();
   const [stepData, setStepData] = useState(null);
   const [error, setError] = useState(null);
 
+  const maskCardNumber = (value) => {
+    if (!value) {
+      return "Не указано";
+    }
+
+    const digits = String(value).replace(/\D/g, "");
+
+    if (digits.length < 4) {
+      return "****";
+    }
+
+    return `**** **** **** ${digits.slice(-4)}`;
+  };
+
+  const maskPhone = (value) => {
+    if (!value) {
+      return "Не указано";
+    }
+
+    const digits = String(value).replace(/\D/g, "");
+
+    if (digits.length < 4) {
+      return "****";
+    }
+
+    return `+* *** *** ${digits.slice(-2)}`;
+  };
+
   useEffect(() => {
+    if (!userInfo?.id_usertg || !userInfo?.status) {
+      return;
+    }
+
     const fetchData = async () => {
       try {
-        const response = await fetch("https://inhomeka.online:8000/getTrans.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id: id,
-            id_usertg: userInfo.id_usertg,
-            status: userInfo.status
-          }),
-        });
-
-        const result = await response.json();
+        const result = await getTransactionReport(id, userInfo.id_usertg, userInfo.status);
         if (result.success) {
           setStepData(result.data);
         } else {
@@ -34,7 +54,7 @@ const ReportPage = ({userInfo}) => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, userInfo?.id_usertg, userInfo?.status]);
 
   if (error) {
     return <div className="error">{error}</div>;
@@ -56,14 +76,14 @@ const ReportPage = ({userInfo}) => {
   return (
     <div className="purchase-step-page">
       <div className="purchase-step-header">
-        <p className="title-class-step">Отчет для транзакции №{id}</p>
+        <p className="title-class-step">Отчёт по операции №{id}</p>
       </div>
       <div className="purchase-step-content" style={{ paddingBottom: "8vh" }}>
         <div>
           <p className="purchase-step-text">ФИО держателя карты: {stepData.cardholder}</p>
           <p className="purchase-step-text">Банк: {stepData.bankname}</p>
-          <p className="purchase-step-text">Номер: {stepData.phone}</p>
-          <p className="purchase-step-text">Номер карты: {stepData.cardnumber}</p>
+          <p className="purchase-step-text">Номер: {maskPhone(stepData.phone)}</p>
+          <p className="purchase-step-text">Номер карты: {maskCardNumber(stepData.cardnumber)}</p>
         </div>
         <div>
           {screenshots.map((screenshot, index) => (

@@ -1,128 +1,245 @@
 .profile-page {
   display: flex;
   flex-direction: column;
-  height: 90vh;
+  min-height: 100%;
   width: 100%;
-  background-color: #000000;
-  overflow-y: hidden;
+  padding: 20px 20px 120px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 24%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
 }
 
-.profile-header {
+.profile-hero,
+.profile-metric-card,
+.profile-content {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 22px;
+  box-shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+}
+
+.profile-hero {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  height: auto;
-  padding: 15px;
-  background-color: rgba(255, 255, 255, 1);
-  border-radius: 0px 0px 8px 8px;
-  box-sizing: border-box;
-  gap: 10px;
+  gap: 18px;
+  padding: 22px;
+}
+
+.profile-hero__top {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.profile-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
 }
 
 .profile-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #f8fafc;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border: 1px solid black;
-  border-radius: 50%;
-  box-sizing: border-box;
+  font-family: "Inter";
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
-.profile-name {
-  font-family: "Helvetica Neue Cyr";
-  font-size: 24px;
-  font-weight: 600;
-  color: rgba(146, 35, 214, 1);
-}
-
-.profile-info {
+.profile-identity__copy {
   display: flex;
-  justify-content: flex-start;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-identity__copy span,
+.profile-edit-card__copy span,
+.profile-metric-card span {
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-identity__copy strong,
+.profile-metric-card strong {
+  color: #0f172a;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.profile-identity__copy p,
+.profile-edit-card__copy p,
+.item-subtitle {
+  margin: 0;
+  color: #475569;
+  font-family: "Inter";
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.profile-status {
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.profile-status--ok {
+  background: rgba(34, 197, 94, 0.14);
+  color: #15803d;
+}
+
+.profile-status--alert {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+
+.profile-edit-card {
+  display: grid;
+  gap: 14px;
+}
+
+.profile-edit-card__form {
+  display: grid;
   gap: 10px;
 }
 
-.profile-buttons {
-  display: flex;
-  justify-content: space-evenly;
-  padding: 0;
-  gap: 20px;
+.profile-name-input,
+.profile-edit-card__form button,
+.profile-action-button {
+  min-height: 48px;
+  border-radius: 14px;
+  font-family: "Inter";
+  font-size: 14px;
 }
 
-.profile-buttons button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 39px;
-  padding: 10px 0px; /* Убраны боковые паддинги */
+.profile-name-input {
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  padding: 0 14px;
+  background: rgba(248, 250, 252, 0.96);
+  color: #0f172a;
+  box-sizing: border-box;
+}
+
+.profile-edit-card__form button,
+.profile-action-button {
   border: none;
-  border-radius: 8px;
-  background-color: rgba(103, 103, 103, 0.38);
-  gap: 20px; /* Гэп увеличен до 20 пикселей */
-  color: #000000;
-  font-family: "Helvetica Neue Cyr";
-  font-size: 18px; /* Увеличено с 12px */
-  font-weight: 500;
-  cursor: pointer;
-  outline: none;
+  padding: 0 16px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-weight: 700;
 }
 
+.profile-actions {
+  display: grid;
+  gap: 10px;
+}
 
-.profile-buttons button:focus {
-  outline: none;
+.profile-metrics {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.profile-metric-card {
+  padding: 18px;
 }
 
 .profile-content {
-  height: 100%;
-  width: 100%;
-  margin-top: 5px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px 8px 0px 0px;
-  box-sizing: border-box;
+  margin-top: 16px;
+  padding: 12px 18px;
 }
 
 .profile-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid black;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18);
   cursor: pointer;
 }
 
-.profile-item:first-child {
-  padding-top: 0;
+.profile-item:last-child {
+  border-bottom: none;
 }
 
 .item-text {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  flex: 1;
 }
 
 .item-title {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  color: #0f172a;
   font-family: "Helvetica Neue Cyr";
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 600;
-  gap: 5px;
 }
 
-.item-subtitle {
-  font-family: "Helvetica Neue Cyr";
-  font-size: 18px;
-  font-weight: 400;
+.item-title--split {
+  justify-content: flex-start;
+  gap: 8px;
 }
 
-/* Иконки рядом с заголовками */
-.item-title svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
+.profile-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 2px;
+}
+
+.profile-dot--ok {
+  background: #16a34a;
+}
+
+.profile-dot--alert {
+  background: #ef4444;
+}
+
+.profile-item__arrow {
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 26px;
+  line-height: 1;
+}
+
+@media (min-width: 900px) {
+  .profile-hero__top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .profile-edit-card {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+    align-items: end;
+  }
+
+  .profile-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .profile-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

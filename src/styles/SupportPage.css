@@ -1,0 +1,273 @@
+.support-page {
+  min-height: 100%;
+  padding: 20px 20px 120px;
+  box-sizing: border-box;
+  background:
+    radial-gradient(circle at top right, rgba(56, 189, 248, 0.18), transparent 28%),
+    linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.support-hero {
+  margin-bottom: 18px;
+}
+
+.support-eyebrow {
+  margin: 0 0 8px;
+  color: #0f766e;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.support-hero h1 {
+  margin: 0 0 10px;
+  color: #0f172a;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.support-lead {
+  margin: 0;
+  color: #475569;
+  font-family: "Inter";
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.support-context-card,
+.support-card,
+.support-history-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+}
+
+.support-context-card {
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.support-context-label {
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.support-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.support-card {
+  padding: 20px;
+}
+
+.support-card h2,
+.support-history-card h2 {
+  margin: 0 0 16px;
+  color: #0f172a;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.support-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.support-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #334155;
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.support-form input,
+.support-form textarea,
+.support-form select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 14px;
+  padding: 14px 15px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family: "Inter";
+  font-size: 14px;
+}
+
+.support-primary-button {
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.support-submit-message {
+  margin: 14px 0 0;
+  font-family: "Inter";
+  font-size: 14px;
+}
+
+.support-submit-message--success {
+  color: #0f766e;
+}
+
+.support-submit-message--error {
+  color: #b91c1c;
+}
+
+.support-checklist {
+  margin: 0;
+  padding-left: 18px;
+  color: #334155;
+  font-family: "Inter";
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.support-note {
+  margin-top: 16px;
+  border-radius: 14px;
+  padding: 14px;
+  background: #ecfeff;
+  color: #155e75;
+  font-family: "Inter";
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.support-links {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.support-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  padding: 13px 16px;
+  background: #0f172a;
+  color: #f8fafc;
+  text-decoration: none;
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.support-history-card {
+  margin-top: 16px;
+  padding: 20px;
+}
+
+.support-history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.support-history-head span {
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.support-empty-state {
+  margin: 0;
+  color: #64748b;
+  font-family: "Inter";
+  font-size: 14px;
+}
+
+.support-ticket-list {
+  display: grid;
+  gap: 12px;
+}
+
+.support-ticket {
+  border-radius: 16px;
+  padding: 16px;
+  background: #f8fafc;
+}
+
+.support-ticket-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.support-ticket-head strong,
+.support-ticket-head span,
+.support-ticket small,
+.support-ticket p,
+.support-ticket-context {
+  font-family: "Inter";
+}
+
+.support-ticket-head strong {
+  color: #0f172a;
+  font-size: 13px;
+}
+
+.support-ticket-head span {
+  color: #0f766e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.support-ticket h3 {
+  margin: 0 0 8px;
+  color: #0f172a;
+  font-family: "Helvetica Neue Cyr";
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.support-ticket p {
+  margin: 0 0 10px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.support-ticket-context {
+  margin-bottom: 10px;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.support-ticket small {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+@media (min-width: 900px) {
+  .support-grid {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  }
+}

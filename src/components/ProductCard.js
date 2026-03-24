@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/ProductCard.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/ProductCard.css";
 
 const ProductCard = ({ product, isModerate }) => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -11,7 +11,7 @@ const ProductCard = ({ product, isModerate }) => {
   };
 
   const handleImageError = (event) => {
-    event.target.style.display = 'none';
+    event.target.style.display = "none";
   };
 
   const handleClick = () => {
@@ -20,37 +20,48 @@ const ProductCard = ({ product, isModerate }) => {
 
   return (
     <div className="product-card" onClick={handleClick}>
-      {!isLoaded && (
-        <div className="catalog-skeleton">
-          {!product.is_confirmed && (
-            <div className="exclamation-mark">
-              !
-            </div>
-          )}
+      <div className="product-card__media">
+        {!isLoaded && (
+          <div className="catalog-skeleton">
+            {!product.is_confirmed && <div className="exclamation-mark">!</div>}
+          </div>
+        )}
+        <img
+          src={product.image}
+          alt={product.name}
+          className="product-image-category"
+          style={{ display: isLoaded ? "block" : "none" }}
+          onLoad={handleImageLoad}
+          onError={handleImageError}
+        />
+        <div className="product-card__badge-row">
+          <span
+            className={`product-card__badge ${
+              product.is_confirmed
+                ? "product-card__badge--ok"
+                : "product-card__badge--warning"
+            }`}
+          >
+            {product.is_confirmed ? "Доступно" : "На проверке"}
+          </span>
         </div>
-      )}
-      <img
-        src={product.image}
-        alt={product.name}
-        className="product-image-category"
-        style={{ display: isLoaded ? 'block' : 'none' }}
-        onLoad={handleImageLoad}
-        onError={handleImageError}
-      />
-      {!product.is_confirmed && (
-        <div className="exclamation-mark">
-          !
-        </div>
-      )}
+      </div>
+
       <div className="product-info">
         <div className="product-price">
           <p className="product-new-price">{product.yourprice} ₽</p>
           <p className="product-old-price">{product.marketprice} ₽</p>
         </div>
         <p className="product-description">{product.name}</p>
-        <div className="product-price">
-        <p className="product-description">Доступно сегодня:</p>
-        <p className="product-description color-text">{product.availableday}шт</p>
+        <div className="product-stats">
+          <div>
+            <span>Доступно сегодня</span>
+            <strong>{product.availableday} шт</strong>
+          </div>
+          <div>
+            <span>Категория</span>
+            <strong>{product.category}</strong>
+          </div>
         </div>
       </div>
     </div>

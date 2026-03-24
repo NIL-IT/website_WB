@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/PurchasesPage.css";
 
 const PurchasesPage = ({ userSteps, userInfo }) => {
   const [loadedImages, setLoadedImages] = useState({});
+  const navigate = useNavigate();
+
+  const operations = useMemo(
+    () =>
+      userSteps.filter(
+        (userStep) => userStep.step > 0 || userStep.step === "Завершено"
+      ),
+    [userSteps]
+  );
+
+  const activeOperations = operations.filter(
+    (userStep) => userStep.step !== "Завершено"
+  );
+  const completedOperations = operations.filter(
+    (userStep) => userStep.step === "Завершено"
+  );
+  const nextOperation = activeOperations[0] || null;
 
   const handleImageLoad = (userStepId) => {
     setLoadedImages((prevState) => ({
@@ -13,90 +30,156 @@ const PurchasesPage = ({ userSteps, userInfo }) => {
   };
 
   const handleImageError = (event, userStepId) => {
-    event.target.style.display = "none"; // Скрыть изображение при ошибке
+    event.target.style.display = "none";
     setLoadedImages((prevState) => ({
       ...prevState,
-      [userStepId]: false, // Пометить, что изображение не загружено
+      [userStepId]: false,
     }));
   };
 
-  const navigate = useNavigate();
-
   const handleProductClick = (userStepId) => {
-    // Если пользователь не подтверждён — переадресуем на страницу подтверждения
     if (userInfo && !userInfo.confirmation) {
-      navigate('/confirmation', { state: { from: `/purchase-steps/${userStepId}` } });
+      navigate("/confirmation", { state: { from: `/purchase-steps/${userStepId}` } });
       return;
     }
-    console.log(userStepId);
+
     navigate(`/purchase-steps/${userStepId}`);
+  };
+
+  const getStatusMeta = (step) => {
+    if (step === "Завершено") {
+      return { label: "Завершено", tone: "success" };
+    }
+
+    if (Number(step) > 0) {
+      return { label: `Шаг ${step}`, tone: "active" };
+    }
+
+    return { label: "Ожидает запуска", tone: "idle" };
   };
 
   return (
     <div className="purchases-page">
-      <div className="title-class">Мои покупки</div>
-      <ul>
-      {userSteps
-          .filter(userStep => userStep.step > 0 || userStep.step === "Завершено")
-          .map((userStep) => (
-          <li key={userStep.id} className="purchase-item" onClick={() => handleProductClick(userStep.id)}>
-            <div className="purchase-skeleton" style={{ display: loadedImages[userStep.id] ? "none" : "block" }}></div>
-            <img
-              src={userStep.image}
-              alt={userStep.name}
-              className="purchase-image"
-              style={{ display: loadedImages[userStep.id] ? "block" : "none" }}
-              onLoad={() => handleImageLoad(userStep.id)}
-              onError={(event) => handleImageError(event, userStep.id)}
-            />
-            <div className="purchase-details">
-              <h2 className="purchase-title">{userStep.name}</h2>
-              <p className="purchase-price">Цена для вас: {userStep.yourprice} ₽</p>
-              <p className="purchase-step">
-                Текущий шаг: {userStep.step}
-                {userStep.step === "Завершено" && (
-                  <span style={{ marginLeft: '4px' }}>
-                    <svg
-                      width="8"
-                      height="8"
-                      viewBox="0 0 8 8"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M0 4C0 1.79086 1.79086 0 4 0C6.20915 0 8 1.79086 8 4C8 6.20915 6.20915 8 4 8C1.79086 8 0 6.20915 0 4Z"
-                        fill="#04B800"
-                      />
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.6858 2.87243C5.79479 2.98141 5.79479 3.15811 5.6858 3.26708L3.96442 4.9885C3.71014 5.24279 3.29782 5.24279 3.04354 4.9885L2.3144 4.25935C2.20542 4.15036 2.20542 3.97365 2.3144 3.86467C2.42339 3.75568 2.60008 3.75568 2.70907 3.86467L3.43821 4.59382C3.47453 4.63014 3.53343 4.63014 3.56974 4.59382L5.29116 2.87243C5.40014 2.76345 5.57681 2.76345 5.6858 2.87243Z"
-                        fill="black"
-                      />
-                    </svg>
-                  </span>
-                )}
-              </p>
-            </div>
-            <div className="purchase-arrow">
-              <svg
-                width="6"
-                height="11"
-                viewBox="0 0 6 11"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+      <section className="operations-summary">
+        <article className="operations-summary-card operations-summary-card--accent">
+          <span>Следующее действие</span>
+          <strong>{nextOperation ? nextOperation.name : "Свободно"}</strong>
+          <p>
+            {nextOperation
+              ? `Продолжите операцию №${nextOperation.id} и завершите текущий шаг.`
+              : "Активных шагов нет. Можно выбрать новое предложение из каталога."}
+          </p>
+          <button
+            type="button"
+            onClick={() =>
+              nextOperation
+                ? handleProductClick(nextOperation.id)
+                : navigate("/catalog")
+            }
+          >
+            {nextOperation ? "Продолжить" : "Открыть предложения"}
+          </button>
+        </article>
+
+        <article className="operations-summary-card">
+          <span>Активные операции</span>
+          <strong>{activeOperations.length}</strong>
+          <p>Операции, которые требуют действий на текущем шаге.</p>
+        </article>
+
+        <article className="operations-summary-card">
+          <span>Завершённые</span>
+          <strong>{completedOperations.length}</strong>
+          <p>Операции, по которым уже сформирован итоговый результат.</p>
+        </article>
+      </section>
+
+      <section className="operations-list">
+        {operations.length === 0 ? (
+          <div className="operations-empty">
+            <strong>Операций пока нет</strong>
+            <p>Откройте предложения и возьмите первое подходящее задание.</p>
+            <button type="button" onClick={() => navigate("/catalog")}>
+              Перейти к предложениям
+            </button>
+          </div>
+        ) : (
+          operations.map((userStep) => {
+            const status = getStatusMeta(userStep.step);
+
+            return (
+              <article
+                key={userStep.id}
+                className="purchase-item"
+                onClick={() => handleProductClick(userStep.id)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    handleProductClick(userStep.id);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
               >
-                <path
-                  d="M0.247666 10.7527C0.573851 11.0781 1.10275 11.0781 1.42893 10.7527L5.51127 6.67579C6.16312 6.02488 6.16287 4.97004 5.51077 4.31938L1.42592 0.244075C1.09974 -0.0813583 0.570844 -0.0813583 0.244651 0.244075C-0.0815504 0.569517 -0.0815504 1.09715 0.244651 1.42259L3.74081 4.91062C4.06707 5.23604 4.06707 5.76371 3.74081 6.08913L0.247666 9.57421C-0.0785353 9.89962 -0.0785353 10.4272 0.247666 10.7527Z"
-                  fill="black"
-                />
-              </svg>
-            </div>
-          </li>
-        ))}
-      </ul>
+                <div className="purchase-media">
+                  <div
+                    className="purchase-skeleton"
+                    style={{ display: loadedImages[userStep.id] ? "none" : "block" }}
+                  />
+                  <img
+                    src={userStep.image}
+                    alt={userStep.name}
+                    className="purchase-image"
+                    style={{ display: loadedImages[userStep.id] ? "block" : "none" }}
+                    onLoad={() => handleImageLoad(userStep.id)}
+                    onError={(event) => handleImageError(event, userStep.id)}
+                  />
+                </div>
+
+                <div className="purchase-details">
+                  <div className="purchase-meta">
+                    <span className={`purchase-status purchase-status--${status.tone}`}>
+                      {status.label}
+                    </span>
+                    <span className="purchase-id">Операция #{userStep.id}</span>
+                  </div>
+
+                  <h2 className="purchase-title">{userStep.name}</h2>
+
+                  <div className="purchase-stats">
+                    <div>
+                      <span>Цена для вас</span>
+                      <strong>{userStep.yourprice} ₽</strong>
+                    </div>
+                    <div>
+                      <span>Статус</span>
+                      <strong>{userStep.step === "Завершено" ? "Закрыта" : "В работе"}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="purchase-arrow" aria-hidden="true">
+                  <svg
+                    width="8"
+                    height="14"
+                    viewBox="0 0 8 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1 1L7 7L1 13"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+              </article>
+            );
+          })
+        )}
+      </section>
     </div>
   );
 };

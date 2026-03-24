@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { confirmProduct, deleteProduct } from "../api/products";
+import { createStep } from "../api/steps";
 import "../styles/ProductDetail.css";
 
 const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) => {
@@ -15,15 +17,19 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
   };
 
   const handleSellerClick = () => {
-    if (product.tg_nick) {
-      window.open(
-        `https://t.me/${product.tg_nick}`,
-        "_blank",
-        "noopener,noreferrer"
-      );
-    } else {
-      console.error("Telegram nickname not found or userStep is undefined");
+    if (product?.tg_nick) {
+      window.open(`https://t.me/${product.tg_nick}`, "_blank", "noopener,noreferrer");
+      return;
     }
+
+    navigate("/support", {
+      state: {
+        topic: "operation",
+        title: `Вопрос по предложению ${product.name}`,
+        description: "Нужна помощь по условиям предложения или следующему шагу.",
+        productName: product.name,
+      },
+    });
   };
 
   const skidka = Math.round(((product.marketprice - product.yourprice) / product.marketprice) * 100);
@@ -38,34 +44,23 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://inhomeka.online:8000/createStep.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id_usertg: userInfo.id_usertg, id_product: id }),
-      });
-
-      const result = await response.json();
+      const result = await createStep(userInfo.id_usertg, id);
 
       if (result.success) {
         const updatedUserSteps = await fetchUserSteps(userInfo.id_usertg);
         const newStep = updatedUserSteps.find(step => step.id_product === Number(id));
 
         if (newStep) {
-          localStorage.clear()
           navigate(`/purchase-steps/${result.stepsId}`);
         } else {
           console.error('Не удалось найти созданный шаг в данных пользователя');
         }
       } else {
         alert('Ошибка при создании шага: ' + result.error);
-        localStorage.clear()
       }
     } catch (error) {
       console.error('Ошибка при создании шага:', error);
       alert('Произошла ошибка при создании шага');
-      localStorage.clear()
     }
   };
 
@@ -76,15 +71,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
     }
 
     try {
-      const response = await fetch(`https://inhomeka.online:8000/deleteProduct.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: id, userId: userInfo.id_usertg }),
-      });
-
-      const result = await response.json();
+      const result = await deleteProduct(id, userInfo.id_usertg);
 
       if (result.success) {
         fetchProducts();
@@ -100,15 +87,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
 
   const handleConfirmClick = async () => {
     try {
-      const response = await fetch(`https://inhomeka.online:8000/confirmProduct.php`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ productId: id, userId: userInfo.id_usertg }),
-      });
-
-      const result = await response.json();
+      const result = await confirmProduct(id, userInfo.id_usertg);
 
       if (result.success) {
         fetchProducts();
@@ -153,7 +132,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
                     fill="white"
                   />
                 </svg>
-                Написать продавцу
+                Связаться в Telegram
               </button>)}
       <div>
         <div>
@@ -203,7 +182,7 @@ const ProductDetail = ({ products, userInfo, fetchProducts, fetchUserSteps }) =>
         onClick={handleBuyClick}
         disabled={product.availableday === 0}
       >
-        {product.availableday === 0 ? 'Лимит на сегодня исчерпан' : 'Купить товар'}
+        {product.availableday === 0 ? 'Лимит на сегодня исчерпан' : 'Открыть операцию'}
       </button>
       {fromModeratePage && (
         <button className="delete-button" onClick={handleDeleteClick}>Удалить товар</button>

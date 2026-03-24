@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
+import { addProduct, publishWithChanges } from "../api/products";
+import { getManagers } from "../api/users";
 import "../styles/AddProductPage.css";
 
 const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
@@ -56,11 +58,7 @@ const AddProductPage = ({ userInfo, categories, fetchProducts }) => {
 
   useEffect(() => {
     // Получение списка менеджеров с бэкенда
-    fetch("https://inhomeka.online:8000/getManagers.php", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((res) => res.json())
+    getManagers()
       .then((data) => {
         if (data.success && Array.isArray(data.data)) {
           setManagers(data.data);
@@ -252,12 +250,7 @@ const handleRemoveField = (event) => {
       keywordsWithCount: hasInputFields ? keywordsWithCount : undefined,
     };
 
-    fetch("https://inhomeka.online:8000/addProduct.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dataToSend),
-    })
-      .then((response) => response.json())
+    addProduct(dataToSend)
       .then((data) => {
         if (data.success) {
           setPopupMessage(
@@ -291,17 +284,13 @@ const handleRemoveField = (event) => {
       selectedDate: stateValue & 0b10 ? selectedDate : undefined,
       deleteDate: stateValue & 0b01 ? deleteDate : undefined,
     };
-  
-    const url = type === "publishWithChanges"
-      ? "https://inhomeka.online:8000/publishWithChanges.php"
-      : "https://inhomeka.online:8000/addProduct.php";
-  
-    fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dataToSend),
-    })
-      .then((response) => response.json())
+
+    const request =
+      type === "publishWithChanges"
+        ? publishWithChanges(dataToSend)
+        : addProduct(dataToSend);
+
+    request
       .then((data) => {
         if (data.success) {
           setShowAdminMenu(false);
@@ -325,7 +314,7 @@ const handleRemoveField = (event) => {
 
   return (
     <div className="add-product-page">
-      <div className="title-class">Размещение товара</div>
+      <div className="title-class">Размещение предложения</div>
       <form className="add-product-form" onSubmit={handleSubmit}>
         {/* Поля формы */}
         <label>

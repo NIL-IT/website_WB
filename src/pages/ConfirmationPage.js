@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { confirmAccount } from '../api/users';
 import "../styles/ConfirmationPage.css";
 // Импортируем изображения из src/assets — они будут включены в билд
 import photoStep1 from '../assets/photo_confirmation_1.jpg';
@@ -8,7 +9,6 @@ import photoStep2 from '../assets/photo_confirmation_2.jpg';
 const ConfirmationPage = ({ userInfo }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const baseURL = "https://inhomeka.online:8000/";
   const [filePreview, setFilePreview] = useState(null);
   const [fileDataUrl, setFileDataUrl] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -39,15 +39,7 @@ const ConfirmationPage = ({ userInfo }) => {
     setMessage(null);
 
     try {
-      const fd = new FormData();
-      fd.append('id_usertg', userInfo.id_usertg);
-      fd.append('screenshot', fileDataUrl);
-
-      const res = await fetch(`${baseURL}confirmAccount.php`, {
-        method: 'POST',
-        body: fd,
-      });
-      const json = await res.json();
+      const json = await confirmAccount(userInfo.id_usertg, fileDataUrl);
       if (json.success) {
         // простая установка флага подтверждения локально (без вызова внешних функций)
         try {

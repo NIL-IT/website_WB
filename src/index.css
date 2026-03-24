@@ -142,3 +142,78 @@ body {
   color: #0b5fff;
   text-decoration: underline;
 }
+
+.install-prompt {
+  position: fixed;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  left: 12px;
+  right: 12px;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.94);
+  color: #f8fafc;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.24);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.install-prompt__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.install-prompt__content strong {
+  font-family: "Inter";
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.install-prompt__content span {
+  font-family: "Inter";
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(248, 250, 252, 0.82);
+}
+
+.install-prompt__button {
+  flex-shrink: 0;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: #38bdf8;
+  color: #082f49;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.browser-back-button {
+  position: fixed;
+  top: max(72px, calc(env(safe-area-inset-top, 0px) + 60px));
+  left: 12px;
+  z-index: 1190;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  font-family: "Inter";
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@media (display-mode: standalone) {
+  body {
+    background: #f8fafc;
+  }
+}
