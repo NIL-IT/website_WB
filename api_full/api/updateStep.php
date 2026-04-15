@@ -4,7 +4,7 @@ include 'cors.php';
 require_once 'db.php'; 
 
 try {
-    function sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle) {
+    function sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
         $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
         $message = "<b>Заказ оформлен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
@@ -20,11 +20,20 @@ try {
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            if ($async) {
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                if (defined('CURLOPT_NOSIGNAL')) curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            }
             $output = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlError = curl_errno($ch);
             $curlErrorMsg = curl_error($ch);
             curl_close($ch);
+
+            if ($async) {
+                $success = true;
+                break;
+            }
 
             if ($curlError === 0 && $httpCode === 200) {
                 $response = json_decode($output, true);
@@ -46,7 +55,7 @@ try {
 
         return $output;
     }
-    function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle) {
+    function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
         $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
         $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
         $message = "<b>Заказ получен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
@@ -63,11 +72,20 @@ try {
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            if ($async) {
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                if (defined('CURLOPT_NOSIGNAL')) curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            }
             $response = curl_exec($ch);
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $curlError = curl_errno($ch);
             $curlErrorMsg = curl_error($ch);
             curl_close($ch);
+
+            if ($async) {
+                $success = true;
+                break;
+            }
 
             if ($curlError === 0 && $httpCode === 200) {
                 $respArr = json_decode($response, true);
@@ -424,7 +442,7 @@ try {
                             $productName = $Product_name;
                             $userName = $user["username"];
                             $userHandle = $user["username"];
-                            $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle);
+                            $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
 
                             $pdo->commit();
                             echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
@@ -537,7 +555,7 @@ try {
                     $userName = $user["username"];
                     $userHandle = $user["username"]; 
         
-                    $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle);
+                    $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
                     
                     // Добавить начисление балла пригласившему
                     if (isset($data['id_usertg'])) {
