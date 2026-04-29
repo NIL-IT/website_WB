@@ -434,7 +434,10 @@ try {
                     if ($result) {
                         $chatId_t = $result['id_usertg'];
                     } else {
-                        echo "User not found.";
+                        echo json_encode([
+                        'success' => false,
+                        'error' => 'User not found'
+                        ]);
                         exit; 
                     }
                     if (!isset($data['id_usertg'])) {
