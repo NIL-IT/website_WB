@@ -338,7 +338,7 @@ const resetImages = () => {
   }
 
   resetImages();
-
+  setIsSubmitting(true);
   await fetchUserSteps(userInfo.id_usertg);
 };
 
