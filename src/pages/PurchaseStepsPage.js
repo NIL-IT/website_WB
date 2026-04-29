@@ -1127,15 +1127,13 @@ const resetImages = () => {
             </div>
             <div className="purchase-step-content">
               <p className="purchase-step-text">
-                Бренд INHOMEKA растёт и развивается на новых площадках. Чтобы
-                оставаться в закрытом клубе, подпишитесь на наши социальные
-                сети: Instagram (принадлежит компании Meta, признанной
-                экстремистской и запрещённой на территории РФ), ВКонтакте и
-                Telegram..
+                Бренды INHOMEKA и GROTEK растут и развиваются на новых площадках.
+                Чтобы оставаться в закрытом клубе, подпишитесь на наши социальные сети: 
+                ВКонтакте, Telegram и Instagram (принадлежит компании Meta, признанной экстремистской и запрещённой на территории РФ).
               </p>
               <div className="social-media-buttons">
                 <a
-                  href="https://www.instagram.com/inhomeka.ru?igsh=ZGJpMTYwejA0YmVu"
+                  href="https://inhomeka.mobz.link/instgrotek"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -1158,7 +1156,7 @@ const resetImages = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://vk.com/inhomeka"
+                  href="https://inhomeka.mobz.link/vkgrotek"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
