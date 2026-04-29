@@ -2,9 +2,111 @@
 header('Content-Type: application/json');
 include 'cors.php'; 
 require_once 'db.php'; 
-require_once __DIR__ . '/../proxy/sendTelegramProxy.php';
 
 try {
+    function sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
+        $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
+        $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+        $message = "<b>Заказ оформлен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
+        $messageEncoded = urlencode($message);
+        $url = "$apiUrl?chat_id=$chatId&text=$messageEncoded&parse_mode=HTML";
+
+        $maxAttempts = 3;
+        $attempt = 0;
+        $success = false;
+        $lastError = '';
+        do {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            if ($async) {
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                if (defined('CURLOPT_NOSIGNAL')) curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            }
+            $output = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_errno($ch);
+            $curlErrorMsg = curl_error($ch);
+            curl_close($ch);
+
+            if ($async) {
+                $success = true;
+                break;
+            }
+
+            if ($curlError === 0 && $httpCode === 200) {
+                $response = json_decode($output, true);
+                if (isset($response['ok']) && $response['ok'] === true) {
+                    $success = true;
+                } else {
+                    $lastError = isset($response['description']) ? $response['description'] : 'Unknown Telegram API error';
+                }
+            } else {
+                $lastError = $curlErrorMsg ? $curlErrorMsg : 'HTTP code: ' . $httpCode;
+            }
+            $attempt++;
+        } while (!$success && $attempt < $maxAttempts);
+
+        if (!$success) {
+            $logMsg = date('Y-m-d H:i:s') . " | Не удалось отправить сообщение (Оформлен заказ) | Кому: $chatId | Сделка: $dealNumber | Пользователь: $userName (@$userHandle) | Ошибка: $lastError\n";
+            file_put_contents(__DIR__ . '/../logs/telegram_send_errors.txt', $logMsg, FILE_APPEND);
+        }
+
+        return $output;
+    }
+    function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
+        $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
+        $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
+        $message = "<b>Заказ получен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
+        $reportUrl = "https://inhomeka.online:81/?id=$dealNumber";
+        $replyMarkup = '{"inline_keyboard":[[{"text":"Отчет","web_app":{"url":"' . $reportUrl . '"}}]]}';
+        $url = "$apiUrl?chat_id=$chatId&text=" . urlencode($message) . "&parse_mode=HTML&reply_markup=" . urlencode($replyMarkup);
+
+        $maxAttempts = 3;
+        $attempt = 0;
+        $success = false;
+        $lastError = '';
+        do {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            if ($async) {
+                curl_setopt($ch, CURLOPT_TIMEOUT_MS, 1);
+                if (defined('CURLOPT_NOSIGNAL')) curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+            }
+            $response = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $curlError = curl_errno($ch);
+            $curlErrorMsg = curl_error($ch);
+            curl_close($ch);
+
+            if ($async) {
+                $success = true;
+                break;
+            }
+
+            if ($curlError === 0 && $httpCode === 200) {
+                $respArr = json_decode($response, true);
+                if (isset($respArr['ok']) && $respArr['ok'] === true) {
+                    $success = true;
+                } else {
+                    $lastError = isset($respArr['description']) ? $respArr['description'] : 'Unknown Telegram API error';
+                }
+            } else {
+                $lastError = $curlErrorMsg ? $curlErrorMsg : 'HTTP code: ' . $httpCode;
+            }
+            $attempt++;
+        } while (!$success && $attempt < $maxAttempts);
+
+        if (!$success) {
+            $logMsg = date('Y-m-d H:i:s') . " | Не удалось отправить сообщение (Получен заказ) | Кому: $chatId | Сделка: $dealNumber | Пользователь: $userName (@$userHandle) | Ошибка: $lastError\n";
+            file_put_contents(__DIR__ . '/../logs/telegram_send_errors.txt', $logMsg, FILE_APPEND);
+        }
+
+        return $response;
+    }
     $pdo = getDbConnection(); 
     $data = $_POST;
 
@@ -340,11 +442,8 @@ try {
                             $productName = $Product_name;
                             $userName = $user["username"];
                             $userHandle = $user["username"];
-                            try {
-                            sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-                            } catch (Throwable $e) {
-                                error_log($e->getMessage());
-                            }
+                            $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+
                             $pdo->commit();
                             echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
                         } else {
@@ -459,11 +558,8 @@ try {
                     $userName = $user["username"];
                     $userHandle = $user["username"]; 
         
-                    try {
-                    sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-                    } catch (Throwable $e) {
-                    error_log($e->getMessage());
-                    }
+                    $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+                    
                     // Добавить начисление балла пригласившему
                     if (isset($data['id_usertg'])) {
                         tryGiveReferralScore($pdo, $data['id_usertg']);
