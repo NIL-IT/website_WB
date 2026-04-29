@@ -162,23 +162,60 @@ const PurchaseStepsPage = ({
     cardHolder: false,
     phone: false,
   });
+  
+const resetImages = () => {
+  setFormData(prev => ({
+    ...prev,
+    image1: "",
+    image2: "",
+    image3: "",
+    image4: "",
+    image5: "",
+    image6: "",
+    image7: "",
+  }));
+
+  setUploaded({
+    image1: false,
+    image2: false,
+    image3: false,
+    image4: false,
+    image5: false,
+    image6: false,
+    image7: false,
+  });
+
+  setImageError({
+    image1: false,
+    image2: false,
+    image3: false,
+    image4: false,
+    image5: false,
+    image6: false,
+    image7: false,
+  });
+};
 
   const handleImageLoad = () => {
     setIsLoaded(true);
   };
 
-  document.addEventListener(
-    "touchstart",
-    function (event) {
-      if (
-        event.target.tagName === "INPUT" ||
-        event.target.tagName === "TEXTAREA"
-      ) {
-        event.preventDefault();
-      }
-    },
-    false
-  );
+  useEffect(() => {
+  const handler = (event) => {
+    if (
+      event.target.tagName === "INPUT" ||
+      event.target.tagName === "TEXTAREA"
+    ) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener("touchstart", handler);
+
+  return () => {
+    document.removeEventListener("touchstart", handler);
+  };
+}, []);
 
   const handleImageError = (event) => {
     event.target.style.display = "none";
@@ -276,11 +313,17 @@ const PurchaseStepsPage = ({
 
   // Вынесем повторяющиеся действия после успешного шага
   const handleStepSuccess = async () => {
-    setChecked(false);
+  setChecked(false);
+
+  if (userStep?.id) {
     localStorage.removeItem(`formData_${userStep.id}`);
     localStorage.removeItem(`checked_${userStep.id}`);
-    await fetchUserSteps(userInfo.id_usertg);
-  };
+  }
+
+  resetImages();
+
+  await fetchUserSteps(userInfo.id_usertg);
+};
 
   // helper: если пользователь не подтверждён — перенаправляем на страницу подтверждения с указанием откуда пришли
   const redirectIfNotConfirmed = () => {
