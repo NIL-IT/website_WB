@@ -244,25 +244,42 @@ const resetImages = () => {
   }, [formData, checked, userStep]);
 
   const handleFileUpload = async (event, imageField) => {
-    const file = event.target.files[0];
-    if (file) {
-      try {
-        const compressedFile = await imageCompression(file, {
-          maxSizeMB: 0.7,
-          maxWidthOrHeight: 1920,
-        });
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setFormData({ ...formData, [imageField]: reader.result });
-          setUploaded({ ...uploaded, [imageField]: true });
-          setImageError({ ...imageError, [imageField]: false });
-        };
-        reader.readAsDataURL(compressedFile);
-      } catch (error) {
-        console.error("Ошибка сжатия изображения:", error);
-      }
-    }
-  };
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const compressedFile = await imageCompression(file, {
+      maxSizeMB: 0.7,
+      maxWidthOrHeight: 1920,
+    });
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setFormData(prev => ({
+        ...prev,
+        [imageField]: reader.result,
+      }));
+
+      setUploaded(prev => ({
+        ...prev,
+        [imageField]: true,
+      }));
+
+      setImageError(prev => ({
+        ...prev,
+        [imageField]: false,
+      }));
+    };
+
+    reader.readAsDataURL(compressedFile);
+  } catch (error) {
+    console.error("Ошибка сжатия изображения:", error);
+  } finally {
+    // 🔥 ВАЖНО: сброс input
+    event.target.value = "";
+  }
+};
 
   // Функция для форматирования номера карты
   const formatCardNumber = (value) => {
