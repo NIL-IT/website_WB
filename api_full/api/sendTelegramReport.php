@@ -1,26 +1,7 @@
 <?php
-require_once 'db.php'; // Подключение к базе данных
 
-function sendTelegramMessage($chatId, $message) {
-    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
-
-    $postFields = [
-        'chat_id' => $chatId,
-        'text' => $message,
-        'parse_mode' => 'HTML'
-    ];
-
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $apiUrl);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $postFields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    return $response;
-}
+require_once 'db.php';
+require_once __DIR__ . '/../proxy/sendTelegramProxy.php';
 
 try {
     // Получение chat_id из переменных запроса
@@ -54,8 +35,16 @@ try {
     $message .= "Выплаченные заказы: $paidCount\n";
     $message .= "Невыплаченные заказы: $unpaidCount\n";
 
+
     // Отправка сообщения в Telegram
-    sendTelegramMessage($chatId, $message);
+    sendTelegramRequest(
+        $GLOBALS['telegramApiBase'] . "bot" . $GLOBALS['botToken'] . "/sendMessage",
+        [
+            'chat_id' => $chatId,
+            'text' => $message,
+            'parse_mode' => 'HTML'
+        ]
+    );
 
     echo json_encode(['success' => true, 'message' => 'Сообщение отправлено']);
 

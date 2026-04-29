@@ -63,63 +63,10 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 foreach ($rows as $row) {
     if (!empty($row['id_usertg']) && (int)$row['status'] !== 3) {
-        $chatId = $row['id_usertg'];
-        $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-        $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
-        // Первое сообщение
-        $message1 = "❤️ Спасибо за участие! Ваш заказ был отправлен на оплату!";
-        $postFields1 = [
-            'chat_id' => $chatId,
-            'text' => $message1,
-            'parse_mode' => 'HTML'
-        ];
-        $ch1 = curl_init();
-        curl_setopt($ch1, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch1, CURLOPT_POST, true);
-        curl_setopt($ch1, CURLOPT_POSTFIELDS, $postFields1);
-        curl_setopt($ch1, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch1, CURLOPT_SSL_VERIFYPEER, false);
-        curl_exec($ch1);
-        curl_close($ch1);
-        // Второе сообщение
-        $message2 = "🎉 Приглашайте в закрытый клуб своих друзей, чтобы они тоже могли покупать с выгодой и участвовать в развитии бренда. Чтобы пригласить друга - просто перешлите ему сообщение ниже:";
-        $postFields2 = [
-            'chat_id' => $chatId,
-            'text' => $message2,
-            'parse_mode' => 'HTML'
-        ];
-        $ch2 = curl_init();
-        curl_setopt($ch2, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch2, CURLOPT_POST, true);
-        curl_setopt($ch2, CURLOPT_POSTFIELDS, $postFields2);
-        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, false);
-        curl_exec($ch2);
-        curl_close($ch2);
-
-        // Получение referral_id через локальную функцию
-        $referral_id = getOrCreateReferralId($pdo, $chatId);
-
-        if (!$referral_id) {
-            $referral_id = "unknown";
-        }
-        $inviteLink = "https://t.me/wb_cashback_nsk_bot?start=ref" . $referral_id;
-        $message3 = "Привет! Я нашел закрытый клуб бренда товаров для дома INHOMEKA, там раздают товары бренда с кэшбеком 80-100%, а еще можно поучаствовать в развитии бренда и получить за это бонусы! 🎁\n\n"
-            . "🔵 Это моя <a href='$inviteLink'>персональная пригласительная ссылка</a> для тебя.\n"
-            . "Вступай в клуб и становись частью закрытого сообщества бренда INHOMEKA.";
-        $postFields3 = [
-            'chat_id' => $chatId,
-            'text' => $message3,
-            'parse_mode' => 'HTML'
-        ];
-        $ch3 = curl_init();
-        curl_setopt($ch3, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch3, CURLOPT_POST, true);
-        curl_setopt($ch3, CURLOPT_POSTFIELDS, $postFields3);
-        curl_setopt($ch3, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch3, CURLOPT_SSL_VERIFYPEER, false);
-        curl_exec($ch3);
-        curl_close($ch3);
+        include_once __DIR__ . '/../proxy/sendTelegramProxy.php';
+        $chat_id = $row['id_usertg'];
+        $referral_id = getOrCreateReferralId($pdo, $chat_id);
+        sendExcelPaymentMessages($chat_id, $referral_id);
 
         // --- ОПЛАТА МЕНЕДЖЕРА ---
         // Получаем tg_nick_manager, market_price, your_price из products

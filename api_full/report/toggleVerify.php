@@ -1,46 +1,9 @@
 <?php
+
 header('Content-Type: application/json');
 include 'cors.php'; // Включение CORS, если необходимо
 require_once 'db.php'; // Подключение к базе данных
-
-function sendTelegramMessageWithComment($chatId, $comment) {
-    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
-
-    $message = "Комментарий: $comment";
-
-    $postFields = [
-        'chat_id' => $chatId,
-        'text' => $message,
-        'parse_mode' => 'HTML'
-    ];
-
-    sendTelegramRequest($apiUrl, $postFields);
-}
-
-function sendAdminNotification($message) {
-    $botToken = "7077985036:AAFHZ-JKekDokComqzFC6-f7-uijdDeKlTw";
-    $apiUrl = "https://api.telegram.org/bot$botToken/sendMessage";
-    $adminChatId = 934574143;
-    $postFields = [
-        'chat_id' => $adminChatId,
-        'text' => $message,
-        'parse_mode' => 'HTML'
-    ];
-    sendTelegramRequest($apiUrl, $postFields);
-}
-
-function sendTelegramRequest($url, $fields) {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    $response = curl_exec($ch);
-    curl_close($ch);
-    return $response;
-}
+require_once __DIR__ . '/../proxy/sendTelegramProxy.php';
 
 try {
     // Получение соединения с базой данных
