@@ -9,6 +9,35 @@
   box-sizing: border-box;
 }
 
+.purchase-step-button.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.purchase-step-button.loading::after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: translateY(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateY(-50%) rotate(360deg);
+  }
+}
+
 .title-class-step {
   font-family: "Helvetica Neue Cyr";
   font-size: 24px;

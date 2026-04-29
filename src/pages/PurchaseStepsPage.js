@@ -116,7 +116,7 @@ const PurchaseStepsPage = ({
       </div>
     </div>
   );
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     image1: "",
     image2: "",
@@ -356,6 +356,8 @@ const resetImages = () => {
   };
 
   const handleStepSubmit = async () => {
+      if (isSubmitting) return; 
+      setIsSubmitting(true);
     const clearAndAlert = (msg) => {
       alert(msg);
       localStorage.clear();
@@ -903,12 +905,16 @@ const resetImages = () => {
                     Добавил(а) в корзину 2-3 товара
                   </div>
                 </div>
-                <button
-                  className="purchase-step-button"
+               <button
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0 || !checked}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1041,12 +1047,16 @@ const resetImages = () => {
                     Подтверждаю правильность артикула и загрузки скрина
                   </div>
                 </div>
-                <button
-                  className="purchase-step-button"
+               <button
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0 || !checked}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1137,11 +1147,15 @@ const resetImages = () => {
                   </div>
                 </div>
                 <button
-                  className="purchase-step-button"
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0 || !checked}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1286,12 +1300,16 @@ const resetImages = () => {
                     Оформил(а) подписку на социальные сети бренда
                   </div>
                 </div>
-                <button
-                  className="purchase-step-button"
+               <button
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0 || !checked}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1448,11 +1466,15 @@ const resetImages = () => {
                   </div>
                 </div>
                 <button
-                  className="purchase-step-button"
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1531,12 +1553,16 @@ const resetImages = () => {
                   </div>
                   <div className="upload-feedback-text">Оформил(а) заказ</div>
                 </div>
-                <button
-                  className="purchase-step-button"
+               <button
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0 || !checked}
+                  disabled={
+                    userStep.availableday === 0 || !checked || isSubmitting
+                  }
                 >
-                  {userStep.availableday === 0
+                  {isSubmitting
+                    ? "Загрузка..."
+                    : userStep.availableday === 0
                     ? "Товар сегодня недоступен"
                     : "Продолжить"}
                 </button>
@@ -1626,11 +1652,11 @@ const resetImages = () => {
                   <div className="upload-feedback-text">Забрал(а) товар</div>
                 </div>
                 <button
-                  className="purchase-step-button"
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={!checked}
+                  disabled={!checked || isSubmitting}
                 >
-                  Продолжить
+                  {isSubmitting ? "Загрузка..." : "Продолжить"}
                 </button>
               </div>
             </div>
@@ -1742,11 +1768,11 @@ const resetImages = () => {
                   <div className="upload-feedback-text">Оставил(а) отзыв</div>
                 </div>
                 <button
-                  className="purchase-step-button"
+                  className={`purchase-step-button ${isSubmitting ? "loading" : ""}`}
                   onClick={handleStepSubmit}
-                  disabled={!checked}
+                  disabled={!checked || isSubmitting}
                 >
-                  Продолжить
+                  {isSubmitting ? "Загрузка..." : "Продолжить"}
                 </button>
               </div>
             </div>
