@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($chatId && $message) {
 
-        $count = max(1, min($count, 50)); // ограничим от 1 до 50
-        $delay = max(0, min($delay, 30)); // задержка до 30 сек
+        $count = isset($_POST['count']) && $_POST['count'] !== '' ? (int)$_POST['count'] : 1;
+        $delay = isset($_POST['delay']) && $_POST['delay'] !== '' ? (int)$_POST['delay'] : 0;
 
         for ($i = 1; $i <= $count; $i++) {
             $response = sendTelegramMessage($chatId, $message);
@@ -112,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="text" name="chat_id" placeholder="Chat ID" required>
         <textarea name="message" placeholder="Message" required></textarea>
 
-        <input type="number" name="count" placeholder="Сколько раз отправить" value="1" min="1" max="50">
-        <input type="number" name="delay" placeholder="Задержка (сек)" value="0" min="0" max="30">
+        <input type="number" name="count" placeholder="Сколько раз отправить" min="1" max="50">
+        <input type="number" name="delay" placeholder="Задержка (сек)" min="0" max="30">
 
         <button type="submit">Отправить</button>
     </form>
