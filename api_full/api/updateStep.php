@@ -340,7 +340,7 @@ try {
                             $productName = $Product_name;
                             $userName = $user["username"];
                             $userHandle = $user["username"];
-                            $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+                            sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
 
                             $pdo->commit();
                             echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
@@ -453,7 +453,7 @@ try {
                     $userName = $user["username"];
                     $userHandle = $user["username"]; 
         
-                    $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+                    sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
                     
                     // Добавить начисление балла пригласившему
                     if (isset($data['id_usertg'])) {
