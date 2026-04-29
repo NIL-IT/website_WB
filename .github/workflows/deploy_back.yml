@@ -44,4 +44,4 @@ jobs:
            sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/report_table/ root@$HOST:/var/www/test_bot/report_table/
 
            # Копируем proxy из git/backend/proxy в /var/www/test_bot/proxy/
-           sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/report_table root@$HOST:/var/www/test_bot/proxy/
+           sshpass -p "$PASSWORD" rsync -avz -e "$SSH_CMD" ./api_full/proxy/ root@$HOST:/var/www/test_bot/proxy/
