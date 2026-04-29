@@ -5,7 +5,6 @@ require_once 'db.php';
 require_once __DIR__ . '/../proxy/sendTelegramProxy.php';
 
 try {
-
     $pdo = getDbConnection(); 
     $data = $_POST;
 
@@ -341,8 +340,11 @@ try {
                             $productName = $Product_name;
                             $userName = $user["username"];
                             $userHandle = $user["username"];
-                            $response = sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-
+                            try {
+                                sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+                            } catch (Throwable $e) {
+                                error_log($e->getMessage());
+                            }
                             $pdo->commit();
                             echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
                         } else {
@@ -457,8 +459,11 @@ try {
                     $userName = $user["username"];
                     $userHandle = $user["username"]; 
         
-                    $result = sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-                    
+                    try {
+                        sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
+                    } catch (Throwable $e) {
+                        error_log($e->getMessage());
+                    }
                     // Добавить начисление балла пригласившему
                     if (isset($data['id_usertg'])) {
                         tryGiveReferralScore($pdo, $data['id_usertg']);

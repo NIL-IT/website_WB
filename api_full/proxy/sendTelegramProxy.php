@@ -176,3 +176,4 @@ function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName
         ]
     );
 }
+?>
