@@ -143,26 +143,30 @@ function sendTelegramRequest($url, $fields) {
     return $response;
 }
 function sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
-        $message = "<b>Заказ оформлен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
-        sendTelegramRequest(
-            $GLOBALS['telegramApiBase'] . "bot" . $GLOBALS['botToken'] . "/sendMessage",
-            [
-                'chat_id' => $chatId,
-                'text' => $message,
-                'parse_mode' => 'HTML'
-            ]
-        );
+    $message = "<b>Заказ оформлен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
+    
+    return sendTelegramRequest(
+        $GLOBALS['telegramApiBase'] . "bot" . $GLOBALS['botToken'] . "/sendMessage",
+        [
+            'chat_id' => $chatId,
+            'text' => $message,
+            'parse_mode' => 'HTML'
+        ]
+    );
 }
 function sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, $async = false) {
     $message = "<b>Заказ получен</b>\nСделка№ $dealNumber\n\nТовар: $productName\nПользователь: $userName\n(@$userHandle)";
+    
     $report_url = "https://inhomeka.online:81/?id=$dealNumber";
+
     $reply_markup = json_encode([
         'inline_keyboard' => [[[
             'text' => 'Отчет',
             'web_app' => ['url' => $report_url]
         ]]]
     ]);
-    sendTelegramRequest(
+
+    return sendTelegramRequest(
         $GLOBALS['telegramApiBase'] . "bot" . $GLOBALS['botToken'] . "/sendMessage",
         [
             'chat_id' => $chatId,
