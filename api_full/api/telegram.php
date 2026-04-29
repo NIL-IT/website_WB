@@ -32,16 +32,30 @@ function sendTelegramMessage($chatId, $message) {
     return isset($error) ? $error : $response;
 }
 
-$result = null;
+$result = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $chatId = $_POST['chat_id'] ?? '';
     $message = $_POST['message'] ?? '';
+    $count = (int)($_POST['count'] ?? 1);
+    $delay = (int)($_POST['delay'] ?? 0);
 
     if ($chatId && $message) {
-        $result = sendTelegramMessage($chatId, $message);
+
+        $count = max(1, min($count, 50)); // ограничим от 1 до 50
+        $delay = max(0, min($delay, 30)); // задержка до 30 сек
+
+        for ($i = 1; $i <= $count; $i++) {
+            $response = sendTelegramMessage($chatId, $message);
+            $result[] = "Отправка #$i: " . $response;
+
+            if ($i < $count && $delay > 0) {
+                sleep($delay);
+            }
+        }
+
     } else {
-        $result = "Заполни все поля";
+        $result[] = "Заполни все поля";
     }
 }
 
@@ -81,7 +95,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         .result {
             margin-top: 15px;
-            word-break: break-all;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #eee;
+            padding: 10px;
         }
     </style>
 </head>
@@ -93,13 +111,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="POST">
         <input type="text" name="chat_id" placeholder="Chat ID" required>
         <textarea name="message" placeholder="Message" required></textarea>
+
+        <input type="number" name="count" placeholder="Сколько раз отправить" value="1" min="1" max="50">
+        <input type="number" name="delay" placeholder="Задержка (сек)" value="0" min="0" max="30">
+
         <button type="submit">Отправить</button>
     </form>
 
-    <?php if ($result): ?>
+    <?php if (!empty($result)): ?>
         <div class="result">
-            <strong>Ответ:</strong><br>
-            <?php echo htmlspecialchars($result); ?>
+            <?php foreach ($result as $line): ?>
+                <?php echo htmlspecialchars($line) . "<br>"; ?>
+            <?php endforeach; ?>
         </div>
     <?php endif; ?>
 </div>
