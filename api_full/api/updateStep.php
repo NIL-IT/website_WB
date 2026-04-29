@@ -340,8 +340,11 @@ try {
                             $productName = $Product_name;
                             $userName = $user["username"];
                             $userHandle = $user["username"];
+                            try {
                             sendTelegramMessage($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-
+                            } catch (Throwable $e) {
+                                error_log($e->getMessage());
+                            }
                             $pdo->commit();
                             echo json_encode(['success' => true, 'message' => 'Image saved, step updated to 7, and product availability and keywords updated successfully']);
                         } else {
@@ -433,7 +436,10 @@ try {
                     if ($result) {
                         $chatId_t = $result['id_usertg'];
                     } else {
-                        echo "User not found.";
+                        echo json_encode([
+                        'success' => false,
+                        'error' => 'User not found'
+                        ]);
                         exit; 
                     }
                     if (!isset($data['id_usertg'])) {
@@ -453,8 +459,11 @@ try {
                     $userName = $user["username"];
                     $userHandle = $user["username"]; 
         
+                    try {
                     sendTelegramMessage_final($chatId, $dealNumber, $productName, $userName, $userHandle, true);
-                    
+                    } catch (Throwable $e) {
+                    error_log($e->getMessage());
+                    }
                     // Добавить начисление балла пригласившему
                     if (isset($data['id_usertg'])) {
                         tryGiveReferralScore($pdo, $data['id_usertg']);
