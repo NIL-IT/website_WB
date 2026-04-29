@@ -132,7 +132,7 @@ const App = () => {
 
     localStorage.clear();
     const tg = window.Telegram.WebApp;
-    tg.expand(); // Расширяет приложение на весь экран
+    tg.expand(); 
 
 
     const fetchData = async () => {

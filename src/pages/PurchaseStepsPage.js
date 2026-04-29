@@ -906,7 +906,7 @@ const resetImages = () => {
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
@@ -1014,8 +1014,8 @@ const resetImages = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M19.2597 2.74549C19.5246 1.45402 18.2561 0.380775 17.0264 0.855917L1.95202 6.68009C0.578698 7.21069 0.517506 9.13108 1.85425 9.748L5.13702 11.2632L6.69868 16.7289C6.77979 17.0128 7.00508 17.2327 7.29091 17.3068C7.57673 17.3808 7.88042 17.2981 8.0892 17.0893L10.4948 14.6837L13.8645 17.211C14.8427 17.9446 16.2515 17.4102 16.4972 16.2125L19.2597 2.74549ZM2.55268 8.23475L17.627 2.41058L14.8645 15.8777L10.9166 12.9167C10.5849 12.6678 10.1206 12.7008 9.82735 12.9941L8.79702 14.0244L9.1066 12.3218L15.1725 6.25594C15.4678 5.96073 15.4989 5.49263 15.2455 5.16086C14.9921 4.82908 14.5324 4.73602 14.1699 4.94315L5.79263 9.73008L2.55268 8.23475ZM6.81406 11.066L7.31938 12.8347L7.51338 11.7676C7.54371 11.6008 7.62417 11.4472 7.74403 11.3274L9.59393 9.47758L6.81406 11.066Z"
                     fill="white"
                   />
@@ -1026,10 +1026,25 @@ const resetImages = () => {
                 INHOMEKA – комплекты для ванной комнаты, собранные дизайнерами
               </p>
               <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">
+                    Подтверждаю правильность артикула и загрузки скрина
+                  </div>
+                </div>
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
@@ -1081,21 +1096,6 @@ const resetImages = () => {
                   </p>
                 )}
               </div>
-              <div
-                className="upload-feedback-step4"
-                onClick={() => setChecked(!checked)}
-              >
-                <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
-                  {checked && (
-                    <svg viewBox="0 0 13 13">
-                      <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
-                    </svg>
-                  )}
-                </div>
-                <div className="upload-feedback-text">
-                  Добавил(а) товар и бренд в избранное
-                </div>
-              </div>
               <button className="telegram-button" onClick={handleSellerClick}>
                 <svg
                   width="20"
@@ -1105,8 +1105,8 @@ const resetImages = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M19.2597 2.74549C19.5246 1.45402 18.2561 0.380775 17.0264 0.855917L1.95202 6.68009C0.578698 7.21069 0.517506 9.13108 1.85425 9.748L5.13702 11.2632L6.69868 16.7289C6.77979 17.0128 7.00508 17.2327 7.29091 17.3068C7.57673 17.3808 7.88042 17.2981 8.0892 17.0893L10.4948 14.6837L13.8645 17.211C14.8427 17.9446 16.2515 17.4102 16.4972 16.2125L19.2597 2.74549ZM2.55268 8.23475L17.627 2.41058L14.8645 15.8777L10.9166 12.9167C10.5849 12.6678 10.1206 12.7008 9.82735 12.9941L8.79702 14.0244L9.1066 12.3218L15.1725 6.25594C15.4678 5.96073 15.4989 5.49263 15.2455 5.16086C14.9921 4.82908 14.5324 4.73602 14.1699 4.94315L5.79263 9.73008L2.55268 8.23475ZM6.81406 11.066L7.31938 12.8347L7.51338 11.7676C7.54371 11.6008 7.62417 11.4472 7.74403 11.3274L9.59393 9.47758L6.81406 11.066Z"
                     fill="white"
                   />
@@ -1121,10 +1121,25 @@ const resetImages = () => {
                 виде комплектов, чтобы упростить выбор стильных товаров
               </p>
               <div className="step-footer-container">
+                <div
+                  className="upload-feedback-step4"
+                  onClick={() => setChecked(!checked)}
+                >
+                  <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
+                    {checked && (
+                      <svg viewBox="0 0 13 13">
+                        <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
+                      </svg>
+                    )}
+                  </div>
+                  <div className="upload-feedback-text">
+                    Добавил(а) товар и бренд в избранное
+                  </div>
+                </div>
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
@@ -1505,9 +1520,7 @@ const resetImages = () => {
                   className="upload-feedback-step4"
                   onClick={() => setChecked(!checked)}
                 >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
+                  <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
                     {checked && (
                       <svg viewBox="0 0 13 13">
                         <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
@@ -1519,7 +1532,7 @@ const resetImages = () => {
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
-                  disabled={userStep.availableday === 0}
+                  disabled={userStep.availableday === 0 || !checked}
                 >
                   {userStep.availableday === 0
                     ? "Товар сегодня недоступен"
@@ -1601,9 +1614,7 @@ const resetImages = () => {
                   className="upload-feedback-step4"
                   onClick={() => setChecked(!checked)}
                 >
-                  <div
-                    className={`upload-checkbox ${checked ? "checked" : ""}`}
-                  >
+                  <div className={`upload-checkbox ${checked ? "checked" : ""}`}>
                     {checked && (
                       <svg viewBox="0 0 13 13">
                         <path d="M11.25 3.75L4.75 10.25L1.75 7.25L2.75 6.25L4.75 8.25L10.25 2.75L11.25 3.75Z" />
@@ -1615,6 +1626,7 @@ const resetImages = () => {
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
+                  disabled={!checked}
                 >
                   Продолжить
                 </button>
@@ -1730,6 +1742,7 @@ const resetImages = () => {
                 <button
                   className="purchase-step-button"
                   onClick={handleStepSubmit}
+                  disabled={!checked}
                 >
                   Продолжить
                 </button>
