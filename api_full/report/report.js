@@ -523,6 +523,8 @@ document.addEventListener("DOMContentLoaded", function () {
         
           verifyBtn.classList.add('loading');
           verifyBtn.disabled = true;
+          payBtn.classList.add('loading');
+          payBtn.disabled = true;
           fetch("toggleVerify.php", {
             method: "POST",
             headers: {
@@ -539,7 +541,9 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((response) => response.json())
             .then((data) => {
               verifyBtn.classList.remove('loading');
+              payBtn.classList.remove('loading');
               verifyBtn.disabled = false;
+              payBtn.disabled = false;
               if (data.success) {
                 if (data.verified) {
                   verifyBtn.textContent = "Отменить верификацию товара";
@@ -564,7 +568,9 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch((error) => {
               verifyBtn.classList.remove('loading');
+              payBtn.classList.remove('loading');
               verifyBtn.disabled = false;
+              payBtn.disabled = false;
               console.error("Ошибка при выполнении запроса для verifyBtn:", error);
             });
         });
@@ -578,26 +584,28 @@ document.addEventListener("DOMContentLoaded", function () {
         
           payBtn.classList.add("loading");
           payBtn.disabled = true;
+          verifyBtn.classList.add('loading');
+          verifyBtn.disabled = true;
           const file = receiptUpload.files[0];
           const reader = new FileReader();
-        
+
           reader.onload = function (event) {
             const img = new Image();
             img.onload = function () {
               // Создаем canvas для конвертации в PNG
               const canvas = document.createElement("canvas");
               const ctx = canvas.getContext("2d");
-        
+
               // Устанавливаем размеры canvas равными размеру изображения
               canvas.width = img.width;
               canvas.height = img.height;
-        
+
               // Рисуем изображение на canvas
               ctx.drawImage(img, 0, 0);
-        
+
               // Получаем изображение в формате PNG
               const base64Image = canvas.toDataURL("image/png");
-        
+
               // Отправляем изображение на сервер
               fetch("togglePay.php", {
                 method: "POST",
@@ -612,7 +620,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then((response) => response.json())
                 .then((data) => {
                   payBtn.classList.remove("loading");
+                  verifyBtn.classList.remove('loading');
                   payBtn.disabled = false;
+                  verifyBtn.disabled = false;
                   if (data.success) {
                     if (data.paid) {
                       payBtn.textContent = "Отменить оплату";
@@ -629,13 +639,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .catch((error) => {
                   payBtn.classList.remove("loading");
+                  verifyBtn.classList.remove('loading');
                   payBtn.disabled = false;
+                  verifyBtn.disabled = false;
                   console.error("Ошибка при выполнении запроса для payBtn:", error);
                 });
             };
             img.src = event.target.result;
           };
-        
+
           reader.readAsDataURL(file); // Чтение файла как Data URL
         });
 
