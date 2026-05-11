@@ -374,10 +374,18 @@ const handleRemoveField = (event) => {
             type="number"
             name="marketPrice"
             value={formData.marketPrice}
-            onChange={handleChange}
+            onChange={(e) => {
+              // Только целые положительные числа
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Укажите цену на маркетплейсе"
             required
             className={errors.marketPrice ? "error" : ""}
+            min={1}
+            step={1}
             onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
@@ -387,10 +395,18 @@ const handleRemoveField = (event) => {
             type="number"
             name="yourPrice"
             value={formData.yourPrice}
-            onChange={handleChange}
+            onChange={(e) => {
+              // Только целые положительные числа
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Введите цену клиента"
             required
             className={errors.yourPrice ? "error" : ""}
+            min={1}
+            step={1}
             onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
@@ -650,10 +666,18 @@ const handleRemoveField = (event) => {
             type="number"
             name="article"
             value={formData.article}
-            onChange={handleChange}
+            onChange={(e) => {
+              // Только целые положительные числа
+              const value = e.target.value;
+              if (/^\d*$/.test(value)) {
+                handleChange(e);
+              }
+            }}
             placeholder="Введите артикул"
             required
             className={errors.article ? "error" : ""}
+            min={1}
+            step={1}
             onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
         </label>
@@ -798,8 +822,15 @@ const handleRemoveField = (event) => {
                         [dateString]: prev.availableDay[dateString] === "" ? 0 : prev.availableDay[dateString]
                       }
                     }))}
-
-                    onChange={handleAvailableDayChange}
+                    onChange={e => {
+                      // Только целые положительные числа
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value)) {
+                        handleAvailableDayChange(e);
+                      }
+                    }}
+                    min={1}
+                    step={1}
                     onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
                   />
                 </label>
