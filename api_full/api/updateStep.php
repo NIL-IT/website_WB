@@ -258,29 +258,29 @@ try {
                                 throw new Exception("Error decoding JSON for product ID $idProduct: " . json_last_error_msg());
                             }
                             $keywordsWithCount = json_decode($result['keywords_with_count'], true);
-                            // Проверка, что available_day_current > 0
-                            if ($availableDayCurrent > 0) {
+                            // Новая проверка: значение на текущий день должно совпадать с availableDayCurrent и быть больше 0
+                            if (
+                                isset($availableDayArray[$currentDateString]) &&
+                                $availableDayArray[$currentDateString] === $availableDayCurrent &&
+                                $availableDayCurrent > 0
+                            ) {
                                 // Уменьшаем значение в available_day для текущей даты
-                                if (isset($availableDayArray[$currentDateString])) {
-                                    $availableDayArray[$currentDateString]--;
-                                    $availableDayCurrent--;
-                                    $updatedAvailableDayJson = json_encode($availableDayArray);
+                                $availableDayArray[$currentDateString]--;
+                                $availableDayCurrent--;
+                                $updatedAvailableDayJson = json_encode($availableDayArray);
 
-                                    // Обновляем available_day и available_day_current
-                                    $updateStmt = $pdo->prepare('
-                                        UPDATE products 
-                                        SET available_day = :available_day, available_day_current = :available_day_current 
-                                        WHERE id = :id_product
-                                    ');
-                                    $updateStmt->bindParam(':available_day', $updatedAvailableDayJson, PDO::PARAM_STR);
-                                    $updateStmt->bindParam(':available_day_current', $availableDayCurrent);
-                                    $updateStmt->bindParam(':id_product', $idProduct);
-                                    $updateStmt->execute();
-                                } else {
-                                    throw new Exception("No available day found for date $currentDateString");
-                                }
+                                // Обновляем available_day и available_day_current
+                                $updateStmt = $pdo->prepare('
+                                    UPDATE products 
+                                    SET available_day = :available_day, available_day_current = :available_day_current 
+                                    WHERE id = :id_product
+                                ');
+                                $updateStmt->bindParam(':available_day', $updatedAvailableDayJson, PDO::PARAM_STR);
+                                $updateStmt->bindParam(':available_day_current', $availableDayCurrent);
+                                $updateStmt->bindParam(':id_product', $idProduct);
+                                $updateStmt->execute();
                             } else {
-                                throw new Exception("No available days left for product ID $idProduct");
+                                throw new Exception("Товар не доступен сегодня");
                             }
 
                             // Уменьшаем значение в keywords_with_count, если оно не пустое и не null
