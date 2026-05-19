@@ -405,7 +405,7 @@ const handleRemoveField = (event) => {
             placeholder="Введите цену клиента"
             required
             className={errors.yourPrice ? "error" : ""}
-            min={1}
+            min={0}
             step={1}
             onWheel={(e) => e.target.blur()} // Отключение изменения при прокрутке
           />
